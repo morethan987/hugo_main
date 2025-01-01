@@ -20,8 +20,6 @@ Tailwind CSS 是 Blowfish 的核心，当前版本包含了最新的[Tailwind CS
 Tailwind CSS 带来了性能优化，并提供了一些出色的新的 CSS 特性。
 
 
-{{< youtube "TmWIrBPE6Bc" >}}
-
 ## 多语言支持
 
 这是一个高频需求，Blowfish 现在支持多语言！

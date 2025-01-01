@@ -52,8 +52,6 @@ blowfish-tools new mynewsite
 
 下面是一个简短的视频，介绍了如何使用 CLI 工具快速构建 Blowfish：
 
-<iframe width="100%" height="350" src="https://www.youtube.com/embed/SgXhGb-7QbU?si=ce44baicuQ6zMeXz" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-
 ### 无需 CLI 的安装
 
 #### 创建新站点

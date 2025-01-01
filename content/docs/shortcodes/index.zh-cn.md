@@ -779,5 +779,3 @@ consectetur adipiscing elit.
 {{</* youtubeLite id="SgXhGb-7QbU" label="Blowfish-tools demo" */>}}
 
 ```
-
-{{< youtubeLite id="SgXhGb-7QbU" label="Blowfish-tools demo" >}}
