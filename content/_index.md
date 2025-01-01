@@ -1,5 +1,5 @@
 ---
-title: "Welcome to Blowfish! :tada:"
+title: "Welcome to More's website"
 description: "This page was built using the Blowfish theme for Hugo."
 ---
 
@@ -23,7 +23,3 @@ description: "This page was built using the Blowfish theme for Hugo."
 ```node
 npx blowfish-tools
 ```  
-
-{{< youtubeLite id="SgXhGb-7QbU" label="Blowfish-tools demo" >}}
-
-

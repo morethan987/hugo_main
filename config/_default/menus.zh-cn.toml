@@ -12,24 +12,21 @@
 
 [[main]]
   name = "文章"
+  title = "文章"
   pageRef = "blog"
   weight = 10
 
 [[main]]
   name = "标签"
+  title = "标签"
   pageRef = "docs/shortcodes"
   weight = 15
 
 [[main]]
   name = "作者"
+  title = "作者"
   pageRef = "authors"
   weight = 20
-
-#一级菜单
-#[[main]]
-#  name = "Test"
-#  pageRef = "pagTest"
-#  weight = 1000
 
 #次级菜单
 #[[main]]
@@ -57,10 +54,12 @@
 
  [[footer]]
    name = "标签"
+   title = "标签"
    pageRef = "tags"
    weight = 10
 
  [[footer]]
    name = "作者"
+   title = "作者"
    pageRef = "authors"
    weight = 20
