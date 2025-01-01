@@ -12,16 +12,19 @@
 
 [[main]]
   name = "Blog"
+  title = "Blog"
   pageRef = "blog"
   weight = 10
 
 [[main]]
   name = "Tags"
+  title = "Tags"
   pageRef = "docs/shortcodes"
   weight = 15
 
 [[main]]
   name = "Authors"
+  title = "Authors"
   pageRef = "authors"
   weight = 20
 
@@ -45,10 +48,12 @@
 
  [[footer]]
    name = "Tags"
+   title = "Tags"
    pageRef = "tags"
    weight = 10
 
  [[footer]]
    name = "Authors"
+   title = "Authors"
    pageRef = "authors"
    weight = 20

@@ -8,13 +8,14 @@ title = "More's awesome website"
   isoCode = "en"
   rtl = false
   dateFormat = "2 January 2006"
-  logo = "img/blowfish_logo_transparent.png"
-  description = "A powerful, lightweight theme for Hugo."
+  logo = "img/logo.png"
+  secondaryLogo = "img/logo_light.png"
+  description = "A website for thinking and feeling."
 
 [params.author]
   name = "Morethan"
   email = "morthan@qq.com"
-  image = "img/logo_transparent.png"
+  image = "img/figure.png"
   headline = "A website for thinking and feeling."
   bio = "A website for thinking and feeling."
   links = [
