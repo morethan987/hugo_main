@@ -15,8 +15,8 @@ title = "Morethan 小站"
 [params.author]
   name = "Morethan"
   image = "img/figure.png"
-  headline = "一个存放思考、感悟的网站"
-  bio = "一个存放思考、感悟的网站"
+  headline = "计算机、物理与AI理工男"
+  bio = "计算机、物理与AI理工男"
   links = [
     { github = "https://github.com/morethan987" },
   ]
