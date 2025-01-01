@@ -146,7 +146,7 @@ smartTOCHideUnfocusedChildren = false
 
 [buymeacoffee]
   identifier = "nunocoracao"
-  globalWidget = true
+  globalWidget = false
   globalWidgetMessage = ""
   globalWidgetColor = "#FFDD00"
   globalWidgetPosition = "Right"
