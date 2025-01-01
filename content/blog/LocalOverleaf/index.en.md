@@ -153,7 +153,7 @@ module.exports = {
 };
 ```
 
-This default configuration has been included with these content paths so that you can easily generate your own CSS file without needing to modify it, provided you follow a particular project structure. Namely, **you have to include Blowfish in your project as a subdirectory at `themes/blowfish/`**. This means you cannot easily use Hugo Modules to install the theme and you must go down either the git submodule (recommended) or manual install routes. The [Installation docs]({{< ref "installation" >}}) explain how to install the theme using either of these methods.
+This default configuration has been included with these content paths so that you can easily generate your own CSS file without needing to modify it, provided you follow a particular project structure. Namely, **you have to include Blowfish in your project as a subdirectory at `themes/blowfish/`**. This means you cannot easily use Hugo Modules to install the theme and you must go down either the git submodule (recommended) or manual install routes. The explain how to install the theme using either of these methods.
 
 ### Project structure
 
