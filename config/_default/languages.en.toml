@@ -16,8 +16,8 @@ title = "More's awesome website"
   name = "Morethan"
   email = "morthan@qq.com"
   image = "img/figure.png"
-  headline = "A website for thinking and feeling."
-  bio = "A website for thinking and feeling."
+  headline = "Computer, Physic & AI"
+  bio = "Computer, Physic & AI"
   links = [
     { github = "https://github.com/morethan987" },
   ]
