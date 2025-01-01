@@ -50,11 +50,11 @@ smartTOCHideUnfocusedChildren = false
   layoutBackgroundBlur = true # only used when layout equals background
 
 [article]
-  showDate = false
-  showViews = false
-  showLikes = false
-  showDateOnlyInArticle = false
-  showDateUpdated = false
+  showDate = true
+  showViews = true
+  showLikes = true
+  showDateOnlyInArticle = true
+  showDateUpdated = true
   showAuthor = true
   # showAuthorBottom = false
   showHero = true
@@ -121,13 +121,13 @@ smartTOCHideUnfocusedChildren = false
   cardViewScreenWidth = false
   
 [firebase]
-  #apiKey = "AIzaSyB5tqlqDky77Vb4Tc4apiHV4hRZI18KGiY"
-  #authDomain = "blowfish-21fff.firebaseapp.com"
-  #projectId = "blowfish-21fff"
-  #storageBucket = "blowfish-21fff.appspot.com"
-  #messagingSenderId = "60108104191"
-  #appId = "1:60108104191:web:039842ebe1370698b487ca"
-  #measurementId = "G-PEDMYR1V0K"
+  apiKey = "AIzaSyAG8Rm167cOyRl2_h3Grnz6OD-aq4nRQvM"
+  authDomain = "morethan-website.firebaseapp.com"
+  projectId = "morethan-website"
+  storageBucket = "morethan-website.firebasestorage.app"
+  messagingSenderId = "480115699967"
+  appId = "1:480115699967:web:22fa07c76fe400b0a2dcca"
+  measurementId = "G-V70VD5H4D8"
 
 [fathomAnalytics]
   # site = "ABC12345"
