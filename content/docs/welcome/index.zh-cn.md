@@ -6,6 +6,7 @@ description: "探索 Blowfish 2.0版本的新功能。"
 tags: ["新手", "文档"]
 series: ["部署教程"]
 series_order: 1
+date: "2025-01-01"
 ---
 
 {{< lead >}}
