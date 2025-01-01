@@ -53,8 +53,6 @@ blowfish-tools new mynewsite
 
 Here's a quick video of how fast it is to get started with Blowfish using the CLI tool:
 
-<iframe width="100%" height="350" src="https://www.youtube.com/embed/SgXhGb-7QbU?si=ce44baicuQ6zMeXz" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-
 ### Install without CLI
 
 #### Create a new site

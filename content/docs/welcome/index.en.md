@@ -18,7 +18,6 @@ The original aim of Blowfish was to develop a theme that was simple and lightwei
 
 Tailwind CSS is at the heart of Blowfish and this release contains the very latest [Tailwind CSS version 3](https://tailwindcss.com/blog/tailwindcss-v3). It brings with it performance optimisations and support for some great new CSS features.
 
-{{< youtube "TmWIrBPE6Bc" >}}
 
 ## Multilingual support
 
