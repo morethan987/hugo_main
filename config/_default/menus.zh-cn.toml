@@ -19,7 +19,7 @@
 [[main]]
   name = "标签"
   title = "标签"
-  pageRef = "docs/shortcodes"
+  pageRef = "tags"
   weight = 15
 
 [[main]]
