@@ -1,15 +1,18 @@
 ---
 title: 本地 OverLeaf 部署
-weight: 1
+weight: 5
 draft: false
-description: "Overleaf 本地部署全流程"
-slug: "localoverleaf"
-tags: ["overleaf", "LaTeX"]
-series: ["技术流程"]
+description: Overleaf 本地部署全流程
+slug: localoverleaf
+tags:
+  - overleaf
+  - LaTeX
+series:
+  - 技术流程
 series_order: 1
-date: "2024-07-12"
+date: 2024-07-12
 authors:
- - "Morethan"
+  - Morethan
 ---
 
 ## 背景提要

@@ -1,15 +1,18 @@
 ---
 title: Local OverLeaf Deployment
-weight: 1
+weight: 5
 draft: false
-description: "Complete process of local Overleaf deployment"
-slug: "localoverleaf"
-tags: ["overleaf", "LaTeX"]
-series: ["Operation"]
+description: Complete process of local Overleaf deployment
+slug: localoverleaf
+tags:
+  - overleaf
+  - LaTeX
+series:
+  - Operation
 series_order: 1
-date: "2024-07-12"
+date: 2024-07-12
 authors:
- - "Morethan"
+  - Morethan
 ---
 
 ## Background Overview
