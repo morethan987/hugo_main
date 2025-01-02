@@ -1,3 +1,10 @@
+<!--
+此文件用于自定义首页的内容，包括背景、主题、个人信息、卡片、页面等。 
+
+填写完整路径名，如："partials/home/background.html"，指向的是theme文件夹中的定义，因为编译器会全局查找"partials/home"文件夹下的文件，第一个找到的当然是用户自定义的文件夹，也就是这个文件夹，但是这个文件夹下面没有目标文件，所以最终引用文件会转向theme文件夹中的。
+
+填写不完整路径名，如："recent-articles-demo.html"，指向的是最近的"partials"文件夹，在这个文件夹里面可以利用Hugo语法进行高度自定义。
+-->
 {{ $jsHome := resources.Get "js/home.js" | resources.Minify | resources.Fingerprint "sha512" }}
 <div id="background">
   {{ partial "partials/home/background.html" . }}
@@ -14,7 +21,7 @@
 <div id="page" style="display:none">
   {{ partial "partials/home/page.html" . }}
 </div>
-<section>
+<!-- <section>
   {{ partial "recent-articles-demo.html" . }}
-</section>
+</section> -->
 <script defer type="text/javascript" src="{{ $jsHome.RelPermalink }}" integrity="{{ $jsHome.Data.Integrity }}"></script>

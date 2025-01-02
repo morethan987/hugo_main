@@ -1,10 +1,10 @@
 ---
 title: "Welcome to More's website"
-description: "This page was built using the Blowfish theme for Hugo."
+description: "Here are some thinkings and feelings. Hope you find some thing useful."
 ---
 
 
-<div class="flex px-4 py-2 mb-8 text-base rounded-md bg-primary-100 dark:bg-primary-900">
+<!-- <div class="flex px-4 py-2 mb-8 text-base rounded-md bg-primary-100 dark:bg-primary-900">
   <span class="flex items-center ltr:pr-3 rtl:pl-3 text-primary-400">
     {{< icon "triangle-exclamation" >}}
   </span>
@@ -17,9 +17,5 @@ description: "This page was built using the Blowfish theme for Hugo."
       Switch layout &orarr;
     </button>
   </span>
-</div>
+</div> -->
 
-
-```node
-npx blowfish-tools
-```  

@@ -19,7 +19,7 @@
 [[main]]
   name = "Tags"
   title = "Tags"
-  pageRef = "docs/shortcodes"
+  pageRef = "tags"
   weight = 15
 
 [[main]]
