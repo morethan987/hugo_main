@@ -1,5 +1,3 @@
 ---
-title: "Authors Taxonomy Listing Example"
+title: "Authors List"
 ---
-
-A quick example of how to start using author taxonomies in your articles.

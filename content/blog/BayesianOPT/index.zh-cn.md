@@ -8,6 +8,8 @@ tags: ["math", "MATLAB"]
 series: ["数学建模"]
 series_order: 1
 date: "2024-08-05"
+authors:
+ - "Morethan"
 ---
 
 ## 引用文献

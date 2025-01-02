@@ -8,6 +8,8 @@ tags: ["overleaf", "LaTeX"]
 series: ["技术流程"]
 series_order: 1
 date: "2024-07-12"
+authors:
+ - "Morethan"
 ---
 
 ## 背景提要

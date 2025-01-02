@@ -8,6 +8,8 @@ tags: ["overleaf", "LaTeX"]
 series: ["Operation"]
 series_order: 1
 date: "2024-07-12"
+authors:
+ - "Morethan"
 ---
 
 ## Background Overview

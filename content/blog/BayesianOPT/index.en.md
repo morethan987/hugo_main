@@ -8,6 +8,8 @@ tags: ["math", "MATLAB"]
 series: ["MathModel"]
 series_order: 1
 date: "2024-08-05"
+authors:
+ - "Morethan"
 ---
 
 ## Reference
