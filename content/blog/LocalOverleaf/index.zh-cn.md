@@ -3,9 +3,9 @@ title: 本地 OverLeaf 部署
 weight: 1
 draft: false
 description: "Overleaf 本地部署全流程"
-slug: "LocalOverleaf"
+slug: "localoverleaf"
 tags: ["overleaf", "LaTeX"]
-series: ["部署教程"]
+series: ["技术流程"]
 series_order: 1
 date: "2024-07-12"
 ---

@@ -3,9 +3,9 @@ title: Local OverLeaf Deployment
 weight: 1
 draft: false
 description: "Complete process of local Overleaf deployment"
-slug: "LocalOverleaf"
+slug: "localoverleaf"
 tags: ["overleaf", "LaTeX"]
-series: ["Documentation"]
+series: ["Operation"]
 series_order: 1
 date: "2024-07-12"
 ---

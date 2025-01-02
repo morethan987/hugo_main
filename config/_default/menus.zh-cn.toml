@@ -23,10 +23,16 @@
   weight = 15
 
 [[main]]
+  name = "系列"
+  title = "系列"
+  pageRef = "series"
+  weight = 20
+
+[[main]]
   name = "作者"
   title = "作者"
   pageRef = "authors"
-  weight = 20
+  weight = 25
 
 #次级菜单
 #[[main]]
