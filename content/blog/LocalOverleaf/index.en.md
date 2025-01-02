@@ -76,7 +76,7 @@ Now open a browser and visit `http://localhost/launchpad`.
 
 After registering an Administrator Account, you will be redirected to `http://localhost/project`. The basic OverLeaf webpage should now be displayed.
 {{< alert >}}
-If you upload a file to compile now, it will most likely report an error `ᕕ( ᐛ )ᕗ`.
+If you compile now, it will most likely report an error `ᕕ( ᐛ )ᕗ`.
 
 This is because ShareLaTeX is missing many required packages, not a red envelope "manual dog head."
 {{< /alert >}}
