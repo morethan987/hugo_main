@@ -78,7 +78,7 @@ After registering an Administrator Account, you will be redirected to `http://lo
 {{< alert >}}
 If you compile now, it will most likely report an error `ᕕ( ᐛ )ᕗ`.
 
-This is because ShareLaTeX is missing many required packages, not a red envelope "manual dog head."
+This is because ShareLaTeX is missing many required packages🙃"
 {{< /alert >}}
 
 ### Installing Extension Packages
