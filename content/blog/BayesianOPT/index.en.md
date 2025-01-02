@@ -2,14 +2,18 @@
 title: Bayesian Optimization
 weight: 10
 draft: false
-description: "BayesianOPT principle and its MATLAB implementation"
-slug: "bayesianopt"
-tags: ["math", "MATLAB"]
-series: ["MathModel"]
+description: BayesianOPT principle and its MATLAB implementation
+slug: bayesianopt
+tags:
+  - math
+  - MATLAB
+  - CUMCM
+series:
+  - MathModel
 series_order: 1
-date: "2024-08-05"
+date: 2024-08-05
 authors:
- - "Morethan"
+  - Morethan
 ---
 
 ## Reference

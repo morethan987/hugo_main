@@ -2,14 +2,18 @@
 title: 贝叶斯优化
 weight: 10
 draft: false
-description: "贝叶斯优化原理及其MATLAB实现"
-slug: "bayesianopt"
-tags: ["math", "MATLAB"]
-series: ["数学建模"]
+description: 贝叶斯优化原理及其MATLAB实现
+slug: bayesianopt
+tags:
+  - math
+  - MATLAB
+  - CUMCM
+series:
+  - 数学建模
 series_order: 1
-date: "2024-08-05"
+date: 2024-08-05
 authors:
- - "Morethan"
+  - Morethan
 ---
 
 ## 引用文献
