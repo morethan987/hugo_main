@@ -31,10 +31,12 @@ D:\Python\Python311\python.exe -m venv your_env_name
 
 More parameters you may need for a customized virtual env. 🤔
 
-| `--system-site-packages` | Give the virtual environment access to the system site-packages dir.                                |
+| Params                   | Meaning                                                                                             |
 | ------------------------ | --------------------------------------------------------------------------------------------------- |
+| `--system-site-packages` | Give the virtual environment access to the system site-packages dir.
 | `--clear`                | Delete the contents of the environment directory if it already exists, before environment creation. |
 | `--version`              | print the python version of the env                                                                 |
+
 {{< alert >}}
 All the detailed expaination of the parameters can be got by the code `python -m venv -h`. No need to search everywhere~😆
 {{< /alert >}}
