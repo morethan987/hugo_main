@@ -42,7 +42,7 @@ D:\Python\Python311\python.exe -m venv your_env_name
 {{< /alert >}}
 
 ### 激活
-缺省情况下，虚拟环境处于非激活状态。在“your_env_name/Scripts/”方向将有一个名为“activate”的文件，用命令行运行即可。
+默认情况下，虚拟环境处于非激活状态。在“your_env_name/Scripts/”目录下将有一个名为“activate”的文件，用命令行运行即可。
 
 ```sh
 # 激活虚拟环境
