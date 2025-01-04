@@ -8,8 +8,8 @@ title = "More's awesome website"
   isoCode = "en"
   rtl = false
   dateFormat = "2 January 2006"
-  logo = "img/logo.png"
-  secondaryLogo = "img/logo_light.png"
+  logo = "img/logo.svg"
+  secondaryLogo = "img/logo_light.svg"
   description = "A website for thinking and feeling."
 
 [params.author]

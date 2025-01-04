@@ -8,8 +8,8 @@ title = "Morethan 小站"
   isoCode = "zh-cn"
   rtl = false
   dateFormat = "2006-01-02"
-  logo = "img/logo.png"
-  secondaryLogo = "img/logo_light.png"
+  logo = "img/logo.svg"
+  secondaryLogo = "img/logo_light.svg"
   description = "一个存放思考、感悟的网站"
 
 [params.author]
