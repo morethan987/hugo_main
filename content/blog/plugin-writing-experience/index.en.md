@@ -36,7 +36,7 @@ That was until I wanted to upload the massive amount of notes I had in `Obsidian
 
 ### The Bitter Taste of Originality
 
-I soon realized that there wasn’t a plugin available to directly convert the format of my `Obsidian` notes to fit the `Blowfish` theme. Fueled by the earlier "pleasant experience," I decided to write a plugin myself! (😄 Although, I would soon stop laughing 😢)
+I soon realized that there wasn’t a plugin available to directly convert the format of my `Obsidian` notes to fit the `Blowfish` theme. Fueled by the earlier "pleasant experience," I decided to write a [plugin](https://github.com/morethan987/Hugo-Blowfish-Exporter) myself! (😄 Although, I would soon stop laughing 😢)
 
 The rest of the experience wasn’t anything particularly exciting—just endless switching between webpages, searching through API documentation, and never-ending conversations with AI bots. After countless revisions, I finally ended up with something exceedingly simple: a plugin that identifies specific patterns in documents and performs content replacement.
 
