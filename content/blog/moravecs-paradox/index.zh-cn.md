@@ -3,7 +3,7 @@ title: 关于莫拉维克悖论的思考
 weight: 25
 draft: true
 description: 关于莫拉维克悖论的思考
-slug: moravec's-paradox
+slug: moravecs-paradox
 tags:
   - AI
   - 遐想

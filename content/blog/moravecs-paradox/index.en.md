@@ -3,7 +3,7 @@ title: The reflection of Moravec's paradox
 weight: 25
 draft: true
 description: The reflection of Moravec's paradox
-slug: moravec's-paradox
+slug: moravecs-paradox
 tags:
   - AI
   - Imagination

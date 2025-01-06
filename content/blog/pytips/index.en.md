@@ -3,7 +3,7 @@ title: Python Tpis
 weight: 15
 draft: false
 description: A set of Python tips
-slug: pythontips
+slug: pytips
 tags:
   - Python
 series:
