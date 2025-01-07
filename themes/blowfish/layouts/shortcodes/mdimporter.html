@@ -1,6 +1,27 @@
-{{ $url := .Get "url"}}
-{{ with resources.GetRemote (urls.Parse $url) }}
-{{ .Content | markdownify }}
+{{ $url := .Get "url" }}
+{{ $local := .Get "local" }}
+
+{{ define "removeFrontmatter" }}
+  {{ $content := . }}
+  {{ if hasPrefix . "---" }}
+    {{ $parts := split . "---" }}
+    {{ if ge (len $parts) 3 }}
+      {{ $content = delimit (after 2 $parts) "---" }}
+    {{ end }}
+  {{ end }}
+  {{ $content }}
+{{ end }}
+
+{{ if $local }}
+  {{ with os.ReadFile $local }}
+    {{ template "removeFrontmatter" . | markdownify }}
+  {{ else }}
+    {{ errorf "Markdown Importer Shortcode - Unable to read local file: %s" $local }}
+  {{ end }}
 {{ else }}
-{{ errorf "Mardown Importer Shortcode - Unable to get remote resource" . }}
+  {{ with resources.GetRemote (urls.Parse $url) }}
+    {{ template "removeFrontmatter" .Content | markdownify }}
+  {{ else }}
+    {{ errorf "Markdown Importer Shortcode - Unable to get remote resource" . }}
+  {{ end }}
 {{ end }}
