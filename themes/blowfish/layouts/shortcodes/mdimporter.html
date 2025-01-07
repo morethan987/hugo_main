@@ -1,6 +1,11 @@
-{{ $url := .Get "url"}}
-{{ with resources.GetRemote (urls.Parse $url) }}
-{{ .Content | markdownify }}
+{{ $url := .Get "url" }}
+{{ if hasPrefix $url "http" }}
+  {{ with resources.GetRemote (urls.Parse $url) }}
+    {{ .Content | markdownify }}
+  {{ else }}
+    {{ errorf "Markdown Importer - cannot get the remote resources: %s" $url }}
+  {{ end }}
 {{ else }}
-{{ errorf "Mardown Importer Shortcode - Unable to get remote resource" . }}
+  {{ $content := readFile $url }}
+  {{ $content | markdownify }}
 {{ end }}
