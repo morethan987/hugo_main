@@ -1,6 +1,6 @@
 ---
 title: CUMCM 2024 Summary
-weight: 20
+weight: -20
 draft: false
 description: A summary and reflection on CUMCM 2024
 slug: cumcm2024

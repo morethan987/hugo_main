@@ -1,6 +1,6 @@
 ---
 title: Bayesian Optimization
-weight: 10
+weight: -10
 draft: false
 description: BayesianOPT principle and its MATLAB implementation
 slug: bayesianopt

@@ -1,8 +1,8 @@
 ---
-title: An experience of a plugin writing
-weight: 30
+title: An experience of writing plugin
+weight: -30
 draft: false
-description: An experience of a plugin writing
+description: An experience of writing plugin
 slug: plugin-writing-experience
 tags:
   - Experience

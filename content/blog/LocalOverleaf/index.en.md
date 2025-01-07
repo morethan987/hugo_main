@@ -1,6 +1,6 @@
 ---
 title: Local OverLeaf Deployment
-weight: 5
+weight: -5
 draft: false
 description: Complete process of local Overleaf deployment
 slug: localoverleaf

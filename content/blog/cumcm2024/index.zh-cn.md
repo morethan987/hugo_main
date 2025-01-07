@@ -1,6 +1,6 @@
 ---
 title: CUMCM 2024总结
-weight: 20
+weight: -20
 draft: false
 description: 对于CUMCM 2024的总结与反思
 slug: cumcm2024

@@ -1,6 +1,6 @@
 ---
 title: The reflection of Moravec's paradox
-weight: 25
+weight: -25
 draft: true
 description: The reflection of Moravec's paradox
 slug: moravecs-paradox

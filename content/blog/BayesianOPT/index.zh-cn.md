@@ -1,6 +1,6 @@
 ---
 title: 贝叶斯优化
-weight: 10
+weight: -10
 draft: false
 description: 贝叶斯优化原理及其MATLAB实现
 slug: bayesianopt

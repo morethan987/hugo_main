@@ -1,6 +1,6 @@
 ---
 title: Python Tpis
-weight: 15
+weight: -15
 draft: false
 description: A set of Python tips
 slug: pytips
