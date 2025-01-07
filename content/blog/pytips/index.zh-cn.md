@@ -48,3 +48,7 @@ D:\Python\Python311\python.exe -m venv your_env_name
 # 激活虚拟环境
 your_env_name/Scripts/activate
 ```
+
+## 临时测试
+### 导入外源性markdown文件
+{{< mdimporter url="https://raw.githubusercontent.com/morethan987/Hugo-Blowfish-Exporter/main/README.md" >}}
