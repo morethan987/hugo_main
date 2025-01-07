@@ -51,4 +51,4 @@ your_env_name/Scripts/activate
 
 ## 临时测试
 ### 导入外源性markdown文件
-{{< mdimporter url="https://raw.githubusercontent.com/morethan987/hugo_main/main/content/blog/pytips/index.zh-cn.md" >}}
+{{< mdimporter url="https://raw.githubusercontent.com/morethan987/hugo_main/main/content/blog/bayesianopt/index.zh-cn.md" >}}
