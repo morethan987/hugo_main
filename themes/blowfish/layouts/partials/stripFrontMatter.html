@@ -1,0 +1,9 @@
+{{- $content := . -}}
+{{- $result := $content -}}
+{{- if hasPrefix (trim $content "\n\r ") "---" -}}
+  {{- $parts := split $content "---" -}}
+  {{- if ge (len $parts) 3 -}}
+    {{- $result = delimit (after 2 $parts) "---" -}}
+  {{- end -}}
+{{- end -}}
+{{- $result -}}
