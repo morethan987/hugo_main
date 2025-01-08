@@ -14,7 +14,6 @@ date: 2024-09-12
 authors:
   - Morethan
 ---
-{{< katex >}}
 
 ## Preface
 This article is primarily a review and summary of the entire process of CUMCM 2024.
@@ -25,7 +24,8 @@ There were moments of excitement and surprise, as well as disappointment; we mus
 
 In short, this experience is truly unforgettable, and it is even more worth summarizing and learning from the experience to prepare for next year's competition.
 
-{{< alert >}}
+
+{{< alert icon="circle-info" >}}
 CUMCM stands for Chinese Undergraduate Mathematical Contest in Modeling; it is commonly referred to as the "National Mathematical Modeling Competition".
 {{< /alert >}}
 
@@ -105,6 +105,7 @@ The paper writing part is divided into:
 	- Optimize code comments to make them more readable
 	- Focus on checking **personal information**
 
+
 {{< alert icon="fire" cardColor="#e63946" iconColor="#1d3557" textColor="#f1faee" >}}
 Personal information must not be retained in the competition paper, including file paths in the code, such as `C:\Users\Morethan`; retaining personal information is a very serious mistake!
 {{< /alert >}}
@@ -115,7 +116,7 @@ When we applied the above strategies to the actual combat process, that is, the 
 - Effective Time:
 	- The total duration of the competition is three days, a total of 72 hours
 	- The team works from seven in the morning to eight in the evening, excluding meal times, with an effective time of 12 hours a day
-	- Time utilization rate is \\( 50 \\% \\) (quite low in comparison🤔)
+	- Time utilization rate is {{< katex >}}\\(50\\%\\) (quite low in comparison🤔)
 - Completed Work:
 	- The main body of the paper is 28 A4 pages
 	- The code part is 35 A4 pages, excluding the reused code between each sub-question, there should be about 20 pages
@@ -182,7 +183,8 @@ When we applied the above strategies to the actual combat process, that is, the 
 
 - Code parallelization: Add some parallelizable code to the code to increase running speed
 
-{{< alert >}}
+
+{{< alert cardColor="#FFD700" iconColor="#8B6914" textColor="#696969" >}}
 All code improvements must be implemented in a document! Not just slogans!
 {{< /alert >}}
 
@@ -195,7 +197,8 @@ All code improvements must be implemented in a document! Not just slogans!
 	- Optimize the paper's main logic framework, refine the content of each section
 	- Improvements in language style, text readability, detail, illustration logic, and image readability, etc.
 
-{{< alert >}}
+
+{{< alert cardColor="#FFD700" iconColor="#8B6914" textColor="#696969" >}}
 The results are fixed in the form of comments in the LaTeX template!
 {{< /alert >}}
 

@@ -26,7 +26,7 @@ python -m venv your_env_name
 python -m venv your_env_name --python=python3.11
 
 # simply list the absolute direction of python, simple and efficient
-D:\Python\Python311\python.exe -m venv your_env_name
+D:/PythonPython311/python.exe -m venv your_env_name
 ```
 
 More parameters you may need for a customized virtual env. 🤔
@@ -37,7 +37,7 @@ More parameters you may need for a customized virtual env. 🤔
 | `--clear`                | Delete the contents of the environment directory if it already exists, before environment creation. |
 | `--version`              | print the python version of the env                                                                 |
 
-{{< alert >}}
+{{< alert icon="pencil" >}}
 All the detailed expaination of the parameters can be got by the code `python -m venv -h`. No need to search everywhere~😆
 {{< /alert >}}
 

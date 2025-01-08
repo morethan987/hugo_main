@@ -91,17 +91,23 @@ This is because ShareLaTeX is missing many required packages🙃"
 Open `Kali`, navigate to the appropriate directory, and run `bin/shell`. Then execute the following one by one:
 ```sh
 cd /usr/local/texlive
+
 # Download and run the upgrade script
 wget http://mirror.ctan.org/systems/texlive/tlnet/update-tlmgr-latest.sh
 sh update-tlmgr-latest.sh -- --upgrade
+
 # Change the TeX Live download source
 tlmgr option repository https://mirrors.sustech.edu.cn/CTAN/systems/texlive/tlnet/
+
 # Upgrade tlmgr
 tlmgr update --self --all
+
 # Install the full TeX Live package (this will take time, so don’t let the shell disconnect)
 tlmgr install scheme-full
+
 # Exit the ShareLaTeX command-line interface
 exit
+
 # Restart the ShareLaTeX container
 docker restart sharelatex
 ```
@@ -109,15 +115,20 @@ docker restart sharelatex
 After restarting, enter the `shell` again and run:
 ```sh
 apt update
+
 # Install fonts
 apt install --no-install-recommends ttf-mscorefonts-installer fonts-noto texlive-fonts-recommended tex-gyre fonts-wqy-microhei fonts-wqy-zenhei fonts-noto-cjk fonts-noto-cjk-extra fonts-noto-color-emoji fonts-noto-extra fonts-noto-ui-core fonts-noto-ui-extra fonts-noto-unhinted fonts-texgyre
+
 # Install pygments
 apt install python3-pygments
+
 # Install Beamer and others
 apt install texlive-latex-recommended
 apt install texlive-latex-extra
+
 # Install English fonts
 echo "yes" | apt install -y --reinstall ttf-mscorefonts-installer
+
 # Install Chinese fonts
 apt install -y latex-cjk-all texlive-lang-chinese texlive-lang-english
 cp fonts/* /usr/share/fonts/zh-cn/
@@ -133,16 +144,16 @@ vim /usr/local/texlive/2023/texmf.cnf
 ```
 Open the configuration file and add `shell_escape = t` at the bottom.
 
-{{< alert >}}
+
+{{< alert icon="circle-info" >}}
 I’m not sure what this does, but it was passed down by the predecessors 🤔
 {{< /alert >}}
 
 Note, if the TeX Live version (the official name for extension packages) differs, the directory path may also change. You will need to adjust the path based on the actual version, for example, change `2023` to `2024`.
 
-{{< alert >}}
+{{< alert icon="circle-info" >}}
 You can use `ls -l` in the Linux command line to view all files in the current directory.
 {{< /alert >}}
-
 ## Successful Deployment
 Now you can happily use your local OverLeaf version without worrying about compilation timeouts~
 

@@ -38,8 +38,9 @@ Built in 872 ms
 
 In total, compiling 104 pages (both Chinese and English) took just 0.872 seconds, including the time to build the local server. That speed is hard to criticize. And the local server can listen for changes to the source code in real time and do **incremental refactoring**, depending on the size of the change, usually around 0.03 seconds.
 
-{{< alert icon="pencil" >}}  
-I haven't used other page generators for setting up blogs, so I can't compare Hugo's speed with others.  
+
+{{< alert icon="pencil" >}}
+I haven't used other page generators for setting up blogs, so I can't compare Hugo's speed with others.
 {{< /alert >}}
 
 ## References
@@ -56,8 +57,9 @@ This part is covered in detail in the [webpage](https://letere-gzj.github.io/hug
 
 Honestly, setting up Hugo is one of the easiest setups I've ever seen, no exaggeration. You simply download Hugo from the [official website](https://gohugo.io/), place it in a folder, and unzip it. You’ll find just one file, `hugo.exe`—it’s that simple.
 
-{{< alert icon="pencil" >}}  
-Hugo is really convenient. I tried Hexo before, but the Node.js setup turned me away. Even now, I have no idea why it failed to compile. 😢  
+
+{{< alert icon="pencil" >}}
+Hugo is really convenient. I tried Hexo before, but the Node.js setup turned me away. Even now, I have no idea why it failed to compile. 😢
 {{< /alert >}}
 
 The only slight difficulty is adding the directory containing `hugo.exe` to your environment variables.
