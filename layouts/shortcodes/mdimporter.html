@@ -1,0 +1,14 @@
+{{ $url := .Get "url" }}
+
+{{ if hasPrefix $url "http" }}
+  {{ with resources.GetRemote (urls.Parse $url) }}
+    {{ $processed := partial "stripFrontMatter" .Content }}
+    {{ $processed | markdownify }}
+  {{ else }}
+    {{ errorf "Markdown Importer - cannot get the remote resources: %s" $url }}
+  {{ end }}
+{{ else }}
+  {{ $content := readFile $url }}
+  {{ $processed := partial "stripFrontMatter" $content }}
+  {{ $processed | markdownify }}
+{{ end }}
