@@ -99,7 +99,7 @@ Hugo 的网站主题很多，具体参考 [Hugo Themes](https://themes.gohugo.io
 
 - 为什么我使用 `svg` 格式的 `logo` 无法完成(日间/夜间)模式的切换？
 
-这是我发现的一个 `bug`，已经给主题作者推送我改进的代码了，详见[代码改进](https://github.com/nunocoracao/blowfish/pull/1902)
+这是我发现的一个 `bug`，已经给主题作者推送我改进的代码了，详见[代码改进](https://github.com/nunocoracao/blowfish/pull/1902)或 [SVG 支持]((https://github.com/morethan987/hugo_main/blob/main/assets/js/appearance.js)
 
 - 为什么浏览器窗口上的小图标一直都是 `blowfish`，即使改换了 `logo` 也不行？
 
@@ -126,7 +126,8 @@ Hugo 的网站主题很多，具体参考 [Hugo Themes](https://themes.gohugo.io
 
 1. 非展示性链接简单处理为网页超链接形式
 
-2. 展示性链接较为复杂：需要更新 `Blowfish` 主题的源代码，通过 `mdimporter` 这个 `shortcode` 来进行文件注入；同时为了方便链接，每一个文件都需要设置 `slug` 属性来标记网站中存放 `markdown` 文件的文件夹
+2. 展示性链接较为复杂：需要覆写 `Blowfish` 主题的源代码，通过 `mdimporter` 这个 `shortcode` 来进行文件注入；同时为了方便链接，每一个文件都需要设置 `slug` 属性来标记网站中存放 `markdown` 文件的文件夹
+3. 对于主题源代码的覆写详见 [mdimporter](https://github.com/morethan987/hugo_main/blob/main/layouts/shortcodes/mdimporter.html) 以及用于去除注入文件开头元数据的 [stripFrontMatter](https://github.com/morethan987/hugo_main/blob/main/layouts/partials/stripFrontMatter.html)；覆写目录参考 GitHub 上的配置
 
 这个插件也是投入了我巨大的精力，虽然也只有几天时间🤔但是那几天还是挺累的😵‍💫
   

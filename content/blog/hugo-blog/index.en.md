@@ -130,7 +130,8 @@ While the plugin is simple, it covers almost all of my needs, including:
 
 1. The none-displayed link is simply exported as normal hyperlink in the HTML file;
 
-2. The displayed link is more complex: change the source code of Blowfish to support the file injection through the `shortcode`, `mdimporter`; every Obsidian file should includes a meta data `slug` to tag the folder that contains the target markdown file in your website repository.
+2. The displayed link is more complex: change(override) the source code of Blowfish to support the file injection through the `shortcode`, `mdimporter`; every Obsidian file should includes a meta data `slug` to tag the folder that contains the target markdown file in your website repository.
+3. The overriding of the theme's source code can be found in the [mdimporter](https://github.com/morethan987/hugo_main/blob/main/layouts/shortcodes/mdimporter.html) and the [stripFrontMatter](https://github.com/morethan987/hugo_main/blob/main/layouts/partials/stripFrontMatter.html) used to remove metadata from the injected files' headers. For overriding the directory, refer to the configuration on GitHub.
 
 I put a lot of effort into this plugin, even though it only took a few days 🤔. But those few days were quite exhausting 😵‍💫.
 
