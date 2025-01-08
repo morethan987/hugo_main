@@ -124,7 +124,11 @@ While the plugin is simple, it covers almost all of my needs, including:
 
   - **Image embedding** (automatically exports images)
 
-  - **Wiki-style links**, with a file interlinking system that simulates Obsidian’s functionality. I think it works pretty well 😁.
+  - **Wiki-style links**, with a **file interlinking system** that simulates Obsidian’s functionality. I think it works pretty well 😁.
+
+1. The none-displayed link is simply exported as normal hyperlink in the HTML file;
+
+2. The displayed link is more complex: change the source code of Blowfish to support the file injection through the `shortcode`, `mdimporter`; every Obsidian file should includes a meta data `slug` to tag the folder that contains the target markdown file in your website repository.
 
 I put a lot of effort into this plugin, even though it only took a few days 🤔. But those few days were quite exhausting 😵‍💫.
 
