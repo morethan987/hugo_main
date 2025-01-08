@@ -22,7 +22,7 @@ A blog website journey, from hand-coding to Hugo, a story of twists and turns.
 ## Why Hugo?
 It all started with hearing that Hugo could generate webpages and that it was incredibly efficient at compiling static pages. I decided to dive into the research—Hugo is said to be the **fastest static site generator** in the world, as claimed on its official website.
 
-Of course, words are just words, so here’s the output I got when I compiled and ran Hugo locally:
+Of course, words are just words, so here’s the output I got when I compiled and ran Hugo locally without the `public` folder at the beginning:
 
 |                  | ZH-CN | EN  |
 | ---------------- | ----- | --- |
@@ -36,7 +36,7 @@ Of course, words are just words, so here’s the output I got when I compiled an
 
 Built in 872 ms
 
-In total, compiling 104 pages (both Chinese and English) took just 0.872 seconds, including the time to build the local server. That speed is hard to criticize.
+In total, compiling 104 pages (both Chinese and English) took just 0.872 seconds, including the time to build the local server. That speed is hard to criticize. And the local server can listen for changes to the source code in real time and do **incremental refactoring**, depending on the size of the change, usually around 0.03 seconds.
 
 {{< alert icon="pencil" >}}  
 I haven't used other page generators for setting up blogs, so I can't compare Hugo's speed with others.  
@@ -136,7 +136,7 @@ And if you modify and upgrade the code, I’d be very grateful if you share your
 
 **Setting up a blog site is just the first step in a long journey; the real challenge is filling it with content.**
 
-As I mentioned in [An experience of writing plugins](https://morethan987.github.io/blog/plugin-writing-experience/), many personal blogs fade into obscurity in as little as a year, from the initial burst of excitement to the eventual silence.
+As I mentioned in [An experience of writing plugins]({{< ref "/blog/plugin-writing-experience" >}}), many personal blogs fade into obscurity in as little as a year, from the initial burst of excitement to the eventual silence.
 
 In this fast-paced world, most meaningless and inefficient things are eventually replaced by **efficiency**, and the original enthusiasm and dreams often compromise with reality. I too no longer have the passion I once had, and my actions have become more like those of a **real adult**.
 
