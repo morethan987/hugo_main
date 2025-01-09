@@ -145,13 +145,13 @@ vim /usr/local/texlive/2023/texmf.cnf
 Open the configuration file and add `shell_escape = t` at the bottom.
 
 
-{{< alert icon="circle-info" >}}
+{{< alert icon="circle-info" cardColor="#b0c4de" textColor="#333333" >}}
 I’m not sure what this does, but it was passed down by the predecessors 🤔
 {{< /alert >}}
 
 Note, if the TeX Live version (the official name for extension packages) differs, the directory path may also change. You will need to adjust the path based on the actual version, for example, change `2023` to `2024`.
 
-{{< alert icon="circle-info" >}}
+{{< alert icon="circle-info" cardColor="#b0c4de" textColor="#333333" >}}
 You can use `ls -l` in the Linux command line to view all files in the current directory.
 {{< /alert >}}
 ## Successful Deployment

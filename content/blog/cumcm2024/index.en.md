@@ -25,7 +25,7 @@ There were moments of excitement and surprise, as well as disappointment; we mus
 In short, this experience is truly unforgettable, and it is even more worth summarizing and learning from the experience to prepare for next year's competition.
 
 
-{{< alert icon="circle-info" >}}
+{{< alert icon="circle-info" cardColor="#b0c4de" textColor="#333333" >}}
 CUMCM stands for Chinese Undergraduate Mathematical Contest in Modeling; it is commonly referred to as the "National Mathematical Modeling Competition".
 {{< /alert >}}
 
@@ -106,7 +106,7 @@ The paper writing part is divided into:
 	- Focus on checking **personal information**
 
 
-{{< alert icon="fire" cardColor="#e63946" iconColor="#1d3557" textColor="#f1faee" >}}
+{{< alert icon="fire" cardColor="#e63946" iconColor="#ffffff" textColor="#ffffff" >}}
 Personal information must not be retained in the competition paper, including file paths in the code, such as `C:\Users\Morethan`; retaining personal information is a very serious mistake!
 {{< /alert >}}
 
@@ -184,7 +184,7 @@ When we applied the above strategies to the actual combat process, that is, the 
 - Code parallelization: Add some parallelizable code to the code to increase running speed
 
 
-{{< alert cardColor="#FFD700" iconColor="#8B6914" textColor="#696969" >}}
+{{< alert icon="triangle-exclamation" cardColor="#ffcc00" textColor="#333333" iconColor="#8B6914" >}}
 All code improvements must be implemented in a document! Not just slogans!
 {{< /alert >}}
 
@@ -198,7 +198,7 @@ All code improvements must be implemented in a document! Not just slogans!
 	- Improvements in language style, text readability, detail, illustration logic, and image readability, etc.
 
 
-{{< alert cardColor="#FFD700" iconColor="#8B6914" textColor="#696969" >}}
+{{< alert icon="triangle-exclamation" cardColor="#ffcc00" textColor="#333333" iconColor="#8B6914" >}}
 The results are fixed in the form of comments in the LaTeX template!
 {{< /alert >}}
 
