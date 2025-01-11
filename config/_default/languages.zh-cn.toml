@@ -19,4 +19,5 @@ title = "Morethan 小站"
   bio = "计算机、物理与AI理工男"
   links = [
     { github = "https://github.com/morethan987" },
+    { knowledgebase = "https://morethan987.github.io/KnowledgeBase"},
   ]

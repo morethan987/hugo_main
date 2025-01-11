@@ -50,7 +50,7 @@ Enter the following content:
 ```
 
 ### Installing Docker
-Go to the Docker website to download Docker, which will be the container for the ShareLaTeX model. Docker is an open-source application container engine that includes images, containers, and repositories. Its purpose is to manage the lifecycle of application components, such as encapsulation, distribution, deployment, and operation, allowing users to "package once, run anywhere," much like a container, developed and encapsulated by programmers, which users can directly move around.
+Go to the [Docker](https://www.docker.com/) website to download Docker, which will be the container for the ShareLaTeX model. Docker is an open-source application container engine that includes images, containers, and repositories. Its purpose is to manage the lifecycle of application components, such as encapsulation, distribution, deployment, and operation, allowing users to "package once, run anywhere," much like a container, developed and encapsulated by programmers, which users can directly move around.
 
 Once Docker is installed, you can double-click to start it in the background. We will interact with Docker later via the command line.
 

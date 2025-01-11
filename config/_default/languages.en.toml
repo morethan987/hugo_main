@@ -20,4 +20,5 @@ title = "More's awesome website"
   bio = "Computer, Physic & AI"
   links = [
     { github = "https://github.com/morethan987" },
+    { knowledgebase = "https://morethan987.github.io/KnowledgeBase"},
   ]
