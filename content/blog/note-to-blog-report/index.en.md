@@ -82,7 +82,9 @@ Recommendation: ❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍�
 
 ##### Introduction
 
-[Quartz](https://github.com/jackyzha0/quartz) is a toolset that uses Hugo to convert Obsidian notes into webpages. The latest version optimizes the user customization experience.
+[Quartz](https://github.com/jackyzha0/quartz) is a toolset that converts Obsidian notes into web pages. The latest version, `v4`, has undergone a complete rewrite compared to `v3`, removing its dependency on `Hugo` and optimizing the user customization experience. The `v4` version is now primarily built with `TypeScript`, and the original `Hugo` templates have been replaced with `JSX`.
+
+As a result, Quartz in its current form is almost entirely disconnected from `Hugo`. However, much of the information available in Internet still advertises Quartz as being built on top of `Hugo`.
 
 Official example website: [Welcome to Quartz 4](https://quartz.jzhao.xyz/)
 

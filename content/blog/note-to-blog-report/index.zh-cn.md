@@ -67,10 +67,12 @@ authors:
 
 
 ### 已有方案
-#### Quartz(Hugo)
+#### Quartz
 推荐指数：❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥
 ##### 介绍
-[Quartz](https://github.com/jackyzha0/quartz) 是一个利用 Hugo 将 Obsidian 笔记转化为网页的工具集，最新版本优化了用户自定义的体验。
+[Quartz](https://github.com/jackyzha0/quartz) 是一个将 Obsidian 笔记转化为网页的工具集。Quartz 的最新版本是 `v4` 版本，相较于 `v3` 版本， `v4` 版本从底层完全重构了代码，去除了对于 `Hugo` 的依赖，优化了用户自定义的体验。目前 `v4` 版本主要使用 `TypeScript` 构建，原本 `hugo` 的 `template` 也改用 `JSX` 替换。
+
+因此，现在的 Quartz 几乎可以说和 `Hugo` 没什么关系了，但是目前国内的很多信息还是宣传 Quartz 的底层是 `Hugo`
 
 官方样例网站：[Welcome to Quartz 4](https://quartz.jzhao.xyz/)
 
