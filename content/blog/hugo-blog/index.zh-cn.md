@@ -99,7 +99,7 @@ Hugo 的网站主题很多，具体参考 [Hugo Themes](https://themes.gohugo.io
 
 - 为什么我使用 `svg` 格式的 `logo` 无法完成(日间/夜间)模式的切换？
 
-这是我发现的一个 `bug`，已经给主题作者推送我改进的代码了，详见[代码改进](https://github.com/nunocoracao/blowfish/pull/1902)或 [SVG 支持]((https://github.com/morethan987/hugo_main/blob/main/assets/js/appearance.js)
+这是我发现的一个 `bug`，已经给主题作者推送我改进的代码了，详见[代码改进](https://github.com/nunocoracao/blowfish/pull/1902)或 [SVG 支持](https://github.com/morethan987/hugo_main/blob/main/assets/js/appearance.js)
 
 - 为什么浏览器窗口上的小图标一直都是 `blowfish`，即使改换了 `logo` 也不行？
 
@@ -141,7 +141,7 @@ Hugo 的网站主题很多，具体参考 [Hugo Themes](https://themes.gohugo.io
 
 正如我在[一次写插件的经历]({{< ref "/blog/plugin-writing-experience/" >}})中所写，很多个人博客网站从一开始的火热到最终的沉寂可能只需要短短一年的时间。
 
-在这个生活节奏越来越快的时代，无意义、无效率的事情大多都会向*高效*让步，曾经的初心与梦想往往会向生活妥协。我自己也早已经没有了当初的热情，行为方式上也更加的像一个**真正的成年人**。
+在这个生活节奏越来越快的时代，无意义、无效率的事情大多都会向**高效**让步，曾经的初心与梦想往往会向生活妥协。我自己也早已经没有了当初的热情，行为方式上也更加的像一个**真正的成年人**。
 
 但是我仍然是有些**不甘心**，这个网站就是一种抗争吧，我会尽力维护下去，这也是我写插件方便我更新博客的目的所在。
 

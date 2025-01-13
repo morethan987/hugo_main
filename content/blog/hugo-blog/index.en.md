@@ -104,7 +104,7 @@ If you don’t mind, just ignore it. But if you care (like I did 🤪), you can 
 
 - **Why doesn’t the logo change between day and night modes when I use an `svg` logo?**
 
-This is a bug I discovered, and I’ve already submitted an improvement to the theme author. See [code improvement](https://github.com/nunocoracao/blowfish/pull/1902).
+This is a bug I discovered, and I’ve already submitted an improvement to the theme author. See [code improvement](https://github.com/nunocoracao/blowfish/pull/1902) or [SVG support](https://github.com/morethan987/hugo_main/blob/main/assets/js/appearance.js)
 
 - **Why does the small icon in the browser window still show the `blowfish` logo even after I change the site’s logo?**
 
