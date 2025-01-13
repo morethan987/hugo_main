@@ -10,6 +10,7 @@ series:
   - Casual essay
 series_order: 1
 date: 2025-01-06
+lastmod: 2025-01-06
 authors:
   - Morethan
 ---

@@ -11,6 +11,7 @@ series:
   - Wild imagination of AI
 series_order: 1
 date: 2025-01-03
+lastmod: 2025-01-03
 authors:
   - Morethan
 ---

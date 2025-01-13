@@ -12,6 +12,7 @@ series:
   - Operation
 series_order: 4
 date: 2025-01-10
+lastmod: 2025-01-12
 authors:
   - Morethan
 ---

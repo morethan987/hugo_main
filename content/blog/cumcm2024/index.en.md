@@ -11,6 +11,7 @@ series:
   - MathModel
 series_order: 2
 date: 2024-09-12
+lastmod: 2024-12-20
 authors:
   - Morethan
 ---
