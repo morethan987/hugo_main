@@ -188,7 +188,7 @@ When we applied the above strategies to the actual combat process, that is, the 
 {{< alert icon="triangle-exclamation" cardColor="#ffcc00" textColor="#333333" iconColor="#8B6914" >}}
 All code improvements must be implemented in a document! Not just slogans!
 {{< /alert >}}
-- The final output: 
+- The final output: [Code Collaboration Scheme]({{< ref "/blog/code-collaboration-scheme/" >}})
 
 ### Paper
 - Study excellent papers

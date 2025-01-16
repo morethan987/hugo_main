@@ -76,6 +76,9 @@ To use this configuration file in other code files, simply include the following
 run('config.m');
 ```
 
+{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
+Even the parameters are transformed into another file, the VS Code can also recognizes it and provide complement suggestion.
+{{< /alert >}}
 #### Function-Internal Parameters
 
 All variables used within a function should be explicitly defined at the beginning of the function and should include brief Chinese comments.
@@ -86,6 +89,15 @@ If similar parameters are used across multiple files, make sure to use consisten
 ### Code Formatting
 
 Code formatting is mainly handled using the `matlab-formatter` plugin. After activating the plugin, you can format your code in VS Code by pressing `Ctrl+Shift+P` to bring up the command palette, then search for "Format" and select `Use... to format code`, choosing `matlab-formatter` to apply the formatting.
+
+### Git Version Control
+
+A GitHub repository needs to be created to store the entire project files. Although the Live Server plugin enables faster real-time code collaboration, it is still necessary to commit and save at key development milestones to maintain the ability to roll back code.
+
+All Git version control operations are performed on the lead developer's computer, while other supporting developers use the Live Server plugin for more immediate code collaboration.
+
+- Local `commit` to save small improvements
+- `push` operations are done in major increments
 
 ## Code Execution
 

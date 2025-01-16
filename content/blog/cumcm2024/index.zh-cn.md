@@ -182,7 +182,7 @@ CUMCM 全称为 Chinese Undergraduate Mathmatical Contest in Modeling；民间�
 {{< alert icon="triangle-exclamation" cardColor="#ffcc00" textColor="#333333" iconColor="#8B6914" >}}
 所有代码方面的改进最终落实为一个文档！不能光喊口号！
 {{< /alert >}}
-- 落实后的方案：
+- 落实后的方案：[代码协同方案]({{< ref "/blog/code-collaboration-scheme/" >}})
 
 ### 论文
 - 研究优秀论文
