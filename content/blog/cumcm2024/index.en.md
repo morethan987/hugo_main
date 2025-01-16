@@ -11,7 +11,7 @@ series:
   - MathModel
 series_order: 2
 date: 2024-09-12
-lastmod: 2024-12-20
+lastmod: 2025-01-15
 authors:
   - Morethan
 ---
@@ -188,6 +188,7 @@ When we applied the above strategies to the actual combat process, that is, the 
 {{< alert icon="triangle-exclamation" cardColor="#ffcc00" textColor="#333333" iconColor="#8B6914" >}}
 All code improvements must be implemented in a document! Not just slogans!
 {{< /alert >}}
+- The final output: 
 
 ### Paper
 - Study excellent papers

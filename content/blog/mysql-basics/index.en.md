@@ -1,7 +1,7 @@
 ---
 title: MySQL Basics
 weight: -45
-draft: true
+draft: false
 description: The deployment tutorial and basic syntax of MySQL
 slug: mysql-basics
 tags:
@@ -10,6 +10,7 @@ series:
   - Operation
 series_order: 5
 date: 2025-01-15
+lastmod: 2025-01-15
 authors:
   - Morethan
 ---

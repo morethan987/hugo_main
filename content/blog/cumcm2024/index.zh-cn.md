@@ -11,7 +11,7 @@ series:
   - 数学建模
 series_order: 2
 date: 2024-09-12
-lastmod: 2024-12-20
+lastmod: 2025-01-15
 authors:
   - Morethan
 ---
@@ -179,10 +179,10 @@ CUMCM 全称为 Chinese Undergraduate Mathmatical Contest in Modeling；民间�
 
 - 代码并行化：在代码中添加一些可并行的代码，提高运行速度
 
-
 {{< alert icon="triangle-exclamation" cardColor="#ffcc00" textColor="#333333" iconColor="#8B6914" >}}
 所有代码方面的改进最终落实为一个文档！不能光喊口号！
 {{< /alert >}}
+- 落实后的方案：
 
 ### 论文
 - 研究优秀论文

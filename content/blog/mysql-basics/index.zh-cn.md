@@ -1,7 +1,7 @@
 ---
 title: MySQL基础
 weight: -45
-draft: true
+draft: false
 description: MySQL的安装部署流程以及基础语法
 slug: mysql-basics
 tags:
@@ -10,6 +10,7 @@ series:
   - 技术流程
 series_order: 5
 date: 2025-01-15
+lastmod: 2025-01-15
 authors:
   - Morethan
 ---
@@ -205,7 +206,7 @@ ON s.class_id = c.id;
 SELECT ... FROM tableA ??? JOIN tableB ON tableA.column1 = tableB.column2;
 ```
 
-![连接查询示意图.png](img/连接查询示意图.png)
+![JoinQuery.png](img/JoinQuery.png)
 
 
 #### 修改
