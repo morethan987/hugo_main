@@ -11,7 +11,7 @@ series:
   - 数学建模
 series_order: 3
 date: 2025-01-16
-lastmod: 2025-01-16
+lastmod: 2025-01-17
 authors:
   - Morethan
 ---
