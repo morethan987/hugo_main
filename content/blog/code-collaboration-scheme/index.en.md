@@ -130,3 +130,9 @@ User's instruction:
 {{< alert icon="triangle-exclamation" cardColor="#ffcc00" textColor="#333333" iconColor="#8B6914" >}}
 The execution of `parfor` functions is subject to strict requirements. Please refer to the [official documentation](https://ww2.mathworks.cn/help/parallel-computing/parfor.html) for more details.
 {{< /alert >}}
+### Huge Table Process
+The comment output of the Mathematical Model is a **Huge** table in `.mat` file, which is usually hard to abstract the target data.
+
+Here I directly write a simply Python program, [Data extractor](https://github.com/morethan987/morethan987/tree/main/%E6%95%B0%E6%8D%AE%E6%8F%90%E5%8F%96%E5%99%A8), to automatically operate the huge table data. With tiny modification, you can get any data you want from the `.mat` file.
+
+Utilizing the online LaTeX table [editor](https://tableconvert.com/zh-cn/latex-generator), we can get the capacity to quickly insert the table data into your thesis.

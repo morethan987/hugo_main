@@ -114,3 +114,9 @@ MATLAB 能够支持多线程计算，仅需将一般的 `for` 循环改写为 `p
 {{< alert icon="triangle-exclamation" cardColor="#ffcc00" textColor="#333333" iconColor="#8B6914" >}}
 parfor 函数的执行要求十分严格，具体参阅[官方说明](https://ww2.mathworks.cn/help/parallel-computing/parfor.html)
 {{< /alert >}}
+### 大型表格处理
+模型计算的输出往往是一个超大型数据表格，并且存储在 `.mat` 文件中，难以进行数据的快速提取。
+
+直接编写了一个简单的 Python 脚本来进行大型表格数据的提取操作：[数据提取器](https://github.com/morethan987/morethan987/tree/main/%E6%95%B0%E6%8D%AE%E6%8F%90%E5%8F%96%E5%99%A8)
+
+同时配合 LaTeX 在线表格编辑[网站](https://tableconvert.com/zh-cn/latex-generator)，能够实现在论文中快速插入表格数据。
