@@ -11,7 +11,7 @@ series:
   - 数学建模
 series_order: 3
 date: 2025-01-16
-lastmod: 2025-01-17
+lastmod: 2025-01-20
 authors:
   - Morethan
 ---
@@ -105,7 +105,7 @@ run('config.m');
 ```
 
 ### 配套样例项目
--  [样例项目](https://github.com/morethan987/morethan987/tree/main/MathModelExampleProject)
+为了能够快速、规范地启动工程项目，我创建了一个[样例项目](https://github.com/morethan987/morethan987/tree/main/MathModelExampleProject)，里面包含了所有上文提及的代码规范，可以直接对这个项目进行修改，省去了记忆的苦恼😄
 
 ### 代码技巧
 - **并行运行**

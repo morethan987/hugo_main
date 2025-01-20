@@ -11,7 +11,7 @@ series:
   - MathModel
 series_order: 3
 date: 2025-01-16
-lastmod: 2025-01-17
+lastmod: 2025-01-20
 authors:
   - Morethan
 ---
@@ -119,8 +119,7 @@ User's instruction:
 ```
 
 ### Example Project
-
-- [Example Project](https://github.com/morethan987/morethan987/tree/main/MathModelExampleProject)
+In order to develop a project as fast and well-defined as possible, I have created an [Example Project](https://github.com/morethan987/morethan987/tree/main/MathModelExampleProject) which contains all the regulations mentioned before. You can directly change the files in the example project without mnemonic cost. 😄
 
 ### Code Tips
 
