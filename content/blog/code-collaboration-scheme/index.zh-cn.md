@@ -33,7 +33,7 @@ id1("工作分配")-->id2("VS Code协同")-->id3("MATLAB代码执行");
 
 ## 代码协同
 ### 软件工具
-1. VS Code 编辑器，以及 Live Server 插件，MATLAB 插件，matlab-formatter 格式化插件
+1. VS Code 编辑器，以及 Live Server 插件，MATLAB 插件
 
 2. MATLAB
 
@@ -78,7 +78,7 @@ run('config.m');
 如果有一些表达相同含义的参数在多个文件中使用，请使用统一的命名，尤其是 AI 生成的代码，请在 VS Code 中使用 `F2` 进行重命名
 {{< /alert >}}
 ### 代码格式化
-代码的格式化主要通过 matlab-formatter 格式化插件来实现：在启动插件之后，在 VS Code 中使用快捷键 `Ctrl+Shift+P` 呼出命令面板，搜索 `格式化`，然后回车选中 `使用...来格式化代码`，然后选择 `matlab-formatter` 回车即可
+代码的格式化主要通过官方的 `MATLAB` 插件来执行。安装插件之后，按快捷键 `Shift+Alt+F` 即可格式化代码。
 
 ### Git 版本控制
 这里需要新建一个 GitHub 代码仓库来存放整个项目文件。尽管使用了 Live Server 插件能够更加快速地执行代码协同，但是仍然需要在一些重要的开发结点进行提交保存，保留代码的回滚能力。

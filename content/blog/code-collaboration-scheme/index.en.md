@@ -38,7 +38,7 @@ There are two key points:
 
 ### Software Tools
 
-1. VS Code Editor, along with the Live Server plugin, MATLAB plugin, and matlab-formatter for code formatting.
+1. VS Code Editor, along with the Live Server plugin, MATLAB plugin
 2. MATLAB.
 
 ### Naming Conventions
@@ -88,7 +88,7 @@ If similar parameters are used across multiple files, make sure to use consisten
 {{< /alert >}}
 ### Code Formatting
 
-Code formatting is mainly handled using the `matlab-formatter` plugin. After activating the plugin, you can format your code in VS Code by pressing `Ctrl+Shift+P` to bring up the command palette, then search for "Format" and select `Use... to format code`, choosing `matlab-formatter` to apply the formatting.
+Code formatting is mainly handled using the official `MATLAB` plugin. After you activate the plugin, press `Shift+Alt+F` to format your code.
 
 ### Git Version Control
 
