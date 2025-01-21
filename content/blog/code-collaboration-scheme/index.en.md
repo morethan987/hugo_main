@@ -101,7 +101,7 @@ All Git version control operations are performed on the lead developer's compute
 
 ## Code Execution
 
-Running MATLAB code directly in VS Code may cause some unexpected issues, so it's recommended to run the code in the native MATLAB environment.
+Thanks to the latest function of the plugin `MATLAB`, we can now directly **run and debug** in the VS Code IDE. Though there are some [limitations](https://github.com/mathworks/MATLAB-extension-for-vscode?tab=readme-ov-file#limitations), it deserves a standing ovation.
 
 ## Other
 

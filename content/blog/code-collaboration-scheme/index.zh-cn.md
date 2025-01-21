@@ -89,7 +89,7 @@ run('config.m');
 - `push` 操作以小题为单位进行，保存重大进展
 
 ## 代码执行
-在 VS Code 里面直接运行 MATLAB 代码会出现一些奇怪的问题，因此运行代码请在 MATLAB 原生环境中运行
+感谢官方对于 `MATLAB` 插件的更新支持，最新的插件能够在 VS Code 编辑器中直接**运和调试**行代码。尽管有些[限制](https://github.com/mathworks/MATLAB-extension-for-vscode?tab=readme-ov-file#limitations)，但瑕不掩瑜。
 
 ## 其他
 ### AI 指令集
