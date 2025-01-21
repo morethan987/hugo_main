@@ -9,10 +9,10 @@ tags:
   - 博客
   - 报告
 series:
-  - 技术流程
-series_order: 4
+  - 项目报告
+series_order: 1
 date: 2025-01-10
-lastmod: 2025-01-12
+lastmod: 2025-01-21
 authors:
   - Morethan
 ---

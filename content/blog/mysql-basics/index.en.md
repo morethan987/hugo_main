@@ -8,7 +8,7 @@ tags:
   - MySQL
 series:
   - Operation
-series_order: 5
+series_order: 4
 date: 2025-01-15
 lastmod: 2025-01-15
 authors:

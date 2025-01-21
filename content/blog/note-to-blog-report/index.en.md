@@ -2,17 +2,17 @@
 title: Analysis Report on the Note-to-Blog Project
 weight: -40
 draft: false
-description: An analytical report on the note-to-blog project  
+description: An analytical report on the note-to-blog project
 slug: note-to-blog-report
 tags:
   - Hugo
   - 博客
   - 报告
 series:
-  - Operation
-series_order: 4
+  - Project Report
+series_order: 1
 date: 2025-01-10
-lastmod: 2025-01-12
+lastmod: 2025-01-21
 authors:
   - Morethan
 ---
