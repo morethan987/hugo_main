@@ -1,13 +1,13 @@
 ---
 title: Neo4j基础
 weight: -60
-draft: true
+draft: false
 description: Neo4j图数据库的基础信息以及操作方法
 slug: neo4j-basics
 tags:
   - Neo4j
 series:
-  - 技术流程
+  - 技术杂项
 series_order: 5
 date: 2025-02-05
 lastmod: 2025-02-05

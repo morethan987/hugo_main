@@ -7,7 +7,7 @@ slug: mysql-basics
 tags:
   - MySQL
 series:
-  - 技术流程
+  - 技术杂项
 series_order: 4
 date: 2025-01-15
 lastmod: 2025-01-15

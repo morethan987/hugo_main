@@ -7,7 +7,7 @@ slug: pytips
 tags:
   - Python
 series:
-  - 技术流程
+  - 技术杂项
 series_order: 2
 date: 2024-08-10
 lastmod: 2025-01-20

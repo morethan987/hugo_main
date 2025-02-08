@@ -8,7 +8,7 @@ tags:
   - overleaf
   - LaTeX
 series:
-  - Operation
+  - Technical Miscellany
 series_order: 1
 date: 2024-07-12
 lastmod: 2024-12-20

@@ -6,8 +6,8 @@ description: An analytical report on the note-to-blog project
 slug: note-to-blog-report
 tags:
   - Hugo
-  - 博客
-  - 报告
+  - Blog
+  - Report
 series:
   - Project Report
 series_order: 1

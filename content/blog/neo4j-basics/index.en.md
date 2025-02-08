@@ -1,13 +1,13 @@
 ---
 title: Neo4j Basics
 weight: -60
-draft: true
+draft: false
 description: The basic info and operations of Neo4j Graph Database
 slug: neo4j-basics
 tags:
   - Neo4j
 series:
-  - Operation
+  - Technical Miscellany
 series_order: 5
 date: 2025-02-05
 lastmod: 2025-02-05
@@ -15,7 +15,7 @@ authors:
   - Morethan
 ---
 {{< lead >}}
-The basic info and operations of Neo4j Graph Database
+The basic info and operations of Neo4j Graph Database.
 {{< /lead >}}
 
 ## Introduction

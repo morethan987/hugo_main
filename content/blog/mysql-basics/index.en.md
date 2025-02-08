@@ -7,7 +7,7 @@ slug: mysql-basics
 tags:
   - MySQL
 series:
-  - Operation
+  - Technical Miscellany
 series_order: 4
 date: 2025-01-15
 lastmod: 2025-01-15
