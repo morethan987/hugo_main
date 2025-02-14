@@ -10,7 +10,7 @@ series:
   - 技术杂项
 series_order: 5
 date: 2025-02-05
-lastmod: 2025-02-05
+lastmod: 2025-02-15
 authors:
   - Morethan
 ---
@@ -109,3 +109,54 @@ MERGE (u)-[r:RATED {rating: 5}]->(m)
 RETURN u, r, m
 ```
 
+## 安装
+目前时间 2025-02-15，经过广大开发者的测试，发现 Neo4j Desktop 对于国内的用户有封锁，导致软件界面无法正常显示。虽然可以通过关闭网络等手段破除封锁，但是这样就失去了桌面版独特的优势：方便部署；
+
+因此这里主要推荐并介绍使用 Docker 部署的流程；
+
+操作系统：Windows 11
+
+### Docker Desktop
+无话可说，安装后启动放后台即可
+
+### 拉取镜像
+一般来说直接无脑拉取最新镜像就行：`docker pull neo4j`
+
+但是如果你的项目硬性需要 [APOC](https://neo4j.com/labs/apoc/4.1/installation/) 的话，就需要考虑最新的 APOC 版本，因为镜像有可能领先 APOC 的版本；社区版发布在 [Releases · neo4j/apoc](https://github.com/neo4j/apoc/releases)
+
+目前考虑 APOC 兼容的话请使用：`docker pull neo4j:5.26.2`
+
+### 构建容器
+
+```sh
+docker run -d -p 7474:7474 -p 7687:7687 -v E:/neo4j/data:/data -v E:/neo4j/logs:/logs -v E:/neo4j/conf:/var/lib/neo4j/conf -v E:/neo4j/import:/var/lib/neo4j/import -v E:/neo4j/plugins:/var/lib/neo4j/plugins -e NEO4J_dbms_security_procedures_unrestricted="apoc.*" -e NEO4J_dbms_security_procedures_allowlist="apoc.*" -e NEO4JLABS_PLUGINS='["apoc"]' -e NEO4J_AUTH=neo4j/mo123456789 --name neo4j neo4j:5.26.2
+```
+
+参数说明：
+
+-  `-p` 参数用于暴露端口，这里开放了两个端口
+- `-v` 参数用于宿主机的目录挂载（说人话就是指定这个 Docker 应用的存储目录）
+- `-e` 参数用来配置环境变量：带有 `apoc` 的都是 APOC 相关的配置；`NEO4J_AUTH` 表示用户名为 neo4j，密码为 mo123456789；
+
+{{< alert icon="triangle-exclamation" cardColor="#ffcc00" textColor="#333333" iconColor="#8B6914" >}}
+如果你使用 Neo4j 用于语言模型的增强生成(RAG)，一定要带上述 APOC 相关配置；如果不是的话，那么那些命令可以直接去掉
+{{< /alert >}}
+
+运行完上面的命令之后可以去宿主机挂载目录中查看 APOC 插件是否安装：
+
+![Neo4jBasics-1.png](img/Neo4jBasics-1.png)
+
+### 手动安装 APOC
+去 [Releases · neo4j/apoc](https://github.com/neo4j/apoc/releases) 中最新的 Assets 中下载 `apoc-5.26.2-core`；然后粘贴到上面👆所说的宿主机目录中；然后重启 Docker 容器就行
+
+### 浏览器UI
+这里默认将 7474 端口给浏览器UI使用，7687 端口给别的后台程序使用；
+
+在容器运行在后台的情况下，访问：`http://localhost:7474/browser/preview`
+
+选择接入链接：`neo4j://localhost:7687`
+
+然后就可以成功进入浏览器UI界面了😄
+
+## 参考资料
+- [Docker：Docker部署Neo4j图数据库 - 怒吼的萝卜 - 博客园](https://www.cnblogs.com/nhdlb/p/18703804)
