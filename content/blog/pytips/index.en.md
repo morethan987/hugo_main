@@ -133,13 +133,17 @@ poetry env use /full/path/to/python # Use this if the above shortcuts don't work
 
 2. If you're working with someone else's project:
 
-There are two very similar commands. As shown in the comments, the official recommendation is to use `sync`, as it avoids installing any packages that aren't tracked by `poetry.lock`, which may include unintended packages that the original developer added:
+There are two very similar commands. As shown in the comments, the official recommendation is to use `sync`, as it avoids installing any packages that aren't tracked by `poetry.lock`, which may include unintended packages that the original developer added. 
+
+**However**, I personally recommend  to use `install`. The `sync` command may result into some strange error: it may remove itself and causes the command line break out.🤔
 
 ```sh
-poetry install # Automatically creates a virtual environment and installs all dependencies from pyproject.toml
+# Automatically creates a virtual environment and installs all dependencies from pyproject.toml
+poetry install
 
 # Make sure virtualenvs.create is set to true
-poetry sync # Automatically creates a virtual environment and installs dependencies from poetry.lock
+# Automatically creates a virtual environment, installs dependencies from poetry.lock and remove redundant package in pyproject.toml
+poetry sync
 ```
 
 To activate the virtual environment, use:

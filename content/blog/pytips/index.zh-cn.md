@@ -129,13 +129,16 @@ poetry env use /full/path/to/python # 如果上面的简写形式没法识别，
 
 2. 你是使用别人的项目
 
-有两个非常类似的命令，从下面的注释就可以看出二者的区别。官方更推荐 sync 命令，因为这样可以避免安装一些没有被 `poetry.lock` 追踪的包，这些包可能是原开发者不小心加进去的
+有两个非常类似的命令，从下面的注释就可以看出二者的区别。官方更推荐 sync 命令，因为这样可以避免安装一些没有被 `poetry.lock` 追踪的包，这些包可能是原开发者不小心加进去的；
+
+**但是**实际测试下来更建议使用 install，因为 sync 有时会出现一些奇怪的错误，比如它把自己给移除了，导致命令行崩溃🤔
 
 ```sh
 poetry install # 自动创建虚拟环境并安装pyprojecy.toml中的所有依赖包
 
 # 确保你的 virtualenvs.create 设置为 true
-poetry sync # 自动创建虚拟环境并安装poetry.lock中的所有依赖包
+# 自动创建虚拟环境并安装poetry.lock中的所有依赖包，移除pyproject.toml中多余的包
+poetry sync
 ```
 
 然后使用如下命令进入虚拟环境
