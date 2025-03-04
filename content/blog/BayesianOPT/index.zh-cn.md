@@ -34,7 +34,7 @@ authors:
 
 
 ## 优点和算法原理
-这里重点描述贝叶斯优化的优点以及其算法原理。如果你只关注“怎么用”，可以先了解贝叶斯优化的优点，然后跳转到[#MATLAB用法]({{<relref "#matlab用法">}})
+这里重点描述贝叶斯优化的优点以及其算法原理。如果你只关注“怎么用”，可以先了解贝叶斯优化的优点，然后跳转到[ MATLAB用法]({{< relref "#matlab用法" >}})
 
 ### 优点
 
@@ -78,6 +78,7 @@ fprintf('最优目标值: %.4f\n', bestObjective);
 
 每个参数具体的可选值见官方文档: [bayesopt](https://ww2.mathworks.cn/help/stats/bayesopt.html?s_tid=srchtitle_site_search_1_bayesopt)；官方写的相当细致，还有很多样例。
 
-{{<alert>}}
+
+{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
 数学建模人必会技能之一就是读文档😝
-{{</alert>}}
+{{< /alert >}}

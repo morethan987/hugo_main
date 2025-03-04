@@ -34,7 +34,7 @@ Honestly, I'm not familiar with BayesianOPT, the opinions mentioned stem from th
 
 
 ## Advantages & Algorithm Principle
-Here we are going to talk about the advantages & algorithm principle of BayesianOPT. If you only want to konw how to use it, you can read the `#Advantage` section, then go to the [#MATLAB Practice]({{<relref "#matlab-practice">}})
+Here we are going to talk about the advantages & algorithm principle of BayesianOPT. If you only want to konw how to use it, you can read the `#Advantage` section, then go to the [ MATLAB Practice]({{< relref "#matlab-practice" >}})
 
 ### Advantages
 
