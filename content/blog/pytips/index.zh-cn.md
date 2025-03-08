@@ -10,7 +10,7 @@ series:
   - 技术杂项
 series_order: 2
 date: 2024-08-10
-lastmod: 2025-02-13
+lastmod: 2025-03-07
 authors:
   - Morethan
 ---
@@ -77,6 +77,9 @@ poetry config virtualenvs.in-project true
 # 当项目中没有虚拟环境的时候，poetry默认能够自动创建
 # 不放心可以再运行一下这个命令
 poetry config virtualenvs.create true
+
+# 更换国内源
+poetry config repositories.tencentyun https://mirrors.tencentyun.com/pypi/simple
 
 # 其他的几乎不用关注，默认即可
 ```
