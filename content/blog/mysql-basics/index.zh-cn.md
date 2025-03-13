@@ -10,7 +10,7 @@ series:
   - 技术杂项
 series_order: 4
 date: 2025-01-15
-lastmod: 2025-01-15
+lastmod: 2025-02-15
 authors:
   - Morethan
 ---
@@ -19,10 +19,12 @@ MySQL 安装部署流程 + 简明语法 CookBook + 学习笔记
 {{< /lead >}}
 
 ### 信息源
+
 -  [SQL教程 - 廖雪峰的官方网站](https://liaoxuefeng.com/books/sql/introduction/index.html)
 非常非常亲民的 MySQL 教程网站，内置了一个网页版的数据库，方便新手同志们直观了解 MySQL数据库的操作，对于 SQL 的整个背景也有简洁但必要的表述。
 
 ### 安装 MySQL
+
 安装 MySQL 最简单的方法就是通过 Docker Desktop 来操作；只需要两步就能够完成
 
 命令行中运行：
@@ -48,11 +50,15 @@ docker run -d --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=password -v /User
 | `-v /path:/var/lib/mysql`         | 表示将本地目录映射到容器目录 `/var/lib/mysql` 作为 MySQL 数据库存放的位置，需要将 `/path` 改为你的电脑上的实际目录     |
 | `mysql`                           | 告诉 Docker 你要运行的镜像的名称                                                           |
 
+
 {{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
 使用 Docker 运行 MySQL 时，任何时候都可以删除 MySQL 容器并重新运行；如果删除了本地映射的目录，重新运行就相当于一个全新的 MySQL ；
 {{< /alert >}}
+
 ### MySQL 基础语法
+
 #### 查询
+
 **注释语法**：
 
 ```sql
@@ -125,9 +131,11 @@ SELECT COUNT(*) boys FROM students WHERE gender = 'M';
 
 ```
 
+
 {{< alert  >}}
 虽然 `COUNT(*)` 的结果是一个标量，但是返回仍然是一个二维表格，只是表格只有一行一列
 {{< /alert >}}
+
 另外还有一些常用的聚合函数：`MAX()`，`MIN()`，`AVG()`，`SUM()` 等，与 `COUNT()` 类似
 
 **分组聚合查询**：
@@ -210,7 +218,9 @@ SELECT ... FROM tableA ??? JOIN tableB ON tableA.column1 = tableB.column2;
 
 
 #### 修改
+
 - **插入语法**：
+
 ```sql
 -- 添加一条新记录:
 INSERT INTO students (class_id, name, gender, score) VALUES (2, '大牛', 'M', 80);
@@ -223,6 +233,7 @@ INSERT INTO students (class_id, name, gender, score) VALUES
 ```
 
 - **更新**：
+
 ```sql
 -- 更新id=1的记录:
 UPDATE students SET name='大牛', score=66 WHERE id=1;
@@ -238,11 +249,44 @@ UPDATE students SET score=60;
 ```
 
 - **删除**：
+
 ```sql
 -- 删除id=1的记录:
 DELETE FROM students WHERE id=1;
 
 -- 不带WHERE的删除操作会作用于整张表
 DELETE FROM students;
+```
+
+#### 建库建表
+
+- **建库**：
+
+```sql
+CREATE DATABASE your_db_name -- 数据库名称
+CHARACTER SET utf8mb4 -- 数据库字符集
+COLLATE utf8mb4_unicode_ci; -- 指定排序规则
+```
+
+- **建表**：
+
+```sql
+CREATE TABLE 表名 (
+    列名1 数据类型 约束,
+    列名2 数据类型 约束,
+    列名3 数据类型 约束,
+    ...
+    PRIMARY KEY (主键列名)
+);
+
+-- 具体的一个用户表
+CREATE TABLE users (
+    id INT AUTO_INCREMENT,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id)
+);
 ```
 

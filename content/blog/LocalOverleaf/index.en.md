@@ -27,18 +27,20 @@ authors:
 ## Full Deployment Process
 
 ### Installing Linux
+
 Search for a Linux distribution in the `Windows App Store` and download it. The author chose `Kali`. After installation, you can open it directly from the Start menu. Upon opening, a command-line window will pop up, and you will need to register with a username and password.
 
-{{< alert >}}
-At this point, your command line should display a warning. This is because you haven’t installed WSL (Windows Subsystem for Linux).
 
-Also, when entering the password, your input will not be displayed in the command line, but it has been recorded.
+{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
+At this point, your command line should display a warning. This is because you haven’t installed WSL (Windows Subsystem for Linux). Also, when entering the password, your input will not be displayed in the command line, but it has been recorded.
 {{< /alert >}}
 
 Why do you need a Linux system? Because OverLeaf's ShareLaTeX model requires a Linux environment. It is said that OverLeaf runs more smoothly on Linux systems.
 
 ### Installing WSL
+
 To install WSL2, run the following in the Windows command line:
+
 ```sh
 wsl --install
 ```
@@ -46,11 +48,13 @@ wsl --install
 After installation, you can open it directly. Another warning will appear. At this point, you need to create a text file in the C:\Users\ASUS directory and rename it to `.wslconfig`.
 
 Enter the following content:
+
 ```txt
 [experimental] autoMemoryReclaim=gradual # gradual | dropcache | disabled networkingMode=mirrored dnsTunneling=true firewall=true autoProxy=true
 ```
 
 ### Installing Docker
+
 Go to the [Docker](https://www.docker.com/) website to download Docker, which will be the container for the ShareLaTeX model. Docker is an open-source application container engine that includes images, containers, and repositories. Its purpose is to manage the lifecycle of application components, such as encapsulation, distribution, deployment, and operation, allowing users to "package once, run anywhere," much like a container, developed and encapsulated by programmers, which users can directly move around.
 
 Once Docker is installed, you can double-click to start it in the background. We will interact with Docker later via the command line.
@@ -58,11 +62,13 @@ Once Docker is installed, you can double-click to start it in the background. We
 ### Pulling the Image
 
 Open `Kali`, and run the following command:
+
 ```sh
 git clone https://github.com/overleaf/toolkit.git ./overleaf-toolkit
 ```
 
 Then run:
+
 ```sh
 cd ./overleaf-toolkit
 bin/init
@@ -81,15 +87,16 @@ Once the previous command finishes, run `bin/start`. At this point, open Docker 
 Now open a browser and visit `http://localhost/launchpad`.
 
 After registering an Administrator Account, you will be redirected to `http://localhost/project`. The basic OverLeaf webpage should now be displayed.
-{{< alert >}}
-If you compile now, it will most likely report an error `ᕕ( ᐛ )ᕗ`.
 
-This is because ShareLaTeX is missing many required packages🙃"
+
+{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
+If you compile now, it will most likely report an error `ᕕ( ᐛ )ᕗ`. This is because ShareLaTeX is missing many required packages🙃
 {{< /alert >}}
 
 ### Installing Extension Packages
 
 Open `Kali`, navigate to the appropriate directory, and run `bin/shell`. Then execute the following one by one:
+
 ```sh
 cd /usr/local/texlive
 
@@ -114,6 +121,7 @@ docker restart sharelatex
 ```
 
 After restarting, enter the `shell` again and run:
+
 ```sh
 apt update
 
@@ -140,9 +148,11 @@ fc-match Arial
 ```
 
 Finally, in the `shell` directory, run:
+
 ```sh
 vim /usr/local/texlive/2023/texmf.cnf
 ```
+
 Open the configuration file and add `shell_escape = t` at the bottom.
 
 
@@ -152,10 +162,13 @@ I’m not sure what this does, but it was passed down by the predecessors 🤔
 
 Note, if the TeX Live version (the official name for extension packages) differs, the directory path may also change. You will need to adjust the path based on the actual version, for example, change `2023` to `2024`.
 
+
 {{< alert icon="circle-info" cardColor="#b0c4de" textColor="#333333" >}}
 You can use `ls -l` in the Linux command line to view all files in the current directory.
 {{< /alert >}}
+
 ## Successful Deployment
+
 Now you can happily use your local OverLeaf version without worrying about compilation timeouts~
 
 If you're lucky and happen to be a CQUer, here’s a graduation thesis template from Chongqing University, super user-friendly: [CQUThesis](https://github.com/nanmu42/CQUThesis)

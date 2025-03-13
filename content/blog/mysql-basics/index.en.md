@@ -10,7 +10,7 @@ series:
   - Technical Miscellany
 series_order: 4
 date: 2025-01-15
-lastmod: 2025-01-15
+lastmod: 2025-02-15
 authors:
   - Morethan
 ---
@@ -125,8 +125,10 @@ SELECT COUNT(*) num FROM students;
 SELECT COUNT(*) boys FROM students WHERE gender = 'M';
 ```
 
-> **Warning**  
-> Even though `COUNT(*)` returns a scalar value, the result is still a two-dimensional table, but with only one row and one column.
+
+{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
+Even though `COUNT(*)` returns a scalar value, the result is still a two-dimensional table, but with only one row and one column.
+{{< /alert >}}
 
 Other commonly used aggregation functions: `MAX()`, `MIN()`, `AVG()`, `SUM()`, etc., similar to `COUNT()`.
 
@@ -242,4 +244,38 @@ DELETE FROM students WHERE id=1;
 
 -- Deleting without a WHERE clause will remove all records from the table:
 DELETE FROM students;
+```
+
+Here's a fluent and natural English translation:
+
+#### Creating Database and Tables
+
+- **Creating the Database**:
+
+```sql
+CREATE DATABASE your_db_name -- name of the database
+CHARACTER SET utf8mb4 -- character set of the database
+COLLATE utf8mb4_unicode_ci; -- collation rule
+```
+
+- **Creating Tables**:
+
+```sql
+CREATE TABLE table_name (
+    column1 datatype constraints,
+    column2 datatype constraints,
+    column3 datatype constraints,
+    ...
+    PRIMARY KEY (primary_key_column)
+);
+
+-- Example of a user table
+CREATE TABLE users (
+    id INT AUTO_INCREMENT,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id)
+);
 ```

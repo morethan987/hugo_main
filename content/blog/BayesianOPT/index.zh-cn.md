@@ -18,6 +18,7 @@ authors:
 ---
 
 ## 引用文献
+
 我对于贝叶斯优化的理解也并不多，主要参考下面的内容👇
 
 - [【机器学习】一文看懂贝叶斯优化/Bayesian Optimization](https://blog.csdn.net/qq_27590277/article/details/115451660)
@@ -34,6 +35,7 @@ authors:
 
 
 ## 优点和算法原理
+
 这里重点描述贝叶斯优化的优点以及其算法原理。如果你只关注“怎么用”，可以先了解贝叶斯优化的优点，然后跳转到[ MATLAB用法]({{< relref "#matlab用法" >}})
 
 ### 优点
@@ -43,6 +45,7 @@ authors:
 ## MATLAB用法
 
 ### 代码一览
+
 ```matlab
 % 定义目标函数
 function y = objectiveFcn(x)

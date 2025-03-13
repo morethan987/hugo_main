@@ -21,6 +21,7 @@ A blog website journey, from hand-coding to Hugo, a story of twists and turns.
 {{< /lead >}}
 
 ## Why Hugo?
+
 It all started with hearing that Hugo could generate webpages and that it was incredibly efficient at compiling static pages. I decided to dive into the research—Hugo is said to be the **fastest static site generator** in the world, as claimed on its official website.
 
 Of course, words are just words, so here’s the output I got when I compiled and ran Hugo locally without the `public` folder at the beginning:
@@ -45,6 +46,7 @@ I haven't used other page generators for setting up blogs, so I can't compare Hu
 {{< /alert >}}
 
 ## References
+
 Here are all the resources I used during the blog setup process:
 
 - [莱特雷-letere](https://letere-gzj.github.io/hugo-stack/) This is a blogger’s site also built with Hugo. It contains a lot of tutorials on other web tools as well. The series is also available on [Bilibili video tutorial](https://www.bilibili.com/video/BV1bovfeaEtQ/?spm_id_from=333.337.search-card.all.click&vd_source=38d0addc11facdcdfe9d401e43b75680).
@@ -53,7 +55,9 @@ Here are all the resources I used during the blog setup process:
 - [Hugo Themes](https://themes.gohugo.io/)
 
 ## Full Deployment Process
+
 ### Setting Up Hugo
+
 This part is covered in detail in the [webpage](https://letere-gzj.github.io/hugo-stack/) and [video tutorial](https://www.bilibili.com/video/BV1bovfeaEtQ/?spm_id_from=333.337.search-card.all.click&vd_source=38d0addc11facdcdfe9d401e43b75680) by the blogger. If you don’t like reading text, you can follow the video tutorial. 😝
 
 Honestly, setting up Hugo is one of the easiest setups I've ever seen, no exaggeration. You simply download Hugo from the [official website](https://gohugo.io/), place it in a folder, and unzip it. You’ll find just one file, `hugo.exe`—it’s that simple.
@@ -66,6 +70,7 @@ Hugo is really convenient. I tried Hexo before, but the Node.js setup turned me 
 The only slight difficulty is adding the directory containing `hugo.exe` to your environment variables.
 
 ### Creating a Template System
+
 Open the terminal in the folder where `hugo.exe` is located and run the command `hugo new site your-site-name`. You’ll see a new folder appear in the current directory.
 
 The **template system** sounds advanced, but it’s just a special folder structure created in the same directory as `hugo.exe`. You can’t arbitrarily modify its contents because each folder has a specific purpose.
@@ -80,6 +85,7 @@ The **template system** sounds advanced, but it’s just a special folder struct
 | `themes`      | Stores your website’s themes   |
 
 ### Basic Theme Configuration
+
 Hugo has a lot of themes, and you can browse them on [Hugo Themes](https://themes.gohugo.io/). You can download the theme you like and place it in the `themes` folder. The process might sound abstract, but you can check out the [video tutorial](https://www.bilibili.com/video/BV1bovfeaEtQ/?spm_id_from=333.337.search-card.all.click&vd_source=38d0addc11facdcdfe9d401e43b75680) for more guidance.
 
 Here’s one **important tip**: most themes come with a **sample site** located in the `exampleSite` folder. If you don’t want to configure everything from scratch, you can just use the sample configuration.
@@ -87,6 +93,7 @@ Here’s one **important tip**: most themes come with a **sample site** located 
 After configuring the theme, you’ll need to customize it. I highly recommend the [Blowfish](https://blowfish.page/zh-cn/) theme, which is fantastic, and I truly respect the author 🫡.
 
 ### Blowfish Theme
+
 The [Blowfish](https://blowfish.page/zh-cn/) official documentation is incredibly detailed, so I won’t repeat it here. Any additional words would be disrespectful to such a comprehensive guide 🫡.
 
 However, there are some issues you might encounter, and I’ll briefly mention them below. You should carefully read the official documentation to fully understand these points 🤔.
@@ -114,6 +121,7 @@ This is mentioned in the official documentation, but it’s buried deep. You can
 To be honest, the official documentation is excellent. 👍 After going through the entire process, I only encountered a few minor issues that were not easy to understand 😋.
 
 ## Plugins I Use
+
 I prefer using [Obsidian](https://obsidian.md/) for writing articles. However, the format used by Obsidian and the one used by Blowfish is quite different, so converting between the two can be a hassle 🤔.
 
 After searching around, I found that there weren’t any suitable plugins! So, I developed my own plugin: [Hugo-Blowfish-Exporter](https://github.com/morethan987/Hugo-Blowfish-Exporter).

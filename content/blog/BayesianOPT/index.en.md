@@ -18,6 +18,7 @@ authors:
 ---
 
 ## Reference
+
 Honestly, I'm not familiar with BayesianOPT, the opinions mentioned stem from the below. 👇
 
 - [【机器学习】一文看懂贝叶斯优化/Bayesian Optimization](https://blog.csdn.net/qq_27590277/article/details/115451660)
@@ -34,6 +35,7 @@ Honestly, I'm not familiar with BayesianOPT, the opinions mentioned stem from th
 
 
 ## Advantages & Algorithm Principle
+
 Here we are going to talk about the advantages & algorithm principle of BayesianOPT. If you only want to konw how to use it, you can read the `#Advantage` section, then go to the [ MATLAB Practice]({{< relref "#matlab-practice" >}})
 
 ### Advantages
@@ -41,9 +43,11 @@ Here we are going to talk about the advantages & algorithm principle of Bayesian
 ### Algorithm Principle
 
 ## MATLAB Practice
+
 Well, we can put Bayesian Optimization into practice even though we don't understand it, using the predefined function of MATLAB, the `bayesopt`. Here is the official guidance of the function: [bayesopt](https://ww2.mathworks.cn/help/stats/bayesopt.html?s_tid=srchtitle_site_search_1_bayesopt)
 
 ### Final code display
+
 ```matlab
 % define the obj function
 function y = objectiveFcn(x)

@@ -19,11 +19,13 @@ The basic info and operations of Neo4j Graph Database.
 {{< /lead >}}
 
 ## Introduction
+
 [Neo4j](https://github.com/neo4j/neo4j) is a high-performance graph database that stores data and the relationships between data in the form of graphs.
 
 The specific form of the graph is a **labeled property graph**, and the query language used is `Cypher`.
 
 ## Labeled Property Graph
+
 A **labeled property graph** is a specific type of graph:
 - A node has one or more labels to define its type.
 - Relationships and nodes are treated equally, holding the same level of importance.
@@ -43,6 +45,7 @@ A **pattern** in a graph database is a specific combination of nodes and relatio
 Here, the parts enclosed in parentheses represent nodes, while the parts enclosed in square brackets represent relationships. In the node section, `p` and `m` are variables referring to the respective nodes, with `Person` and `Movie` being the labels of the nodes, connected by a colon. In the relationship section, `r` is the variable referring to the relationship, and `ACT_IN` is the specific type of relationship. Translated into natural language, this means: use `p` to refer to a node labeled `Person`, use `m` to refer to a node labeled `Movie`, and represent the relationship between them with `r`, which is of type `ACT_IN`.
 
 ### Data Reading
+
 Data reading operations rely on **pattern matching**, using the keyword `MATCH`. This is equivalent to sending an instruction to the database to filter out only the **node-relationship pairs** that match the specified pattern, i.e., a collection of triples `(p, r, m)`.
 
 ```cypher
@@ -80,13 +83,17 @@ ORDER BY released DESC LIMIT 5
 
 This will filter out the 5 most recent movies.
 
+
 {{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
 Cypher keywords are case-insensitive; property names, variable names, and other identifiers are case-sensitive.
 {{< /alert >}}
+
 ### Data Writing
+
 Data writing uses the `MERGE` keyword, which means **merging** a node or relationship into the data graph.
 
 - Merging nodes:
+
 ```cypher
 MERGE (m:Movie {title: "Arthur the King"})
 SET m.year = 2024
@@ -96,6 +103,7 @@ RETURN m
 This command creates a new `Movie` node with the `title` property set to `"Arthur the King"` and the `year` property set to `2024`.
 
 You might wonder why not write it like this:
+
 ```cypher
 MERGE (m:Movie)
 SET m.year = 2024, m.title = "Arthur the King"
@@ -141,6 +149,7 @@ Explanation of the parameters:
 - The `-p` option exposes ports; here, we open two ports.
 - The `-v` option mounts directories from the host machine (this means specifying where the Docker application will store its data).
 - The `-e` option configures environment variables. The `apoc`-related configurations are for the APOC plugin; `NEO4J_AUTH` sets the username to `neo4j` and the password to `mo123456789`.
+
 
 {{< alert icon="triangle-exclamation" cardColor="#ffcc00" textColor="#333333" iconColor="#8B6914" >}}
 If you use Neo4j for language model-enhanced generation (RAG), be sure to include the APOC-related configurations. Otherwise, you can omit these settings.

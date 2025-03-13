@@ -10,10 +10,11 @@ series:
   - AI-Project
 series_order: 2
 date: 2025-03-06
-lastmod: 2025-03-06
+lastmod: 2025-03-08
 authors:
   - Morethan
 ---
+等中文版面完工之后再统一翻译
 {{< lead >}}
 Detailed documentation of deploying an LLM app from scratch, with a primary focus on setting up a cloud server environment. This document will be updated continuously...
 {{< /lead >}}
@@ -35,6 +36,8 @@ All content below assumes you're working primarily on Windows since I've never u
 
 ### Local Server
 
+#### General idea
+
 If you're a truly independent developer, requiring no collaboration, you don't necessarily need a cloud server—a Docker environment is sufficient.
 
 After installing Docker Desktop, you'll need to perform **container orchestration** based on your existing backend code:
@@ -51,6 +54,12 @@ docker-compose up --build
 ```
 
 Once Docker initializes, access your services via `localhost`, replicating the experience of a cloud server.
+
+#### Docker Path Params
+When orchestrating Docker containers, there are several essential **working path parameters** you need to understand; otherwise, you may frequently encounter "file not found" errors. 😢
+
+1. **`build.context`**: This parameter appears in the `docker-compose.yml` file and refers to the "build context." It points to a real directory on your local machine.
+2. **`WORKDIR`**: This parameter is found in the `Dockerfile` and specifies the "working directory." Any subsequent `RUN`, `COPY`, or other instructions using **relative paths** will be executed within this directory. However, it does not affect absolute path parameters.
 
 ### Port Forwarding
 
@@ -87,10 +96,11 @@ Mainly due to cost-effectiveness—only ¥88 for the first year.
 The server OS used here is Ubuntu Server 24.04 LTS 64bit. All commands are based on this system.
 
 #### File Transfer
+Inoder to transfer the local file to the server easily, I have opted some modern terminal app, such as [Tabby](https://tabby.sh/), [WindTerm](https://github.com/kingToolbox/WindTerm) and [Warp](https://www.warp.dev/) etc.
 
-For transferring files from local to server, I recommend using [FileZilla](https://filezilla-project.org/download.php): graphical interface, user-friendly, perfect if you dislike memorizing command lines like me 😝.
+I randomly chose the Tabby terminal. It makes remote connections more convenient and has an integrated SFTP feature for easy file transfers. Plus, if you’re willing to customize the terminal interface, Tabby can look really sleek. 😄
 
-Of course, using terminal commands (`rsync` or `scp`) also works fine.
+Of course, for a more traditional approach, you can opt for [FileZilla](https://filezilla-project.org/download.php). If you don’t mind getting your hands a bit dirty, you can also use terminal commands like `rsync` or `scp` to transfer files.
 
 {{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
 
@@ -127,6 +137,9 @@ sudo docker info
 
 # Start Docker service
 sudo systemctl start docker
+
+# Stop Docker service
+sudo systemctl stop docker
 
 # Enable Docker to start at boot
 sudo systemctl enable docker

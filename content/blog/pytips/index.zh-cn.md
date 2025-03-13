@@ -16,8 +16,11 @@ authors:
 ---
 
 ## 创建虚拟环境
+
 ### 常规 Python 操作
+
 #### 创建
+
 一些常规的代码例子如下👇
 
 ```sh
@@ -43,7 +46,9 @@ D:\Python\Python311\python.exe -m venv your_env_name
 {{< alert icon="circle-info" cardColor="#b0c4de" textColor="#333333" >}}
 所有的参数说明都可以通过运行 `python -m venv -h` 来获得；不用到处查文档了~😆
 {{< /alert >}}
+
 #### 激活
+
 默认情况下，虚拟环境处于非激活状态。在“your_env_name/Scripts/”目录下将有一个名为“activate”的文件，用命令行运行即可。
 
 ```sh
@@ -52,6 +57,7 @@ your_env_name/Scripts/activate
 ```
 
 ### Poetry
+
 Poetry 是一个 Python 的包管理工具，从[更新日志](https://python-poetry.org/history/)来看，它从 2018 年 2 月就已经开始填充代码了，不算一个新的工具，但是最近几年非常流行💫
 
 其官方宣传的亮点如下：
@@ -61,9 +67,11 @@ Poetry 是一个 Python 的包管理工具，从[更新日志](https://python-po
 - 更佳符合直觉的命令🤔
 
 #### 安装
+
 非常直接：`pip install poetry`，进行全局安装
 
 #### 全局配置
+
 poetry 有一些非常特殊的机制，可能和 pip 等有些不太一样。你可能会需要去设置一下某些配置，具体如下：
 
 ```sh
@@ -85,6 +93,7 @@ poetry config repositories.tencentyun https://mirrors.tencentyun.com/pypi/simple
 ```
 
 #### 初始化项目
+
 如果你需要从头创建一个新的项目，那么你需要：创建一个项目文件夹，并把命令行的目录切换到那里，然后简单地：
 
 ```sh
@@ -116,6 +125,7 @@ my-package
 如果你有更加复杂的需求：[new Command](https://python-poetry.org/docs/cli#new)
 
 #### 创建虚拟环境
+
 这里就有几种情况可以说说。
 
 1. 你是从头开始构建自己的项目
@@ -151,6 +161,7 @@ poetry shell
 ```
 
 #### 添加包
+
 poetry 允许开发者区分哪些包是生产环境需要的，哪些包只是开发环境需要的
 
 ```sh
@@ -162,6 +173,7 @@ poetry add your-package -D
 ```
 
 #### 更新包
+
 ```sh
 poetry update # 自动分析依赖并更新可能的所有包
 
@@ -169,6 +181,7 @@ poetry update your-package1 your-package2 # 只更新你列举的包
 ```
 
 #### 移除包
+
 这个确实是 poetry 值得圈点的功能：pip 在安装时会安装你给出的包及其第三方依赖，但是在移除包的时候只会移除你列出的包，而无法移除其对应的第三方依赖。
 
 poetry 却能够安全完整地移除你的第三方依赖包，并且不影响别的依赖包。
@@ -182,6 +195,7 @@ poetry remove your-package -D
 ```
 
 #### 显示依赖
+
 ```sh
 poetry show --tree # 展示pyproject.toml中的依赖树
 
@@ -189,9 +203,11 @@ poetry show your-package --tree # 展示特定包的依赖树
 ```
 
 ## 程序打包
+
 我们经常需要把自己写的 Python 程序分享出去。然而只分享源代码会使得不太懂代码的用户非常苦恼，因为源代码的运行还需要搭建本地运行环境，因此打包程序应运而生。
 
 ### pyinstaller
+
 安装非常简单，就像别的 Python 包一样 `pip install pyinstaller` 即可；使用时在目标文件所在的目录启动终端，然后运行命令即可。
 
 **特点：打包速度较快；打包后的程序较大**
@@ -230,16 +246,19 @@ pyinstaller -D main.py
 | `--log-level LEVEL`                   | 设置构建时控制台消息的详细程度（可选值：TRACE、DEBUG、INFO、WARN、ERROR、FATAL）     |
 
 ### Nuitka
+
 将 Python 代码打包为 exe 可执行文件，转换原理是先将 Python 代码转换为 C 代码，然后再编译 C 代码。
 
 **特点：打包速度相当慢；需要额外安装 C 编译器，尽管可以自动完成但是对于内存空间管理非常严格的用户并不适用；打包后的程序体积很小（实测是 pyinstaller 的十分之一）**
 
 安装命令：
+
 ```shell
 pip install -U nuitka
 ```
 
 常见使用命令：
+
 ```shell
 # 将main.py文件打包为一个exe文件，使用链式优化，完成打包后清理临时文件
 python -m nuitka --lto=yes --remove-output --onefile main.py
@@ -269,4 +288,5 @@ python -m nuitka --lto=yes --remove-output --onefile main.py
 - Poetry 相关：
 	- [poetry 入门完全指南_poetry使用-CSDN博客](https://blog.csdn.net/weixin_42871919/article/details/137125544)非常详细的资料
 	- [Poetry](https://python-poetry.org/)
+	- [poetry如何更换国内源-数据科学SourceResearch](https://www.resourch.com/archives/66.html)
 

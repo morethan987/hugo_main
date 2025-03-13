@@ -72,18 +72,22 @@ To break this negative cycle, there are three solutions:
 
 **Time Gaps and Their Negative Cycle are the Critical Flaws of Static Schedule Management Software**, severely limiting its market acceptance. As a result, the common belief is that schedule management software is only suitable for highly self-disciplined individuals and is considered a niche product designed for them.
 
+
 {{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
 I’ve personally used several schedule management tools, but none of them were sustainable for me: either the learning curve was too steep, or I struggled to stick to a fixed schedule.
 {{< /alert >}}
+
 Therefore, a truly meaningful time management software should not require users to have a perfectly organized life or strictly adhere to their schedules. Instead, it should provide solutions for unexpected situations: motivate users to complete tasks ahead of time, discourage procrastination, and quickly generate new schedules after delays, preventing users from abandoning their plans.
 
 #### Dynamic Schedule Management
 
 Dynamic schedule management traditionally relied on specific algorithms, but in recent years, due to significant breakthroughs in AI, most dynamic scheduling is now driven by large language models.
 
+
 {{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
 During my research, I noticed something peculiar: there are almost no AI-driven dynamic scheduling tools in China; however, many similar products exist abroad, often at a very high cost and not user-friendly for Chinese users.
 {{< /alert >}}
+
 ##### Motion
 
 Motion is said to be a highly advanced AI scheduling tool, but it’s expensive. Additionally, domestic users don’t have access to foreign bank cards, so even the 7-day free trial isn’t accessible. Hence, I couldn’t gather detailed workflow information 😢

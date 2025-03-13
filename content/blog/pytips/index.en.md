@@ -16,8 +16,11 @@ authors:
 ---
 
 ## Virtual Env
+
 ### Plain Python Method
+
 #### Creat
+
 Some tipical code 👇
 
 ```sh
@@ -39,10 +42,13 @@ More parameters you may need for a customized virtual env. 🤔
 | `--clear`                | Delete the contents of the environment directory if it already exists, before environment creation. |
 | `--version`              | print the python version of the env                                                                 |
 
+
 {{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
 All the detailed expaination of the parameters can be got by the code `python -m venv -h`. No need to search everywhere~😆
 {{< /alert >}}
+
 #### Activate
+
 The virtual env is defaulted not active. In the direction `your_env_name/Scripts/` will be a file named `activate`. Run it with your cmd.
 
 ```sh

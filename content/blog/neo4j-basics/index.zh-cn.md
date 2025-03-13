@@ -19,9 +19,11 @@ Neo4j图数据库的基础信息以及操作方法
 {{< /lead >}}
 
 ## 简介
+
 [Neo4j](https://github.com/neo4j/neo4j) 是一个高性能的图数据库，将数据以及数据之间的关系通过图的形式来存储。图的具体形式是**标签属性图**，使用的查询语言是 `Cypher`。
 
 ## 标签属性图
+
 **标签属性图**是一种特定类型的图：
 - 一个结点有一个或者多个标签来进行类型的定义
 - 关系和节点地位相同，被视为同等重要
@@ -32,6 +34,7 @@ Neo4j图数据库的基础信息以及操作方法
 > Cypher 是一种**声明式**查询语言，允许你使用类似**ASCII艺术风格**的语法（包括括号、破折号和箭头）来识别数据中的**模式**。
 
 ### 模式
+
 **模式**是图数据库中的特定的结点和关系的组合，例如一个人（Person）在一个电影（Movie）中出演（ACT_IN）就是一个模式，代码形式表示为：
 
 ```cypher
@@ -41,6 +44,7 @@ Neo4j图数据库的基础信息以及操作方法
 其中用小括号选中的部分是结点，用方括号选中的部分是关系。结点部分中 p，m 是指代相应结点的变量，Person 和 Movie 是对应结点的标签，中间用冒号连接。关系部分中 r 是指代关系的变量，ACT_IN 是特定的关系类型。直接翻译成自然语言，意思就是：用 p 指代包含 Person 标签的结点，用 m 指代包含 Movie 标签的结点，他们之间的关系用 r 表示，类型是 ACT_IN
 
 ### 数据读取
+
 数据读取操作依赖**模式匹配**，使用关键字 `MATCH`，这相当于给数据库发送指令，让它过滤出只符合特定关系的**结点关系对**，也就是三元组 `(p,r,m)` 构成的集合
 
 ```cypher
@@ -68,6 +72,7 @@ RETURN p2.name AS actor, m.title AS movie, r.role AS role
 这个命令筛选出和 Tom Hanks 参演过同一场电影的所有演员，并给出他们的名字、参与的电影、在电影中饰演的角色
 
 按照某个属性来进行排序以及分页也是支持的：
+
 ```cypher
 MATCH (m:Movie)
 WHERE m.released IS NOT NULL
@@ -77,13 +82,17 @@ ORDER BY released DESC LIMIT 5
 
 这会筛选出最新的 5 个电影。
 
+
 {{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
 Cypher 关键字对大小写不敏感；属性名、变量名等其他的都是大小写敏感的
 {{< /alert >}}
+
 ### 数据写入
+
 数据写入使用 `MERGE` 关键字，其含义就是将一个结点或者关系**合并**进数据图中。
 
 - 合并结点：
+
 ```cypher
 MERGE (m:Movie {title: "Arthur the King"})
 SET m.year = 2024
@@ -138,6 +147,7 @@ docker run -d -p 7474:7474 -p 7687:7687 -v E:/neo4j/data:/data -v E:/neo4j/logs:
 - `-v` 参数用于宿主机的目录挂载（说人话就是指定这个 Docker 应用的存储目录）
 - `-e` 参数用来配置环境变量：带有 `apoc` 的都是 APOC 相关的配置；`NEO4J_AUTH` 表示用户名为 neo4j，密码为 mo123456789；
 
+
 {{< alert icon="triangle-exclamation" cardColor="#ffcc00" textColor="#333333" iconColor="#8B6914" >}}
 如果你使用 Neo4j 用于语言模型的增强生成(RAG)，一定要带上述 APOC 相关配置；如果不是的话，那么那些命令可以直接去掉
 {{< /alert >}}
@@ -147,9 +157,11 @@ docker run -d -p 7474:7474 -p 7687:7687 -v E:/neo4j/data:/data -v E:/neo4j/logs:
 ![Neo4jBasics-1.png](img/Neo4jBasics-1.png)
 
 ### 手动安装 APOC
+
 去 [Releases · neo4j/apoc](https://github.com/neo4j/apoc/releases) 中最新的 Assets 中下载 `apoc-5.26.2-core`；然后粘贴到上面👆所说的宿主机目录中；然后重启 Docker 容器就行
 
 ### 浏览器UI
+
 这里默认将 7474 端口给浏览器UI使用，7687 端口给别的后台程序使用；
 
 在容器运行在后台的情况下，访问：`http://localhost:7474/browser/preview`
@@ -159,4 +171,5 @@ docker run -d -p 7474:7474 -p 7687:7687 -v E:/neo4j/data:/data -v E:/neo4j/logs:
 然后就可以成功进入浏览器UI界面了😄
 
 ## 参考资料
+
 - [Docker：Docker部署Neo4j图数据库 - 怒吼的萝卜 - 博客园](https://www.cnblogs.com/nhdlb/p/18703804)

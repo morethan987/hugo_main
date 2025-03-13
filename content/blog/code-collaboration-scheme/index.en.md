@@ -76,16 +76,20 @@ To use this configuration file in other code files, simply include the following
 run('config.m');
 ```
 
+
 {{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
 Even the parameters are transformed into another file, the VS Code can also recognizes it and provide complement suggestion.
 {{< /alert >}}
+
 #### Function-Internal Parameters
 
 All variables used within a function should be explicitly defined at the beginning of the function and should include brief Chinese comments.
 
+
 {{< alert icon="triangle-exclamation" cardColor="#ffcc00" textColor="#333333" iconColor="#8B6914" >}}
 If similar parameters are used across multiple files, make sure to use consistent naming, especially in AI-generated code. Use `F2` in VS Code to rename them.
 {{< /alert >}}
+
 ### Code Formatting
 
 Code formatting is mainly handled using the official `MATLAB` plugin. After you activate the plugin, press `Shift+Alt+F` to format your code.
@@ -119,6 +123,7 @@ User's instruction:
 ```
 
 ### Example Project
+
 In order to develop a project as fast and well-defined as possible, I have created an [Example Project](https://github.com/morethan987/morethan987/tree/main/MathModelExampleProject) which contains all the regulations mentioned before. You can directly change the files in the example project without mnemonic cost. 😄
 
 ### Code Tips
@@ -126,10 +131,13 @@ In order to develop a project as fast and well-defined as possible, I have creat
 - **Parallel Execution**  
     MATLAB supports multi-threaded computing. You can convert a typical `for` loop to a `parfor` loop for parallel execution.
 
+
 {{< alert icon="triangle-exclamation" cardColor="#ffcc00" textColor="#333333" iconColor="#8B6914" >}}
 The execution of `parfor` functions is subject to strict requirements. Please refer to the [official documentation](https://ww2.mathworks.cn/help/parallel-computing/parfor.html) for more details.
 {{< /alert >}}
+
 ### Huge Table Process
+
 The comment output of the Mathematical Model is a **Huge** table in `.mat` file, which is usually hard to abstract the target data.
 
 Here I directly write a simply Python program, [Data extractor](https://github.com/morethan987/morethan987/tree/main/%E6%95%B0%E6%8D%AE%E6%8F%90%E5%8F%96%E5%99%A8), to automatically operate the huge table data. With tiny modification, you can get any data you want from the `.mat` file.

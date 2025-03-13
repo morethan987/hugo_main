@@ -95,7 +95,10 @@ Primarily refers to **similarity search**, leveraging the concept that objects w
 - Euclidean distance
 - Manhattan distance
 
-> **Note:** Vectors are normalized when stored, making dot product and cosine similarity equivalent in Qdrant.
+
+{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
+Vectors are normalized when stored, making dot product and cosine similarity equivalent in Qdrant.
+{{< /alert >}}
 
 Qdrant provides a comprehensive [Search API](https://qdrant.tech/documentation/concepts/search/#search-api), enabling:
 
@@ -107,15 +110,18 @@ Qdrant provides a comprehensive [Search API](https://qdrant.tech/documentation/c
 6. Grouping search results (`group_size`).
 7. Query planning for optimized performance based on heuristic evaluations.
 
-> **Warning:** When using both `group_size` and `limit`, the `limit` parameter indicates the number of groups.
+
+{{< alert icon="triangle-exclamation" cardColor="#ffcc00" textColor="#333333" iconColor="#8B6914" >}}
+When using both `group_size` and `limit`, the `limit` parameter indicates the number of groups.
+{{< /alert >}}
 
 Sparse vectors and dense vectors differ notably in search behavior:
 
-|Aspect|Sparse Vectors|Dense Vectors|
-|---|---|---|
-|Similarity method|Defaults to dot product, no need to specify|You can specify supported algorithms|
-|Search approach|Only exact search|HNSW for approximate searching|
-|Search results|Only vectors sharing common non-zero elements|Top `limit` vectors as specified|
+| Aspect            | Sparse Vectors                                | Dense Vectors                        |
+| ----------------- | --------------------------------------------- | ------------------------------------ |
+| Similarity method | Defaults to dot product, no need to specify   | You can specify supported algorithms |
+| Search approach   | Only exact search                             | HNSW for approximate searching       |
+| Search results    | Only vectors sharing common non-zero elements | Top `limit` vectors as specified     |
 
 ### Explore
 

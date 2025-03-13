@@ -17,6 +17,7 @@ authors:
 ---
 
 ## 背景提要
+
 - 你应该知道如何通过命令行与电脑交互，包括但不限于：Windows如何唤出命令行/终端，正在运行中的命令什么时候结束......
 
 - 懂一点点翻墙的技术，OverLeaf是个国外的软件,与之硬相关的latex项目也是国外的，因此下载相关依赖的时候能够直接接受国外流量会省掉很多麻烦。如果你没有VPN的话就需要为每一个包管理工具指定一个国内源，但有时候国内源更新并不及时。
@@ -25,14 +26,18 @@ authors:
 
 ## 部署全流程
 ### 安装Linux
+
 在 `Windows App Store` 里面直接搜索一个Linux发行版本并下载，笔者选择的是`Kali`。安装完成后可以在开始菜单中直接打开，打开后会跳出命令行窗口，初次打开需要填写需要用户名与密码进行注册。
+
 
 {{< alert  >}}
 此时你的命令行应该有一个 Warning 提示。这是因为你还没有安装 WSL(Windows Subsystem for Linux)；同时，在填写密码的时候你的输入不会显示在命令行，但已经被记录了
 {{< /alert >}}
+
 为什么需要一个Linux系统？因为OverLeaf的sharelatex模型需要Linux环境。也正因如此，据说在Linux系统上运行的`OverLeaf`更加流畅。
 
 ### 安装WSL
+
 安装WSL2，直接在Windows命令行中运行：
 
 ```sh
@@ -48,6 +53,7 @@ wsl --install
 ```
 
 ### 安装Docker
+
 进入 [Docker](https://www.docker.com/) 官网下载Docker，这是sharelatex模型运行的容器。Docker是一个开源的应用容器引擎，其中包括，镜像、容器、仓库，目的就是通过对应用组件的封装、分发、部署、运行等生命周期的管理，使用户的产品及其环境能够做到“一次封装，到处运行”。就像一个集装箱，由程序员开发并封装，用户使用时就直接把整个集装箱搬过去。
 
 Docker安装完成后就可以双击启动放后台了，我们后面通过命令行来操作Docker；
@@ -75,6 +81,7 @@ vim ./config/variables.env
 当你成功保存并退出，回到熟悉的`Kali`命令行界面后运行 `bin/up` 此时正在拉取sharelatex镜像以及相关的网络工具。这时会有大量的数据传输，要保证网络通畅（梯子要稳！）
 
 ### 配置用户
+
 当上一个命令成功结束之后，运行 `bin/start` ；此时你打开Docker点进sharelatex，你应该可以看到代码“爆闪”，如果没有红色的消息，那应该是正常运行了。
 
 这时打开浏览器访问网址 `http://localhost/launchpad` 
@@ -84,6 +91,7 @@ vim ./config/variables.env
 {{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
 但现在你丢一个文件进去编译多半是会报错的 `ᕕ( ᐛ )ᕗ` ；因为此时 sharelatex 里面的宏包严重不足，不是红包「手动狗头」
 {{< /alert >}}
+
 ### 安装扩展包
 
 打开 `Kali` 进入对应目录运行 `bin/shell` 然后逐条执行：
@@ -138,21 +146,28 @@ fc-list :lang=zh-cn
 fc-match Arial
 ```
 
-最后在`shell`目录里面运行：
+最后在 `shell` 目录里面运行：
+
 ```sh
 vim /usr/local/texlive/2023/texmf.cnf
 ```
+
 进入配置文件，在最底下加入一句 `shell_escape = t`
+
 
 {{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
 我也不知道这有什么用，属于是前辈传承了🤔
 {{< /alert >}}
+
 注意，如果Texlive(扩展包的官名)版本不同的话，目录地址也会有所变化，因此需要根据实际的地址来填写，例如将`2023`改成`2024`。
+
 
 {{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
 在Linux命令行中可以用 `ls -l` 来查看当前目录下所有的文件
 {{< /alert >}}
+
 ## 部署成功
+
 现在你就可以愉快地使用本地版OverLeaf了，没有编译超时的困扰~
 
 如果非常巧合，你也是个CQUer，这里附赠一份重庆大学的毕业论文模板，炒鸡的亲民哦：[CQUThesis](https://github.com/nanmu42/CQUThesis)

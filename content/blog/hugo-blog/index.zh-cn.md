@@ -21,6 +21,7 @@ authors:
 {{< /lead >}}
 
 ## 为什么 Hugo
+
 最初也只是因为偶然间听说了 Hugo 可以做网页，并且听说编译静态页面非常高效，于是才去搜集的相关资料——据说 Hugo 是**世界上最快**的静态页面生成器，官方网站也是这么写的。
 
 当然，口说无凭，下面就是我初次本地编译运行 Hugo 得到的输出，即在完全没有 `public` 文件夹的情况下的输出：
@@ -43,6 +44,7 @@ Built in 872 ms
 我并没有用别的网页生成工具搭建过博客，因此无法给出其他生成器的实际生成速度
 {{< /alert >}}
 ## 参考引用
+
 下面是我在搭建博客的过程中所用到的所有资源链接：
 
 - [莱特雷-letere](https://letere-gzj.github.io/hugo-stack/) 这是一位博主的网页，也是用 Hugo 搭建的，里面同时也有很多其他的网页工具的教程；这是他在 B 站上发布的系列[视频教程](https://www.bilibili.com/video/BV1bovfeaEtQ/?spm_id_from=333.337.search-card.all.click&vd_source=38d0addc11facdcdfe9d401e43b75680)
@@ -51,7 +53,9 @@ Built in 872 ms
 - [Hugo Themes](https://themes.gohugo.io/) 
 
 ## 部署全流程
+
 ### 搭建 Hugo 环境
+
 这一部分在那位博主的[网页](https://letere-gzj.github.io/hugo-stack/)和[视频教程](https://www.bilibili.com/video/BV1bovfeaEtQ/?spm_id_from=333.337.search-card.all.click&vd_source=38d0addc11facdcdfe9d401e43b75680)中都有非常详细的讲解，不喜欢看文字的可以去看视频😝
 
 说实话，Hugo 的环境搭建真的是我见过的最简单的，没有之一。你只需要到 [Hugo官方网页](https://gohugo.io/)去把 Hugo 下载下来，然后存放到合适的文件夹里面，然后解压就完成了，解压之后的文件夹内也只有一个 `hugo.exe` 文件，简直不要太简单。
@@ -62,6 +66,7 @@ Hugo 真的是太方便了，我曾经尝试过 Hexo 但是 Node.js 的配置就
 稍微需要那么一点点🤏难度的工作其实就是把 `hugo.exe` 所在的目录添加到环境变量里面去。
 
 ### 生成模版系统
+
 在 `hugo.exe` 的目录中打开终端，然后输入命令 `hugo new site your-site-name`，然后就可以看到一个新的文件夹📂出现在了当前文件夹里面。
 
 **模板系统**听着很高级，其实就是在你的 `hugo.exe` 的同级目录下面建一个文件夹，但是里面的所有文件夹都有特殊的含义，不能随便改动。
@@ -75,6 +80,7 @@ Hugo 真的是太方便了，我曾经尝试过 Hexo 但是 Node.js 的配置就
 | `public`    | 是编译后生成的完整网页，一开始没有       |
 | `themes`    | 存放你的网站主题                |
 ### 主题配置基本操作
+
 Hugo 的网站主题很多，具体参考 [Hugo Themes](https://themes.gohugo.io/) 你可以选一款你喜欢的主题，然后下载之后就放在 `themes` 文件夹里面就行。这一部分文字描述非常抽象，见[视频教程](https://www.bilibili.com/video/BV1bovfeaEtQ/?spm_id_from=333.337.search-card.all.click&vd_source=38d0addc11facdcdfe9d401e43b75680)
 
 这里有一个**重点**是：基本上每一个主题都会配置一个**样例网站**，一般在文件夹 `exampleSite` 里面，如果实在不想跟着网站文档自己配置，直接用这个样例网站的配置也是可以的。
@@ -82,6 +88,7 @@ Hugo 的网站主题很多，具体参考 [Hugo Themes](https://themes.gohugo.io
 每一个不同的主题基本配置完成之后都要进行个性化配置。这里我重点推荐重点推荐一下我使用的主题 [Blowfish](https://blowfish.page/zh-cn/) 相当好的一款主题，向作者致敬🫡
 
 ### Blowfish 主题
+
 [Blowfish](https://blowfish.page/zh-cn/) 官方文档上面已经有了非常非常详细的指导文档，不再过多赘述。任何一个多余的字都是对于如此详细的指导文档的不尊重🫡
 
 我这里简要说明一些可能出现的问题，下面的内容你可能需要仔细阅读官方文档之后才能明白其中含义🤔
@@ -109,6 +116,7 @@ Hugo 的网站主题很多，具体参考 [Hugo Themes](https://themes.gohugo.io
 说实话，官方文档写的真的好👍一套完整流程走下来竟然只有这么点不太容易理解的错误😋
 
 ## 配套插件
+
 我日常习惯使用 [Obsidian](https://obsidian.md/) 来写文章，由于 Obsidian 的格式与 Blowfish 的格式还是有较为明显的区别，二者的格式转换非常麻烦🤔
 
 在查询了一圈之后，发现根本就没有适合的插件！于是，我自己开发了一个插件：[Hugo-Blowfish-Exporter](https://github.com/morethan987/Hugo-Blowfish-Exporter)
