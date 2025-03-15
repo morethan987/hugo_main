@@ -88,6 +88,7 @@ vim ./config/variables.env
 
 按照提示注册Administrator Account之后，就会跳转到 `http://localhost/project` ；这时基本的OverLeaf网页已经可以显示了。
 
+
 {{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
 但现在你丢一个文件进去编译多半是会报错的 `ᕕ( ᐛ )ᕗ` ；因为此时 sharelatex 里面的宏包严重不足，不是红包「手动狗头」
 {{< /alert >}}
