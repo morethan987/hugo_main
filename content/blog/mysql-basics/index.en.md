@@ -126,9 +126,11 @@ SELECT COUNT(*) boys FROM students WHERE gender = 'M';
 ```
 
 
+
 {{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
 Even though `COUNT(*)` returns a scalar value, the result is still a two-dimensional table, but with only one row and one column.
 {{< /alert >}}
+
 
 Other commonly used aggregation functions: `MAX()`, `MIN()`, `AVG()`, `SUM()`, etc., similar to `COUNT()`.
 
@@ -278,4 +280,15 @@ CREATE TABLE users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id)
 );
+```
+
+- **Creating Triggers**：
+
+```sql
+CREATE TRIGGER trigger_name
+BEFORE INSERT ON orders
+FOR EACH ROW
+BEGIN
+    SET NEW.order_time = NOW();
+END;
 ```

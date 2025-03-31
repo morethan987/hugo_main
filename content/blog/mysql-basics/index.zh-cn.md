@@ -258,7 +258,7 @@ DELETE FROM students WHERE id=1;
 DELETE FROM students;
 ```
 
-#### 建库建表
+#### 创建
 
 - **建库**：
 
@@ -290,3 +290,13 @@ CREATE TABLE users (
 );
 ```
 
+- **触发器**：
+
+```sql
+CREATE TRIGGER trigger_name
+BEFORE INSERT ON orders
+FOR EACH ROW
+BEGIN
+    SET NEW.order_time = NOW();
+END;
+```
