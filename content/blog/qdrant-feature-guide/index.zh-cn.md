@@ -35,7 +35,7 @@ Qdrant 为了更好地处理向量数据定义了一些抽象数据类型，理�
 
 数据点是向量数据库的核心数据类型，所有的操作都围绕着数据点进行。
 
-一个非常纯净的数据点只包含其向量，但是一般情况下数据点都会被附加上一些标签用来提供向量数据之外的更多的信息。这些标签被称为[负载·Payload]({{< relref "#负载·payload" >}}) 👇
+一个非常纯净的数据点只包含其向量，但是一般情况下数据点都会被附加上一些标签用来提供向量数据之外的更多的信息。这些标签被称为[负载·Payload]({{< relref "#负载payload" >}}) 👇
 
 **因此：数据点=向量+负载标签**
 
@@ -90,7 +90,7 @@ Qdrant 的数据点能够配置多种不同类型的向量：**密集向量，�
 
 既然都存进数据库里面了，那么这些数据肯定是有作用的：向量数据库的搜索机制主要是**语义近似匹配**，通过这些标签你就能够在这个基础上添加更多的**逻辑过滤条件**
 
-关于过滤的更多信息见：[过滤·Filtering]({{< relref "#过滤·filtering" >}})
+关于过滤的更多信息见：[过滤·Filtering]({{< relref "#过滤filtering" >}})
 
 ### 集合·Collection
 
@@ -118,9 +118,11 @@ Collection 简而言之就是一组数据点的集合。在这个数据类型的
 - 曼哈顿距离
 
 
+
 {{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
 为了提高数据库的性能，所有向量在存入的时候都会被"归一化"，这也意味着点积相似度和余弦相似度在 Qdrant 中是等价的
 {{< /alert >}}
+
 
 为了更良好的用户体验，Qdrant 提供了一套完整的程序接口，让用户能够方便地调用：[Search API - Qdrant](https://qdrant.tech/documentation/concepts/search/#search-api)
 
@@ -135,9 +137,11 @@ Collection 简而言之就是一组数据点的集合。在这个数据类型的
 7. **搜索规划**：依据可选索引、过滤条件的复杂性和总共的数据点的数量，以启发式的方法选择一个合适的搜索方式(提高性能🤔)
 
 
+
 {{< alert icon="triangle-exclamation" cardColor="#ffcc00" textColor="#333333" iconColor="#8B6914" >}}
 如果 `group_size` 和 `limit` 被同时设置，那么此时 `limit` 参数表示分组的数量
 {{< /alert >}}
+
 
 另外，在 Qdrant 中，稀疏向量和密集向量的搜索有一些关键的不同，对比结果如下：
 
@@ -183,9 +187,11 @@ client.query("{collection_name}", {
 ```
 
 
+
 {{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
 官方给出的例子中 100,231 是向量编号，每一个编号都对应一个四维的向量
 {{< /alert >}}
+
 
 其中 `strategy` 参数用于调控搜索算法，下面是具体的算法说明：
 
@@ -204,20 +210,24 @@ let score = if best_positive_score > best_negative_score {
 3. **只考虑负例算法**：使用最佳评分算法👆同时不提供正例，你就会得到一个反向评分算法，能够找到最不相关的数据点
 
 
+
 {{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
 多重向量和别的特殊向量也是能够被处理的，处理逻辑相同，只是代码写法不同
 {{< /alert >}}
+
 
 #### 发现·Discovery
 
 "发现"操作的核心思路就是样本空间的分割。你需要提供一系列的**正负向量对**，每一个向量对都会将样本空间划分为正区域和负区域，最终将会搜索得出**处于正区域更多或者负区域更少**的数据点。
 
-和[推荐·Recommendation]({{< relref "#推荐·recommendation" >}}) 类似，但是这里你需要将正向量和负向量组合成一对来输入。
+和[推荐·Recommendation]({{< relref "#推荐recommendation" >}}) 类似，但是这里你需要将正向量和负向量组合成一对来输入。
+
 
 
 {{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
 由于进行了样本空间的硬划分，因此可以考虑提高 HNSW 算法中的 ef 参数来弥补硬划分产生的精度损失
 {{< /alert >}}
+
 
 通过发现操作，Qdrant 能够处理一下两种新的搜索需求：
 
@@ -226,9 +236,11 @@ let score = if best_positive_score > best_negative_score {
 2. **区域划分搜索**：是发现型搜索👆的特例，在不提供目标向量的情况下，数据库会直接使用正负向量对进行区域划分，并最后返回处在正区域中最多的数据点
 
 
+
 {{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
 在发现型搜索中，通过算法保证了上下文约束条件的**强制性**，优先级更高；换言之，发现型搜索先执行区域划分搜索，然后再进行普通的相似度搜索
 {{< /alert >}}
+
 
 #### 距离矩阵·Distance-Matrix
 
