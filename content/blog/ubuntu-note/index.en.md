@@ -1,234 +1,233 @@
 ---
-title: Ubuntu折腾札记
+title: Ubuntu Tinkering Notes
 weight: -85
 draft: false
-description: 记录折腾Ubuntu系统的过程以备不时之需
+description: Documenting the process of tinkering with Ubuntu for future reference
 slug: ubuntu-note
 tags:
   - Ubuntu
   - Linux
 series:
-  - 技术杂项
+  - Technical Miscellany
 series_order: 7
-date: 2025-05-02
-lastmod: 2025-05-02
+date: 2025-05-01
+lastmod: 2025-05-01
 authors:
   - Morethan
 ---
 
-{{< lead >}}
-总结记录一下折腾Ubuntu系统的过程，以备不时之需
-{{< /lead >}}
+{{< lead >}}  
+Summarizing and documenting the process of tinkering with Ubuntu for future reference.  
+{{< /lead >}}  
 
-## 前言
+## Introduction  
 
-Ubuntu 作为一个流行的 Linux 发行版本，对比其他 Linux 发行版，有较好的生态支持。最主要的体现就是：当你遇到问题的时候 Ubuntu 能够搜到的教程更多。
+Ubuntu, as a popular Linux distribution, offers better ecosystem support compared to other Linux distros. The most notable advantage is that when you encounter issues, you're more likely to find tutorials and solutions for Ubuntu.  
 
-这篇文章主要针对带有 GUI 的个人版 Ubuntu 系统，服务器专用的 Ubuntu 系统操作取决于你的实际业务，[云服务器搭建]({{< ref "/blog/cloud-server-build/" >}})这篇文章可以作为一个参考。
+This article primarily focuses on the GUI-based personal edition of Ubuntu. For server-specific Ubuntu systems, operations depend on your actual business needs. The article [Cloud Server Setup]({{< ref "/blog/cloud-server-build/" >}}) can serve as a reference.  
 
-## Ubuntu安装
+## Ubuntu Installation  
 
-非常久远之前就安装好了，故不做记录了。如有需要，请自行搜索“移动硬盘安装 Ubuntu”等关键词。这里放一个较新的链接：[移动硬盘安装Ubuntu](https://blog.csdn.net/qq_52034548/article/details/131581118)
+The installation was done a long time ago, so no detailed records exist. If needed, please search for keywords like "installing Ubuntu on a portable hard drive." Here’s a relatively recent guide: [Installing Ubuntu on a Portable Hard Drive](https://blog.csdn.net/qq_52034548/article/details/131581118).  
 
-安装过程已经不可考究了，现状就是我将 Ubuntu 系统安装在一个移动硬盘中，随插随用。
+The installation process is no longer traceable. The current setup involves installing Ubuntu on a portable hard drive, allowing it to be used on-the-go.  
 
-使用的时候就可以在开机之前把硬盘插上，点击电源按钮之后快速点击某个按键进入 BIOS 引导界面，把优先级提升到最高然后保存推出就可以正常进入 Ubuntu 系统了。
+To use it, simply plug in the hard drive before powering on the computer. Quickly press a specific key to enter the BIOS boot menu, set the priority to the highest, save, and exit to boot into Ubuntu.  
 
-不想使用的时候直接不插上硬盘就可以了，正常开机，不需要任何的操作就可以直接进入 Windows 系统，非常地方便。
+To switch back to Windows, just unplug the hard drive and power on normally—no additional steps are required.  
 
-## 界面美化
+## Interface Customization  
 
-我个人比较喜欢苹果风格的界面，因此特地找了一款苹果风格的主题：[WhiteSur](https://github.com/vinceliuice/WhiteSur-gtk-theme)
+I personally prefer an Apple-style interface, so I specifically chose an Apple-inspired theme: [WhiteSur](https://github.com/vinceliuice/WhiteSur-gtk-theme).  
 
-安装过程非常简单：
+The installation process is straightforward:  
 
-```bash
-git clone https://github.com/vinceliuice/WhiteSur-gtk-theme.git --depth=1
+```bash  
+git clone https://github.com/vinceliuice/WhiteSur-gtk-theme.git --depth=1  
 
-cd WhiteSur-gtk-theme
+cd WhiteSur-gtk-theme  
 
-./install.sh # 运行安装脚本
-```
+./install.sh # Run the installation script  
+```  
 
-具体的配置操作请见 Github 官网上的说明
+For detailed configuration, refer to the instructions on the GitHub page.  
 
-至于如何升级，官方没有说明，估计是默认用户都知道：
+As for updates, the official guide doesn’t specify, presumably assuming users already know:  
 
-```bash
-git pull # 拉取最新的代码
+```bash  
+git pull # Fetch the latest code  
 
-./install.sh # 重新运行安装脚本即可
-```
+./install.sh # Re-run the installation script  
+```  
 
-## 使用Windows上的字体
+## Using Windows Fonts  
 
-思路：将 Windows 中的字体文件拷贝到 Ubuntu 专用的字体文件夹中，然后给予适当的权限，然后刷新 Ubuntu 的字体缓存，加载新的字体。
+Approach: Copy font files from Windows to Ubuntu’s dedicated font directory, assign appropriate permissions, refresh Ubuntu’s font cache, and load the new fonts.  
 
-```bash
-# Windows上的字体文件夹：C:/Windows/Fonts
-sudo cp /mnt/C/Windows/Fonts/LXGWWenKai-Regular.ttf /usr/share/fonts/custom/LXGWWenKai-Regular.ttf
+```bash  
+# Windows font directory: C:/Windows/Fonts  
+sudo cp /mnt/C/Windows/Fonts/LXGWWenKai-Regular.ttf /usr/share/fonts/custom/LXGWWenKai-Regular.ttf  
 
-# 提高权限
-sudo chmod u+rwx /usr/share/fonts/custom/*
+# Grant permissions  
+sudo chmod u+rwx /usr/share/fonts/custom/*  
 
-# 进入字体文件夹
-cd /usr/share/fonts/custom/
+# Navigate to the font directory  
+cd /usr/share/fonts/custom/  
 
-# 建立字体缓存
-sudo mkfontscale
+# Create font cache  
+sudo mkfontscale  
 
-# 刷新缓存
-sudo fc-cache -fv
-```
+# Refresh cache  
+sudo fc-cache -fv  
+```  
 
-当然，你也可以直接从网上下一个新的 `.ttf` 文件然后再复制到指定文件夹中。而且如果你使用的是带有 GUI 界面的 Ubuntu 系统，下载文件之后你可以直接双击字体文件来安装🥰
+Alternatively, you can download a new `.ttf` file from the web and copy it to the target directory. If you’re using a GUI-based Ubuntu system, you can simply double-click the font file to install it 🥰.  
 
 
 {{< alert icon="triangle-exclamation" cardColor="#ffcc00" textColor="#333333" iconColor="#8B6914" >}}
-字体可能会重复安装，系统不会检查某个字体是否重复安装；如果安装重复了请自行去相关文件夹中查找并手动删除🥲Ubuntu 中字体工具可以查看所有字体信息
+Fonts may be installed redundantly, as the system doesn’t check for duplicates. If this happens, manually locate and delete the duplicate files in the relevant directory 🥲. Ubuntu’s font tools can display all font information.
 {{< /alert >}}
 
-## 挂载硬盘
+## Mounting Hard Drives  
 
-由于我的 Ubuntu 系统安装在移动硬盘上，因此这里主要解决的问题是：如何在 Ubuntu 上访问 Winodws 中的盘区。因此不涉及对于分区的具体处理，如果需要对分区进行格式化等等操作，详见：[如何在Ubuntu系统中进行磁盘的分区与挂载](https://cloud.tencent.com/developer/article/2456171)
+Since my Ubuntu system is installed on a portable hard drive, the main goal here is to access Windows partitions from Ubuntu. This section doesn’t cover detailed partition operations. For tasks like formatting partitions, refer to: [How to Partition and Mount Disks in Ubuntu](https://cloud.tencent.com/developer/article/2456171).  
 
-```bash
-# 查看磁盘及其分区，sudo提权不可省略
-sudo fdisk -l
+```bash  
+# View disks and partitions (sudo privileges required)  
+sudo fdisk -l  
 
-# 创建挂载位点，其实就是建一个文件夹
-# mnt中的子文件夹之所以取名为E是，因为这里准备挂载E盘
-sudo mkdir /mnt/E
+# Create a mount point (essentially creating a folder)  
+# The subfolder under /mnt is named "E" because it’s intended to mount the E drive  
+sudo mkdir /mnt/E  
 
-# 直接挂载新分区
-sudo mount /dev/vdb /mnt/E
+# Mount the new partition directly  
+sudo mount /dev/vdb /mnt/E  
 
-# 设置开机自动挂载
-# 查看分区的UUID
-sudo blkid
+# Set auto-mount at boot  
+# Check the partition’s UUID  
+sudo blkid  
 
-# 编辑特定文件
-vim /etc/fstab
+# Edit the specific file  
+vim /etc/fstab  
 
-# 在文件末尾追加
-UUID=xxxxxxxx /mnt/E ntfs defaults 0 2
-```
+# Append to the end of the file  
+UUID=xxxxxxxx /mnt/E ntfs defaults 0 2  
+```  
 
-- 上面的 UUID 请替换为 `blkid` 命令获取的内容，`ntfs` 处也替换为相应的文件系统类型（常见的如 `ntfs` `ext4`）
-- `defaults`：这是一个组合选项，包含一组默认挂载选项，如rw（读写）、relatime（减少inode访问时间更新次数）等
-- 0和2：这些值分别控制是否需要备份和文件系统检查顺序。通常第一个值为 0（不备份），第二个值为1或2（1用于根文件系统，其他文件系统用2）
+- Replace the UUID above with the output from `blkid`. Replace `ntfs` with the appropriate filesystem type (common types include `ntfs` and `ext 4`).  
+- `defaults`: This is a combination of default mount options, such as `rw` (read-write) and `relatime` (reduces inode access time updates).  
+- `0` and `2`: These values control backup and filesystem check order. Typically, the first value is `0` (no backup), and the second is `1` or `2` (`1` for the root filesystem, `2` for others).  
 
-**测试方法**：
+**Testing method**:  
 
-```bash
-# 运行后如果没有报错则说明配置正确
-sudo mount -a
-```
+```bash  
+# If no errors occur, the configuration is correct  
+sudo mount -a  
+```  
 
-## 创建快捷方式
+## Creating Shortcuts  
 
-常见的一个操作：我想在桌面放一个常用文件夹的快速链接，方便快速进入对应文件夹
+A common task: placing a quick link to a frequently used folder on the desktop for easy access.  
 
-```bash
-# 在Desktop文件夹中放置一个指向/target/dir文件夹的链接
-# 请替换为你的目标文件夹
-ln -s /target/dir ~/Desktop
+```bash  
+# Place a link to /target/dir in the Desktop folder  
+# Replace with your target directory  
+ln -s /target/dir ~/Desktop  
 
-# 测试，如果能cd进去那么就没问题
-cd ~/Desktop/dir
-```
+# Test—if you can cd into it, it works  
+cd ~/Desktop/dir  
+```  
 
-## 安装管理软件
+## Installing and Managing Software  
 
-在 Ubuntu 上安装软件的方式大致分为以下几种;
+Software installation on Ubuntu generally falls into the following categories:  
 
-1. 通过自带的 snap 安装
-2. 通过 apt 安装
-3. 通过 deb 压缩包安装
-4. 通过 curl 安装
+1. Via the built-in Snap store  
+2. Via `apt`  
+3. Via `.deb` packages  
+4. Via `curl`  
 
-不同的安装方式有不同的管理方案，其中通过 curl 安装的管理最为不便，其他的都可以通过相应的包管理工具轻松管理
+Different installation methods require different management approaches. `curl` installations are the most cumbersome to manage, while others can be handled easily with their respective package managers.  
 
-### snap
-直接打开 snap 商店就可以直接看到，轻松便捷，但是其中的软件包往往较为落后
+### Snap  
+Simply open the Snap store to install software effortlessly, though the packages are often outdated.  
 
-### apt
+### apt  
 
-```bash
-# 安装软件
-sudo apt install xxx
+```bash  
+# Install software  
+sudo apt install xxx  
 
-# 升级软件包
-sudo apt update # 同步远程仓库的软件包信息，但不会实际升级任何软件
-apt list --upgradable # 查看可升级的软件包
-# 升级所有可用的包，但不会处理依赖关系变更（如删除旧包或安装新依赖）
-sudo apt upgrade
-sudo apt full-upgrade # 完全升级
-sudo do-release-upgrade # 跨ubuntu大版本升级
+# Update packages  
+sudo apt update # Sync package info from remote repositories without upgrading  
+apt list --upgradable # View upgradable packages  
+# Upgrade all available packages without handling dependency changes  
+sudo apt upgrade  
+sudo apt full-upgrade # Full upgrade  
+sudo do-release-upgrade # Upgrade across major Ubuntu versions  
 
-# 移除软件包
-sudo apt remove xxx
-sudo apt autoremove # 清理残留
-```
+# Remove packages  
+sudo apt remove xxx  
+sudo apt autoremove # Clean up residuals  
+```  
 
-### deb
+### deb  
 
-从浏览器上下载 deb 压缩包之后，直接双击即可直接安装。其内部执行的命令其实就是 apt 安装，因此管理方式也是与 apt 相同的。
+After downloading a `.deb` package from a browser, double-clicking it will install it directly. Internally, this uses `apt`, so management is the same as with `apt`.  
 
-```bash
-# 通过双击安装
+```bash  
+# Install via double-click  
 
-# 通过apt卸载
-sudo apt remove xxx
-sudo apt autoremove # 清理残留
-```
+# Uninstall via apt  
+sudo apt remove xxx  
+sudo apt autoremove # Clean up residuals  
+```  
 
-### curl
+### curl  
 
-通过 curl 命令直接从目标网址下载安装脚本，然后执行这个脚本。通过 curl 安装的软件可管理性较差，原因在于：实际的安装过程是通过脚本执行的，这个过程难以监控
+Download and execute installation scripts directly from a URL using `curl`. Software installed this way is harder to manage because the actual installation process is script-driven and difficult to monitor.  
 
-```bash
-# 以zed编辑器的安装为例
-curl -f https://zed.dev/install.sh | sh
+```bash  
+# Example: Installing the Zed editor  
+curl -f https://zed.dev/install.sh | sh  
 
-# 如果想要卸载，一般都是难以卸载干净的
-# 首先获取安装脚本文件
-curl -f https://zed.dev/install.sh -o install.sh
+# Uninstalling is usually messy  
+# First, fetch the installation script  
+curl -f https://zed.dev/install.sh -o install.sh  
 
-# 把这个脚本文件丢给AI解析一下
-# 然后按照AI的指令手动进行卸载
-```
+# Have an AI parse the script  
+# Then follow the AI’s instructions to manually uninstall  
+```  
 
-## 存储清理
+## Storage Cleanup  
 
-```bash
-# 清理孤立依赖包
-sudo apt autoremove
+```bash  
+# Remove orphaned dependencies  
+sudo apt autoremove  
 
-# 清理apt缓存
-sudo du -sh /var/cache/apt # 查看apt缓存大小
-sudo apt autoclean # 自动清理
-sudo apt clean # 完全清理
+# Clear apt cache  
+sudo du -sh /var/cache/apt # Check apt cache size  
+sudo apt autoclean # Auto-clean  
+sudo apt clean # Full clean  
 
-# 清理系统日志
-journalctl --disk-usage # 查看系统日志代大小
-sudo journalctl --vacuum-time=3d # 清除三天前的日志
+# Clear system logs  
+journalctl --disk-usage # Check system log size  
+sudo journalctl --vacuum-time=3 d # Remove logs older than 3 days  
 
-# 清除缩略图
-sudo du -sh ~/.cache/thumbnails # 查看缩略图的占用空间
-sudo rm -rf ~/.cache/thumbnails/* # 可安全清除，会自动重建
+# Clear thumbnails  
+sudo du -sh ~/.cache/thumbnails # Check thumbnail storage usage  
+sudo rm -rf ~/.cache/thumbnails/* # Safe to delete—will rebuild automatically  
 
-# 清理snap旧版本
-snap list --all # 查看所有snap包
-# 罗列出所有被禁用的包（下面是一行命令）
-echo -e "\033[1m已禁用的 Snap 包及其占用空间:\033[0m" && snap list --all | awk '/disabled|已禁用/{print {{< katex >}}\\(1}' | while read -r pkg; do size=\\)(snap info "{{< katex >}}\\(pkg" | awk '/installed:/ {print\\)4}'); printf "%-30s %10s\n" "{{< katex >}}\\(pkg" "\\)size"; done | sort -k2 -h && echo -e "\n\033[1m总占用空间: {{< katex >}}\\((snap list --all | awk '/disabled|已禁用/{print\\)1}' | xargs -I{} snap info {} | awk '/installed:/ {sum += {{< katex >}}\\(3} END {print sum/1024 "MB"}')\\033[0m" # 移除所有被禁用的snap包（下面是一行命令） snap list --all | awk '/disabled|已禁用/{print\\)1, {{< katex >}}\\(3}' | while read snapname revision; do snap remove "\\)snapname" --revision="$revision"; done
+# Clean up old Snap versions  
+snap list --all # List all Snap packages  
+# List all disabled packages (single-line command)  
+echo -e "\033[1 mDisabled Snap Packages and Their Sizes:\033[0 m" && snap list --all | awk '/disabled|已禁用/{print {{< katex >}}\\(1}' | while read -r pkg; do size=\\)(snap info "{{< katex >}}\\(pkg" | awk '/installed:/ {print\\)4}'); printf "%-30 s %10 s\n" "{{< katex >}}\\(pkg" "\\)size"; done | sort -k 2 -h && echo -e "\n\033[1 mTotal Size: {{< katex >}}\\((snap list --all | awk '/disabled|已禁用/{print\\)1}' | xargs -I{} snap info {} | awk '/installed:/ {sum += {{< katex >}}\\(3} END {print sum/1024 "MB"}')\\033[0 m" # Remove all disabled Snap packages (single-line command) snap list --all | awk '/disabled|已禁用/{print\\)1, {{< katex >}}\\(3}' | while read snapname revision; do snap remove "\\)snapname" --revision="$revision"; done  
 
-# 清理内核
-sudo dpkg --list | grep linux-image # 列出所有内核
-sudo apt autoremove --purge # 自动清除不需要的内核
-```
+# Clean up old kernels  
+sudo dpkg --list | grep linux-image # List all kernels  
+sudo apt autoremove --purge # Automatically remove unnecessary kernels  
+```  
 
-## 引用文献
+## References  
 
-- [如何在Ubuntu系统中进行磁盘的分区与挂载](https://cloud.tencent.com/developer/article/2456171)
-- 
+- [How to Partition and Mount Disks in Ubuntu](https://cloud.tencent.com/developer/article/2456171)
