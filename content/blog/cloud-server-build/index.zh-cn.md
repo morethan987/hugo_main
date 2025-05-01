@@ -275,7 +275,20 @@ sudo docker compose logs certbot-init
 # 使用递归删除来清除缓存
 rm -rf ./certbot/conf/*
 
-sudo docker exec -it server-certbot-1 /bin/sh
+# 进入一个镜像内部
+sudo docker exec -it server-app-1 /bin/sh
+
+# 删除某个镜像
+sudo docker rmi -f server-frontend
+
+# 重新启动某项服务
+sudo docker compose restart app
+
+# 清理npm的缓存
+npm cache clean --force
+
+# 激活python虚拟环境
+source your_venv_name/bin/activate
 ```
 
 ### 备案
@@ -288,8 +301,6 @@ p1(服务器平台实名认证)-->p2(实名认证购买域名)-->p3(申请备案
 {{< /mermaid >}}
 
 如果你是腾讯云用户，那么就可以使用**腾讯云网站备案小程序**；提交申请之后平台会先进行审核，一般 8 个小时左右；然后平台会提交管局审核，一般 7 个工作日左右；在管局审核通过之后需要在 30 个工作日内进行公安备案，
-
-
 
 ### 杂项
 
@@ -304,6 +315,8 @@ p1(服务器平台实名认证)-->p2(实名认证购买域名)-->p3(申请备案
 # 查看uwf状态，inactive状态是未启动，也是理想状态
 sudo ufw status
 ```
+
+如果你是国内用户的话，还有一个原因：ICP 备案没有通过，certbot 也是无法访问你的服务器的😢
 
 ## 引用
 
@@ -332,4 +345,10 @@ sudo ufw status
 - [ICP 备案 首次备案_腾讯云](https://cloud.tencent.com/document/product/243/97668)
 - [ICP 备案 各省管局要求_腾讯云](https://cloud.tencent.com/document/product/243/3474)
 - [腾讯云服务器备案全流程 40天备案的血与泪 - 郑为中 - 博客园](https://www.cnblogs.com/yyzwz/p/13393223.html)
+- [ICP 备案 公安备案流程_腾讯云](https://cloud.tencent.com/document/product/243/19142)
 - [ICP 备案 视频核验_腾讯云](https://cloud.tencent.com/document/product/243/34945)
+- [npm缓存深度解析：理解、使用与清除指南_npm 清除缓存-CSDN博客](https://blog.csdn.net/2401_85762266/article/details/140127881)
+- [用Docker部署一个Web应用 - 知乎](https://zhuanlan.zhihu.com/p/26418829)
+- [HTTPS请求为什么会降级为HTTP-CSDN博客](https://blog.csdn.net/weixin_43947690/article/details/88295278)
+- [https 被redirect成了http_风控-CSDN博客](https://blog.csdn.net/zhuye1992/article/details/80496151?spm=1001.2101.3001.6650.4&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-4-80496151-blog-88295278.235%5Ev43%5Econtrol&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-4-80496151-blog-88295278.235%5Ev43%5Econtrol&utm_relevant_index=9)
+- [如何填写公安联网备案公安联网备案信息指南_备案(Filing Service)-阿里云帮助中心](https://help.aliyun.com/zh/icp-filing/basic-icp-service/the-public-security-network-for-the-record-information-fill-in-the-guide#:~:text=%E8%8B%A5%E6%82%A8%E5%8A%9E%E7%90%86%E5%85%AC%E5%AE%89%E8%81%94%E7%BD%91%E5%A4%87%E6%A1%88%E7%9A%84%E5%9F%9F%E5%90%8D%E6%98%AF%E9%80%9A%E8%BF%87%E9%98%BF%E9%87%8C%E4%BA%91%E6%B3%A8%E5%86%8C%EF%BC%8C%E5%8D%95%E5%87%BB%20%E6%9F%A5%E8%AF%A2%E7%BD%91%E7%BB%9C%E6%B3%A8%E5%86%8C%E6%9C%8D%E5%8A%A1%E5%95%86%E3%80%82%20%E6%A0%B9%E6%8D%AE%E5%A6%82%E4%B8%8B%E9%98%BF%E9%87%8C%E4%BA%91%E4%BF%A1%E6%81%AF%E5%A1%AB%E5%86%99%E3%80%82%20%E8%AF%B7%E6%A0%B9%E6%8D%AE%E7%BD%91%E7%AB%99%E5%AE%9E%E9%99%85%E5%BC%80%E5%B1%95%E7%9A%84%E4%B8%9A%E5%8A%A1%E9%A1%B9%E7%9C%9F%E5%AE%9E%E9%80%89%E6%8B%A9%EF%BC%8C%E4%BE%8B%E5%A6%82%EF%BC%9A%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80%E7%B1%BB%20A%E3%80%81%E7%BD%91%E7%BB%9C%E9%94%80%E5%94%AE%E7%B1%BB%20B%E3%80%81%E7%94%9F%E6%B4%BB%E6%9C%8D%E5%8A%A1%E7%B1%BB%20C%20%E5%92%8C%E7%A4%BE%E4%BA%A4%E6%96%87%E5%A8%B1%E7%B1%BB,D%20%E7%AD%89%E3%80%82%20%E5%A6%82%E6%9E%9C%E4%B8%8D%E6%B6%89%E5%8F%8A%EF%BC%8C%E5%B0%86%20%E6%98%AF%E5%90%A6%E6%8F%90%E4%BE%9B%E4%BA%92%E8%81%94%E7%BD%91%E4%BA%A4%E4%BA%92%E6%9C%8D%E5%8A%A1%20%E9%80%89%E6%8B%A9%E4%B8%BA%20%E5%90%A6%E3%80%82%20%E5%A6%82%E6%9E%9C%E6%B6%89%E5%8F%8A%EF%BC%8C%E6%A0%B9%E6%8D%AE%E7%BD%91%E7%AB%99%E5%AE%9E%E9%99%85%E5%BC%80%E5%B1%95%E7%9A%84%E4%B8%9A%E5%8A%A1%E9%A1%B9%E7%9C%9F%E5%AE%9E%E9%80%89%E6%8B%A9%E3%80%82%20%E6%98%AF%E5%90%A6%E6%8F%90%E4%BE%9B%E6%B6%89%E5%8F%8A%E7%AE%A1%E5%88%B6%E7%89%A9%E5%93%81%E4%BF%A1%E6%81%AF%E5%8F%91%E5%B8%83%E6%9C%8D%E5%8A%A1%EF%BC%9A%E8%AF%B7%E6%8C%89%E7%85%A7%E7%BD%91%E7%AB%99%E6%B6%89%E5%8F%8A%E8%8C%83%E5%9B%B4%E5%A6%82%E5%AE%9E%E5%8B%BE%E9%80%89%E3%80%82)

@@ -275,7 +275,20 @@ sudo docker compose logs certbot-init
 # Use recursive deletion to clear cache
 rm -rf ./certbot/conf/*
 
-sudo docker exec -it server-certbot-1 /bin/sh
+# Enter a container's shell
+sudo docker exec -it server-app-1 /bin/sh
+
+# Remove a Docker image forcefully
+sudo docker rmi -f server-frontend
+
+# Restart a specific service in Docker Compose
+sudo docker compose restart app
+
+# Clear npm cache forcefully
+npm cache clean --force
+
+# Activate a Python virtual environment
+source your_venv_name/bin/activate
 ```
 
 ### Filing
@@ -302,6 +315,8 @@ First, of course, check the network reasons. Check whether the security group of
 # Check ufw status, inactive status means not started, which is the ideal state
 sudo ufw status
 ```
+
+If you're based in China, here's another issue: Certbot can't reach your server if you don't have ICP备案 (ICP license). 😢
 
 ## References
 

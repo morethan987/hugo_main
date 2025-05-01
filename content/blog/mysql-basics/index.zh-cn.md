@@ -33,6 +33,8 @@ MySQL 安装部署流程 + 简明语法 CookBook + 学习笔记
 docker pull mysql
 ```
 
+#### 命令行启动MySQL
+
 初始化 SQL 并运行：
 
 ```sh
@@ -54,6 +56,25 @@ docker run -d --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=password -v /User
 {{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
 使用 Docker 运行 MySQL 时，任何时候都可以删除 MySQL 容器并重新运行；如果删除了本地映射的目录，重新运行就相当于一个全新的 MySQL ；
 {{< /alert >}}
+
+#### docker-compose启动MySQL
+
+创建 `docker-compose.yml` 文件如下：
+
+```yml
+services:
+  mysql:
+    image: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+    volumes:
+      - ../data:/var/lib/mysql
+    restart: unless-stopped
+```
+
+运行 `docker-compose build up -d` 来启动服务
 
 ### MySQL 基础语法
 

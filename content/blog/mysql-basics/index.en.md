@@ -33,6 +33,8 @@ Run the following command in your terminal:
 docker pull mysql
 ```
 
+#### Run MySQL With Shell
+
 Then initialize and run the SQL container:
 
 ```sh
@@ -50,8 +52,29 @@ docker run -d --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=password -v /User
 |`-v /path:/var/lib/mysql`|Mount a local directory to `/var/lib/mysql` in the container, which will store MySQL data. Replace `/path` with the actual directory path on your machine|
 |`mysql`|Specifies the name of the Docker image you want to run|
 
-> **Note**  
-> When using Docker to run MySQL, you can always delete the MySQL container and rerun it. If you delete the locally mounted directory, rerunning the container is equivalent to starting with a fresh MySQL instance.
+
+{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
+When using Docker to run MySQL, you can always delete the MySQL container and rerun it. If you delete the locally mounted directory, rerunning the container is equivalent to starting with a fresh MySQL instance.
+{{< /alert >}}
+
+#### Run MySQL With docker-compose
+
+Create `docker-compose.yml`：
+
+```yml
+services:
+  mysql:
+    image: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+    volumes:
+      - ../data:/var/lib/mysql
+    restart: unless-stopped
+```
+
+Run `docker-compose build up -d` to start service.
 
 ### MySQL Basic Syntax
 #### Querying
