@@ -1,7 +1,7 @@
 ---
 title: rStar读文笔记
-weight: -85
-draft: true
+weight: -90
+draft: false
 description: 一个先进的小模型推理能力自提升框架
 slug: rstar-note
 tags:

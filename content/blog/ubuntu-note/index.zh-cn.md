@@ -1,6 +1,6 @@
 ---
 title: Ubuntu折腾札记
-weight: -85
+weight: -95
 draft: false
 description: 记录折腾Ubuntu系统的过程以备不时之需
 slug: ubuntu-note

@@ -1,8 +1,8 @@
 ---
-title: Python Tpis
+title: Python Tips and Tricks
 weight: -15
 draft: false
-description: A set of Python tips
+description: Some handy tips for Python
 slug: pytips
 tags:
   - Python
@@ -10,104 +10,107 @@ series:
   - Technical Miscellany
 series_order: 2
 date: 2024-08-10
-lastmod: 2025-02-13
+lastmod: 2025-03-07
 authors:
   - Morethan
 ---
 
-## Virtual Env
+## Creating Virtual Environments
 
-### Plain Python Method
+### Standard Python Operations
 
-#### Creat
+#### Creation
 
-Some tipical code 👇
+Here are some common code examples 👇
 
 ```sh
-# creat a virtual env named "your_env_name"
+# Create a virtual environment
 python -m venv your_env_name
 
-# assign the version of python, make sure your python in default direction
+# Create a virtual environment with a specific Python version (if Python is installed in the default location)
 python -m venv your_env_name --python=python3.11
 
-# simply list the absolute direction of python, simple and efficient
-D:/PythonPython311/python.exe -m venv your_env_name
+# If Python is installed in a custom location
+D:\Python\Python311\python.exe -m venv your_env_name
 ```
 
-More parameters you may need for a customized virtual env. 🤔
+Below are some optional parameters for creating customized virtual environments:
 
-| Params                   | Meaning                                                                                             |
-| ------------------------ | --------------------------------------------------------------------------------------------------- |
-| `--system-site-packages` | Give the virtual environment access to the system site-packages dir.                                |
-| `--clear`                | Delete the contents of the environment directory if it already exists, before environment creation. |
-| `--version`              | print the python version of the env                                                                 |
+| Parameter                     | Description                                                                 |
+| ----------------------------- | -------------------------------------------------------------------------- |
+| `--system-site-packages`      | Includes packages from the global Python environment to avoid redundant installations |
+| `--clear`                     | Clears the target directory if it already exists before creating the virtual environment |
+| `--version`                   | Confirms the Python version in the virtual environment                     |
 
 
-{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-All the detailed expaination of the parameters can be got by the code `python -m venv -h`. No need to search everywhere~😆
+{{< alert icon="circle-info" cardColor="#b0c4de" textColor="#333333" >}}
+All parameter descriptions can be obtained by running `python -m venv -h`—no need to search elsewhere for documentation~😆
 {{< /alert >}}
 
-#### Activate
+#### Activation
 
-The virtual env is defaulted not active. In the direction `your_env_name/Scripts/` will be a file named `activate`. Run it with your cmd.
+By default, the virtual environment is inactive. In the "your_env_name/Scripts/" directory, there will be a file named "activate," which can be executed via the command line.
 
 ```sh
-# activate virtual env
+# Activate the virtual environment
 your_env_name/Scripts/activate
 ```
 
 ### Poetry
 
-Poetry is a Python package management tool that started development in February 2018, according to its [changelog](https://python-poetry.org/history/). It's not exactly a new tool, but it has become quite popular in recent years 💫.
+Poetry is a Python package management tool. According to its [changelog](https://python-poetry.org/history/), it has been in development since February 2018, making it not a new tool but one that has gained significant popularity in recent years 💫.
 
-The key highlights promoted by its official documentation include:
+Its advertised highlights include:
 
-- More detailed and comprehensive analysis of third-party dependencies
+- More comprehensive third-party dependency analysis
 - **Automated** virtual environment creation
-- More intuitive and user-friendly commands 🤔
+- More intuitive commands 🤔
 
 #### Installation
 
-It's straightforward: `pip install poetry` for global installation.
+Straightforward: `pip install poetry` for a global installation.
 
 #### Global Configuration
 
-Poetry has some unique mechanisms that differ from tools like `pip`. You might need to set up some configurations, which can be done as follows:
+Poetry has some unique mechanisms that may differ from tools like pip. You might need to configure certain settings as follows:
 
 ```sh
-# List all configurations
+# List all configuration items
 poetry config --list
 
-# By default, Poetry creates virtual environments in a dedicated folder, not within the project directory
-# Use the following command to create the virtual environment in the project directory
+# By default, Poetry creates virtual environments in a dedicated folder rather than the project directory
+# Use the following command to create the environment folder in the project directory
 poetry config virtualenvs.in-project true
 
-# Poetry will automatically create a virtual environment when one doesn't exist in the project
-# To be sure, you can run this command
+# Poetry can automatically create virtual environments when none exist in the project
+# For reassurance, you can run this command
 poetry config virtualenvs.create true
 
-# Other settings can usually be left as default
+# Switch to a domestic mirror
+poetry config repositories.tencentyun https://mirrors.tencentyun.com/pypi/simple
+
+# Other settings can generally be left as defaults
 ```
 
-#### Initialize a Project
+#### Initializing a Project
 
-If you need to create a new project from scratch, you'll want to create a project folder, navigate to it in your terminal, and then run:
+If you're starting a new project from scratch, you'll need to: create a project folder, navigate to it in the command line, and simply run:
 
 ```sh
 poetry init
 ```
 
-An interactive CLI will guide you through creating a new project, which will generate two key files for Poetry: `pyproject.toml` for managing dependencies, and `poetry.lock` to lock package versions, similar to `pip`'s `requirements.txt`. Those familiar with Node.js should find this concept quite familiar 😝.
+An interactive command-line interface will guide you through creating a new project, generating a `pyproject.toml` file to record dependencies, and creating Poetry's signature `poetry.lock` file to lock package versions. Those familiar with Node will find this familiar 😝.
 
-If you're working with someone else's project, it will usually include those two files.
+If you're using someone else's project, you'll typically only find the `pyproject.toml` file, which is compatible across different package management tools. Some authors may also include the `poetry.lock` file. In such cases, you can choose to: 1) delete the lock file and use another package manager, or 2) keep the lock file and use Poetry to manage dependencies.
 
-If you want a simple directory structure, you can use:
+If you need a simple directory structure, you can use:
 
 ```sh
 poetry new my-package
 ```
 
-This will create a basic project structure like this:
+This will automatically create a directory structure suitable for most projects:
 
 ```sh
 my-package
@@ -119,133 +122,174 @@ my-package
     └── __init__.py
 ```
 
-For more complex needs, refer to the [new Command documentation](https://python-poetry.org/docs/cli#new).
+For more complex needs: [new Command](https://python-poetry.org/docs/cli#new).
 
-#### Create a Virtual Environment
+#### Creating a Virtual Environment
 
-There are a few situations to consider here:
+Here are a few scenarios to consider.
 
-1. If you're building your project from scratch:
+1. You're building your project from scratch:
 
 ```sh
-poetry env use python # Default Python version you installed Poetry with
+poetry env use python # Remember how you installed Poetry? This uses the default Python version.
 
-poetry env use python3.7 # Use the Python 3.7 version on your system
+poetry env use python3.7 # Uses Python 3.7 from your system.
 
-poetry env use 3.7 # A shortcut for the above
+poetry env use 3.7 # For the lazy.
 
-poetry env use /full/path/to/python # Use this if the above shortcuts don't work
+poetry env use /full/path/to/python # If the shorthand doesn't work, use this.
 ```
 
-2. If you're working with someone else's project:
+2. You're using someone else's project:
 
-There are two very similar commands. As shown in the comments, the official recommendation is to use `sync`, as it avoids installing any packages that aren't tracked by `poetry.lock`, which may include unintended packages that the original developer added. 
+There are two very similar commands, and the comments below highlight their differences. The official recommendation is the `sync` command, as it avoids installing packages not tracked by `poetry.lock`, which might have been accidentally added by the original developer.
 
-**However**, I personally recommend  to use `install`. The `sync` command may result into some strange error: it may remove itself and causes the command line break out.🤔
+**However**, in practice, `install` is often more reliable, as `sync` can sometimes produce strange errors, like removing itself and crashing the command line 🤔.
 
 ```sh
-# Automatically creates a virtual environment and installs all dependencies from pyproject.toml
-poetry install
+poetry install # Automatically creates a virtual environment and installs all dependencies listed in pyproject.toml.
 
-# Make sure virtualenvs.create is set to true
-# Automatically creates a virtual environment, installs dependencies from poetry.lock and remove redundant package in pyproject.toml
+# Ensure virtualenvs.create is set to true.
+# Automatically creates a virtual environment and installs all dependencies listed in poetry.lock, removing any extra packages from pyproject.toml.
 poetry sync
 ```
 
-To activate the virtual environment, use:
+Then, enter the virtual environment with:
 
 ```sh
 poetry shell
 ```
 
-#### Add Packages
+#### Adding Packages
 
-Poetry lets you differentiate between packages needed in the production environment and those only required for development:
+Poetry allows developers to distinguish between production and development dependencies.
 
 ```sh
-# Add a package to the production environment
+# Defaults to the production group.
 poetry add your-package
 
-# Add a package to the development environment
+# Adds to the development group.
 poetry add your-package -D
 ```
 
-#### Update Packages
+#### Updating Packages
 
 ```sh
-poetry update # Automatically analyzes dependencies and updates all packages if necessary
+poetry update # Automatically analyzes dependencies and updates all possible packages.
 
-poetry update your-package1 your-package2 # Only updates the specific packages you list
+poetry update your-package1 your-package2 # Updates only the listed packages.
 ```
 
-#### Remove Packages
+#### Removing Packages
 
-This is one of Poetry's standout features: While `pip` installs the specified package and its third-party dependencies, it can’t remove these dependencies when you uninstall a package. Poetry, on the other hand, safely and completely removes the dependencies tied to a package without affecting others.
+This is one of Poetry's standout features: pip installs a package and its dependencies but only removes the specified package, leaving its dependencies behind.
+
+Poetry, however, can safely and completely remove a package and its dependencies without affecting other packages.
 
 ```sh
-# Remove a package from the production environment
+# Removes a production dependency.
 poetry remove your-package
 
-# Remove a package from the development environment
+# Removes a development dependency.
 poetry remove your-package -D
 ```
 
-#### Show Dependencies
+#### Displaying Dependencies
 
 ```sh
-poetry show --tree # Show the dependency tree of the packages in pyproject.toml
+poetry show --tree # Displays the dependency tree from pyproject.toml.
 
-poetry show your-package --tree # Show the dependency tree for a specific package
+poetry show your-package --tree # Displays the dependency tree for a specific package.
 ```
 
-## Program Packaging
+## UV
+A package management tool written in `Rust`, with a command structure very similar to `poetry`.
 
-We often need to share our Python programs. However, sharing the source code alone can be frustrating for users who aren't familiar with coding, as it requires setting up a local environment to run the code. Therefore, program packaging comes in handy.
+### Installation
 
-### PyInstaller
+First, configure environment variables:
 
-Installation is very simple, just like any other Python package: `pip install pyinstaller`. To use it, open the terminal in the target directory and run the command.
+```bash
+cd ~ # Ensure you're in the default directory.
+ls -a # Check if the .bashrc file exists.
+vim .bashrc # Edit the file with vim.
 
-**Features: Fast packaging speed; relatively large packaged files**
+# Append these three lines to the end of the file.
+# Domestic mirror for the installer.
+export UV_INSTALLER_GHE_BASE_URL=https://ghproxy.cn/https://github.com
+# Domestic mirror for Python installation.
+export UV_PYTHON_INSTALL_MIRROR=https://ghproxy.cn/https://github.com/indygreg/python-build-standalone/releases/download
+# Domestic mirror for Python packages.
+export UV_DEFAULT_INDEX=https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple
+```
 
-Common command codes:
+- **Installation via curl (recommended)**:
+
+```bash
+# Replace "/custom/path" with your desired installation location.
+curl -LsSf https://astral.sh/uv/install.sh | env UV_INSTALL_DIR="/custom/path" sh
+```
+
+- **Installation via pip/pipx (recommended)**:
+
+```bash
+pipx install uv # Install uv using pipx.
+
+pip install uv # Install uv using pip.
+```
+
+### Usage
+
+Usage is very similar to `poetry`.
+
+## Packaging Applications
+
+We often need to share Python programs we've written. However, sharing only the source code can be frustrating for users unfamiliar with coding, as running the source requires setting up a local environment. Hence, packaging tools come into play.
+
+### pyinstaller
+
+Installation is straightforward, just like any other Python package: `pip install pyinstaller`. To use it, navigate to the directory containing the target file in the terminal and run the command.
+
+**Features: Fast packaging speed; larger resulting executable size.**
+
+Common commands:
 
 ```shell
-# Package the main.py file as a standalone executable; the command window is disabled when the executable runs
+# Package main.py into a standalone executable; disable the console window when running.
 pyinstaller -F -w main.py
 
-# Package the main.py file into a project folder; the command window is enabled when the executable runs
+# Package main.py into a project folder; enable the console window when running.
 pyinstaller -D main.py
 ```
 
-|Parameter|Description|
-|---|---|
-|`-h, --help`|Show help information and exit|
-|`-v, --version`|Show program version information and exit|
-|`-F, --onefile`|Package everything into a single standalone executable|
-|`-D, --onedir`|Package everything into a directory (default option)|
-|`-w, --windowed, --noconsole`|Disable the command window (only works on Windows)|
-|`-c, --console, --nowindowed`|Use the command window to run the program (default option, only on Windows)|
-|`-a, --ascii`|Exclude Unicode character set support (included by default)|
-|`-d, --debug`|Generate a debug version of the executable|
-|`-n NAME, --name=NAME`|Specify the name of the generated executable or directory (default is script name)|
-|`-o DIR, --out=DIR`|Specify the directory where the spec file will be generated (default is the current directory)|
-|`-p DIR, --path=DIR`|Set the Python module import path (similar to setting PYTHONPATH)|
-|`-i <FILE>, --icon <FILE>`|Set the executable file icon (supports `.ico` or `.icns` formats)|
-|`--distpath DIR`|Specify the output directory for the executable file (default is `./dist`)|
-|`--workpath WORKPATH`|Specify the temporary working file directory (default is `./build`)|
-|`--add-data <SRC;DEST or SRC:DEST>`|Add additional data files or directories to the executable (use semicolon for Windows, colon for Linux/OSX to separate source and destination paths)|
-|`--add-binary <SRC;DEST or SRC:DEST>`|Add additional binary files to the executable|
-|`--hidden-import MODULENAME`|Add modules not automatically detected|
-|`--exclude-module EXCLUDES`|Exclude specified modules|
-|`--clean`|Clean PyInstaller cache and temporary files|
-|`--log-level LEVEL`|Set the verbosity of console messages during the build process (possible values: TRACE, DEBUG, INFO, WARN, ERROR, FATAL)|
+| Parameter                                   | Description                                                                 |
+| ------------------------------------------ | -------------------------------------------------------------------------- |
+| `-h, --help`                               | Show help message and exit.                                               |
+| `-v, --version`                            | Show program version and exit.                                            |
+| `-F, --onefile`                            | Package everything into a single executable.                              |
+| `-D, --onedir`                             | Package everything into a directory (default).                            |
+| `-w, --windowed, --noconsole`              | Disable the console window (Windows only).                                |
+| `-c, --console, --nowindowed`              | Run the program with a console window (default, Windows only).            |
+| `-a, --ascii`                              | Exclude Unicode character set support (included by default).              |
+| `-d, --debug`                              | Generate a debug version of the executable.                               |
+| `-n NAME, --name=NAME`                     | Specify the name of the generated executable or directory (default: script name). |
+| `-o DIR, --out=DIR`                        | Specify the directory for the spec file (default: current directory).     |
+| `-p DIR, --path=DIR`                       | Set the Python import path (similar to PYTHONPATH).                       |
+| `-i <FILE>, --icon <FILE>`                 | Set the executable's icon (supports `.ico` or `.icns` formats).           |
+| `--distpath DIR`                           | Specify the output directory for the executable (default: `./dist`).      |
+| `--workpath WORKPATH`                      | Specify the directory for temporary files (default: `./build`).           |
+| `--add-data <SRC;DEST or SRC:DEST>`        | Add additional data files or directories (Windows uses semicolons; Linux/OSX uses colons). |
+| `--add-binary <SRC;DEST or SRC:DEST>`      | Add additional binary files.                                              |
+| `--hidden-import MODULENAME`               | Add modules not automatically detected.                                   |
+| `--exclude-module EXCLUDES`                | Exclude specified modules.                                                |
+| `--clean`                                  | Clean PyInstaller cache and temporary files.                              |
+| `--log-level LEVEL`                        | Set verbosity for console messages (options: TRACE, DEBUG, INFO, WARN, ERROR, FATAL). |
 
 ### Nuitka
 
-Nuitka packages Python code into an executable (.exe). The underlying process first converts Python code to C code, then compiles the C code.
+Converts Python code into an exe executable by first translating Python to C and then compiling the C code.
 
-**Features: Slow packaging speed; requires an additional C compiler (though automatic setup is possible, it can be strict on memory management, so may not be suitable for users with limited space); smaller packaged files (tested to be about one-tenth the size of PyInstaller's output)**
+**Features: Very slow packaging speed; requires a C compiler (though installation can be automated, it may not suit users with strict memory constraints); resulting executable is very small (about one-tenth the size of pyinstaller's output).**
 
 Installation command:
 
@@ -253,34 +297,38 @@ Installation command:
 pip install -U nuitka
 ```
 
-Common usage command:
+Common usage commands:
 
 ```shell
-# Package the main.py file into an exe file with link-time optimization, and remove temporary files after packaging
+# Package main.py into a single exe file with link-time optimization and clean up temporary files afterward.
 python -m nuitka --lto=yes --remove-output --onefile main.py
 ```
 
-| Parameter                                                                                       | Description                                                                                      |
-| ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| `--standalone`                                                                                  | Create a standalone executable folder that includes all dependencies.                            |
-| `--onefile`                                                                                     | Package everything into a single `.exe` file.                                                    |
-| `--optimize=N`                                                                                  | Set optimization level (`0`, `1`, or `2`), the higher the number, the more optimized the result. |
-| `--lto`                                                                                         | Enable Link-Time Optimization (possible values: `no`, `yes`, `thin`).                            |
-| `--enable-plugin=<plugin_name>`                                                                 | Enable a specific plugin, such as `tk-inter`, `numpy`, `anti-bloat`, etc.                        |
-| `--output-dir=<dir>`                                                                            | Specify the output directory for the compiled files.                                             |
-| `--remove-output`                                                                               | Delete intermediate `.c` files and other temporary files after compilation.                      |
-| `--nofollow-imports`                                                                            | Do not recursively process any imported modules.                                                 |
-| `--include-package=<package_name>`                                                              | Explicitly include an entire package and its submodules.                                         |
-| `--include-module=<module_name>`                                                                | Explicitly include a specific module.                                                            |
-| `--follow-import-to=<module/package>`                                                           | Specify which modules or packages to recursively process.                                        |
-| `--nofollow-import-to=<module/package>`                                                         | Specify which modules or packages not to recursively process.                                    |
-| `--include-data-files=<source>=<dest>`                                                          | Include specified data files.                                                                    |
-| `--include-data-dir=<directory>`                                                                | Include all data files in the specified directory.                                               |
-| `--noinclude-data-files=<pattern>`                                                              | Exclude data files matching a specified pattern.                                                 |
-| `--windows-icon-from-ico=<path>`                                                                | Set the Windows executable icon.                                                                 |
-| `--company-name`, `--product-name`, `--file-version`, `--product-version`, `--file-description` | Set Windows executable properties.                                                               |
+| Parameter                                                                                              | Description                                                                 |
+| ----------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| `--standalone`                                                                                        | Creates a standalone executable with all dependencies.                     |
+| `--onefile`                                                                                           | Packages everything into a single `.exe` file.                             |
+| `--optimize=N`                                                                                        | Sets optimization level (`0`, `1`, or `2`); higher numbers mean more optimization. |
+| `--lto`                                                                                               | Enables Link Time Optimization (options: `no`, `yes`, or `thin`).          |
+| `--enable-plugin=<plugin_name>`                                                                       | Enables specified plugins (e.g., `tk-inter`, `numpy`, `anti-bloat`).       |
+| `--output-dir=<dir>`                                                                                  | Specifies the output directory for compilation.                            |
+| `--remove-output`                                                                                     | Deletes intermediate `.c` files and other temporary files after compilation. |
+| `--nofollow-imports`                                                                                  | Does not recursively process any imported modules.                         |
+| `--include-package=<package_name>`                                                                    | Explicitly includes an entire package and its submodules.                  |
+| `--include-module=<module_name>`                                                                      | Explicitly includes a single module.                                       |
+| `--follow-import-to=<module/package>`                                                                 | Specifies modules or packages to process recursively.                       |
+| `--nofollow-import-to=<module/package>`                                                               | Specifies modules or packages to exclude from recursive processing.        |
+| `--include-data-files=<source>=<dest>`                                                                | Includes specified data files.                                             |
+| `--include-data-dir=<directory>`                                                                      | Includes all data files in a directory.                                    |
+| `--noinclude-data-files=<pattern>`                                                                    | Excludes data files matching a pattern.                                    |
+| `--windows-icon-from-ico=<path>`                                                                      | Sets the icon for the Windows executable.                                  |
+| `--company-name`, `--product-name`, `--file-version`, `--product-version`, `--file-description`       | Sets properties for the Windows executable.                                |
 
-## Reference
-- poetry related: 
-	- [poetry 入门完全指南_poetry使用-CSDN博客](https://blog.csdn.net/weixin_42871919/article/details/137125544), a detailed and first-hand blog.
-	- [Poetry](https://python-poetry.org/), the official documents.
+## References
+- Poetry-related:
+	- [Poetry Beginner's Guide_Using Poetry-CSDN Blog](https://blog.csdn.net/weixin_42871919/article/details/137125544) Very detailed resource.
+	- [Poetry](https://python-poetry.org/)
+	- [How to Change Poetry's Domestic Mirror - Data Science SourceResearch](https://www.resourch.com/archives/66.html)
+
+- UV-related:
+	- [Installing and Using Python Project and Package Manager UV - Deep Sea Xiao Tao](https://blog.xtao.de/380) One of the few blogs that includes the domestic mirror address for `uv python install`.

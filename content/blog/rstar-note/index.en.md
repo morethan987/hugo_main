@@ -1,6 +1,6 @@
 ---
 title: rStar Reading Notes
-weight: -85
+weight: -90
 draft: true
 description: An advanced framework for self-improvement of small model reasoning capabilities
 slug: rstar-note

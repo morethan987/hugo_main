@@ -1,6 +1,6 @@
 ---
 title: Ubuntu Tinkering Notes
-weight: -85
+weight: -95
 draft: false
 description: Documenting the process of tinkering with Ubuntu for future reference
 slug: ubuntu-note

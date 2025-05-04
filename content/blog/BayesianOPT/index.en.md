@@ -33,6 +33,7 @@ Honestly, I'm not familiar with BayesianOPT, the opinions mentioned stem from th
 
 - [MATLAB Offical Document](https://ww2.mathworks.cn/help/stats/bayesopt.html?s_tid=srchtitle_site_search_1_bayesopt)
 
+- [Exploring Bayesian Optimization](https://distill.pub/2020/bayesian-optimization/)
 
 ## Advantages & Algorithm Principle
 
@@ -94,3 +95,4 @@ Want more detailed information? Refer to the Offical document: [bayesopt](https:
 {{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
 It's basic for every MathModeler to read the offical document. 😝
 {{< /alert >}}
+
