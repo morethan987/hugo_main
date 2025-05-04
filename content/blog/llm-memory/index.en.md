@@ -175,7 +175,7 @@ Research on the interpretability of Transformer has been ongoing. This article i
 
 In summary: The residual connections throughout the process are regarded as a "data bus," running through the entire model's computation process; the Attention Layer and MLP Layer are seen as the read/write heads for information, reading and writing data on the data bus.
 
-##### Embedding
+##### **Embedding**
 
 The embedding process is the first step in the Transformer processing pipeline:
 
@@ -186,13 +186,13 @@ Intuitively, this step turns a sentence into a cluster of vectors. The embedding
 
 For example, the word "bank" can mean both "riverbank" and "financial institution," but the embedding matrix describes a kind of "average" of these two meanings.
 
-##### Multi-head Attention
+##### **Multi-head Attention**
 
 As mentioned above, the embedding matrix alone cannot describe dynamic semantics based on context. Therefore, the multi-head attention mechanism was introduced to construct more precise word vectors.
 
 A vivid description is: After embedding, a cluster of vectors is generated, and these vectors influence each other. The parameters in the multi-head attention layer model this complex mutual influence. According to the circuit interpretation framework, the Attention Layer calculates the "increment of mutual influence" between this cluster of vectors and writes this increment back into the "data bus."
 
-##### MLP
+##### **MLP**
 
 Research by DeepMind has shown that factual information is mostly stored in the MLP layer. Here, the operations in the MLP layer are broken down into two steps:
 
@@ -205,7 +205,7 @@ The projection matrix then acts as the "calculation of fact increment": based on
 
 The MLP layer then writes the "fact increment vector" back into the residual flow.
 
-##### Stacking
+##### **Stacking**
 
 Transformer stacks the above structure repeatedly, and the information extracted by deeper layers becomes more complex and harder to understand.
 
