@@ -201,6 +201,13 @@ Research by DeepMind has shown that factual information is mostly stored in the 
 
 The vectors processed by the multi-head attention have been shifted to the correct positions in the current context, and these vectors already contain a large amount of complex information superimposed together (a large number of explicit semantics are additively fused into a single vector). The role of the embedding matrix here is similar to a checklist: each row is a check item (the specific meaning of these items is also highly superimposed), and the check items and word vectors are matched through dot products to obtain "matching scores," which are then filtered out by the nonlinear truncation function (ReLU) to remove unrelated matches. This step is the "fact matching" process.
 
+For example, when using an extended matrix to detect the token "relativity," a certain row might simultaneously check: "whether it is an academic concept + whether it is a ball sport + whether it is the name of a galaxy." The detection results could be relevant or irrelevant, but they will all be linearly combined in the end.
+
+
+{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
+Why can they be combined? Because of the distributive property of vector dot products: "combine first then match" is equivalent to "match first then combine."
+{{< /alert >}}
+
 The projection matrix then acts as the "calculation of fact increment": based on the matching scores, it calculates which factual information needs to be added to the original word vectors, adds all the necessary factual information together to form a fact increment vector.
 
 The MLP layer then writes the "fact increment vector" back into the residual flow.
@@ -208,6 +215,15 @@ The MLP layer then writes the "fact increment vector" back into the residual flo
 ##### **Stacking**
 
 Transformer stacks the above structure repeatedly, and the information extracted by deeper layers becomes more complex and harder to understand.
+
+It should be noted that the injection of factual information does not occur in a single isolated MLP layer, nor does it happen solely within one Transformer Block. Instead, it iterates continuously throughout the entire network, gradually producing a clearer and more pronounced impact.  
+
+This complex mechanism of factual information injection poses significant challenges to interpretability efforts and makes it difficult to precisely control the flow of information within large models. However, this process precisely highlights the advantage of storing factual information in neural networks: for a given piece of complex information, it initially associates with a broad and ambiguous set of related information. Then, through computations in each layer of the network, it progressively refines and eventually converges to the most highly relevant information.  
+
+
+{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
+This is also one of the reasons why Attention Layers and MLP Layers alternate: after factual information is injected in the MLP Layer, the Attention Layer is immediately used to trim it—weakening weaker associations and amplifying stronger ones—preventing a flood of redundant information from propagating to the next MLP Layer, which could trigger even more chaotic associations.
+{{< /alert >}}
 
 #### Fact Injection
 
