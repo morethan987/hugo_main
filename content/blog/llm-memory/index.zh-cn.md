@@ -11,7 +11,7 @@ series:
   - AI遐想
 series_order: 2
 date: 2025-05-04
-lastmod: 2025-05-04
+lastmod: 2025-05-06
 authors:
   - Morethan
 ---
@@ -159,7 +159,7 @@ AIME 即美国数学邀请赛，严格意义上来说不算是专门的大模型
 
 ### Differential Transformer
 
-[Differential Transformer](https://arxiv.org/abs/2410.05258)
+[Differential Transformer](https://arxiv.org/abs/2410.05258) 改进了传统 Transformer 架构中的注意力机制，提出了"差分注意力机制"的概念。与传统的softmax注意力不同，Diff Transformer 将查询（query）和键（key）向量分为两组，分别计算两个独立的softmax注意力图，然后通过减法操作消除噪音。这一机制类似于电子工程中的**差分放大器**，通过两个信号的差值来消除共模噪音。
 
 ## 思路梳理
 
@@ -268,6 +268,12 @@ RAG 原本是用于缓解大模型幻觉的技术，但其实质就是利用外�
 3. 表达能力受限：过于复杂的信息难以使用自然语言表达，即便强行表达也会缺失关键信息，导致大模型出现理解偏差，例如，一个复杂的软件项目的开发理念，如果不在实践过程中加以体会，使用自然语言描述出来的理念就是一堆空话
 4. 记忆维护困难：即便拥有大模型技术的加持，记忆的更新维护和提取仍然是一个棘手的问题，响应速度、准确率和成本的平衡难以把控
 
+#### 微调
+
+需要去看看微调方面的论文，特别是"高效微调"方面的文章，看看能不能增强其在线学习能力🤔如果可能的话还需要去看看增量学习方面的文章。
+
+暂时先鸽了😢还要复习期末考试
+
 #### 网络参数
 
 这方面的工作目前非常稀少，尽管 OpenAI 最新推出了记忆功能，但并没有透露具体的实现方法，网上的讨论度也不高。这里主要概括一下 Titans 架构的实现方法。
@@ -299,3 +305,5 @@ RAG 原本是用于缓解大模型幻觉的技术，但其实质就是利用外�
 - [Fact Finding: Attempting to Reverse-Engineer Factual Recall on the Neuron Level (Post 1)](https://www.alignmentforum.org/posts/iGuwZTHWb6DFY3sKB/fact-finding-attempting-to-reverse-engineer-factual-recall)
 - [Fact Finding: Simplifying the Circuit (Post 2)](https://www.alignmentforum.org/posts/3tqJ65kuTkBh8wrRH/fact-finding-simplifying-the-circuit-post-2)
 - [直观解释大语言模型如何储存事实](https://www.bilibili.com/video/BV1aTxMehEjK?spm_id_from=333.788.recommend_more_video.-1&vd_source=38d0addc11facdcdfe9d401e43b75680)
+- [Diff Transformer：让注意力机制更智能，消除噪音，提升大语言模型性能-知乎](https://zhuanlan.zhihu.com/p/15784962358)
+- 
