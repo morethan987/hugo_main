@@ -12,7 +12,7 @@ series:
   - 数学建模
 series_order: 1
 date: 2024-08-05
-lastmod: 2024-12-21
+lastmod: 2024-12-20
 authors:
   - Morethan
 ---
