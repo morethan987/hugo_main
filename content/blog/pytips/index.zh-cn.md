@@ -10,7 +10,7 @@ series:
   - 技术杂项
 series_order: 2
 date: 2024-08-10
-lastmod: 2025-03-07
+lastmod: 2025-05-11
 authors:
   - Morethan
 ---
@@ -43,9 +43,11 @@ D:\Python\Python311\python.exe -m venv your_env_name
 | `--version`              | 用于确认虚拟环境中 Python 的版本                    |
 
 
+
 {{< alert icon="circle-info" cardColor="#b0c4de" textColor="#333333" >}}
 所有的参数说明都可以通过运行 `python -m venv -h` 来获得；不用到处查文档了~😆
 {{< /alert >}}
+
 
 #### 激活
 
@@ -100,9 +102,9 @@ poetry config repositories.tencentyun https://mirrors.tencentyun.com/pypi/simple
 poetry init
 ```
 
-交互式的命令行会指引你创建一个新的项目，并创建两个 poetry 特色文件：`pyproject.toml` 管理依赖包；`poetry.lock` 来锁定包版本，类似于 `pip` 的 `requirements.txt`。用过 Node 的同志应该比较熟悉😝
+交互式的命令行会指引你创建一个新的项目，创建 `pyproject.toml` 文件来记录依赖包，同时创建 poetry 的特色文件 `poetry.lock` 来锁定包版本。用过 Node 的同志应该比较熟悉😝
 
-如果你使用的是别人的项目，那么一般都会自带那两个特色文件。
+如果你使用的是别人的项目，一般只会有 `pyproject.toml` 文件，这个文件在不同的包管理工具之间是通用的。当然也会有将 `poetry.lock` 也一并上传的作者，这种情况你可以选择：1）删掉 lock 文件然后用别的包管理工具；2）保留 lock 文件并使用 poetry 来管理依赖包
 
 如果你需要一个简单的目录框架，则可以使用：
 
@@ -202,6 +204,141 @@ poetry show --tree # 展示pyproject.toml中的依赖树
 poetry show your-package --tree # 展示特定包的依赖树
 ```
 
+## UV
+一款用 `Rust` 编写的包管理工具，命令格式与 `poetry` 极其类似。
+
+### 安装
+
+首先需要配置环境变量：
+
+```bash
+cd ~ # 确保你在默认目录下
+ls -a # 查看是否存在文件.bashrc
+vim .bashrc # vim编辑文件
+
+# 文件末尾附加下面这三条
+# installer的国内下载源
+export UV_INSTALLER_GHE_BASE_URL=https://ghproxy.cn/https://github.com
+# python install国内下载源
+export UV_PYTHON_INSTALL_MIRROR=https://ghproxy.cn/https://github.com/indygreg/python-build-standalone/releases/download
+# python包国内下载源
+export UV_DEFAULT_INDEX=https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple
+```
+
+- **curl安装（推荐）**：
+
+```bash
+# 注意把"/custom/path"换成你自定义的安装位置
+curl -LsSf https://astral.sh/uv/install.sh | env UV_INSTALL_DIR="/custom/path" sh
+```
+
+- **pip/pipx安装（推荐）**：
+
+```bash
+pipx install uv # 使用pipx安装uv
+
+pip install uv # 使用pip安装uv
+```
+
+### 使用
+
+使用方式与 `poetry` 非常类似
+
+## Conda
+
+我个人较少使用 conda 来管理环境，但是鉴于很多实验室服务器上都默认使用 conda 因此也做一个记录
+
+### 使用
+
+下面的命令是基础的查看环境信息的命令，一般在进入一个新的服务器环境的时候就会使用一遍，在排查环境问题的时候也会使用。
+
+```bash
+########## 查看环境信息 ##########
+
+conda --version # 获取conda版本号
+
+python --version # 获取python版本号
+
+conda env list # 查看当前所有环境
+
+conda activate xxx # 激活名为xxx的虚拟环境
+
+conda deactivate # 退出当前虚拟环境
+
+whereis python # 查看当前激活环境中的python位置
+
+nvidia-smi # 查看cuda运行情况，不算conda的命令但很常用
+
+conda config --show channels # 查看conda下载源
+
+conda remove -n xxx  # 删除环境名为xxx的虚拟环境
+
+conda create -n 环境名 # 创建环境名为xxx的虚拟环境，使用默认python版本
+```
+
+添加国内下载源：
+
+```bash
+conda config --show channels # 查看conda下载源
+
+# 添加清华源
+conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/msys2
+```
+
+管理 python 包：
+
+```bash
+# 安装指定包
+conda install package_name
+
+# 移除指定包
+conda remove package_name
+
+# 更新指定包
+conda update package_name
+
+# 搜索指定包
+conda search package_name
+
+# 列出所有包的名称及版本
+conda list
+
+# 删除未使用的包和缓存，节省磁盘空间
+conda clean --all
+
+# 根据文件中的列表安装包
+conda install -f requirements.txt
+```
+
+## VS免密登录
+
+对于没有本地 GPU 的学生党来说，直接在服务器上编辑并运行文件是非常方便的，而 VSCode 插件 `remote-ssh` 也能够在服务器上直接呈现一个 VSCode 的界面。为了省去不断输入密码的痛苦，可以进行如下操作实现免密登录😄
+
+本地机为 Windows，一般来说在 `C:\Users\<User_name>\.ssh` 文件夹中会存放 `ssh` 相关的配置文件，实现免密登录就只需要操作这里面的文件即可。
+
+1. 配置 `config` 文件，样例配置如下：
+
+```txt
+# 把<User_name>替换为你的本地机用户名
+Host 3090
+    HostName xx.xxx.xx.xx
+    User morethan
+    IdentityFile "C:\Users\<User_name>\.ssh\id_rsa"
+```
+
+2. 生成验证文件 `id_rsa.pub`
+
+3. 本地创建 `authorized_keys` 文件，并将 `id_rsa.pub` 中的内容写入这个文件
+
+4. 在服务器中默认目录下创建 `.ssh` 文件夹，然后将 `authorized_keys` 文件从本地拷贝进去即可
+
+然后用 VSCode 登录服务器就发现已经完成了免密登录
+
+
+{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
+上述繁琐的步骤只需要初次执行一次就行，当需要给下一台服务器配置免密登录时，只需要改 config 文件然后把 authorized_keys 文件拷贝到服务器就完成了，不需要改写任何文件😄
+{{< /alert >}}
+
 ## 程序打包
 
 我们经常需要把自己写的 Python 程序分享出去。然而只分享源代码会使得不太懂代码的用户非常苦恼，因为源代码的运行还需要搭建本地运行环境，因此打包程序应运而生。
@@ -290,3 +427,8 @@ python -m nuitka --lto=yes --remove-output --onefile main.py
 	- [Poetry](https://python-poetry.org/)
 	- [poetry如何更换国内源-数据科学SourceResearch](https://www.resourch.com/archives/66.html)
 
+- UV 相关：
+	- [Python 项目和包管理器 uv 安装以及使用 - 深海小涛](https://blog.xtao.de/380)为数不多的写了 `uv python install` 国内源地址的博客
+
+- Conda 相关：
+	- [conda常用命令的总结 - 知乎](https://zhuanlan.zhihu.com/p/1902762958083298021)

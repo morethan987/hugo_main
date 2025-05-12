@@ -5,9 +5,10 @@ draft: false
 description: 一个先进的小模型推理能力自提升框架
 slug: rstar-note
 tags:
-  - rStar
   - 论文
   - 笔记
+  - MCTS
+  - 推理增强
 series:
   - 论文笔记
 series_order: 1

@@ -5,9 +5,10 @@ draft: true
 description: An advanced framework for self-improvement of small model reasoning capabilities
 slug: rstar-note
 tags:
-  - rStar
   - Paper
   - Notes
+  - MCTS
+  - ReasoningEnhance
 series:
   - Paper Notes
 series_order: 1

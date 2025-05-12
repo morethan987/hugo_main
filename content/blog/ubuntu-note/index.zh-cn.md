@@ -166,6 +166,9 @@ sudo apt upgrade
 sudo apt full-upgrade # 完全升级
 sudo do-release-upgrade # 跨ubuntu大版本升级
 
+# 查看软件包
+sudo apt-cache search wps # 查看包含关键字wps的软件包
+
 # 移除软件包
 sudo apt remove xxx
 sudo apt autoremove # 清理残留
@@ -199,6 +202,25 @@ curl -f https://zed.dev/install.sh -o install.sh
 # 然后按照AI的指令手动进行卸载
 ```
 
+## Office套件
+
+众所周知，Microsoft Office 是没法直接在 Linux 上直接运行的😅但是查看和编辑 `doc` 文档又是无法避免的。
+
+因此这里推荐一个 Linux 上的 Office 平替：LibreOffice，安装方式如下：
+
+```bash
+sudo add-apt-repository ppa:libreoffice/ppa
+sudo apt update
+sudo apt install libreoffice
+```
+
+在安装 LibreOffice 之前也尝试过使用 WPS 来编辑 Office 文件，但是不知为何总是会引起系统报错，索性就直接弃用了
+
+
+{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
+如果你是 Office 的深度用户，换了软件就浑身难受，那么你可以尝试一下 [Wine](https://www.winehq.org/)，一个能在 Linux 上跑 Winodws 程序的神奇工具
+{{< /alert >}}
+
 ## 存储清理
 
 ```bash
@@ -231,4 +253,4 @@ sudo apt autoremove --purge # 自动清除不需要的内核
 ## 引用文献
 
 - [如何在Ubuntu系统中进行磁盘的分区与挂载](https://cloud.tencent.com/developer/article/2456171)
-- 
+- [LibreOffice Suite - 适用于 Linux 的 Microsoft Office 套件的最佳替代方案](https://cn.linux-terminal.com/?p=1602)

@@ -11,7 +11,7 @@ series:
   - AI Musings
 series_order: 2
 date: 2025-05-04
-lastmod: 2025-05-04
+lastmod: 2025-05-08
 authors:
   - Morethan
 ---
@@ -159,7 +159,7 @@ The [Tokenformer](https://arxiv.org/abs/2410.23168) framework embraces the philo
 
 ### Differential Transformer
 
-[Differential Transformer](https://arxiv.org/abs/2410.05258)
+The [Differential Transformer](https://arxiv.org/abs/2410.05258) improves the attention mechanism in traditional Transformer architectures by introducing the concept of "differential attention." Unlike conventional softmax attention, the Diff Transformer divides the query and key vectors into two separate groups, computes two independent softmax attention maps, and then eliminates noise through a subtraction operation. This mechanism is analogous to the **differential amplifier** in electronic engineering, which cancels out common-mode noise by taking the difference between two signals.  
 
 ## Ideas and Thoughts
 
@@ -225,6 +225,20 @@ This complex mechanism of factual information injection poses significant challe
 This is also one of the reasons why Attention Layers and MLP Layers alternate: after factual information is injected in the MLP Layer, the Attention Layer is immediately used to trim it—weakening weaker associations and amplifying stronger ones—preventing a flood of redundant information from propagating to the next MLP Layer, which could trigger even more chaotic associations.
 {{< /alert >}}
 
+#### Time Encoding  
+
+The Transformer inherently lacks awareness of the order between tokens—the actual representation of positional sequence relies on "positional embeddings." To more efficiently embed positional information into tokens, various methods have emerged:  
+
+1. **Sinusoidal Embedding**: Introduced in the original Transformer paper, this is an absolute positional encoding that directly adds positional encoding (PE) information to the original token embeddings.  
+2. **Rotary Position Embedding (RoPE)**: This method modifies the Q and K matrices by splitting each dimension into pairs of even dimensions and applying a rotation in the complex plane.  
+3. **Learnable Positional Embedding**: Similar to sinusoidal embedding, this is also an absolute positional encoding, but it is trained directly via backpropagation.  
+
+Similarly, to adapt to streaming data input, we should also encode the **time** at which information is acquired: data from the internet a decade ago should differ from current information. In this process, large models can implicitly learn the "sequence of information" just as they learn "token order," allowing them to grasp the concept of "time" in a latent manner.  
+
+An effective time encoding should have the following characteristics:  
+1. The greater the time span, the larger the difference should be.  
+2. It should preserve the **periodicity** of time.
+
 #### Fact Injection
 
 The above text has described how factual information participates in token generation as model parameters. But how is this information stored in the parameters? Simply put, it is by using backpropagation to adjust the parameters. However, if we continue to ask:
@@ -268,6 +282,12 @@ The disadvantages of using RAG are also present:
 3. Limited expressive ability: Complex information is difficult to express in natural language, and even if it is forcibly expressed, key information will be lost, leading to understanding 偏差 by the large language model. For example, the development philosophy of a complex software project, if not experienced in practice, will become empty words when described in natural language.
 4. Difficult memory maintenance: Even with the support of large language model technology, updating, maintaining, and extracting memories remains a tricky problem, and it is difficult to balance response speed, accuracy, and cost.
 
+#### Fine-Tuning  
+
+I need to look into papers on fine-tuning, especially those on **"efficient fine-tuning"**, to see if they can enhance online learning capabilities. 🤔 If possible, I should also check out research on **incremental learning**.  
+
+But for now, I'll have to put this on hold... 😢 Gotta focus on reviewing for finals.  
+
 #### Network Parameters
 
 There is currently very little work in this area. Although OpenAI has recently launched a memory function, it has not revealed the specific implementation method, and there is not much discussion online. Here, we mainly summarize the implementation method of the Titans architecture.
@@ -297,3 +317,4 @@ After completing such a large amount of knowledge compression, how to handle new
 * [Fact Finding: Attempting to Reverse-Engineer Factual Recall on the Neuron Level (Post 1)](https://www.alignmentforum.org/posts/iGuwZTHWb6DFY3sKB/fact-finding-attempting-to-reverse-engineer-factual-recall)
 * [Fact Finding: Simplifying the Circuit (Post 2)](https://www.alignmentforum.org/posts/3tqJ65kuTkBh8wrRH/fact-finding-simplifying-the-circuit-post-2)
 -  [An Intuitive Explanation of How Large Language Models Store Facts](https://www.bilibili.com/video/BV1aTxMehEjK?spm_id_from=333.788.recommend_more_video.-1&vd_source=38d0addc11facdcdfe9d401e43b75680)
+- - [Diff Transformer：让注意力机制更智能，消除噪音，提升大语言模型性能-知乎](https://zhuanlan.zhihu.com/p/15784962358)

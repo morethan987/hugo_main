@@ -166,6 +166,9 @@ sudo apt upgrade
 sudo apt full-upgrade # Full upgrade  
 sudo do-release-upgrade # Upgrade across major Ubuntu versions  
 
+# check packages
+sudo apt-cache search wps # check packages with key word wps
+
 # Remove packages  
 sudo apt remove xxx  
 sudo apt autoremove # Clean up residuals  
@@ -199,6 +202,25 @@ curl -f https://zed.dev/install.sh -o install.sh
 # Then follow the AI’s instructions to manually uninstall  
 ```  
 
+## Office Suite  
+
+As we all know, Microsoft Office cannot run directly on Linux 😅. However, viewing and editing `doc` files is often unavoidable.  
+
+Therefore, here’s a recommended Office alternative for Linux: **LibreOffice**. The installation steps are as follows:
+
+```bash  
+sudo add-apt-repository ppa:libreoffice/ppa  
+sudo apt update  
+sudo apt install libreoffice  
+```  
+
+Before installing LibreOffice, I also tried using **WPS** to edit Office files, but for some reason, it kept causing system errors, so I eventually abandoned it.
+
+
+{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
+If switching away from Office makes you feel lost, [Wine](https://www.winehq.org/) might be your savior—it’s the sorcery that runs Windows apps on Linux!
+{{< /alert >}}
+
 ## Storage Cleanup  
 
 ```bash  
@@ -231,3 +253,4 @@ sudo apt autoremove --purge # Automatically remove unnecessary kernels
 ## References  
 
 - [How to Partition and Mount Disks in Ubuntu](https://cloud.tencent.com/developer/article/2456171)
+- [LibreOffice Suite](https://cn.linux-terminal.com/?p=1602)

@@ -10,7 +10,7 @@ series:
   - Technical Miscellany
 series_order: 2
 date: 2024-08-10
-lastmod: 2025-03-07
+lastmod: 2025-05-11
 authors:
   - Morethan
 ---
@@ -242,6 +242,101 @@ pip install uv # Install uv using pip.
 
 Usage is very similar to `poetry`.
 
+## Conda  
+
+I personally don't use Conda much for environment management, but since many lab servers default to using Conda, I’ll document the basics here for reference.  
+
+### Usage  
+
+The following commands are fundamental for checking environment information. They’re typically used when accessing a new server environment or troubleshooting environment-related issues.  
+
+```bash  
+########## Checking Environment Information ##########  
+
+conda --version # Get the Conda version  
+
+python --version # Get the Python version  
+
+conda env list # List all available environments  
+
+conda activate xxx # Activate the virtual environment named "xxx"  
+
+conda deactivate # Exit the current virtual environment  
+
+whereis python # Check the location of Python in the currently activated environment  
+
+nvidia-smi # Check CUDA status (not a Conda command but frequently used)  
+
+conda config --show channels # View Conda's download sources  
+
+conda remove -n xxx # Delete the virtual environment named "xxx"  
+
+conda create -n env_name # Create a virtual environment with the specified name, using the default Python version  
+```  
+
+Adding domestic (Chinese) download sources:  
+
+```bash  
+conda config --show channels # View Conda's download sources  
+
+# Add Tsinghua's mirror source  
+conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/msys2  
+```  
+
+Managing Python packages:  
+
+```bash  
+# Install a specific package  
+conda install package_name  
+
+# Remove a specific package  
+conda remove package_name  
+
+# Update a specific package  
+conda update package_name  
+
+# Search for a specific package  
+conda search package_name  
+
+# List all installed packages and their versions  
+conda list  
+
+# Clean unused packages and cache to save disk space  
+conda clean --all  
+
+# Install packages from a requirements.txt file  
+conda install -f requirements.txt  
+```  
+
+## Passwordless Login via VSCode  
+
+For students without a local GPU, editing and running files directly on a server is very convenient. The VSCode extension `remote-ssh` can also display a VSCode interface directly on the server. To avoid the hassle of repeatedly entering passwords, you can set up passwordless login as follows 😄.  
+
+For a local Windows machine, SSH-related configuration files are usually stored in the `C:\Users\<User_name>\.ssh` folder. Passwordless login can be achieved by modifying files in this directory.  
+
+1. Configure the `config` file. A sample configuration is as follows:  
+
+```txt  
+# Replace <User_name> with your local machine's username  
+Host 3090  
+    HostName xx.xxx.xx.xx  
+    User morethan  
+    IdentityFile "C:\Users\<User_name>\.ssh\id_rsa"  
+```  
+
+2. Generate the authentication file `id_rsa.pub`.  
+
+3. Locally create an `authorized_keys` file and copy the contents of `id_rsa.pub` into it.  
+
+4. On the server, create a `.ssh` folder in the default directory and copy the `authorized_keys` file from your local machine into it.  
+
+Now, when logging into the server via VSCode, you’ll find that passwordless login is enabled.  
+
+
+{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
+The steps above only need to be performed once initially. When configuring passwordless login for another server, you only need to modify the `config` file and copy the `authorized_keys` file to the server—no further file modifications are required 😄.
+{{< /alert >}}
+
 ## Packaging Applications
 
 We often need to share Python programs we've written. However, sharing only the source code can be frustrating for users unfamiliar with coding, as running the source requires setting up a local environment. Hence, packaging tools come into play.
@@ -304,25 +399,25 @@ Common usage commands:
 python -m nuitka --lto=yes --remove-output --onefile main.py
 ```
 
-| Parameter                                                                                              | Description                                                                 |
-| ----------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
-| `--standalone`                                                                                        | Creates a standalone executable with all dependencies.                     |
-| `--onefile`                                                                                           | Packages everything into a single `.exe` file.                             |
-| `--optimize=N`                                                                                        | Sets optimization level (`0`, `1`, or `2`); higher numbers mean more optimization. |
-| `--lto`                                                                                               | Enables Link Time Optimization (options: `no`, `yes`, or `thin`).          |
-| `--enable-plugin=<plugin_name>`                                                                       | Enables specified plugins (e.g., `tk-inter`, `numpy`, `anti-bloat`).       |
-| `--output-dir=<dir>`                                                                                  | Specifies the output directory for compilation.                            |
-| `--remove-output`                                                                                     | Deletes intermediate `.c` files and other temporary files after compilation. |
-| `--nofollow-imports`                                                                                  | Does not recursively process any imported modules.                         |
-| `--include-package=<package_name>`                                                                    | Explicitly includes an entire package and its submodules.                  |
-| `--include-module=<module_name>`                                                                      | Explicitly includes a single module.                                       |
-| `--follow-import-to=<module/package>`                                                                 | Specifies modules or packages to process recursively.                       |
-| `--nofollow-import-to=<module/package>`                                                               | Specifies modules or packages to exclude from recursive processing.        |
-| `--include-data-files=<source>=<dest>`                                                                | Includes specified data files.                                             |
-| `--include-data-dir=<directory>`                                                                      | Includes all data files in a directory.                                    |
-| `--noinclude-data-files=<pattern>`                                                                    | Excludes data files matching a pattern.                                    |
-| `--windows-icon-from-ico=<path>`                                                                      | Sets the icon for the Windows executable.                                  |
-| `--company-name`, `--product-name`, `--file-version`, `--product-version`, `--file-description`       | Sets properties for the Windows executable.                                |
+| Parameter                                                                                       | Description                                                                        |
+| ----------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| `--standalone`                                                                                  | Creates a standalone executable with all dependencies.                             |
+| `--onefile`                                                                                     | Packages everything into a single `.exe` file.                                     |
+| `--optimize=N`                                                                                  | Sets optimization level (`0`, `1`, or `2`); higher numbers mean more optimization. |
+| `--lto`                                                                                         | Enables Link Time Optimization (options: `no`, `yes`, or `thin`).                  |
+| `--enable-plugin=<plugin_name>`                                                                 | Enables specified plugins (e.g., `tk-inter`, `numpy`, `anti-bloat`).               |
+| `--output-dir=<dir>`                                                                            | Specifies the output directory for compilation.                                    |
+| `--remove-output`                                                                               | Deletes intermediate `.c` files and other temporary files after compilation.       |
+| `--nofollow-imports`                                                                            | Does not recursively process any imported modules.                                 |
+| `--include-package=<package_name>`                                                              | Explicitly includes an entire package and its submodules.                          |
+| `--include-module=<module_name>`                                                                | Explicitly includes a single module.                                               |
+| `--follow-import-to=<module/package>`                                                           | Specifies modules or packages to process recursively.                              |
+| `--nofollow-import-to=<module/package>`                                                         | Specifies modules or packages to exclude from recursive processing.                |
+| `--include-data-files=<source>=<dest>`                                                          | Includes specified data files.                                                     |
+| `--include-data-dir=<directory>`                                                                | Includes all data files in a directory.                                            |
+| `--noinclude-data-files=<pattern>`                                                              | Excludes data files matching a pattern.                                            |
+| `--windows-icon-from-ico=<path>`                                                                | Sets the icon for the Windows executable.                                          |
+| `--company-name`, `--product-name`, `--file-version`, `--product-version`, `--file-description` | Sets properties for the Windows executable.                                        |
 
 ## References
 - Poetry-related:
@@ -332,3 +427,6 @@ python -m nuitka --lto=yes --remove-output --onefile main.py
 
 - UV-related:
 	- [Installing and Using Python Project and Package Manager UV - Deep Sea Xiao Tao](https://blog.xtao.de/380) One of the few blogs that includes the domestic mirror address for `uv python install`.
+
+- Conda-related：
+	- [Summary of Commonly Used Conda Commands - Zhihu](https://zhuanlan.zhihu.com/p/1902762958083298021)
