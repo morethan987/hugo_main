@@ -60,6 +60,12 @@ git pull # Fetch the latest code
 ./install.sh # Re-run the installation script  
 ```  
 
+## Fcitx 5  
+
+Main reference: [Install and Configure Fcitx 5 Chinese Input Method on Ubuntu](https://muzing.top/posts/3fc249cf/). I initially considered using Sogou Input Method, but the official installation process seemed overly complicated, and it also required installing Fcitx 5. So, I figured I might as well just use Fcitx 5 directly.  
+
+To be honest, I was reluctant to use Fcitx at first 🥲 because its interface is so "plain" that it’s hard to accept. I believe the author of the blog post above must have felt the same way 👆.
+
 ## Using Windows Fonts  
 
 Approach: Copy font files from Windows to Ubuntu’s dedicated font directory, assign appropriate permissions, refresh Ubuntu’s font cache, and load the new fonts.  
@@ -254,3 +260,4 @@ sudo apt autoremove --purge # Automatically remove unnecessary kernels
 
 - [How to Partition and Mount Disks in Ubuntu](https://cloud.tencent.com/developer/article/2456171)
 - [LibreOffice Suite](https://cn.linux-terminal.com/?p=1602)
+- [在 Ubuntu 安装配置 Fcitx 5 中文输入法](https://muzing.top/posts/3fc249cf/)

@@ -60,6 +60,12 @@ git pull # 拉取最新的代码
 ./install.sh # 重新运行安装脚本即可
 ```
 
+## Fcitx 5
+
+主要参考：[在 Ubuntu 安装配置 Fcitx 5 中文输入法](https://muzing.top/posts/3fc249cf/)；之前有考虑过使用搜狗输入法，但是看到官方给的安装流程就头大，而且也需要安装 Fcitx 5，所以不如直接用 Fcitx5 了
+
+其实一开始我是拒绝 Fcitx 的🥲因为它的界面实在是"朴素"得令人难以接受，相信上面那篇博客的作者应该和我深有同感👆
+
 ## 使用Windows上的字体
 
 思路：将 Windows 中的字体文件拷贝到 Ubuntu 专用的字体文件夹中，然后给予适当的权限，然后刷新 Ubuntu 的字体缓存，加载新的字体。
@@ -254,3 +260,4 @@ sudo apt autoremove --purge # 自动清除不需要的内核
 
 - [如何在Ubuntu系统中进行磁盘的分区与挂载](https://cloud.tencent.com/developer/article/2456171)
 - [LibreOffice Suite - 适用于 Linux 的 Microsoft Office 套件的最佳替代方案](https://cn.linux-terminal.com/?p=1602)
+- [在 Ubuntu 安装配置 Fcitx 5 中文输入法](https://muzing.top/posts/3fc249cf/)
