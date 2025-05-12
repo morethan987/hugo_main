@@ -317,4 +317,4 @@ After completing such a large amount of knowledge compression, how to handle new
 * [Fact Finding: Attempting to Reverse-Engineer Factual Recall on the Neuron Level (Post 1)](https://www.alignmentforum.org/posts/iGuwZTHWb6DFY3sKB/fact-finding-attempting-to-reverse-engineer-factual-recall)
 * [Fact Finding: Simplifying the Circuit (Post 2)](https://www.alignmentforum.org/posts/3tqJ65kuTkBh8wrRH/fact-finding-simplifying-the-circuit-post-2)
 -  [An Intuitive Explanation of How Large Language Models Store Facts](https://www.bilibili.com/video/BV1aTxMehEjK?spm_id_from=333.788.recommend_more_video.-1&vd_source=38d0addc11facdcdfe9d401e43b75680)
-- - [Diff Transformer：让注意力机制更智能，消除噪音，提升大语言模型性能-知乎](https://zhuanlan.zhihu.com/p/15784962358)
+- [Diff Transformer：让注意力机制更智能，消除噪音，提升大语言模型性能-知乎](https://zhuanlan.zhihu.com/p/15784962358)
