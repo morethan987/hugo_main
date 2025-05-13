@@ -144,113 +144,36 @@ ln -s /target/dir ~/桌面
 cd ~/桌面/dir
 ```
 
-## 安装管理软件
+## 配置Git
 
-在 Ubuntu 上安装软件的方式大致分为以下几种;
-
-1. 通过自带的 snap 安装
-2. 通过 apt 安装
-3. 通过 deb 压缩包安装
-4. 通过 curl 安装
-
-不同的安装方式有不同的管理方案，其中通过 curl 安装的管理最为不便，其他的都可以通过相应的包管理工具轻松管理
-
-### snap
-直接打开 snap 商店就可以直接看到，轻松便捷，但是其中的软件包往往较为落后
-
-### apt
+Linux 的一大特色就是极致的简洁，因此使用命令行来操纵 Git 是 Linux 用户的首选😃Ubuntu 自带 Git 所以说不用自行安装了，如果想要升级的话见下：
 
 ```bash
-# 安装软件
-sudo apt install xxx
+git --version # 查看git版本
 
-# 升级软件包
-sudo apt update # 同步远程仓库的软件包信息，但不会实际升级任何软件
-apt list --upgradable # 查看可升级的软件包
-# 升级所有可用的包，但不会处理依赖关系变更（如删除旧包或安装新依赖）
-sudo apt upgrade
-sudo apt full-upgrade # 完全升级
-sudo do-release-upgrade # 跨ubuntu大版本升级
+sudo add-apt-repository ppa:git-core/ppa # 添加官方源
 
-# 查看软件包
-sudo apt-cache search wps # 查看包含关键字wps的软件包
-
-# 移除软件包
-sudo apt remove xxx
-sudo apt autoremove # 清理残留
+sudo apt update && sudo apt upgrade # 如果能的话则执行更新
 ```
 
-### deb
+为 GitHub 设置 ssh 免密配置，当然你也可以直接使用 HTTPS，但是缺点就是每次都要输入密码。而且随着 GitHub 的安全措施升级，密码也不见得是你的账号密码，而是专门的 token🥲
 
-从浏览器上下载 deb 压缩包之后，直接双击即可直接安装。其内部执行的命令其实就是 apt 安装，因此管理方式也是与 apt 相同的。
+如此麻烦的操作是 Linux 上无法忍受的，我宁愿进行繁琐的配置，但是我一定不要每次都输入那一长串 token
 
-```bash
-# 通过双击安装
-
-# 通过apt卸载
-sudo apt remove xxx
-sudo apt autoremove # 清理残留
-```
-
-### curl
-
-通过 curl 命令直接从目标网址下载安装脚本，然后执行这个脚本。通过 curl 安装的软件可管理性较差，原因在于：实际的安装过程是通过脚本执行的，这个过程难以监控
+这里主要参考：[设置 Git 默认推送不需要输入账号和密码【Ubuntu、SSH】](https://blog.csdn.net/qq_22841387/article/details/145183746)
 
 ```bash
-# 以zed编辑器的安装为例
-curl -f https://zed.dev/install.sh | sh
+git config --global user.name 'xx' # 配置全局用户名
 
-# 如果想要卸载，一般都是难以卸载干净的
-# 首先获取安装脚本文件
-curl -f https://zed.dev/install.sh -o install.sh
+git config --global user.email 'xxx@qq.com' # 配置全局邮箱账号
 
-# 把这个脚本文件丢给AI解析一下
-# 然后按照AI的指令手动进行卸载
-```
+# 生成shh密钥对，然后我选择一路回车到底
+ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
 
-## Office套件
-
-众所周知，Microsoft Office 是没法直接在 Linux 上直接运行的😅但是查看和编辑 `doc` 文档又是无法避免的。
-
-因此这里推荐一个 Linux 上的 Office 平替：LibreOffice，安装方式如下：
-
-```bash
-sudo add-apt-repository ppa:libreoffice/ppa
-sudo apt update
-sudo apt install libreoffice
-```
-
-在安装 LibreOffice 之前也尝试过使用 WPS 来编辑 Office 文件，但是不知为何总是会引起系统报错，索性就直接弃用了
-
-
-{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-如果你是 Office 的深度用户，换了软件就浑身难受，那么你可以尝试一下 [Wine](https://www.winehq.org/)，一个能在 Linux 上跑 Winodws 程序的神奇工具
-{{< /alert >}}
-
-## 存储清理
-
-```bash
-# 清理孤立依赖包
-sudo apt autoremove
-
-# 清理apt缓存
-sudo du -sh /var/cache/apt # 查看apt缓存大小
-sudo apt autoclean # 自动清理
-sudo apt clean # 完全清理
-
-# 清理系统日志
-journalctl --disk-usage # 查看系统日志代大小
-sudo journalctl --vacuum-time=3d # 清除三天前的日志
-
-# 清理.cache
-cd .cache # 在默认目录下执行
-du -sh * # 查看缓存文件
-rm -r folder_name # 直接删除即可
-
-# 清理snap旧版本
-snap list --all # 查看所有snap包
-# 罗列出所有被禁用的包（下面是一行命令）
-echo -e "\033[1m已禁用的 Snap 包及其占用空间:\033[0m" && snap list --all | awk '/disabled|已禁用/{print {{< katex >}}\\(1}' | while read -r pkg; do size=\\)(snap info "{{< katex >}}\\(pkg" | awk '/installed:/ {print\\)4}'); printf "%-30s %10s\n" "{{< katex >}}\\(pkg" "\\)size"; done | sort -k2 -h && echo -e "\n\033[1m总占用空间: {{< katex >}}\\((snap list --all | awk '/disabled|已禁用/{print\\)1}' | xargs -I{} snap info {} | awk '/installed:/ {sum += {{< katex >}}\\(3} END {print sum/1024 "MB"}')\\033[0m" # 移除所有被禁用的snap包（下面是一行命令） snap list --all | awk '/disabled|已禁用/{print\\)1, {{< katex >}}\\(3}' | while read snapname revision; do snap remove "\\)snapname" --revision="$revision"; done
+# 启动 SSH 代理并将私钥加载到代理
+eval "{{< katex >}}\\((ssh-agent -s)" ssh-add ~/.ssh/id_rsa # 查看并复制公钥内容 cat ~/.ssh/id_rsa.pub # 在GitHub上添加这个新的ssh密钥就行 # 将现有https链接的仓库改为ssh链接 git remote rm origin git remote add origin git@github.com:username/repository.git ``` ## 安装管理软件 在 Ubuntu 上安装软件的方式大致分为以下几种; 1. 通过自带的 snap 安装 2. 通过 apt 安装 3. 通过 deb 压缩包安装 4. 通过 curl 安装 不同的安装方式有不同的管理方案，其中通过 curl 安装的管理最为不便，其他的都可以通过相应的包管理工具轻松管理 ### snap 直接打开 snap 商店就可以直接看到，轻松便捷，但是其中的软件包往往较为落后 ### apt ```bash # 安装软件 sudo apt install xxx # 升级软件包 sudo apt update # 同步远程仓库的软件包信息，但不会实际升级任何软件 apt list --upgradable # 查看可升级的软件包 # 升级所有可用的包，但不会处理依赖关系变更（如删除旧包或安装新依赖） sudo apt upgrade sudo apt full-upgrade # 完全升级 sudo do-release-upgrade # 跨ubuntu大版本升级 # 查看软件包 sudo apt-cache search wps # 查看包含关键字wps的软件包 # 移除软件包 sudo apt remove xxx sudo apt autoremove # 清理残留 ``` ### deb 从浏览器上下载 deb 压缩包之后，直接双击即可直接安装。其内部执行的命令其实就是 apt 安装，因此管理方式也是与 apt 相同的。 ```bash # 通过双击安装 # 通过apt卸载 sudo apt remove xxx sudo apt autoremove # 清理残留 ``` ### curl 通过 curl 命令直接从目标网址下载安装脚本，然后执行这个脚本。通过 curl 安装的软件可管理性较差，原因在于：实际的安装过程是通过脚本执行的，这个过程难以监控 ```bash # 以zed编辑器的安装为例 curl -f https://zed.dev/install.sh | sh # 如果想要卸载，一般都是难以卸载干净的 # 首先获取安装脚本文件 curl -f https://zed.dev/install.sh -o install.sh # 把这个脚本文件丢给AI解析一下 # 然后按照AI的指令手动进行卸载 ``` ## Office套件 众所周知，Microsoft Office 是没法直接在 Linux 上直接运行的😅但是查看和编辑 `doc` 文档又是无法避免的。 因此这里推荐一个 Linux 上的 Office 平替：LibreOffice，安装方式如下： ```bash sudo add-apt-repository ppa:libreoffice/ppa sudo apt update sudo apt install libreoffice ``` 在安装 LibreOffice 之前也尝试过使用 WPS 来编辑 Office 文件，但是不知为何总是会引起系统报错，索性就直接弃用了 > [!NOTE] Title > 如果你是 Office 的深度用户，换了软件就浑身难受，那么你可以尝试一下 [Wine](https://www.winehq.org/)，一个能在 Linux 上跑 Winodws 程序的神奇工具 ## 存储清理 ```bash # 清理孤立依赖包 sudo apt autoremove # 清理apt缓存 sudo du -sh /var/cache/apt # 查看apt缓存大小 sudo apt autoclean # 自动清理 sudo apt clean # 完全清理 # 清理系统日志 journalctl --disk-usage # 查看系统日志代大小 sudo journalctl --vacuum-time=3d # 清除三天前的日志 # 清理.cache cd .cache # 在默认目录下执行 du -sh * # 查看缓存文件 rm -r folder_name # 直接删除即可 # 清理snap旧版本 snap list --all # 查看所有snap包 # 罗列出所有被禁用的包（下面是一行命令） echo -e "\\033[1m已禁用的 Snap 包及其占用空间:\\033[0m" && snap list --all | awk '/disabled|已禁用/{print\\)1}' | while read -r pkg; do size={{< katex >}}\\((snap info "\\)pkg" | awk '/installed:/ {print {{< katex >}}\\(4}'); printf "%-30s %10s\\n" "\\)pkg" "{{< katex >}}\\(size"; done | sort -k2 -h && echo -e "\\n\\033[1m总占用空间:\\)(snap list --all | awk '/disabled|已禁用/{print {{< katex >}}\\(1}' | xargs -I{} snap info {} | awk '/installed:/ {sum +=\\)3} END {print sum/1024 "MB"}')\033[0m"
+# 移除所有被禁用的snap包（下面是一行命令）
+snap list --all | awk '/disabled|已禁用/{print {{< katex >}}\\(1,\\)3}' | while read snapname revision; do snap remove "{{< katex >}}\\(snapname" --revision="\\)revision"; done
 
 # 清理内核
 sudo dpkg --list | grep linux-image # 列出所有内核
@@ -262,3 +185,4 @@ sudo apt autoremove --purge # 自动清除不需要的内核
 - [如何在Ubuntu系统中进行磁盘的分区与挂载](https://cloud.tencent.com/developer/article/2456171)
 - [LibreOffice Suite - 适用于 Linux 的 Microsoft Office 套件的最佳替代方案](https://cn.linux-terminal.com/?p=1602)
 - [在 Ubuntu 安装配置 Fcitx 5 中文输入法](https://muzing.top/posts/3fc249cf/)
+- [设置 Git 默认推送不需要输入账号和密码【Ubuntu、SSH】](https://blog.csdn.net/qq_22841387/article/details/145183746)
