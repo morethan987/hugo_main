@@ -11,7 +11,7 @@ series:
   - Technical Miscellany
 series_order: 7
 date: 2025-05-01
-lastmod: 2025-05-01
+lastmod: 2025-05-13
 authors:
   - Morethan
 ---
@@ -242,9 +242,10 @@ sudo apt clean # Full clean
 journalctl --disk-usage # Check system log size  
 sudo journalctl --vacuum-time=3 d # Remove logs older than 3 days  
 
-# Clear thumbnails  
-sudo du -sh ~/.cache/thumbnails # Check thumbnail storage usage  
-sudo rm -rf ~/.cache/thumbnails/* # Safe to delete—will rebuild automatically  
+# Clear .cache
+cd .cache # execute at ~
+du -sh * # Check cache size
+rm -r folder_name # delete the folder recursively
 
 # Clean up old Snap versions  
 snap list --all # List all Snap packages  

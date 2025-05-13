@@ -11,7 +11,7 @@ series:
   - 技术杂项
 series_order: 7
 date: 2025-05-01
-lastmod: 2025-05-01
+lastmod: 2025-05-13
 authors:
   - Morethan
 ---
@@ -138,10 +138,10 @@ sudo mount -a
 ```bash
 # 在Desktop文件夹中放置一个指向/target/dir文件夹的链接
 # 请替换为你的目标文件夹
-ln -s /target/dir ~/Desktop
+ln -s /target/dir ~/桌面
 
 # 测试，如果能cd进去那么就没问题
-cd ~/Desktop/dir
+cd ~/桌面/dir
 ```
 
 ## 安装管理软件
@@ -242,9 +242,10 @@ sudo apt clean # 完全清理
 journalctl --disk-usage # 查看系统日志代大小
 sudo journalctl --vacuum-time=3d # 清除三天前的日志
 
-# 清除缩略图
-sudo du -sh ~/.cache/thumbnails # 查看缩略图的占用空间
-sudo rm -rf ~/.cache/thumbnails/* # 可安全清除，会自动重建
+# 清理.cache
+cd .cache # 在默认目录下执行
+du -sh * # 查看缓存文件
+rm -r folder_name # 直接删除即可
 
 # 清理snap旧版本
 snap list --all # 查看所有snap包
