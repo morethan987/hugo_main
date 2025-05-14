@@ -282,16 +282,17 @@ journalctl --disk-usage # 查看系统日志代大小
 sudo journalctl --vacuum-time=3d # 清除三天前的日志
 
 # 清理.cache
-cd .cache # 在默认目录下执行
-du -sh * # 查看缓存文件
+du -sh ~/.cache/* | sort -h -r # 查看缓存文件大小
 rm -r folder_name # 直接删除即可
 
 # 清理snap旧版本
 snap list --all # 查看所有snap包
+
 # 罗列出所有被禁用的包（下面是一行命令）
-echo -e "\033[1m已禁用的 Snap 包及其占用空间:\033[0m" && snap list --all | awk '/disabled|已禁用/{print $1}' | while read -r pkg; do size=$(snap info "$pkg" | awk '/installed:/ {print $4}'); printf "%-30s %10s\n" "$pkg" "$size"; done | sort -k2 -h && echo -e "\n\033[1m总占用空间: $(snap list --all | awk '/disabled|已禁用/{print $1}' | xargs -I{} snap info {} | awk '/installed:/ {sum += $3} END {print sum/1024 "MB"}')\033[0m"
+echo -e "\033[1m已禁用的 Snap 包及其占用空间:\033[0m" && snap list --all | awk '/disabled|已禁用/{print $1}' | while read -r pkg; do size=$(snap info "$pkg" | awk '/installed:/ {print $4}'); printf "%-30s %10s\n" "$pkg" "$size"; done | sort -k2 -h
+
 # 移除所有被禁用的snap包（下面是一行命令）
-snap list --all | awk '/disabled|已禁用/{print $1, $3}' | while read snapname revision; do snap remove "$snapname" --revision="$revision"; done
+snap list --all | awk '/disabled|已禁用/{print $1, $3}' | while read snapname revision; do sudo snap remove "$snapname" --revision="$revision"; done
 
 # 清理内核
 sudo dpkg --list | grep linux-image # 列出所有内核

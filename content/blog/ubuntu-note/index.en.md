@@ -284,16 +284,17 @@ journalctl --disk-usage # Check system log size
 sudo journalctl --vacuum-time=3 d # Remove logs older than 3 days  
 
 # Clear .cache
-cd .cache # execute at ~
-du -sh * # Check cache size
+du -sh ~/.cache/* | sort -h -r # Check cache size
 rm -r folder_name # delete the folder recursively
 
-# Clean up old Snap versions  
-snap list --all # List all Snap packages  
-# List all disabled packages (single-line command)  
-echo -e "\033[1 mDisabled Snap Packages and Their Sizes:\033[0 m" && snap list --all | awk '/disabled|已禁用/{print $1}' | while read -r pkg; do size=$(snap info "$pkg" | awk '/installed:/ {print $4}'); printf "%-30 s %10 s\n" "$pkg" "$size"; done | sort -k 2 -h && echo -e "\n\033[1 mTotal Size: $(snap list --all | awk '/disabled|已禁用/{print $1}' | xargs -I{} snap info {} | awk '/installed:/ {sum += $3} END {print sum/1024 "MB"}')\033[0 m"  
+# Clean up old Snap versions
+snap list --all # List all Snap packages
+
+# List all disabled packages (single-line command)
+echo -e "\033[1 mDisabled Snap Packages and Their Sizes:\033[0 m" && snap list --all | awk '/disabled|已禁用/{print $1}' | while read -r pkg; do size=$(snap info "$pkg" | awk '/installed:/ {print $4}'); printf "%-30 s %10 s\n" "$pkg" "$size"; done | sort -k 2 -h
+
 # Remove all disabled Snap packages (single-line command)  
-snap list --all | awk '/disabled|已禁用/{print $1, $3}' | while read snapname revision; do snap remove "$snapname" --revision="$revision"; done  
+snap list --all | awk '/disabled|已禁用/{print $1, $3}' | while read snapname revision; do sudo snap remove "$snapname" --revision="$revision"; done
 
 # Clean up old kernels  
 sudo dpkg --list | grep linux-image # List all kernels  
