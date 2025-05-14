@@ -15,7 +15,6 @@ lastmod: 2025-05-13
 authors:
   - Morethan
 ---
-
 {{< lead >}}  
 Summarizing and documenting the process of tinkering with Ubuntu for future reference.  
 {{< /lead >}}  
@@ -173,9 +172,128 @@ git config --global user.email 'xxx@qq.com' # Configure the global email account
 ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
 
 # Start the SSH agent and load the private key into the agent
-eval "{{< katex >}}\\((ssh-agent -s)" ssh-add ~/.ssh/id_rsa # View and copy the public key content cat ~/.ssh/id_rsa.pub # Add this new SSH key to your GitHub account. # Change an existing HTTPS-linked repository to an SSH link git remote rm origin git remote add origin git@github.com:username/repository.git ``` ## Installing and Managing Software Software installation on Ubuntu generally falls into the following categories: 1. Via the built-in Snap store 2. Via `apt` 3. Via `.deb` packages 4. Via `curl` Different installation methods require different management approaches. `curl` installations are the most cumbersome to manage, while others can be handled easily with their respective package managers. ### Snap Simply open the Snap store to install software effortlessly, though the packages are often outdated. ### apt ```bash # Install software sudo apt install xxx # Update packages sudo apt update # Sync package info from remote repositories without upgrading apt list --upgradable # View upgradable packages # Upgrade all available packages without handling dependency changes sudo apt upgrade sudo apt full-upgrade # Full upgrade sudo do-release-upgrade # Upgrade across major Ubuntu versions # check packages sudo apt-cache search wps # check packages with key word wps # Remove packages sudo apt remove xxx sudo apt autoremove # Clean up residuals ``` ### deb After downloading a `.deb` package from a browser, double-clicking it will install it directly. Internally, this uses `apt`, so management is the same as with `apt`. ```bash # Install via double-click # Uninstall via apt sudo apt remove xxx sudo apt autoremove # Clean up residuals ``` ### curl Download and execute installation scripts directly from a URL using `curl`. Software installed this way is harder to manage because the actual installation process is script-driven and difficult to monitor. ```bash # Example: Installing the Zed editor curl -f https://zed.dev/install.sh | sh # Uninstalling is usually messy # First, fetch the installation script curl -f https://zed.dev/install.sh -o install.sh # Have an AI parse the script # Then follow the AI’s instructions to manually uninstall ``` ## Office Suite As we all know, Microsoft Office cannot run directly on Linux 😅. However, viewing and editing `doc` files is often unavoidable. Therefore, here’s a recommended Office alternative for Linux: **LibreOffice**. The installation steps are as follows: ```bash sudo add-apt-repository ppa:libreoffice/ppa sudo apt update sudo apt install libreoffice ``` Before installing LibreOffice, I also tried using **WPS** to edit Office files, but for some reason, it kept causing system errors, so I eventually abandoned it. > [!NOTE] Title > If switching away from Office makes you feel lost, [Wine](https://www.winehq.org/) might be your savior—it’s the sorcery that runs Windows apps on Linux! ## Storage Cleanup ```bash # Remove orphaned dependencies sudo apt autoremove # Clear apt cache sudo du -sh /var/cache/apt # Check apt cache size sudo apt autoclean # Auto-clean sudo apt clean # Full clean # Clear system logs journalctl --disk-usage # Check system log size sudo journalctl --vacuum-time=3 d # Remove logs older than 3 days # Clear .cache cd .cache # execute at ~ du -sh * # Check cache size rm -r folder_name # delete the folder recursively # Clean up old Snap versions snap list --all # List all Snap packages # List all disabled packages (single-line command) echo -e "\\033[1 mDisabled Snap Packages and Their Sizes:\\033[0 m" && snap list --all | awk '/disabled|已禁用/{print\\)1}' | while read -r pkg; do size={{< katex >}}\\((snap info "\\)pkg" | awk '/installed:/ {print {{< katex >}}\\(4}'); printf "%-30 s %10 s\\n" "\\)pkg" "{{< katex >}}\\(size"; done | sort -k 2 -h && echo -e "\\n\\033[1 mTotal Size:\\)(snap list --all | awk '/disabled|已禁用/{print {{< katex >}}\\(1}' | xargs -I{} snap info {} | awk '/installed:/ {sum +=\\)3} END {print sum/1024 "MB"}')\033[0 m"  
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/id_rsa
+
+# View and copy the public key content
+cat ~/.ssh/id_rsa.pub
+
+# Add this new SSH key to your GitHub account.
+
+# Change an existing HTTPS-linked repository to an SSH link
+git remote rm origin
+git remote add origin git@github.com:username/repository.git
+```
+
+## Installing and Managing Software  
+
+Software installation on Ubuntu generally falls into the following categories:  
+
+1. Via the built-in Snap store  
+2. Via `apt`  
+3. Via `.deb` packages  
+4. Via `curl`  
+
+Different installation methods require different management approaches. `curl` installations are the most cumbersome to manage, while others can be handled easily with their respective package managers.  
+
+### Snap  
+Simply open the Snap store to install software effortlessly, though the packages are often outdated.  
+
+### apt  
+
+```bash  
+# Install software  
+sudo apt install xxx  
+
+# Update packages  
+sudo apt update # Sync package info from remote repositories without upgrading  
+apt list --upgradable # View upgradable packages  
+# Upgrade all available packages without handling dependency changes  
+sudo apt upgrade  
+sudo apt full-upgrade # Full upgrade  
+sudo do-release-upgrade # Upgrade across major Ubuntu versions  
+
+# check packages
+sudo apt-cache search wps # check packages with key word wps
+
+# Remove packages  
+sudo apt remove xxx  
+sudo apt autoremove # Clean up residuals  
+```  
+
+### deb  
+
+After downloading a `.deb` package from a browser, double-clicking it will install it directly. Internally, this uses `apt`, so management is the same as with `apt`.  
+
+```bash  
+# Install via double-click  
+
+# Uninstall via apt  
+sudo apt remove xxx  
+sudo apt autoremove # Clean up residuals  
+```  
+
+### curl  
+
+Download and execute installation scripts directly from a URL using `curl`. Software installed this way is harder to manage because the actual installation process is script-driven and difficult to monitor.  
+
+```bash  
+# Example: Installing the Zed editor  
+curl -f https://zed.dev/install.sh | sh  
+
+# Uninstalling is usually messy  
+# First, fetch the installation script  
+curl -f https://zed.dev/install.sh -o install.sh  
+
+# Have an AI parse the script  
+# Then follow the AI’s instructions to manually uninstall  
+```  
+
+## Office Suite  
+
+As we all know, Microsoft Office cannot run directly on Linux 😅. However, viewing and editing `doc` files is often unavoidable.  
+
+Therefore, here’s a recommended Office alternative for Linux: **LibreOffice**. The installation steps are as follows:
+
+```bash  
+sudo add-apt-repository ppa:libreoffice/ppa  
+sudo apt update  
+sudo apt install libreoffice  
+```  
+
+Before installing LibreOffice, I also tried using **WPS** to edit Office files, but for some reason, it kept causing system errors, so I eventually abandoned it.
+
+
+{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
+If switching away from Office makes you feel lost, [Wine](https://www.winehq.org/) might be your savior—it’s the sorcery that runs Windows apps on Linux!
+{{< /alert >}}
+
+## Storage Cleanup  
+
+```bash  
+# Remove orphaned dependencies  
+sudo apt autoremove  
+
+# Clear apt cache  
+sudo du -sh /var/cache/apt # Check apt cache size  
+sudo apt autoclean # Auto-clean  
+sudo apt clean # Full clean  
+
+# Clear system logs  
+journalctl --disk-usage # Check system log size  
+sudo journalctl --vacuum-time=3 d # Remove logs older than 3 days  
+
+# Clear .cache
+cd .cache # execute at ~
+du -sh * # Check cache size
+rm -r folder_name # delete the folder recursively
+
+# Clean up old Snap versions  
+snap list --all # List all Snap packages  
+# List all disabled packages (single-line command)  
+echo -e "\033[1 mDisabled Snap Packages and Their Sizes:\033[0 m" && snap list --all | awk '/disabled|已禁用/{print $1}' | while read -r pkg; do size=$(snap info "$pkg" | awk '/installed:/ {print $4}'); printf "%-30 s %10 s\n" "$pkg" "$size"; done | sort -k 2 -h && echo -e "\n\033[1 mTotal Size: $(snap list --all | awk '/disabled|已禁用/{print $1}' | xargs -I{} snap info {} | awk '/installed:/ {sum += $3} END {print sum/1024 "MB"}')\033[0 m"  
 # Remove all disabled Snap packages (single-line command)  
-snap list --all | awk '/disabled|已禁用/{print {{< katex >}}\\(1,\\)3}' | while read snapname revision; do snap remove "{{< katex >}}\\(snapname" --revision="\\)revision"; done  
+snap list --all | awk '/disabled|已禁用/{print $1, $3}' | while read snapname revision; do snap remove "$snapname" --revision="$revision"; done  
 
 # Clean up old kernels  
 sudo dpkg --list | grep linux-image # List all kernels  

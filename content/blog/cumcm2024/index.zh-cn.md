@@ -15,6 +15,7 @@ lastmod: 2025-01-15
 authors:
   - Morethan
 ---
+{{< katex >}}
 
 ## 前言
 
@@ -27,9 +28,11 @@ authors:
 总之，这次经历着实是令人难忘，更加值得梳理和总结经验，为明年的比赛作准备。
 
 
+
 {{< alert icon="circle-info" cardColor="#b0c4de" textColor="#333333" >}}
 CUMCM 全称为 Chinese Undergraduate Mathmatical Contest in Modeling；民间称呼为“数模国赛”
 {{< /alert >}}
+
 
 ## 用词说明
 
@@ -114,9 +117,11 @@ CUMCM 全称为 Chinese Undergraduate Mathmatical Contest in Modeling；民间�
 	- 重点检查**个人信息**
 
 
+
 {{< alert icon="fire" cardColor="#e63946" iconColor="#ffffff" textColor="#ffffff" >}}
 比赛论文中**不能保留任何个人信息**，包括代码中的文件路径，例如 `C:\Users\Morethan` ；保留个人信息是非常严重的错误！
 {{< /alert >}}
+
 
 ### 实战效果
 
@@ -125,7 +130,7 @@ CUMCM 全称为 Chinese Undergraduate Mathmatical Contest in Modeling；民间�
 - 有效用时：
 	- 比赛总时长三天，共计 72 小时
 	- 队伍从早上七点到晚上八点，除开吃饭用时，一天的有效时间为 12 个小时
-	- 时间利用率为 {{< katex >}}\\(50\\%\\)（对比之下很低🤔）
+	- 时间利用率为 \\(50\\%\\)（对比之下很低🤔）
 - 最终完成工作：
 	- 论文主体 28 页 A4 纸
 	- 代码部分 35 页 A4 纸，除开每一个小题之间的复用代码，应该有 20 页左右
@@ -205,9 +210,11 @@ CUMCM 全称为 Chinese Undergraduate Mathmatical Contest in Modeling；民间�
 - 代码并行化：在代码中添加一些可并行的代码，提高运行速度
 
 
+
 {{< alert icon="triangle-exclamation" cardColor="#ffcc00" textColor="#333333" iconColor="#8B6914" >}}
 所有代码方面的改进最终落实为一个文档！不能光喊口号！
 {{< /alert >}}
+
 
 - 落实后的方案：[代码协同方案]({{< ref "/blog/code-collaboration-scheme/" >}})
 

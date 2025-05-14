@@ -15,6 +15,7 @@ lastmod: 2025-01-15
 authors:
   - Morethan
 ---
+{{< katex >}}
 
 ## Preface
 
@@ -27,9 +28,11 @@ There were moments of excitement and surprise, as well as disappointment; we mus
 In short, this experience is truly unforgettable, and it is even more worth summarizing and learning from the experience to prepare for next year's competition.
 
 
+
 {{< alert icon="circle-info" cardColor="#b0c4de" textColor="#333333" >}}
 CUMCM stands for Chinese Undergraduate Mathematical Contest in Modeling; it is commonly referred to as the "National Mathematical Modeling Competition".
 {{< /alert >}}
+
 
 ## Terminology Explanation
 
@@ -115,9 +118,11 @@ The paper writing part is divided into:
 	- Focus on checking **personal information**
 
 
+
 {{< alert icon="fire" cardColor="#e63946" iconColor="#ffffff" textColor="#ffffff" >}}
 Personal information must not be retained in the competition paper, including file paths in the code, such as `C:\Users\Morethan`; retaining personal information is a very serious mistake!
 {{< /alert >}}
+
 
 ### Actual Combat Effectiveness
 
@@ -126,7 +131,7 @@ When we applied the above strategies to the actual combat process, that is, the 
 - Effective Time:
 	- The total duration of the competition is three days, a total of 72 hours
 	- The team works from seven in the morning to eight in the evening, excluding meal times, with an effective time of 12 hours a day
-	- Time utilization rate is {{< katex >}}\\(50\\%\\) (quite low in comparison🤔)
+	- Time utilization rate is \\(50\\%\\) (quite low in comparison🤔)
 - Completed Work:
 	- The main body of the paper is 28 A4 pages
 	- The code part is 35 A4 pages, excluding the reused code between each sub-question, there should be about 20 pages
@@ -207,9 +212,11 @@ When we applied the above strategies to the actual combat process, that is, the 
 - Code parallelization: Add some parallelizable code to the code to increase running speed
 
 
+
 {{< alert icon="triangle-exclamation" cardColor="#ffcc00" textColor="#333333" iconColor="#8B6914" >}}
 All code improvements must be implemented in a document! Not just slogans!
 {{< /alert >}}
+
 
 - The final output: [Code Collaboration Scheme]({{< ref "/blog/code-collaboration-scheme/" >}})
 
@@ -224,9 +231,11 @@ All code improvements must be implemented in a document! Not just slogans!
 	- Improvements in language style, text readability, detail, illustration logic, and image readability, etc.
 
 
+
 {{< alert icon="triangle-exclamation" cardColor="#ffcc00" textColor="#333333" iconColor="#8B6914" >}}
 The results are fixed in the form of comments in the LaTeX template!
 {{< /alert >}}
+
 
 ## Summary
 

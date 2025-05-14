@@ -15,6 +15,7 @@ lastmod: 2025-01-20
 authors:
   - Morethan
 ---
+{{< katex >}}
 {{< lead >}}
 总结 CUMCM2024 比赛经验，针对数学建模国赛 A 题和MATLAB改进的代码协同方案
 {{< /lead >}}
@@ -44,7 +45,7 @@ id1("工作分配")-->id2("VS Code协同")-->id3("MATLAB代码执行");
 ### 命名规范
 
 1. 主函数统一命名为 `main`：能够直接计算出最终答案的叫主函数，其他的都叫辅助函数
-3. 数据加工代码：数据加工代码指的是没有任何返回值，仅仅产生数据表格的代码，用 `data` 开头，例如：将太阳高度角 {{< katex >}}\\(\\phi\\) 转化为余弦值，`dataCosPhi`
+3. 数据加工代码：数据加工代码指的是没有任何返回值，仅仅产生数据表格的代码，用 `data` 开头，例如：将太阳高度角 \\(\\phi\\) 转化为余弦值，`dataCosPhi`
 4. 内部数据转换代码，用 `to` 连接，例如将自然坐标系中点的坐标转化为直角坐标系中点的坐标 `StoXY`
 5. 绘图代码：绘制图形的代码，用 `fig` 开头
 6. 测试代码：`test` 开头
@@ -77,17 +78,21 @@ run('config.m');
 ```
 
 
+
 {{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
 尽管参数被转移到了其他地方但是 VS Code 仍然能够进行自动检测并给出补全提示！
 {{< /alert >}}
+
 
 #### 函数内部使用的参数
 
 函数内部所有使用的变量都应该在主程序开始之前明确定义，并在变量后添加简要的中文注释；
 
+
 {{< alert icon="triangle-exclamation" cardColor="#ffcc00" textColor="#333333" iconColor="#8B6914" >}}
 如果有一些表达相同含义的参数在多个文件中使用，请使用统一的命名，尤其是 AI 生成的代码，请在 VS Code 中使用 `F2` 进行重命名
 {{< /alert >}}
+
 ### 代码格式化
 
 代码的格式化主要通过官方的 `MATLAB` 插件来执行。安装插件之后，按快捷键 `Shift+Alt+F` 即可格式化代码。
@@ -129,9 +134,11 @@ run('config.m');
 - **并行运行**
 MATLAB 能够支持多线程计算，仅需将一般的 `for` 循环改写为 `parfor` 即可
 
+
 {{< alert icon="triangle-exclamation" cardColor="#ffcc00" textColor="#333333" iconColor="#8B6914" >}}
 parfor 函数的执行要求十分严格，具体参阅[官方说明](https://ww2.mathworks.cn/help/parallel-computing/parfor.html)
 {{< /alert >}}
+
 ### 大型表格处理
 
 模型计算的输出往往是一个超大型数据表格，并且存储在 `.mat` 文件中，难以进行数据的快速提取。

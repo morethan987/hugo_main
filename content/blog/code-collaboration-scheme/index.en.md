@@ -15,7 +15,7 @@ lastmod: 2025-01-20
 authors:
   - Morethan
 ---
-
+{{< katex >}}
 {{< lead >}}  
 Summary of CUMCM 2024 competition experience, focusing on the A problem and the collaborative approach with MATLAB code improvement  
 {{< /lead >}}
@@ -44,7 +44,7 @@ There are two key points:
 ### Naming Conventions
 
 1. Main function should be uniformly named `main`: The main function is the one that directly computes the final result, while others should be called auxiliary functions.
-2. Data processing code: This refers to code that does not return any value but generates data tables. It should start with `data`, e.g., converting solar altitude angle {{< katex >}}\\(\\phi\\) to cosine value, `dataCosPhi`.
+2. Data processing code: This refers to code that does not return any value but generates data tables. It should start with `data`, e.g., converting solar altitude angle \\(\\phi\\) to cosine value, `dataCosPhi`.
 3. Internal data conversion code: This should start with `to`, e.g., converting coordinates from a natural coordinate system to a Cartesian coordinate system `StoXY`.
 4. Plotting code: Code related to plotting graphs should start with `fig`.
 5. Testing code: Should start with `test`.
@@ -77,18 +77,22 @@ run('config.m');
 ```
 
 
+
 {{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
 Even the parameters are transformed into another file, the VS Code can also recognizes it and provide complement suggestion.
 {{< /alert >}}
+
 
 #### Function-Internal Parameters
 
 All variables used within a function should be explicitly defined at the beginning of the function and should include brief Chinese comments.
 
 
+
 {{< alert icon="triangle-exclamation" cardColor="#ffcc00" textColor="#333333" iconColor="#8B6914" >}}
 If similar parameters are used across multiple files, make sure to use consistent naming, especially in AI-generated code. Use `F2` in VS Code to rename them.
 {{< /alert >}}
+
 
 ### Code Formatting
 
@@ -132,9 +136,11 @@ In order to develop a project as fast and well-defined as possible, I have creat
     MATLAB supports multi-threaded computing. You can convert a typical `for` loop to a `parfor` loop for parallel execution.
 
 
+
 {{< alert icon="triangle-exclamation" cardColor="#ffcc00" textColor="#333333" iconColor="#8B6914" >}}
 The execution of `parfor` functions is subject to strict requirements. Please refer to the [official documentation](https://ww2.mathworks.cn/help/parallel-computing/parfor.html) for more details.
 {{< /alert >}}
+
 
 ### Huge Table Process
 
