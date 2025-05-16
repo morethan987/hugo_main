@@ -219,6 +219,7 @@ ON s.class_id = c.id;
 ```
 
 - **外连接**，有三种，修饰语为 `RIGHT`，`LEFT`，`FULL`：
+
 ```sql
 -- 使用RIGHT OUTER JOIN:
 SELECT s.id, s.name, s.class_id, c.name class_name, s.gender, s.score

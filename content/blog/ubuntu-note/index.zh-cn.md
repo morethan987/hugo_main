@@ -212,7 +212,8 @@ sudo apt full-upgrade # 完全升级
 sudo do-release-upgrade # 跨ubuntu大版本升级
 
 # 查看软件包
-sudo apt-cache search wps # 查看包含关键字wps的软件包
+sudo apt-cache search wps # 搜索所有包含wps的软件包及其描述信息
+sudo apt-cache pkgnames | grep -i wps # 查看包含关键字wps的软件包名字
 
 # 移除软件包
 sudo apt remove xxx
@@ -297,6 +298,25 @@ snap list --all | awk '/disabled|已禁用/{print $1, $3}' | while read snapname
 # 清理内核
 sudo dpkg --list | grep linux-image # 列出所有内核
 sudo apt autoremove --purge # 自动清除不需要的内核
+```
+
+## 其他
+
+这里包含了一些简单而常用的命令
+
+### 解压
+
+命令根据你需要解压的文件格式而变动
+
+```bash
+# 解压zip文件
+unzip file.zip -d /target/directory
+
+# 解压.tar文件
+tar -xvf file.tar
+
+# 解压.tar.gz文件
+tar -xzvf file.tar.gz
 ```
 
 ## 引用文献

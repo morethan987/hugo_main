@@ -213,8 +213,11 @@ sudo apt upgrade
 sudo apt full-upgrade # Full upgrade  
 sudo do-release-upgrade # Upgrade across major Ubuntu versions  
 
-# check packages
-sudo apt-cache search wps # check packages with key word wps
+# Check software packages
+# Search for all packages containing "wps" and their description information
+sudo apt-cache search wps
+# View package names containing the keyword "wps"
+sudo apt-cache pkgnames | grep -i wps
 
 # Remove packages  
 sudo apt remove xxx  
@@ -300,6 +303,25 @@ snap list --all | awk '/disabled|已禁用/{print $1, $3}' | while read snapname
 sudo dpkg --list | grep linux-image # List all kernels  
 sudo apt autoremove --purge # Automatically remove unnecessary kernels  
 ```  
+
+## Miscellaneous  
+
+This section includes some simple yet commonly used commands.  
+
+### Extracting Files  
+
+The command varies depending on the file format you need to extract.  
+
+```bash  
+# Extract a .zip file  
+unzip file.zip -d /target/directory  
+
+# Extract a .tar file  
+tar -xvf file.tar  
+
+# Extract a .tar.gz file  
+tar -xzvf file.tar.gz  
+```
 
 ## References  
 
