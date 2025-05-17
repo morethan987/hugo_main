@@ -10,7 +10,7 @@ series:
   - 技术杂项
 series_order: 2
 date: 2024-08-10
-lastmod: 2025-05-11
+lastmod: 2025-05-17
 authors:
   - Morethan
 ---
@@ -255,6 +255,8 @@ pip install uv # 使用pip安装uv
 ```bash
 ########## 查看环境信息 ##########
 
+arch # 查看系统架构
+
 conda --version # 获取conda版本号
 
 python --version # 获取python版本号
@@ -309,6 +311,22 @@ conda clean --all
 # 根据文件中的列表安装包
 conda install -f requirements.txt
 ```
+
+手动安装依赖包，用于应对极端断网情况：
+
+```bash
+# 直接使用pip download命令下载所有相关whl文件
+pip download scikit-image --dest ./scikit_image_files --only-binary :all: --python-version 3.13 --platform manylinux_2_17_x86_64 --implementation cp --abi cp313
+
+# 手动传输到服务器上，切到对应文件夹然后运行，注意whl
+# --find-links指定whl所在的文件夹
+pip install scikit_image-0.25.2-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl --no-index --find-links=./
+```
+
+
+{{< alert icon="triangle-exclamation" cardColor="#ffcc00" textColor="#333333" iconColor="#8B6914" >}}
+注意不要改 whl 文件的名字😢
+{{< /alert >}}
 
 ## VS免密登录
 

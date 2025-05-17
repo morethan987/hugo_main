@@ -10,7 +10,7 @@ series:
   - Technical Miscellany
 series_order: 2
 date: 2024-08-10
-lastmod: 2025-05-11
+lastmod: 2025-05-17
 authors:
   - Morethan
 ---
@@ -250,29 +250,31 @@ I personally don't use Conda much for environment management, but since many lab
 
 The following commands are fundamental for checking environment information. They’re typically used when accessing a new server environment or troubleshooting environment-related issues.  
 
-```bash  
-########## Checking Environment Information ##########  
+```bash
+########## Checking Environment Information ##########
 
-conda --version # Get the Conda version  
+arch # View the system architecture
 
-python --version # Get the Python version  
+conda --version # Get the Conda version
 
-conda env list # List all available environments  
+python --version # Get the Python version
 
-conda activate xxx # Activate the virtual environment named "xxx"  
+conda env list # List all available environments
 
-conda deactivate # Exit the current virtual environment  
+conda activate xxx # Activate the virtual environment named "xxx"
 
-whereis python # Check the location of Python in the currently activated environment  
+conda deactivate # Exit the current virtual environment
 
-nvidia-smi # Check CUDA status (not a Conda command but frequently used)  
+whereis python # Check the location of Python in the currently activated environment
 
-conda config --show channels # View Conda's download sources  
+nvidia-smi # Check CUDA status (not a Conda command but frequently used)
 
-conda remove -n xxx # Delete the virtual environment named "xxx"  
+conda config --show channels # View Conda's download sources
 
-conda create -n env_name # Create a virtual environment with the specified name, using the default Python version  
-```  
+conda remove -n xxx # Delete the virtual environment named "xxx"
+
+conda create -n env_name # Create a virtual environment with the specified name, using the default Python version
+```
 
 Adding domestic (Chinese) download sources:  
 
@@ -281,13 +283,13 @@ conda config --show channels # View Conda's download sources
 
 # Add Tsinghua's mirror source  
 conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/msys2  
-```  
+```
 
-Managing Python packages:  
+Managing Python packages:
 
 ```bash  
-# Install a specific package  
-conda install package_name  
+# Install a specific package
+conda install package_name
 
 # Remove a specific package  
 conda remove package_name  
@@ -307,6 +309,22 @@ conda clean --all
 # Install packages from a requirements.txt file  
 conda install -f requirements.txt  
 ```  
+
+Manual installation of dependency packages for handling extreme offline situations:
+
+```bash
+# Directly use pip download command to download all related whl files
+pip download scikit-image --dest ./scikit_image_files --only-binary :all: --python-version 3.13 --platform manylinux_2_17_x86_64 --implementation cp --abi cp313
+
+# Manually transfer to the server, switch to the target folder, and run (note the whl files)
+# --find-links specifies the folder containing the whl files
+pip install scikit_image-0.25.2-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl --no-index --find-links=./
+```
+
+
+{{< alert icon="triangle-exclamation" cardColor="#ffcc00" textColor="#333333" iconColor="#8B6914" >}}
+Do not rename the whl files 😢
+{{< /alert >}}
 
 ## Passwordless Login via VSCode  
 
