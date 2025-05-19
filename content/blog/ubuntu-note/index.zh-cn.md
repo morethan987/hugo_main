@@ -232,6 +232,34 @@ sudo apt remove xxx
 sudo apt autoremove # 清理残留
 ```
 
+### AppImage
+
+**AppImage** 是一种用于 Linux 系统的便携式软件打包格式，旨在简化应用程序的分发和运行。它的核心思想是“一个应用 = 一个文件”，用户无需安装或管理员权限即可直接运行应用程序。
+
+在较新的 Ubuntu 版本中，直接运行该文件会出现报错，需要额外安装 `libfuse2`，使用如下命令即可：
+
+```bash
+sudo apt install libfuse2
+```
+
+然后双击软件包就能启动了😃
+
+
+{{< alert icon="fire" cardColor="#e63946" iconColor="#ffffff" textColor="#ffffff" >}}
+千万不要直接安装 fuse ，这会自动卸载 fuse3，导致新版本的 Ubuntu 文件系统崩溃！如果不小心安装了，请移除 fuse，然后查看 apt 的操作日志，将自动卸载的包手动重新安装回来！
+{{< /alert >}}
+
+如果你想卸载软件的话，也非常方便：直接把软件包删除就行了。当然，如果你和我一样有"洁癖"，可以去检查下面的这些目录，彻底清除残留：
+
+```bash
+ls ~/.config -a # 查看配置文件
+
+ls ~/.local/share -a # 查看共享配置文件
+
+ls ~/.cache -a # 查看缓存
+du -sh ~/.cache/* | sort -h -r # 查看.cache目录下各个文件夹的磁盘占用
+```
+
 ### curl
 
 通过 curl 命令直接从目标网址下载安装脚本，然后执行这个脚本。通过 curl 安装的软件可管理性较差，原因在于：实际的安装过程是通过脚本执行的，这个过程难以监控

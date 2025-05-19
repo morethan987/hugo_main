@@ -236,6 +236,35 @@ sudo apt remove xxx
 sudo apt autoremove # Clean up residuals  
 ```  
 
+### AppImage  
+
+**AppImage** is a portable software packaging format for Linux systems, designed to simplify application distribution and execution. Its core philosophy is "one app = one file," allowing users to run applications directly without installation or administrator privileges.
+
+In newer versions of Ubuntu, attempting to run the file directly may result in an error. To resolve this, you need to install `libfuse2` using the following command:
+
+```bash
+sudo apt install libfuse2
+```
+
+After installation, you can simply double-click the package to launch the application 😃.
+
+
+{{< alert icon="fire" cardColor="#e63946" iconColor="#ffffff" textColor="#ffffff" >}}
+**Never install fuse directly**, as this will automatically uninstall fuse3, causing the file system in newer Ubuntu versions to crash! If you accidentally install it, remove fuse and check the apt operation log to manually reinstall any automatically removed packages.
+{{< /alert >}}
+
+If you want to uninstall the software, it’s very straightforward: just delete the package. However, if you’re a perfectionist like me, you can check the following directories to completely clean up any residual files:
+
+```bash
+ls ~/.config -a # Check configuration files
+
+ls ~/.local/share -a # Check shared configuration files
+
+ls ~/.cache -a # Check cache
+# Check disk usage of folders under .cache
+du -sh ~/.cache/* | sort -h -r
+```
+
 ### curl  
 
 Download and execute installation scripts directly from a URL using `curl`. Software installed this way is harder to manage because the actual installation process is script-driven and difficult to monitor.  
