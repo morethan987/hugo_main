@@ -314,7 +314,17 @@ sudo reboot # 重启系统
 - 升级策略文件：`/etc/update-manager/release-upgrades`
 - 软件源配置文件：`/etc/apt/sources.list.d/ubuntu.sources`
 
-至于具体要如何改这些文件，问问大模型才是最保险的😃
+如果你想从 LTS 版本升级为非 LTS 版本，那么就需要更改策略文件。策略文件中其实也只有一行，改成下面的样子就行：
+
+```txt
+Prompt=normal
+```
+
+接下来修改软件源配置文件，运行如下命令：
+
+```bash
+sudo sed -i 's/noble/oracular/g' /etc/apt/sources.list.d/ubuntu.sources
+```
 
 文件修改完成之后：
 

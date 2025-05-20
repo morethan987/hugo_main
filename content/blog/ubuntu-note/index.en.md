@@ -319,7 +319,24 @@ The logic is straightforward: point the old version’s software sources to thos
 - Upgrade policy file: `/etc/update-manager/release-upgrades`  
 - Software sources configuration file: `/etc/apt/sources.list.d/ubuntu.sources`  
 
-As for how exactly to modify these files, consulting a large language model is the safest bet. 😃  
+If you want to upgrade from an LTS version to a non-LTS version, you'll need to modify the policy file. The policy file actually contains just one line—change it to the following:  
+
+```txt  
+Prompt=normal  
+```  
+
+Next, modify the software source configuration file by running the following command:  
+
+```bash  
+sudo sed -i 's/noble/oracular/g' /etc/apt/sources.list.d/ubuntu.sources  
+```  
+
+After modifying the file, execute:  
+
+```bash  
+# Refresh the package index and perform a full upgrade, including the kernel, drivers, and all packages  
+sudo apt update && sudo apt full-upgrade -y  
+```
 
 After modifying the files:  
 
