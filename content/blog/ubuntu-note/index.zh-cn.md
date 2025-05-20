@@ -11,7 +11,7 @@ series:
   - 技术杂项
 series_order: 7
 date: 2025-05-01
-lastmod: 2025-05-13
+lastmod: 2025-05-20
 authors:
   - Morethan
 ---
@@ -276,6 +276,66 @@ curl -f https://zed.dev/install.sh -o install.sh
 # 然后按照AI的指令手动进行卸载
 ```
 
+## 大版本更新
+
+进行大版本的更新对于服务器 OS 来说是完全没有必要的，因为相关套件一般都还没有跟上，追逐"最新版本"并不明智。但是对于桌面版用户来说还是很有用的，毕竟更新之后就能体验最新的系统特性，说白了就是好玩儿🤓
+
+这部分主要参考微信公众号：[如何从 Ubuntu 24.04 升级到 Ubuntu 25.04](https://mp.weixin.qq.com/s/HS95K9hohyTHNt6y9Jroew)
+
+### 数据备份
+
+这一步是非常有必要的，虽然说可能会占用好几十个 G 的硬盘空间，但毕竟大版本更新还是一个有风险的操作，不怕一万就怕万一😅升级成功后再删除备份，释放空间也行啊
+
+```bash
+# 安装备份工具
+sudo apt install dejia-dup
+
+# 直接运行
+dejia-dup
+```
+
+### 更新软件包
+
+确保系统处于最新状态可以最大程度上减少兼容性问题，逐条运行下面命令即可：
+
+```bash
+sudo apt update
+sudo apt full-upgrade
+sudo apt autoremove
+sudo apt autoclean
+
+sudo reboot # 重启系统
+```
+
+### 版本更新
+
+逻辑很直接：把旧版本相关软件源指向新版本对应的软件源就行，下面罗列一些相关文件，如有修改就需要改这些文件：
+
+- 升级策略文件：`/etc/update-manager/release-upgrades`
+- 软件源配置文件：`/etc/apt/sources.list.d/ubuntu.sources`
+
+至于具体要如何改这些文件，问问大模型才是最保险的😃
+
+文件修改完成之后：
+
+```bash
+# 刷新索引并执行完整更新，包括内核、驱动和所有软件包
+sudo apt update && sudo apt full-upgrade -y
+```
+
+
+{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
+其中的 `-y` 选项是"自动确认"的意思，如果你想手动输入 yes 的话可以不加😃我反正不想
+{{< /alert >}}
+
+升级完成后：
+
+```bash
+sudo reboot # 重启系统应用更改
+
+lsb_release -a # 验证系统版本
+```
+
 ## Office套件
 
 众所周知，Microsoft Office 是没法直接在 Linux 上直接运行的😅但是查看和编辑 `doc` 文档又是无法避免的。
@@ -331,6 +391,12 @@ sudo apt autoremove --purge # 自动清除不需要的内核
 ## 其他
 
 这里包含了一些简单而常用的命令
+
+### 系统控制
+
+- 立刻关机：`shutdown now`
+
+- 立即重启：`sudo reboot`
 
 ### 解压
 

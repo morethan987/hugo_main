@@ -11,7 +11,7 @@ series:
   - Technical Miscellany
 series_order: 7
 date: 2025-05-01
-lastmod: 2025-05-13
+lastmod: 2025-05-20
 authors:
   - Morethan
 ---
@@ -281,6 +281,66 @@ curl -f https://zed.dev/install.sh -o install.sh
 # Then follow the AI’s instructions to manually uninstall  
 ```  
 
+## Major Version Updates  
+
+Performing major version updates is completely unnecessary for server OSes, as the related software packages usually haven't caught up yet. Chasing the "latest version" isn’t wise. However, for desktop users, it’s quite useful—after all, updating allows them to experience the newest system features. In short, it’s just for fun. 🤓  
+
+This section primarily references the WeChat public article: [How to Upgrade from Ubuntu 24.04 to Ubuntu 25.04](https://mp.weixin.qq.com/s/HS95K9hohyTHNt6y9Jroew).  
+
+### Data Backup  
+
+This step is essential. Although it might take up dozens of gigabytes of disk space, a major version update is still a risky operation. Better safe than sorry. 😅 You can always delete the backup and free up space after a successful upgrade.  
+
+```bash  
+# Install the backup tool  
+sudo apt install deja-dup  
+
+# Run directly  
+deja-dup  
+```  
+
+### Update Software Packages  
+
+Ensuring the system is up to date minimizes compatibility issues. Execute the following commands one by one:  
+
+```bash  
+sudo apt update  
+sudo apt full-upgrade  
+sudo apt autoremove  
+sudo apt autoclean  
+
+sudo reboot # Reboot the system  
+```  
+
+### Version Upgrade  
+
+The logic is straightforward: point the old version’s software sources to those of the new version. Below are some relevant files that may need modification:  
+
+- Upgrade policy file: `/etc/update-manager/release-upgrades`  
+- Software sources configuration file: `/etc/apt/sources.list.d/ubuntu.sources`  
+
+As for how exactly to modify these files, consulting a large language model is the safest bet. 😃  
+
+After modifying the files:  
+
+```bash  
+# Refresh the index and perform a full upgrade, including the kernel, drivers, and all packages  
+sudo apt update && sudo apt full-upgrade -y  
+```  
+
+
+{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
+The `-y` option means "automatic confirmation." If you prefer to manually type "yes," you can omit it. 😃 Personally, I’d rather not.
+{{< /alert >}}
+
+After the upgrade completes:  
+
+```bash  
+sudo reboot # Reboot to apply changes  
+
+lsb_release -a # Verify the system version  
+```
+
 ## Office Suite  
 
 As we all know, Microsoft Office cannot run directly on Linux 😅. However, viewing and editing `doc` files is often unavoidable.  
@@ -336,6 +396,20 @@ sudo apt autoremove --purge # Automatically remove unnecessary kernels
 ## Miscellaneous  
 
 This section includes some simple yet commonly used commands.  
+
+### System Control  
+
+- Shut down immediately:  
+
+```bash
+  shutdown now
+```  
+
+- Restart immediately:  
+
+```bash
+  sudo reboot
+```
 
 ### Extracting Files  
 
