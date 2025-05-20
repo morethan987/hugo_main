@@ -288,10 +288,10 @@ curl -f https://zed.dev/install.sh -o install.sh
 
 ```bash
 # 安装备份工具
-sudo apt install dejia-dup
+sudo apt install deja-dup
 
 # 直接运行
-dejia-dup
+deja-dup
 ```
 
 ### 更新软件包
