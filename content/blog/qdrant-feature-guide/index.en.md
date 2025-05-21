@@ -234,7 +234,7 @@ In discovery search, contextual constraints are **enforced** with higher priorit
 
 This operation resembles batch search. Batch search inputs multiple vectors and searches for similar vectors for each. Distance matrix randomly selects a **subset of vectors**, then searches for similar vectors within this subset for each vector.  
 
-For example, if `sample=100` vectors are selected to form a subset, and `limit=10` similar vectors are searched for each, the returned distance matrix will be a \\(100 \\times 10\\) matrix, where each row represents the top 10 similar vectors for one point.  
+For example, if `sample=100` vectors are selected to form a subset, and `limit=10` similar vectors are searched for each, the returned distance matrix will be a \(100 \times 10\) matrix, where each row represents the top 10 similar vectors for one point.  
 
 This operation is typically used for data visualization or dimensionality reduction.  
 

@@ -44,7 +44,7 @@ There are two key points:
 ### Naming Conventions
 
 1. Main function should be uniformly named `main`: The main function is the one that directly computes the final result, while others should be called auxiliary functions.
-2. Data processing code: This refers to code that does not return any value but generates data tables. It should start with `data`, e.g., converting solar altitude angle \\(\\phi\\) to cosine value, `dataCosPhi`.
+2. Data processing code: This refers to code that does not return any value but generates data tables. It should start with `data`, e.g., converting solar altitude angle \(\phi\) to cosine value, `dataCosPhi`.
 3. Internal data conversion code: This should start with `to`, e.g., converting coordinates from a natural coordinate system to a Cartesian coordinate system `StoXY`.
 4. Plotting code: Code related to plotting graphs should start with `fig`.
 5. Testing code: Should start with `test`.

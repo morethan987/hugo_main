@@ -31,9 +31,11 @@ authors:
 Search for a Linux distribution in the `Windows App Store` and download it. The author chose `Kali`. After installation, you can open it directly from the Start menu. Upon opening, a command-line window will pop up, and you will need to register with a username and password.
 
 
+
 {{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
 At this point, your command line should display a warning. This is because you haven’t installed WSL (Windows Subsystem for Linux). Also, when entering the password, your input will not be displayed in the command line, but it has been recorded.
 {{< /alert >}}
+
 
 Why do you need a Linux system? Because OverLeaf's ShareLaTeX model requires a Linux environment. It is said that OverLeaf runs more smoothly on Linux systems.
 
@@ -89,9 +91,11 @@ Now open a browser and visit `http://localhost/launchpad`.
 After registering an Administrator Account, you will be redirected to `http://localhost/project`. The basic OverLeaf webpage should now be displayed.
 
 
+
 {{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
 If you compile now, it will most likely report an error `ᕕ( ᐛ )ᕗ`. This is because ShareLaTeX is missing many required packages🙃
 {{< /alert >}}
+
 
 ### Installing Extension Packages
 
@@ -156,16 +160,20 @@ vim /usr/local/texlive/2023/texmf.cnf
 Open the configuration file and add `shell_escape = t` at the bottom.
 
 
+
 {{< alert icon="circle-info" cardColor="#b0c4de" textColor="#333333" >}}
 I’m not sure what this does, but it was passed down by the predecessors 🤔
 {{< /alert >}}
 
+
 Note, if the TeX Live version (the official name for extension packages) differs, the directory path may also change. You will need to adjust the path based on the actual version, for example, change `2023` to `2024`.
+
 
 
 {{< alert icon="circle-info" cardColor="#b0c4de" textColor="#333333" >}}
 You can use `ls -l` in the Linux command line to view all files in the current directory.
 {{< /alert >}}
+
 
 ## Successful Deployment
 

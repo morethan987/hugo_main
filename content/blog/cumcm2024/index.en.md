@@ -131,7 +131,7 @@ When we applied the above strategies to the actual combat process, that is, the 
 - Effective Time:
 	- The total duration of the competition is three days, a total of 72 hours
 	- The team works from seven in the morning to eight in the evening, excluding meal times, with an effective time of 12 hours a day
-	- Time utilization rate is \\(50\\%\\) (quite low in comparison🤔)
+	- Time utilization rate is \(50\%\) (quite low in comparison🤔)
 - Completed Work:
 	- The main body of the paper is 28 A4 pages
 	- The code part is 35 A4 pages, excluding the reused code between each sub-question, there should be about 20 pages

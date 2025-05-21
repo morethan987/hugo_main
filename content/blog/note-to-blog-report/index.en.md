@@ -9,7 +9,7 @@ tags:
   - Blog
   - Report
 series:
-  - Project Report
+  - Project Reports
 series_order: 1
 date: 2025-01-10
 lastmod: 2025-01-21
