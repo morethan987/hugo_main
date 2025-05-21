@@ -242,6 +242,12 @@ sudo apt autoremove # 清理残留
 sudo apt install libfuse2
 ```
 
+然后对软件包提权：
+
+```bash
+chmod +x file_name.AppImage
+```
+
 然后双击软件包就能启动了😃
 
 

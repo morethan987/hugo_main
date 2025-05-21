@@ -246,6 +246,12 @@ In newer versions of Ubuntu, attempting to run the file directly may result in a
 sudo apt install libfuse2
 ```
 
+Then grant executable permissions to the AppImage package:
+
+```bash
+chmod +x file_name.AppImage
+```
+
 After installation, you can simply double-click the package to launch the application 😃.
 
 
