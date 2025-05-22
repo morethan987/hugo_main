@@ -201,7 +201,15 @@ Simply open the Snap store to install software effortlessly, though the packages
 
 ### apt  
 
-```bash  
+```bash
+# Software source operations can be performed graphically in the desktop version via "Software & Updates"
+
+# Add a software source
+sudo add-apt-repository ppa:libreoffice/ppa && sudo apt update
+
+# Remove a software source
+sudo add-apt-repository --remove ppa:libreoffice/ppa
+
 # Install software  
 sudo apt install xxx  
 

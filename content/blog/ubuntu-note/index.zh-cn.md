@@ -200,6 +200,13 @@ git remote add origin git@github.com:username/repository.git
 ### apt
 
 ```bash
+# 软件源的相关操作在桌面版中可以在"软件与更新"中进行图形化操作
+# 添加软件源
+sudo add-apt-repository ppa:libreoffice/ppa && sudo apt update
+
+# 移除软件源
+sudo add-apt-repository --remove ppa:libreoffice/ppa
+
 # 安装软件
 sudo apt install xxx
 
