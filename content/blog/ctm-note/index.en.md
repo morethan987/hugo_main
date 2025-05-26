@@ -259,7 +259,7 @@ In the section introducing the "internal temporal dimension," the paper emphasiz
 
 "Unlike traditional sequence models (e.g., RNNs or Transformers)—which process inputs sequentially (e.g., words in a sentence or frames in a video)—CTM operates along an autonomously generated internal thought timeline."  
 
-Combining the [interactive webpage](https://pub.sakana.ai/ctm)'s detailed videos and text, I realized something astonishing, as noted at the end of the [循环权重：突触模型]({{< relref "#循环权重突触模型" >}}) section:  
+Combining the [interactive webpage](https://pub.sakana.ai/ctm) 's detailed videos and text, I realized something astonishing, as noted at the end of the [Recurrent Weights Synaptic Model]({{< relref "#recurrent-weights-synaptic-model" >}}) section:  
 
 \(z^t\) is not the input data at time step \(t\)! As shown in the diagram, the entire computation flow hardly involves input data—only when computing \(o^t\) (the orange block) does external input data participate.  
 
