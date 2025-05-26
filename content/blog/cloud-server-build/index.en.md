@@ -86,9 +86,23 @@ No other reason, mainly because it's cheap, only ￥88 for the first year.
 
 ### Register a Domain
 
+There are plenty of tutorials online, so I won’t go into detail here. Just pick a domain registrar you trust, and you’re good to go.
+
+Not sure what a domain name is? Here’s my simple way of putting it: Do you remember your apartment’s full official address? Probably not. But you definitely remember the name of your apartment complex, right? A domain name is kind of like that—easy to remember.
+
+Of course, if you’re a big company, it’s also about looking impressive 😄
+
 ### Set Up DNS Resolution
 
+DNS resolution is usually a service provided by your domain registrar. When you buy a domain, they’ll typically throw in a free DNS resolution service. It’s a basic version, sure—but hey, it works👌
+
+So what is DNS resolution exactly? Think of a domain name like the name of your apartment complex. It makes perfect sense to you, but outsiders probably have no idea where that is. DNS acts like a translator—it turns your apartment complex's name into the full official address: Province XX, City XX, Street XX...
+
+That way, even people from out of town can find your place and drop by without getting lost.
+
 ### Purchase a Cloud Server
+
+Just buy it from a cloud server provider—this service system is already well-established. Nothing more to say. 😅  
 
 ### Configure the Server
 
@@ -345,3 +359,11 @@ If you're based in China, here's another issue: Certbot can't reach your server 
 - [The Certificate Authority Failed to Download the Temporary Challenge Files Created by Certbot -- Connection Refused - Help - Let's Encrypt Community Support](https://community.letsencrypt.org/t/the-certificate-authority-failed-to-download-the-temporary-challenge-files-created-by-certbot-connection-refused/159426/26)
 - [ICP Filing First Filing - Tencent Cloud](https://cloud.tencent.com/document/product/243/97668)
 - [ICP Filing Requirements by Province - Tencent Cloud](https://cloud.tencent.com/document/product/243/3474)
+- [Complete Tencent Cloud Server Filing Process: 40 Days of Painful Experience - Zheng Weizhong - CNBlogs](https://www.cnblogs.com/yyzwz/p/13393223.html)
+- [ICP Filing and Public Security Filing Process - Tencent Cloud](https://cloud.tencent.com/document/product/243/19142)
+- [ICP Filing Video Verification - Tencent Cloud](https://cloud.tencent.com/document/product/243/34945)
+- [In-Depth Analysis of npm Cache: Understanding, Usage, and Clearing Guide_npm Clear Cache - CSDN Blog](https://blog.csdn.net/2401_85762266/article/details/140127881)
+- [Deploying a Web Application with Docker - Zhihu](https://zhuanlan.zhihu.com/p/26418829)
+- [Why Do HTTPS Requests Get Downgraded to HTTP? - CSDN Blog](https://blog.csdn.net/weixin_43947690/article/details/88295278)
+- [HTTPS Redirected to HTTP—Risk Control-CSDN Blog](https://blog.csdn.net/zhuye1992/article/details/80496151?spm=1001.2101.3001.6650.4&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-4-80496151-blog-88295278.235%5Ev43%5Econtrol&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-4-80496151-blog-88295278.235%5Ev43%5Econtrol&utm_relevant_index=9)
+- [How to Fill Out the Public Security Network Filing — Guide to Public Security Network Filing Information_Filing Service - Alibaba Cloud Help Center](https://help.aliyun.com/zh/icp-filing/basic-icp-service/the-public-security-network-for-the-record-information-fill-in-the-guide#:~:text=%E8%8B%A5%E6%82%A8%E5%8A%9E%E7%90%86%E5%85%AC%E5%AE%89%E8%81%94%E7%BD%91%E5%A4%87%E6%A1%88%E7%9A%84%E5%9F%9F%E5%90%8D%E6%98%AF%E9%80%9A%E8%BF%87%E9%98%BF%E9%87%8C%E4%BA%91%E6%B3%A8%E5%86%8C%EF%BC%8C%E5%8D%95%E5%87%BB%20%E6%9F%A5%E8%AF%A2%E7%BD%91%E7%BB%9C%E6%B3%A8%E5%86%8C%E6%9C%8D%E5%8A%A1%E5%95%86%E3%80%82%20%E6%A0%B9%E6%8D%AE%E5%A6%82%E4%B8%8B%E9%98%BF%E9%87%8C%E4%BA%91%E4%BF%A1%E6%81%AF%E5%A1%AB%E5%86%99%E3%80%82%20%E8%AF%B7%E6%A0%B9%E6%8D%AE%E7%BD%91%E7%AB%99%E5%AE%9E%E9%99%85%E5%BC%80%E5%B1%95%E7%9A%84%E4%B8%9A%E5%8A%A1%E9%A1%B9%E7%9C%9F%E5%AE%9E%E9%80%89%E6%8B%A9%EF%BC%8C%E4%BE%8B%E5%A6%82%EF%BC%9A%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80%E7%B1%BB%20A%E3%80%81%E7%BD%91%E7%BB%9C%E9%94%80%E5%94%AE%E7%B1%BB%20B%E3%80%81%E7%94%9F%E6%B4%BB%E6%9C%8D%E5%8A%A1%E7%B1%BB%20C%20%E5%92%8C%E7%A4%BE%E4%BA%A4%E6%96%87%E5%A8%B1%E7%B1%BB,D%20%E7%AD%89%E3%80%82%20%E5%A6%82%E6%9E%9C%E4%B8%8D%E6%B6%89%E5%8F%8A%EF%BC%8C%E5%B0%86%20%E6%98%AF%E5%90%A6%E6%8F%90%E4%BE%9B%E4%BA%92%E8%81%94%E7%BD%91%E4%BA%A4%E4%BA%92%E6%9C%8D%E5%8A%A1%20%E9%80%89%E6%8B%A9%E4%B8%BA%20%E5%90%A6%E3%80%82%20%E5%A6%82%E6%9E%9C%E6%B6%89%E5%8F%8A%EF%BC%8C%E6%A0%B9%E6%8D%AE%E7%BD%91%E7%AB%99%E5%AE%9E%E9%99%85%E5%BC%80%E5%B1%95%E7%9A%84%E4%B8%9A%E5%8A%A1%E9%A1%B9%E7%9C%9F%E5%AE%9E%E9%80%89%E6%8B%A9%E3%80%82%20%E6%98%AF%E5%90%A6%E6%8F%90%E4%BE%9B%E6%B6%89%E5%8F%8A%E7%AE%A1%E5%88%B6%E7%89%A9%E5%93%81%E4%BF%A1%E6%81%AF%E5%8F%91%E5%B8%83%E6%9C%8D%E5%8A%A1%EF%BC%9A%E8%AF%B7%E6%8C%89%E7%85%A7%E7%BD%91%E7%AB%99%E6%B6%89%E5%8F%8A%E8%8C%83%E5%9B%B4%E5%A6%82%E5%AE%9E%E5%8B%BE%E9%80%89%E3%80%82)
