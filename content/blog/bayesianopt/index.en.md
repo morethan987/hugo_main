@@ -2,7 +2,7 @@
 title: Bayesian Optimization
 weight: -10
 draft: false
-description: BayesianOPT principle and its MATLAB implementation
+description: Principles of Bayesian Optimization and its MATLAB Implementation
 slug: bayesianopt
 tags:
   - math
@@ -17,82 +17,73 @@ authors:
   - Morethan
 ---
 
-## Reference
+## References  
 
-Honestly, I'm not familiar with BayesianOPT, the opinions mentioned stem from the below. 👇
+My understanding of Bayesian optimization is also limited, mainly referencing the following content👇  
 
-- [【机器学习】一文看懂贝叶斯优化/Bayesian Optimization](https://blog.csdn.net/qq_27590277/article/details/115451660)
+- [【Machine Learning】Understanding Bayesian Optimization in One Article](https://blog.csdn.net/qq_27590277/article/details/115451660)  
 
-- [一文详解贝叶斯优化（Bayesian Optimization）原理](https://www.cnblogs.com/milliele/p/17782631.html)
+- [A Detailed Explanation of Bayesian Optimization Principles](https://www.cnblogs.com/milliele/p/17782631.html)  
 
-- [贝叶斯优化(BayesianOptimization)](https://blog.csdn.net/Leon_winter/article/details/86604553)
+- [Bayesian Optimization](https://blog.csdn.net/Leon_winter/article/details/86604553)  
 
-- [超参数优---贝叶斯优化及其改进（PBT优化）](https://blog.csdn.net/xys430381_1/article/details/103871212)
+- [Hyperparameter Optimization—Bayesian Optimization and Its Improvement (PBT Optimization)](https://blog.csdn.net/xys430381_1/article/details/103871212)  
 
-- [贝叶斯优化 (Bayesian Optimization)](https://leovan.me/cn/2020/06/bayesian-optimization/)
+- [Bayesian Optimization](https://leovan.me/cn/2020/06/bayesian-optimization/)  
 
-- [MATLAB Offical Document](https://ww2.mathworks.cn/help/stats/bayesopt.html?s_tid=srchtitle_site_search_1_bayesopt)
+- [MATLAB Official Documentation](https://ww2.mathworks.cn/help/stats/bayesopt.html?s_tid=srchtitle_site_search_1_bayesopt)  
 
-- [Exploring Bayesian Optimization](https://distill.pub/2020/bayesian-optimization/)
+- [Exploring Bayesian Optimization](https://distill.pub/2020/bayesian-optimization/)  
 
-## Advantages & Algorithm Principle
+## Advantages and Algorithm Principles  
 
-Here we are going to talk about the advantages & algorithm principle of BayesianOPT. If you only want to konw how to use it, you can read the `#Advantage` section, then go to the [ MATLAB Practice]({{< relref "#matlab-practice" >}})
+This section focuses on the advantages of Bayesian optimization and its algorithmic principles. If you are only interested in "how to use it," you can first learn about the advantages of Bayesian optimization and then skip to [ MATLAB Usage]({{< relref "#matlab-usage" >}}).  
 
-### Advantages
+### Advantages  
 
-### Algorithm Principle
+### Algorithm Principles  
 
-## MATLAB Practice
+## MATLAB Usage  
 
-Well, we can put Bayesian Optimization into practice even though we don't understand it, using the predefined function of MATLAB, the `bayesopt`. Here is the official guidance of the function: [bayesopt](https://ww2.mathworks.cn/help/stats/bayesopt.html?s_tid=srchtitle_site_search_1_bayesopt)
+### Code Overview  
 
-### Final code display
+```matlab  
+% Define the objective function  
+function y = objectiveFcn(x)  
+    y = (1 - x.x1)^2 + 100 * (x.x2 - x.x1^2)^2;  
+end  
 
-```matlab
-% define the obj function
-function y = objectiveFcn(x)
-    y = (1 - x.x1)^2 + 100 * (x.x2 - x.x1^2)^2;
-end
+% Define optimization variables  
+vars = [optimizableVariable('x1', [-2, 2])  
+        optimizableVariable('x2', [-2, 2])];  
 
-% define the variables
-vars = [optimizableVariable('x1', [-2, 2])
-        optimizableVariable('x2', [-2, 2])];
+% Perform Bayesian optimization  
+results = bayesopt(@objectiveFcn, vars, ...  
+                   'AcquisitionFunctionName', 'expected-improvement-plus', ...  
+                   'MaxObjectiveEvaluations', 30, ...  
+                   'IsObjectiveDeterministic', true, ...  
+                   'Verbose', 1);  
 
-% conduce the optimizer
-results = bayesopt(@objectiveFcn, vars, ...
-                   'AcquisitionFunctionName', 'expected-improvement-plus', ...
-                   'MaxObjectiveEvaluations', 30, ...
-                   'IsObjectiveDeterministic', true, ...
-                   'Verbose', 1);
+% View results  
+bestPoint = results.XAtMinObjective;  
+bestObjective = results.MinObjective;  
 
-% get result
-bestPoint = results.XAtMinObjective;
-bestObjective = results.MinObjective;
+fprintf('Optimal solution x1: %.4f, x2: %.4f\n', bestPoint.x1, bestPoint.x2);  
+fprintf('Optimal objective value: %.4f\n', bestObjective);  
+```  
 
-% result output
-fprintf('最优解 x1: %.4f, x2: %.4f\n', bestPoint.x1, bestPoint.x2);
-fprintf('最优目标值: %.4f\n', bestObjective);
-```
+### Parameter Explanation  
 
+| Params                     | Meaning                                     |  
+| -------------------------- | ------------------------------------------- |  
+| `AcquisitionFunctionName`  | Selects the acquisition function, which determines how the algorithm chooses the next sampling point after each iteration. |  
+| `MaxObjectiveEvaluations`  | Maximum number of iterations.               |  
+| `IsObjectiveDeterministic` | Set to `true` if the objective function is deterministic (no noise); otherwise, set to `false`. |  
+| `Verbose`                  | Controls the verbosity of the output, which may include multiple charts. |  
 
-{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-I'd commit that the code is generated by AI. 🥲 AI is a better coder, at least when comparing with me. 🫠
-{{< /alert >}}
-
-### Parameters Explaination
-
-| Params                     | Meaning                                                                                                    |
-| -------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| `AcquisitionFunctionName`  | select a Acquisition Function, which  determines the method how bayesopt choose the next acquisition point |
-| `MaxObjectiveEvaluations`  | the maximize evalu turns                                                                                   |
-| `IsObjectiveDeterministic` | If the obj function contains noise, set to `true` ; Otherwise, set to `false`                              |
-| `Verbose`                  | Determine the detailing extend of console output, the complete output includes many figures.               |
-
-Want more detailed information? Refer to the Offical document: [bayesopt](https://ww2.mathworks.cn/help/stats/bayesopt.html?s_tid=srchtitle_site_search_1_bayesopt). It's more completed and with amount of examples.
+For specific options for each parameter, refer to the official documentation: [bayesopt](https://ww2.mathworks.cn/help/stats/bayesopt.html?s_tid=srchtitle_site_search_1_bayesopt). The official documentation is very detailed and includes many examples.  
 
 
 {{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-It's basic for every MathModeler to read the offical document. 😝
+One of the essential skills for mathematical modelers is reading documentation 😝
 {{< /alert >}}
-
