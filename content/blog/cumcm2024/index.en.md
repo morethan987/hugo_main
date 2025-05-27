@@ -28,11 +28,9 @@ There were moments of excitement and surprise, as well as disappointment; we mus
 In short, this experience is truly unforgettable, and it is even more worth summarizing and learning from the experience to prepare for next year's competition.
 
 
-
 {{< alert icon="circle-info" cardColor="#b0c4de" textColor="#333333" >}}
 CUMCM stands for Chinese Undergraduate Mathematical Contest in Modeling; it is commonly referred to as the "National Mathematical Modeling Competition".
 {{< /alert >}}
-
 
 ## Terminology Explanation
 
@@ -212,11 +210,9 @@ When we applied the above strategies to the actual combat process, that is, the 
 - Code parallelization: Add some parallelizable code to the code to increase running speed
 
 
-
 {{< alert icon="triangle-exclamation" cardColor="#ffcc00" textColor="#333333" iconColor="#8B6914" >}}
 All code improvements must be implemented in a document! Not just slogans!
 {{< /alert >}}
-
 
 - The final output: [Code Collaboration Scheme]({{< ref "/blog/code-collaboration-scheme/" >}})
 
@@ -231,11 +227,9 @@ All code improvements must be implemented in a document! Not just slogans!
 	- Improvements in language style, text readability, detail, illustration logic, and image readability, etc.
 
 
-
 {{< alert icon="triangle-exclamation" cardColor="#ffcc00" textColor="#333333" iconColor="#8B6914" >}}
 The results are fixed in the form of comments in the LaTeX template!
 {{< /alert >}}
-
 
 ## Summary
 
