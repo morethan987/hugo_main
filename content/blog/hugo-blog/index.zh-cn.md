@@ -83,6 +83,7 @@ Hugo 真的是太方便了，我曾经尝试过 Hexo 但是 Node.js 的配置就
 | `content`   | 所有内容都在这里面               |
 | `public`    | 是编译后生成的完整网页，一开始没有       |
 | `themes`    | 存放你的网站主题                |
+
 ### 主题配置基本操作
 
 Hugo 的网站主题很多，具体参考 [Hugo Themes](https://themes.gohugo.io/) 你可以选一款你喜欢的主题，然后下载之后就放在 `themes` 文件夹里面就行。这一部分文字描述非常抽象，见[视频教程](https://www.bilibili.com/video/BV1bovfeaEtQ/?spm_id_from=333.337.search-card.all.click&vd_source=38d0addc11facdcdfe9d401e43b75680)

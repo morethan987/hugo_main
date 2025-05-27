@@ -87,3 +87,4 @@ For specific options for each parameter, refer to the official documentation: [b
 {{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
 One of the essential skills for mathematical modelers is reading documentation 😝
 {{< /alert >}}
+

@@ -32,7 +32,6 @@ This article focuses less on specific syntax and more on features and principles
 ## Basic Data Types  
 
 Qdrant defines some abstract data types to better handle vector data. Understanding these types is fundamental to flexible usage.  
-
 ### Point  
 
 Points are the core data type in a vector database. All operations revolve around points.  
@@ -120,9 +119,11 @@ The term "closer" implies a **similarity metric**. Qdrant supports several popul
 - Manhattan Distance  
 
 
+
 {{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
 To improve performance, all vectors are normalized before storage. This means dot product similarity and cosine similarity are equivalent in Qdrant.
 {{< /alert >}}
+
 
 For a better user experience, Qdrant provides a complete API for easy invocation: [Search API - Qdrant](https://qdrant.tech/documentation/concepts/search/#search-api).  
 
@@ -137,9 +138,11 @@ In summary, the functionalities you can invoke include:
 7. **Search Planning**: Based on optional indexes, filter complexity, and the total number of points, a heuristic method selects an appropriate search approach (improving performance 🤔).  
 
 
+
 {{< alert icon="triangle-exclamation" cardColor="#ffcc00" textColor="#333333" iconColor="#8B6914" >}}
 If both `group_size` and `limit` are set, `limit` represents the number of groups.
 {{< /alert >}}
+
 
 Additionally, sparse and dense vector searches in Qdrant have key differences:  
 
@@ -185,13 +188,16 @@ client.query("{collection_name}", {
 ```  
 
 
+
 {{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
 In the official example, 100 and 231 are vector IDs, each corresponding to a 4-dimensional vector.
 {{< /alert >}}
 
+
 The `strategy` parameter controls the search algorithm. Here are the details:  
 
 1. **Average Algorithm**: Averages positive and negative examples separately, then combines them into a final search vector.  
+
 2. **Best Score Algorithm**: Each candidate point is matched against all positive and negative examples to compute scores. The highest scores are selected, and the final score is calculated as:  
 
 ```rust  
@@ -205,9 +211,11 @@ let score = if best_positive_score > best_negative_score {
 3. **Negative-Only Algorithm**: Uses the best score algorithm 👆 without positive examples, yielding a reverse scoring algorithm to find the least relevant points.  
 
 
+
 {{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
 Multi-vectors and other special vectors can also be processed with similar logic, though the syntax differs.
 {{< /alert >}}
+
 
 #### Discovery  
 
@@ -216,19 +224,24 @@ Multi-vectors and other special vectors can also be processed with similar logic
 Similar to [Recommendation]({{< relref "#recommendation" >}}), but here you pair positive and negative vectors together as input.  
 
 
+
 {{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
 Due to hard partitioning, consider increasing the HNSW `ef` parameter to compensate for precision loss.
 {{< /alert >}}
 
+
 Discovery operations enable Qdrant to handle two new search requirements:  
 
 1. **Discovery Search**: Given a target vector and a set of positive-negative vector pairs as *contextual constraints*.  
+
 2. **Region Partition Search**: A special case of discovery search 👆 where no target vector is provided. The database partitions the space directly and returns points lying most in positive regions.  
+
 
 
 {{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
 In discovery search, contextual constraints are **enforced** with higher priority. In other words, discovery search first performs region partitioning, then standard similarity search.
 {{< /alert >}}
+
 
 #### Distance Matrix  
 

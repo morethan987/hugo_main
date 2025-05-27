@@ -78,11 +78,9 @@ run('config.m');
 ```
 
 
-
 {{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
 尽管参数被转移到了其他地方但是 VS Code 仍然能够进行自动检测并给出补全提示！
 {{< /alert >}}
-
 
 #### 函数内部使用的参数
 

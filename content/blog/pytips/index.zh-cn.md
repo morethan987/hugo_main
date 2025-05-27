@@ -43,11 +43,9 @@ D:\Python\Python311\python.exe -m venv your_env_name
 | `--version`              | 用于确认虚拟环境中 Python 的版本                    |
 
 
-
 {{< alert icon="circle-info" cardColor="#b0c4de" textColor="#333333" >}}
 所有的参数说明都可以通过运行 `python -m venv -h` 来获得；不用到处查文档了~😆
 {{< /alert >}}
-
 
 #### 激活
 

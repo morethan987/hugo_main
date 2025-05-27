@@ -72,7 +72,6 @@ authors:
 - Flowershow：截至 2024 年 10 月插件下载量为 3355；截至 2025 年 1 月插件下载量为 4594，同时最高下载量的插件有 3211992 的下载量；
 - Quartz 截至 2025 年 1 月收获 GitHub start 数量为 7.7k
 
-
 ### 已有方案
 
 #### Quartz
@@ -138,6 +137,7 @@ authors:
 - [Discrete Structures for Computer Science](https://publish.obsidian.md/discretecs/START+HERE) 神似官方的朴素风格
 
 ##### 评述
+
 - 优势
 	- 官方发布的网页对于 Obsidian 内部表达的适配效果是一流的，Obsidian 内部所有的功能都能够成功在网页中展示；但是不清楚插件功能如何在网页中展示
 	- 有持续的维护服务，能够第一时间适配 Obsidian 的更新

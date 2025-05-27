@@ -17,7 +17,6 @@ authors:
 ---
 {{< lead >}}
 This is an independent full-stack development journey, driven by the goal of building an LLM application. It covers various issues encountered during development.
-
 It's also the introductory article—article zero—of the "AI Engineering" series, serving both as an index to the series and a summary of personal insights.
 {{< /lead >}}
 

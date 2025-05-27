@@ -83,11 +83,9 @@ ORDER BY released DESC LIMIT 5
 这会筛选出最新的 5 个电影。
 
 
-
 {{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
 Cypher 关键字对大小写不敏感；属性名、变量名等其他的都是大小写敏感的
 {{< /alert >}}
-
 
 ### 数据写入
 
@@ -104,6 +102,7 @@ RETURN m
 这个命令代码会创建一个新的 Movie 结点，其 `title` 属性被设置为 `"Arthur the King"`，`year` 属性被设置为 `2024`；
 
 你可能会疑惑为什么不这样写：
+
 ```cypher
 MERGE (m:Movie)
 SET m.year = 2024, m.titile = "Arthur the King"
@@ -113,6 +112,7 @@ RETURN m
 其实大括号内的内容被用于检查你想创建的**模式**是否已经存在，避免重复创建模式。
 
 - 合并关系：
+
 ```cypher
 MERGE (m:Movie {title: "Arthur the King"})
 MERGE (u:User {name: "Adam"})
@@ -121,6 +121,7 @@ RETURN u, r, m
 ```
 
 ## 安装
+
 目前时间 2025-02-15，经过广大开发者的测试，发现 Neo4j Desktop 对于国内的用户有封锁，导致软件界面无法正常显示。虽然可以通过关闭网络等手段破除封锁，但是这样就失去了桌面版独特的优势：方便部署；
 
 因此这里主要推荐并介绍使用 Docker 部署的流程；
@@ -128,6 +129,7 @@ RETURN u, r, m
 操作系统：Windows 11
 
 ### Docker Desktop
+
 无话可说，安装后启动放后台即可
 
 ### 拉取镜像

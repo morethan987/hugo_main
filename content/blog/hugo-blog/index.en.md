@@ -41,11 +41,9 @@ Built in 872 ms
 In total, compiling 104 pages (both Chinese and English) took just 0.872 seconds, including the time to build the local server. That speed is hard to criticize. And the local server can listen for changes to the source code in real time and do **incremental refactoring**, depending on the size of the change, usually around 0.03 seconds.
 
 
-
 {{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
 I haven't used other page generators for setting up blogs, so I can't compare Hugo's speed with others.
 {{< /alert >}}
-
 
 ## References
 
@@ -65,11 +63,9 @@ This part is covered in detail in the [webpage](https://letere-gzj.github.io/hug
 Honestly, setting up Hugo is one of the easiest setups I've ever seen, no exaggeration. You simply download Hugo from the [official website](https://gohugo.io/), place it in a folder, and unzip it. You’ll find just one file, `hugo.exe`—it’s that simple.
 
 
-
 {{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
 Hugo is really convenient. I tried Hexo before, but the Node.js setup turned me away. Even now, I have no idea why it failed to compile. 😢
 {{< /alert >}}
-
 
 The only slight difficulty is adding the directory containing `hugo.exe` to your environment variables.
 
@@ -133,6 +129,7 @@ After searching around, I found that there weren’t any suitable plugins! So, I
 While the plugin is simple, it covers almost all of my needs, including:
 
   - **Callouts** (supports all official callout names, with [additional icons](https://github.com/morethan987/hugo_main/tree/main/assets/icons))
+
   - **Inline math formulas** (Blowfish supports block-level formulas)
 
   - **Mermaid** (supports Mermaid diagrams)
@@ -163,3 +160,5 @@ In this fast-paced world, most meaningless and inefficient things are eventually
 But there's still a bit of **unwillingness** in me. This website is a form of resistance, and I’ll do my best to maintain it. That’s also why I developed the plugin—to make updating the blog easier.
 
 I hope this tutorial helps anyone planning to set up their own blog. Let’s keep moving forward, together 🫡.
+
+因此希望这篇教程所提供的内容能够帮助到正在准备搭建自己的博客网站的你，你我共勉🫡
