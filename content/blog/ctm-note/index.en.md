@@ -290,3 +290,6 @@ A very reasonable idea is: would replacing this matrix with an MLP network yield
 {{< /alert >}}
 
 ## Code Analysis
+
+I don't have time to study the code carefully now 😢 Finals are coming, I have to go review.
+
