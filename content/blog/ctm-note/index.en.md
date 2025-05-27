@@ -170,6 +170,11 @@ $$
 S^t=Z^t \cdot (Z^t)^T\in R^{D\times D}
 $$  
 
+
+{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
+Mathematically, \(S^t\) is an unnormalized covariance matrix where the \((i,j)\) element represents the "degree of coordination" between the \(i\)-th neuron and the \(j\)-th neuron across all time steps, which is what the paper refers to as "neural synchronization."
+{{< /alert >}}
+
 This neuron synchronization matrix undergoes **downsampling**: Randomly select \(D_{out}\) and \(D_{action}\) elements to form two neuron synchronization **representation vectors**, \(S^t_{out}\in R^{D_{out}}\) and \(S^t_{action}\in R^{D_{action}}\).  
 
 \(S^t_{out}\) is projected into the output space:  
@@ -273,6 +278,15 @@ This means that for any input—sequential or non-sequential—the model can fre
 
 ![CTM_Arc.png](img/CTM_Arc.png)  
 
-The diagram above vividly illustrates the operations of the synaptic model and neuron-level model: The former enables information exchange between neurons at the same time step, while the latter facilitates historical information exchange across time steps for the same neuron. As shown, a vertical information fusion is followed by a horizontal one 🤔.  
+The above diagram vividly illustrates the operations performed by the synaptic model part and the neuron-level model part: the former enables information interaction between different neurons at the same moment, while the latter facilitates the interaction of historical information across different moments for the same neuron. As shown in the figure, a vertical information fusion is immediately followed by a horizontal information fusion 🤔  
 
-Gotta pause here—finals are coming up 😢.
+How does the model interact with external data? It is achieved by downsampling the neuronal synchronization matrix and then applying a linear projection. This sounds very abstract, but from another perspective, the logic becomes clear: if we imagine CTM as a brain, then sampling the neural synchronization matrix is akin to extracting a portion of information from it, which is then mapped through a matrix to drive behavior.  
+
+A very reasonable idea is: would replacing this matrix with an MLP network yield better results? 🤔 Does the downsampling strategy impact the capabilities of the CTM model? Could some form of attention mechanism be used to construct an "intelligent" downsampling strategy?  
+
+
+{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
+🤔 I’m actually quite curious: if the number of neurons \(D\) is scaled up to the magnitude of neurons in the human brain, and an attention mechanism is employed, would some form of sparse activation features naturally emerge?
+{{< /alert >}}
+
+## Code Analysis
