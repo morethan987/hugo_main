@@ -1,6 +1,6 @@
 ---
 title: 关于大模型记忆
-weight: -100
+weight: -95
 draft: true
 description: 一些对于大模型记忆的思考和探索
 slug: llm-memory

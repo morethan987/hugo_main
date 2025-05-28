@@ -1,6 +1,6 @@
 ---
 title: Cloud Service Deployment
-weight: -85
+weight: -80
 draft: true
 description: Detailed documentation of the cloud service platform setup process from scratch
 slug: cloud-server-build

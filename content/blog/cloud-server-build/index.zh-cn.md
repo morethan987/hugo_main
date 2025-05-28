@@ -1,6 +1,6 @@
 ---
 title: 云服务搭建
-weight: -85
+weight: -80
 draft: true
 description: 详细记录了从零开始的云服务平台搭建过程
 slug: cloud-server-build

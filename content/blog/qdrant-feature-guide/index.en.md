@@ -1,18 +1,18 @@
 ---
-title: Qdrant Feature Guide  
-weight: -80  
-draft: true  
-description: Detailed documentation of Qdrant's vector database features for practical applications  
-slug: qdrant-feature-guide  
-tags:  
-  - Qdrant  
-series:  
-  - Technical Miscellany  
-series_order: 6  
-date: 2025-03-05  
-lastmod: 2025-03-05  
-authors:  
-  - Morethan  
+title: Qdrant Feature Guide
+weight: -75
+draft: true
+description: Detailed documentation of Qdrant's vector database features for practical applications
+slug: qdrant-feature-guide
+tags:
+  - Qdrant
+series:
+  - Technical Miscellany
+series_order: 6
+date: 2025-03-05
+lastmod: 2025-03-05
+authors:
+  - Morethan
 ---
 {{< katex >}}
 {{< lead >}}  

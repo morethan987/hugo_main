@@ -1,6 +1,6 @@
 ---
 title: CTM Reading Notes
-weight: -105
+weight: -100
 draft: true
 description: A novel brain-inspired AI architecture
 slug: ctm-note

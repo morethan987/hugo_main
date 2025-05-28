@@ -1,6 +1,6 @@
 ---
 title: RAG Technology Research Report
-weight: -75
+weight: -70
 draft: true
 description: A detailed investigation into the implementation principles and typical products of various mainstream RAG technologies
 slug: rag-report

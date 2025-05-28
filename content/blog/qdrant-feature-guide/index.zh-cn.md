@@ -1,6 +1,6 @@
 ---
 title: Qdrant功能指南
-weight: -80
+weight: -75
 draft: true
 description: 详细记录了Qdrant向量数据库的功能便于实际应用
 slug: qdrant-feature-guide

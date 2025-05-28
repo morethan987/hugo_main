@@ -1,6 +1,6 @@
 ---
 title: On the Memory of LLM
-weight: -100
+weight: -95
 draft: true
 description: Some thoughts and explorations on the memory of large language models
 slug: llm-memory
