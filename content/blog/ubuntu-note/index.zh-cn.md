@@ -9,7 +9,7 @@ tags:
   - Linux
 series:
   - 技术杂项
-series_order: 7
+series_order: 8
 date: 2025-05-01
 lastmod: 2025-05-20
 authors:

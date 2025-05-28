@@ -7,8 +7,8 @@ slug: cloud-server-build
 tags:
   - Cloud-Service
 series:
-  - AI-Project
-series_order: 2
+  - Technical Miscellany
+series_order: 7
 date: 2025-03-06
 lastmod: 2025-03-16
 authors:

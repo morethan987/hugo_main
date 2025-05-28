@@ -9,15 +9,15 @@ tags:
   - Linux
 series:
   - Technical Miscellany
-series_order: 7
+series_order: 8
 date: 2025-05-01
 lastmod: 2025-05-20
 authors:
   - Morethan
 ---
-{{< lead >}}  
+{{< lead >}}
 Summarizing and documenting the process of tinkering with Ubuntu for future reference.  
-{{< /lead >}}  
+{{< /lead >}}
 
 ## Introduction  
 

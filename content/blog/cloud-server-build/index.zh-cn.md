@@ -7,8 +7,8 @@ slug: cloud-server-build
 tags:
   - 云服务
 series:
-  - AI工程
-series_order: 2
+  - 技术杂项
+series_order: 7
 date: 2025-03-06
 lastmod: 2025-03-16
 authors:
