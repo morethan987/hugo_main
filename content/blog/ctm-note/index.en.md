@@ -289,6 +289,19 @@ A very reasonable idea is: would replacing this matrix with an MLP network yield
 🤔 I’m actually quite curious: if the number of neurons \(D\) is scaled up to the magnitude of neurons in the human brain, and an attention mechanism is employed, would some form of sparse activation features naturally emerge?
 {{< /alert >}}
 
+### About Temporal Information
+
+As early as 1997, Maass proposed the Spiking Neural Network (SNN), which is hailed as the third generation of neural networks. Its most prominent feature is: fully mimicking biological neural networks and transmitting information in the form of spikes. This, of course, includes rich temporal information. Therefore, utilizing temporal information in neural networks is not a "novel" idea but rather has a very long history.
+
+However, the equations corresponding to SNNs are mathematically non-differentiable, making it difficult to directly optimize SNNs using the BP algorithm. This might be the biggest obstacle to the large-scale application of SNNs. In other words, the greatest defect of SNNs does not lie in the model's expressive power but in the training algorithm—training algorithms are crucial for large neural networks.
+
+CTM implements a neural network capable of utilizing temporal information based on traditional neuron models. Moreover, it can be seen from the paper's description that the authors have constructed a new type of neuron, where the activation value at time \(t+1\) is connected to the historical activation states of many other neurons through both neuron-level and synaptic-level models. Thus, the output of each neuron can integrate a large amount of historical information.
+
+
+{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
+A somewhat less rigorous thought: SNN processes temporal information and activation values simultaneously, leading to higher model complexity, whereas CTM decouples the computation of temporal information and activation values 🤔
+{{< /alert >}}
+
 ## Code Analysis
 
 I don't have time to study the code carefully now 😢 Finals are coming, I have to go review.
