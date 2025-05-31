@@ -393,6 +393,8 @@ If switching away from Office makes you feel lost, [Wine](https://www.winehq.org
 
 ## Storage Cleanup  
 
+### Common Cleanup Tasks
+
 ```bash  
 # Remove orphaned dependencies  
 sudo apt autoremove  
@@ -423,6 +425,93 @@ snap list --all | awk '/disabled|已禁用/{print $1, $3}' | while read snapname
 sudo dpkg --list | grep linux-image # List all kernels  
 sudo apt autoremove --purge # Automatically remove unnecessary kernels  
 ```  
+
+### Auto Clean on Boot
+
+Manually checking and cleaning up your system every time can be a hassle. A smart computer should learn to clean itself 😋
+
+First, run the following command to create a cleanup script:
+
+```bash
+sudo nano /usr/local/bin/system-clean-up.sh
+```
+
+Then paste the following contents into the file:
+
+```bash
+#!/bin/bash
+set -e
+
+echo "[1] Running apt autoremove..."
+apt autoremove -y
+
+echo "[2] Running apt autoclean..."
+apt autoclean -y
+
+echo "[3] Cleaning journal logs older than 2 days..."
+journalctl --vacuum-time=2d
+
+echo "[4] Removing disabled snap revisions..."
+snap list --all | awk '/disabled|已禁用/ {print $1, $3}' | while read snapname revision; do
+  echo "Removing snap: $snapname revision $revision"
+  snap remove "$snapname" --revision="$revision"
+done
+
+echo "[5] Cleaning ~/.cache/ directories larger than 200MB..."
+for userdir in /home/*; do
+  cache_root="$userdir/.cache"
+  [ -d "$cache_root" ] || continue
+  for dir in "$cache_root"/*; do
+    if [ -d "$dir" ]; then
+      size_kb=$(du -s "$dir" | awk '{print $1}')
+      if [ "$size_kb" -gt 204800 ]; then
+        echo "Removing large cache directory: $dir ($(($size_kb / 1024)) MB)"
+        rm -rf "$dir"
+      fi
+    fi
+  done
+done
+
+echo "[Done] Clean-up finished."
+```
+
+After saving the `.sh` script, make it executable with:
+
+```bash
+sudo chmod +x /usr/local/bin/system-clean-up.sh
+```
+
+Next, set up the script to run automatically at boot. System startup services are defined in files located in `/etc/systemd/system`, all with a `.service` extension. To auto-clean on boot, create a `clean-up.service` file there with the following contents:
+
+```bash
+[Unit]
+Description=Clean up system caches, logs, and snaps at boot
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/system-clean-up.sh
+User=root
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Once the service file is created, enable it with the following command so it runs on the next boot (but does not run immediately):
+
+```bash
+sudo systemctl daemon-reexec && sudo systemctl enable clean-up.service
+```
+
+To test that everything is working correctly, you can run the service manually:
+
+```bash
+# Run the service immediately
+sudo systemctl start clean-up.service
+
+# View service logs
+sudo journalctl -u clean-up.service
+```
 
 ## Miscellaneous  
 

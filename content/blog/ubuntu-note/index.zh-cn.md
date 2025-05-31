@@ -380,6 +380,8 @@ sudo apt install libreoffice
 
 ## 存储清理
 
+### 常见清理项
+
 ```bash
 # 清理孤立依赖包
 sudo apt autoremove
@@ -409,6 +411,89 @@ snap list --all | awk '/disabled|已禁用/{print $1, $3}' | while read snapname
 # 清理内核
 sudo dpkg --list | grep linux-image # 列出所有内核
 sudo apt autoremove --purge # 自动清除不需要的内核
+```
+
+### 开机自动清理
+
+每次都要手动检查上面这些可清理项实在是麻烦，一个聪明的电脑需要学会自己清理自己😋
+
+首先运行命令：`sudo nano /usr/local/bin/system-clean-up.sh`
+
+然后把下面的文件内容粘贴进去：
+
+```bash
+#!/bin/bash
+set -e
+
+echo "[1] Running apt autoremove..."
+apt autoremove -y
+
+echo "[2] Running apt autoclean..."
+apt autoclean -y
+
+echo "[3] Cleaning journal logs older than 2 days..."
+journalctl --vacuum-time=2d
+
+echo "[4] Removing disabled snap revisions..."
+snap list --all | awk '/disabled|已禁用/ {print $1, $3}' | while read snapname revision; do
+  echo "Removing snap: $snapname revision $revision"
+  snap remove "$snapname" --revision="$revision"
+done
+
+echo "[5] Cleaning ~/.cache/ directories larger than 200MB..."
+for userdir in /home/*; do
+  cache_root="$userdir/.cache"
+  [ -d "$cache_root" ] || continue
+  for dir in "$cache_root"/*; do
+    if [ -d "$dir" ]; then
+      size_kb=$(du -s "$dir" | awk '{print $1}')
+      if [ "$size_kb" -gt 204800 ]; then
+        echo "Removing large cache directory: $dir ($(($size_kb / 1024)) MB)"
+        rm -rf "$dir"
+      fi
+    fi
+  done
+done
+
+echo "[Done] Clean-up finished."
+```
+
+写完了 `.sh` 脚本文件之后还需要赋予其可执行权限：
+
+```bash
+sudo chmod +x /usr/local/bin/system-clean-up.sh
+```
+
+然后是配置开机自启动：在目录 `/etc/systemd/system` 中存放着开机自动运行的服务脚本，后缀都是 `.service`。为了实现开机自动清理，我们可在该目录下写入一个 `clean-up.service` 文件，内容如下所示：
+
+```bash
+[Unit]
+Description=Clean up system caches, logs, and snaps at boot
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/system-clean-up.sh
+User=root
+
+[Install]
+WantedBy=multi-user.target
+```
+
+编辑完成后，运行如下命令来启用这个服务脚本，这样下次开机就会自动运行一次，但不会立即运行：
+
+```bash
+sudo systemctl daemon-reexec && sudo systemctl enable clean-up.service
+```
+
+配置完成后可以立即启动一次，检验脚本是否正确执行：
+
+```bash
+# 立即运行一次
+sudo systemctl start clean-up.service
+
+# 查看系统日志
+sudo journalctl -u clean-up.service
 ```
 
 ## 其他
