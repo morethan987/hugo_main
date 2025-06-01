@@ -155,7 +155,9 @@ sudo add-apt-repository ppa:git-core/ppa # 添加官方源
 sudo apt update && sudo apt upgrade # 如果能的话则执行更新
 ```
 
-为 GitHub 设置 ssh 免密配置，当然你也可以直接使用 HTTPS，但是缺点就是每次都要输入密码。而且随着 GitHub 的安全措施升级，密码也不见得是你的账号密码，而是专门的 token🥲
+### GitHub-SSH
+
+当然你也可以直接使用 HTTPS，但是缺点就是每次都要输入密码。而且随着 GitHub 的安全措施升级，密码也不见得是你的账号密码，而是专门的 token🥲
 
 如此麻烦的操作是 Linux 上无法忍受的，我宁愿进行繁琐的配置，但是我一定不要每次都输入那一长串 token
 
@@ -417,7 +419,11 @@ sudo apt autoremove --purge # 自动清除不需要的内核
 
 每次都要手动检查上面这些可清理项实在是麻烦，一个聪明的电脑需要学会自己清理自己😋
 
-首先运行命令：`sudo nano /usr/local/bin/system-clean-up.sh`
+首先运行命令：
+
+```bash
+sudo nano /usr/local/bin/system-clean-up.sh
+```
 
 然后把下面的文件内容粘贴进去：
 
@@ -458,13 +464,31 @@ done
 echo "[Done] Clean-up finished."
 ```
 
+这个脚本中包含了五个可以安全地自动进行的清理项：
+
+1. `apt autoremove`
+2. `apt autoclean`
+3. 清理超过两天的系统日志
+4. 清理已经被禁用的 snap 包
+5. 清理 `.cache` 中大于 200 MB 的缓存文件
+
 写完了 `.sh` 脚本文件之后还需要赋予其可执行权限：
 
 ```bash
 sudo chmod +x /usr/local/bin/system-clean-up.sh
 ```
 
-然后是配置开机自启动：在目录 `/etc/systemd/system` 中存放着开机自动运行的服务脚本，后缀都是 `.service`。为了实现开机自动清理，我们可在该目录下写入一个 `clean-up.service` 文件，内容如下所示：
+---
+
+然后是配置开机自启动：在目录 `/etc/systemd/system` 中存放着开机自动运行的服务脚本，后缀都是 `.service`。
+
+为了实现开机自动清理，我们可在该目录下创建一个 `clean-up.service` 文件：
+
+```bash
+sudo nano /etc/systemd/system/clean-up.service
+```
+
+写入内容如下所示：
 
 ```bash
 [Unit]
@@ -494,6 +518,96 @@ sudo systemctl start clean-up.service
 
 # 查看系统日志
 sudo journalctl -u clean-up.service
+```
+
+### 自动清理配置脚本
+
+如果你觉得上述脚本配置过程过于麻烦，这里也提供一个一键自动化配置的脚本，运行一次之后即可删除。
+
+在任意一个目录下创建一个 `setup-cleanup.sh` 文件，写入下面的内容👇
+
+```bash
+#!/bin/bash
+
+set -e
+
+echo "🚀 正在创建清理脚本 /usr/local/bin/system-clean-up.sh ..."
+cat << 'EOF' | sudo tee /usr/local/bin/system-clean-up.sh > /dev/null
+#!/bin/bash
+set -e
+
+echo "[1] Running apt autoremove..."
+apt autoremove -y
+
+echo "[2] Running apt autoclean..."
+apt autoclean -y
+
+echo "[3] Cleaning journal logs older than 2 days..."
+journalctl --vacuum-time=2d
+
+echo "[4] Removing disabled snap revisions..."
+snap list --all | awk '/disabled|已禁用/ {print $1, $3}' | while read snapname revision; do
+  echo "Removing snap: $snapname revision $revision"
+  snap remove "$snapname" --revision="$revision"
+done
+
+echo "[5] Cleaning ~/.cache/ directories larger than 200MB..."
+for userdir in /home/*; do
+  cache_root="$userdir/.cache"
+  [ -d "$cache_root" ] || continue
+  for dir in "$cache_root"/*; do
+    if [ -d "$dir" ]; then
+      size_kb=$(du -s "$dir" | awk '{print $1}')
+      if [ "$size_kb" -gt 204800 ]; then
+        echo "Removing large cache directory: $dir ($(($size_kb / 1024)) MB)"
+        rm -rf "$dir"
+      fi
+    fi
+  done
+done
+
+echo "[Done] Clean-up finished."
+EOF
+
+sudo chmod +x /usr/local/bin/system-clean-up.sh
+
+echo "✅ 清理脚本创建完成"
+
+echo "🚀 正在创建 systemd 服务 clean-up.service ..."
+cat << EOF | sudo tee /etc/systemd/system/clean-up.service > /dev/null
+[Unit]
+Description=Clean up system caches, logs, and snaps at boot
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/system-clean-up.sh
+User=root
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+echo "✅ 服务文件创建完成"
+
+echo "🔄 重新加载 systemd..."
+sudo systemctl daemon-reexec
+echo "✅ systemd 重新加载完成"
+
+echo "🧩 启用开机启动 clean-up.service ..."
+sudo systemctl enable clean-up.service
+echo "✅ 已启用"
+
+echo "⚙️ 现在运行一次清理任务 ..."
+sudo systemctl start clean-up.service
+
+echo "✅ 清理完成,你可以使用 sudo journalctl -u clean-up.service 查看日志。"
+```
+
+然后在这个目录下运行安装命令：
+
+```bash
+sudo chmod +x setup-cleanup.sh && sudo ./setup-cleanup.sh
 ```
 
 ## 其他

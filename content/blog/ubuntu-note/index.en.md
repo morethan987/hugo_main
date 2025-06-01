@@ -23,7 +23,7 @@ Summarizing and documenting the process of tinkering with Ubuntu for future refe
 
 Ubuntu, as a popular Linux distribution, offers better ecosystem support compared to other Linux distros. The most notable advantage is that when you encounter issues, you're more likely to find tutorials and solutions for Ubuntu.  
 
-This article primarily focuses on the GUI-based personal edition of Ubuntu. For server-specific Ubuntu systems, operations depend on your actual business needs. The article [Cloud Server Setup]({{< ref "/blog/cloud-server-build/" >}}) can serve as a reference.  
+This article primarily focuses on the GUI-based personal edition of Ubuntu. For server-specific Ubuntu systems, operations depend on your actual business needs. The article [Cloud Service Deployment]({{< ref "/blog/cloud-server-build/" >}}) can serve as a reference.  
 
 ## Ubuntu Installation  
 
@@ -155,7 +155,7 @@ sudo add-apt-repository ppa:git-core/ppa # Add the official repository
 sudo apt update && sudo apt upgrade # If possible, proceed with the upgrade
 ```
 
-### Setting Up SSH for GitHub (Password-Free Configuration)
+### GitHub-SSH
 
 Of course, you can also use HTTPS directly, but the downside is that you’ll need to enter your password every time. Moreover, with GitHub's increasing security measures, the password isn’t necessarily your account password but rather a dedicated token 🥲.
 
@@ -203,7 +203,6 @@ Simply open the Snap store to install software effortlessly, though the packages
 
 ```bash
 # Software source operations can be performed graphically in the desktop version via "Software & Updates"
-
 # Add a software source
 sudo add-apt-repository ppa:libreoffice/ppa && sudo apt update
 
@@ -222,10 +221,8 @@ sudo apt full-upgrade # Full upgrade
 sudo do-release-upgrade # Upgrade across major Ubuntu versions  
 
 # Check software packages
-# Search for all packages containing "wps" and their description information
-sudo apt-cache search wps
-# View package names containing the keyword "wps"
-sudo apt-cache pkgnames | grep -i wps
+sudo apt-cache search wps # Search for all packages containing "wps" and their description information
+sudo apt-cache pkgnames | grep -i wps # View package names containing the keyword "wps"
 
 # Remove packages  
 sudo apt remove xxx  
@@ -275,8 +272,7 @@ ls ~/.config -a # Check configuration files
 ls ~/.local/share -a # Check shared configuration files
 
 ls ~/.cache -a # Check cache
-# Check disk usage of folders under .cache
-du -sh ~/.cache/* | sort -h -r
+du -sh ~/.cache/* | sort -h -r # Check disk usage of folders under .cache
 ```
 
 ### curl  
@@ -345,14 +341,7 @@ Next, modify the software source configuration file by running the following com
 sudo sed -i 's/noble/oracular/g' /etc/apt/sources.list.d/ubuntu.sources  
 ```  
 
-After modifying the file, execute:  
-
-```bash  
-# Refresh the package index and perform a full upgrade, including the kernel, drivers, and all packages  
-sudo apt update && sudo apt full-upgrade -y  
-```
-
-After modifying the files:  
+After modifying the files:
 
 ```bash  
 # Refresh the index and perform a full upgrade, including the kernel, drivers, and all packages  
@@ -430,13 +419,13 @@ sudo apt autoremove --purge # Automatically remove unnecessary kernels
 
 Manually checking and cleaning up your system every time can be a hassle. A smart computer should learn to clean itself 😋
 
-First, run the following command to create a cleanup script:
+Run the following command to open a new script file:
 
 ```bash
 sudo nano /usr/local/bin/system-clean-up.sh
 ```
 
-Then paste the following contents into the file:
+Then paste the following content into the file:
 
 ```bash
 #!/bin/bash
@@ -475,15 +464,33 @@ done
 echo "[Done] Clean-up finished."
 ```
 
-After saving the `.sh` script, make it executable with:
+This script includes five safe automatic cleanup tasks:
+
+1. `apt autoremove`
+2. `apt autoclean`
+3. Deletes system logs older than 2 days
+4. Removes disabled Snap packages
+5. Deletes `.cache` subfolders larger than 200MB
+
+After saving the file, grant execute permission:
 
 ```bash
 sudo chmod +x /usr/local/bin/system-clean-up.sh
 ```
 
-Next, set up the script to run automatically at boot. System startup services are defined in files located in `/etc/systemd/system`, all with a `.service` extension. To auto-clean on boot, create a `clean-up.service` file there with the following contents:
+---
+
+Then configure automatic startup on boot: The directory `/etc/systemd/system` contains service scripts that run automatically at startup, all with the `.service` extension.  
+
+To enable the script to run automatically at system boot, create a new systemd service file:
 
 ```bash
+sudo nano /etc/systemd/system/clean-up.service
+```
+
+Paste in the following content:
+
+```ini
 [Unit]
 Description=Clean up system caches, logs, and snaps at boot
 After=network.target
@@ -497,20 +504,110 @@ User=root
 WantedBy=multi-user.target
 ```
 
-Once the service file is created, enable it with the following command so it runs on the next boot (but does not run immediately):
+After editing is completed, run the following command to enable this service script, so it will automatically run once upon the next boot but will not run immediately.
 
 ```bash
 sudo systemctl daemon-reexec && sudo systemctl enable clean-up.service
 ```
 
-To test that everything is working correctly, you can run the service manually:
+You can also run it manually to test if it works properly:
 
 ```bash
-# Run the service immediately
+# Run immediately
 sudo systemctl start clean-up.service
 
-# View service logs
+# Check the system journal
 sudo journalctl -u clean-up.service
+```
+
+### One-Click Auto Setup Script
+
+If you find the above script configuration process too cumbersome, we also provide a one-click automated setup script. You can delete it after running it once.
+
+Create a file named `setup-cleanup.sh` in any directory and paste the following content:
+
+```bash
+#!/bin/bash
+
+set -e
+
+echo "🚀 Creating cleanup script at /usr/local/bin/system-clean-up.sh..."
+cat << 'EOF' | sudo tee /usr/local/bin/system-clean-up.sh > /dev/null
+#!/bin/bash
+set -e
+
+echo "[1] Running apt autoremove..."
+apt autoremove -y
+
+echo "[2] Running apt autoclean..."
+apt autoclean -y
+
+echo "[3] Cleaning journal logs older than 2 days..."
+journalctl --vacuum-time=2d
+
+echo "[4] Removing disabled snap revisions..."
+snap list --all | awk '/disabled|已禁用/ {print $1, $3}' | while read snapname revision; do
+  echo "Removing snap: $snapname revision $revision"
+  snap remove "$snapname" --revision="$revision"
+done
+
+echo "[5] Cleaning ~/.cache/ directories larger than 200MB..."
+for userdir in /home/*; do
+  cache_root="$userdir/.cache"
+  [ -d "$cache_root" ] || continue
+  for dir in "$cache_root"/*; do
+    if [ -d "$dir" ]; then
+      size_kb=$(du -s "$dir" | awk '{print $1}')
+      if [ "$size_kb" -gt 204800 ]; then
+        echo "Removing large cache directory: $dir ($(($size_kb / 1024)) MB)"
+        rm -rf "$dir"
+      fi
+    fi
+  done
+done
+
+echo "[Done] Clean-up finished."
+EOF
+
+sudo chmod +x /usr/local/bin/system-clean-up.sh
+
+echo "✅ Cleanup script created."
+
+echo "🚀 Creating systemd service clean-up.service..."
+cat << EOF | sudo tee /etc/systemd/system/clean-up.service > /dev/null
+[Unit]
+Description=Clean up system caches, logs, and snaps at boot
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/system-clean-up.sh
+User=root
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+echo "✅ Service file created."
+
+echo "🔄 Reloading systemd..."
+sudo systemctl daemon-reexec
+echo "✅ systemd reloaded."
+
+echo "🧩 Enabling clean-up.service at boot..."
+sudo systemctl enable clean-up.service
+echo "✅ Enabled."
+
+echo "⚙️ Running cleanup task now..."
+sudo systemctl start clean-up.service
+
+echo "✅ Cleanup complete. You can check logs with: sudo journalctl -u clean-up.service"
+```
+
+Finally, run this setup script once and you're done:
+
+```bash
+sudo chmod +x setup-cleanup.sh && sudo ./setup-cleanup.sh
 ```
 
 ## Miscellaneous  
@@ -519,17 +616,9 @@ This section includes some simple yet commonly used commands.
 
 ### System Control  
 
-- Shut down immediately:  
+- Shut down immediately: `shutdown now`
 
-```bash
-  shutdown now
-```  
-
-- Restart immediately:  
-
-```bash
-  sudo reboot
-```
+- Restart immediately: `sudo reboot`
 
 ### Extracting Files  
 
