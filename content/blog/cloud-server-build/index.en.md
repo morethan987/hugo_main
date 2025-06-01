@@ -1,7 +1,7 @@
 ---
 title: Cloud Service Deployment
 weight: -80
-draft: true
+draft: false
 description: Detailed documentation of the cloud service platform setup process from scratch
 slug: cloud-server-build
 tags:

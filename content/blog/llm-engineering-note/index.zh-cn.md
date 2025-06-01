@@ -12,7 +12,7 @@ series:
   - AI工程
 series_order: 0
 date: 2025-05-28
-lastmod: 2025-05-28
+lastmod: 2025-06-01
 authors:
   - Morethan
 ---
