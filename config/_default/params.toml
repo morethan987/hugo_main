@@ -24,6 +24,7 @@ disableTextInHeader = false
 
 defaultBackgroundImage = "/img/background.svg"
 defaultFeaturedImage = "/img/featured.svg"
+# defaultSocialImage = "/android-chrome-512x512.png" # used as default for social media sharing (Open Graph and Twitter)
 
 highlightCurrentMenuArea = true
 smartTOC = true
@@ -74,8 +75,10 @@ smartTOCHideUnfocusedChildren = false
   showTableOfContents = true
   showRelatedContent = true
   relatedContentLimit = 3
-  showTaxonomies = true 
-  showAuthorsBadges = true 
+  showTaxonomies = true
+  # use showTaxonomies OR showCategory Only, not both
+  showCategoryOnly = false
+  showAuthorsBadges = true
   showWordCount = false
   sharingLinks = [ "linkedin", "twitter", "bluesky", "reddit", "whatsapp", "telegram", "pinterest", "facebook", "email"]
   showZenMode = true

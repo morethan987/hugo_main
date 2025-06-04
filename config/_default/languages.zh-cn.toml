@@ -1,3 +1,4 @@
+disabled = false
 languageCode = "zh-cn"
 languageName = "中文"
 weight = 4
@@ -11,10 +12,12 @@ title = "Morethan 小站"
   logo = "img/logo.svg"
   secondaryLogo = "img/logo_light.svg"
   description = "一个存放思考、感悟的网站"
+  # copyright = "Copy, _right?_ :thinking_face:"
 
 [params.author]
   name = "Morethan"
   image = "img/figure.png"
+  imageQuality = 96
   headline = "计算机、物理与AI理工男"
   bio = "计算机、物理与AI理工男"
   links = [

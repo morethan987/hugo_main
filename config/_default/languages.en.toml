@@ -1,3 +1,4 @@
+disabled = false
 languageCode = "en"
 languageName = "English"
 weight = 1
@@ -11,11 +12,13 @@ title = "More's awesome website"
   logo = "img/logo.svg"
   secondaryLogo = "img/logo_light.svg"
   description = "A website for thinking and feeling."
+  # copyright = "Copy, _right?_ :thinking_face:"
 
 [params.author]
   name = "Morethan"
   email = "morthan@qq.com"
   image = "img/figure.png"
+  imageQuality = 96
   headline = "Computer, Physic & AI"
   bio = "Computer, Physic & AI"
   links = [
