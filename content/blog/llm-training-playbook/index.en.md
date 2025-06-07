@@ -4,6 +4,7 @@ weight: -105
 draft: true
 description: Documents various engineering aspects related to LLM training.
 slug: llm-training-playbook
+language: en
 tags:
   - Architecture
   - LLM

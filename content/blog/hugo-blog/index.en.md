@@ -4,6 +4,7 @@ weight: -35
 draft: false
 description: Hugo Blog Setup
 slug: hugo-blog
+language: en
 tags:
   - Hugo
   - Blog

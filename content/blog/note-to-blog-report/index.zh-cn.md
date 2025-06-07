@@ -4,6 +4,7 @@ weight: -40
 draft: false
 description: 一个针对笔记转博客项目的分析报告
 slug: note-to-blog-report
+language: zh-cn
 tags:
   - Hugo
   - 博客

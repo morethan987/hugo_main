@@ -4,6 +4,7 @@ weight: -90
 draft: false
 description: 记录折腾Ubuntu系统的过程以备不时之需
 slug: ubuntu-note
+language: zh-cn
 tags:
   - Ubuntu
   - Linux

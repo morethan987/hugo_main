@@ -4,6 +4,7 @@ weight: -95
 draft: true
 description: Some thoughts and explorations on the memory of large language models
 slug: llm-memory
+language: en
 tags:
   - LLM
   - Blog

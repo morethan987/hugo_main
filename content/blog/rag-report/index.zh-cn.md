@@ -4,6 +4,7 @@ weight: -70
 draft: true
 description: 详细调研了各种主流RAG技术的实现原理以及典型产品
 slug: rag-report
+language: zh-cn
 tags:
   - AI
   - Web

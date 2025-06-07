@@ -4,6 +4,7 @@ weight: -15
 draft: false
 description: Some handy tips for Python
 slug: pytips
+language: en
 tags:
   - Python
 series:

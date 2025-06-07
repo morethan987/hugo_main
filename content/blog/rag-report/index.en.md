@@ -4,6 +4,7 @@ weight: -70
 draft: true
 description: A detailed investigation into the implementation principles and typical products of various mainstream RAG technologies
 slug: rag-report
+language: en
 tags:
   - AI
   - Web

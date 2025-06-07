@@ -4,6 +4,7 @@ weight: -55
 draft: true
 description: 一个针对日程管理软件功能现状的分析报告
 slug: schedule-management-report
+language: zh-cn
 tags:
   - 报告
   - 日程管理

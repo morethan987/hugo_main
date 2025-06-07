@@ -4,6 +4,7 @@ weight: -20
 draft: false
 description: A summary and reflection on CUMCM 2024
 slug: cumcm2024
+language: en
 tags:
   - CUMCM
   - math

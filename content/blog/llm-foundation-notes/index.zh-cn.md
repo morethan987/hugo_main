@@ -4,6 +4,7 @@ weight: -110
 draft: true
 description: 阅读浙大的教材大模型基础后写的读书笔记
 slug: llm-foundation-notes
+language: zh-cn
 tags:
   - LLM
   - 工程实践

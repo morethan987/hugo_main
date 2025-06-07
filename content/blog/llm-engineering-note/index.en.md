@@ -4,6 +4,7 @@ weight: -65
 draft: true
 description: Recording important knowledge points in the process of LLM engineering practices
 slug: llm-engineering-note
+language: en
 tags:
   - LLM
   - EngineeringPractice

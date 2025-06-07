@@ -4,6 +4,7 @@ weight: -25
 draft: true
 description: Reflections on Moravec's Paradox
 slug: moravecs-paradox
+language: en
 tags:
   - AI
   - Imagination

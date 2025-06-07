@@ -4,6 +4,7 @@ weight: -100
 draft: true
 description: 一个新型的人脑启发式AI架构
 slug: ctm-note
+language: zh-cn
 tags:
   - 论文
   - 笔记

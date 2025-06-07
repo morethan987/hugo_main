@@ -4,6 +4,7 @@ weight: -100
 draft: true
 description: A novel brain-inspired AI architecture
 slug: ctm-note
+language: en
 tags:
   - Paper
   - Notes

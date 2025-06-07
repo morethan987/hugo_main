@@ -4,6 +4,7 @@ weight: -105
 draft: true
 description: 记录了各种各样的关于LLM训练的工程知识
 slug: llm-training-playbook
+language: zh-cn
 tags:
   - 架构
   - LLM

@@ -4,6 +4,7 @@ weight: -85
 draft: false
 description: 一个先进的小模型推理能力自提升框架
 slug: rstar-note
+language: zh-cn
 tags:
   - 论文
   - 笔记

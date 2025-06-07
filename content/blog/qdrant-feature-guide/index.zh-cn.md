@@ -4,6 +4,7 @@ weight: -75
 draft: true
 description: 详细记录了Qdrant向量数据库的功能便于实际应用
 slug: qdrant-feature-guide
+language: zh-cn
 tags:
   - Qdrant
 series:

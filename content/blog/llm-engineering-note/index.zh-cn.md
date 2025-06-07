@@ -4,6 +4,7 @@ weight: -65
 draft: true
 description: 记录LLM工程实践过程中的重要知识点
 slug: llm-engineering-note
+language: zh-cn
 tags:
   - LLM
   - 工程实践

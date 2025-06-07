@@ -4,6 +4,7 @@ weight: -10
 draft: false
 description: Principles of Bayesian Optimization and its MATLAB Implementation
 slug: bayesianopt
+language: en
 tags:
   - math
   - MATLAB

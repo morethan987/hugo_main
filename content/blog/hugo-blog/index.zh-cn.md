@@ -4,6 +4,7 @@ weight: -35
 draft: false
 description: Hugo博客搭建
 slug: hugo-blog
+language: zh-cn
 tags:
   - Hugo
   - 博客

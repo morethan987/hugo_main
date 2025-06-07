@@ -4,6 +4,7 @@ weight: -50
 draft: false
 description: 针对数学建模国赛和MATLAB改进的代码协同方案
 slug: code-collaboration-scheme
+language: zh-cn
 tags:
   - MATLAB
   - CUMCM

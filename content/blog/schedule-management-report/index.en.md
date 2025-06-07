@@ -4,6 +4,7 @@ weight: -55
 draft: true
 description: An analytical report on the current state of schedule management software functionality
 slug: schedule-management-report
+language: en
 tags:
   - Report
   - Schedule

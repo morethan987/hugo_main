@@ -4,6 +4,7 @@ weight: -20
 draft: false
 description: 对于CUMCM 2024的总结与反思
 slug: cumcm2024
+language: zh-cn
 tags:
   - CUMCM
   - math

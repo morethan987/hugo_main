@@ -4,6 +4,7 @@ weight: -30
 draft: false
 description: 一次写插件经历
 slug: plugin-writing-experience
+language: zh-cn
 tags:
   - 经历
 series:

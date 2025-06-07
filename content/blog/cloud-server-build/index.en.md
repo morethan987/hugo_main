@@ -4,6 +4,7 @@ weight: -80
 draft: false
 description: Detailed documentation of the cloud service platform setup process from scratch
 slug: cloud-server-build
+language: en
 tags:
   - Cloud-Service
 series:

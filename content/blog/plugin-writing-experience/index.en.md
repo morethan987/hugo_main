@@ -4,6 +4,7 @@ weight: -30
 draft: false
 description: An experience of writing plugin
 slug: plugin-writing-experience
+language: en
 tags:
   - Experience
 series:

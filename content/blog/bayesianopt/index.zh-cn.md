@@ -4,6 +4,7 @@ weight: -10
 draft: false
 description: 贝叶斯优化原理及其MATLAB实现
 slug: bayesianopt
+language: zh-cn
 tags:
   - math
   - MATLAB

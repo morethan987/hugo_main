@@ -4,6 +4,7 @@ weight: -60
 draft: false
 description: The basic info and operations of Neo4j Graph Database
 slug: neo4j-basics
+language: en
 tags:
   - Neo4j
 series:

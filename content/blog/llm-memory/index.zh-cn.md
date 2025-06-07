@@ -4,6 +4,7 @@ weight: -95
 draft: true
 description: 一些对于大模型记忆的思考和探索
 slug: llm-memory
+language: zh-cn
 tags:
   - LLM
   - 博客

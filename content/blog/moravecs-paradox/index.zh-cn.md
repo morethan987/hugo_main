@@ -4,6 +4,7 @@ weight: -25
 draft: true
 description: 关于莫拉维克悖论的思考
 slug: moravecs-paradox
+language: zh-cn
 tags:
   - AI
   - 遐想

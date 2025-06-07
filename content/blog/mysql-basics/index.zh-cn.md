@@ -4,6 +4,7 @@ weight: -45
 draft: false
 description: MySQL的安装部署流程以及基础语法
 slug: mysql-basics
+language: zh-cn
 tags:
   - MySQL
 series:

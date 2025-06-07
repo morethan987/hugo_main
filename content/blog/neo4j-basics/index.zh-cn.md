@@ -4,6 +4,7 @@ weight: -60
 draft: false
 description: Neo4j图数据库的基础信息以及操作方法
 slug: neo4j-basics
+language: zh-cn
 tags:
   - Neo4j
 series:

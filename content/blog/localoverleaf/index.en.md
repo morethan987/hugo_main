@@ -4,6 +4,7 @@ weight: -5
 draft: false
 description: Complete process of local Overleaf deployment
 slug: localoverleaf
+language: en
 tags:
   - overleaf
   - LaTeX

@@ -4,6 +4,7 @@ weight: -50
 draft: false
 description: Code Collaboration Scheme especial for CUMCM and MATLAB
 slug: code-collaboration-scheme
+language: en
 tags:
   - MATLAB
   - CUMCM

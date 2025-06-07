@@ -4,6 +4,7 @@ weight: -110
 draft: true
 description: Notes written after reading the textbook "Foundation of Large Models" from Zhejiang University
 slug: llm-foundation-notes
+language: en
 tags:
   - LLM
   - EngineeringPractice

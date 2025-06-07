@@ -4,6 +4,7 @@ weight: -15
 draft: false
 description: Python中的一些小技巧
 slug: pytips
+language: zh-cn
 tags:
   - Python
 series:

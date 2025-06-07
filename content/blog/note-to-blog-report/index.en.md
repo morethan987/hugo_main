@@ -4,6 +4,7 @@ weight: -40
 draft: false
 description: An analytical report on the note-to-blog project
 slug: note-to-blog-report
+language: en
 tags:
   - Hugo
   - Blog

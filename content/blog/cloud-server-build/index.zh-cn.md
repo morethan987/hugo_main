@@ -4,6 +4,7 @@ weight: -80
 draft: false
 description: 详细记录了从零开始的云服务平台搭建过程
 slug: cloud-server-build
+language: zh-cn
 tags:
   - 云服务
 series:

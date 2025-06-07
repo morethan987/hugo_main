@@ -4,6 +4,7 @@ weight: -45
 draft: false
 description: The deployment tutorial and basic syntax of MySQL
 slug: mysql-basics
+language: en
 tags:
   - MySQL
 series:

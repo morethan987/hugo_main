@@ -4,6 +4,7 @@ weight: -5
 draft: false
 description: Overleaf 本地部署全流程
 slug: localoverleaf
+language: zh-cn
 tags:
   - overleaf
   - LaTeX

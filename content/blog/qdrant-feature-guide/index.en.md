@@ -4,6 +4,7 @@ weight: -75
 draft: true
 description: Detailed documentation of Qdrant's vector database features for practical applications
 slug: qdrant-feature-guide
+language: en
 tags:
   - Qdrant
 series:
