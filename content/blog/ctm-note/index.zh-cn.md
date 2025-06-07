@@ -304,5 +304,41 @@ CTM 基于传统神经元模型实现了一个能够利用时序信息神经网�
 
 ## 代码分析
 
-暂时没空去仔细研究代码了😢期末考试要来了，必须要去复习了
+官方给出的 `README.md` 文件对于整个项目的目录说明很清晰，此处不再赘述。大致浏览了一下 `models` 文件夹中的模型代码后就可以直接去看 `tasks` 文件夹中的具体的训练代码。
+
+
+{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
+只看模型代码其实不太容易理解模型是如何与数据进行交互的🤔
+{{< /alert >}}
+
+### 迷宫问题
+
+这个任务是 CTM 论文中着重强调的典型任务，在[可交互网页](https://pub.sakana.ai/ctm/)中有一个互动版本的演示，非常直观地说明了这个任务的逻辑和最终效果。大部分代码其实都非常好理解，这里给出一些有助于理解的 QA🤔
+
+---
+
+Q：`prediction_reshaper` 参数是什么？
+
+A：可以理解为输出的参数的形状，每个任务都有不同的配置。
+
+在迷宫问题中这个参数被设置为 `[args.maze_route_length, 5]`，其中数字 5 表示每次模型都从"上、下左、右、停止"这五个动作中产生预测，给出这五个动作的归一化后的概率分布；`maze_route_length` 表示进行预测的步数，网页端设置的是 75 步
+
+---
+
+Q：下面这一段代码是在干什么？
+
+```python
+try:
+	# Determine pseudo input shape based on dataset
+	h_w = 39 if args.dataset in ['mazes-small', 'mazes-medium'] else 99 # Example dimensions
+	pseudo_inputs = torch.zeros((1, 3, h_w, h_w), device=device).float()
+	model(pseudo_inputs)
+except Exception as e:
+	 print(f"Warning: Pseudo forward pass failed: {e}")
+print(f'Total params: {sum(p.numel() for p in model.parameters())}')
+```
+
+A：构造一个"伪输入"，验证算法正确性
+
+---
 

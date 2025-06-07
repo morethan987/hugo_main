@@ -17,9 +17,9 @@ authors:
   - Morethan
 ---
 {{< katex >}}
-{{< lead >}}  
+{{< lead >}}
 A novel brain-inspired architecture that introduces the concept of "temporality" to existing time-agnostic neuron models, giving rise to a series of brain-like emergent phenomena.  
-{{< /lead >}}  
+{{< /lead >}}
 
 ## Preface  
 
@@ -304,5 +304,41 @@ A somewhat less rigorous thought: SNN processes temporal information and activat
 
 ## Code Analysis
 
-I don't have time to study the code carefully now 😢 Finals are coming, I have to go review.
+The official `README.md` file provides a clear explanation of the project's directory structure, so I won't go into detail here. After briefly reviewing the model code in the `models` folder, you can directly look at the specific training code in the `tasks` folder.
+
+
+{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
+Just looking at the model code actually makes it not very easy to understand how the model interacts with the data🤔
+{{< /alert >}}
+
+### Maze Problem
+
+This task is a typical one emphasized in the CTM paper. There is an interactive version of the demonstration on the [interactive webpage](https://pub.sakana.ai/ctm/), which very intuitively explains the logic and final results of this task. Most of the code is quite easy to understand, so here are some Q&As that may help with comprehension🤔
+
+---
+
+Q: What is the `prediction_reshaper` parameter?
+
+A: It can be understood as the shape of the output parameters, and each task has different configurations.
+
+In the maze problem, this parameter is set to `[args.maze_route_length, 5]`, where the number 5 indicates that the model predicts from five actions—"up, down, left, right, stop"—and outputs the normalized probability distribution of these five actions; `maze_route_length` represents the number of steps for prediction, which is set to 75 steps on the web interface.
+
+---
+
+Q: What does the following piece of code do?
+
+```python
+```python
+try:
+    # Determine pseudo input shape based on dataset
+    h_w = 39 if args.dataset in ['mazes-small', 'mazes-medium'] else 99 # Example dimensions
+    pseudo_inputs = torch.zeros((1, 3, h_w, h_w), device=device).float()
+    model(pseudo_inputs)
+except Exception as e:
+    print(f"Warning: Pseudo forward pass failed: {e}")
+```
+
+print(f'Total params: {sum(p.numel() for p in model.parameters())}')
+
+---
 

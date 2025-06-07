@@ -34,9 +34,40 @@ This article primarily focuses on the book [“Foundation of Large Models”](ht
 
 ## Basics of Language Models
 
+This is the most commonly taught knowledge in universities today: n-gram based statistical language modeling, RNN-based language models, and Transformer-based language models. Below is a flowchart of the Transformer architecture.
+
+![Transformer](Transformer.png "引用自第 16 页")
+
+The model architecture doesn't have much to say, but there are a few interesting questions that were a bit unclear to me before reading the book but became immediately clear afterward.
+
+---
+
+Q: It's said that Transformer is a parallel computing architecture, so why can tokens only be generated one after another in a serial manner?
+
+A: The parallel computing of the Transformer is reflected in the processing of known sequences, where all known token vectors are fed into the model in parallel for processing. However, the token generation process remains serial and autoregressive.
+
+---
+
+Q: Does swapping the order of residual connections and layer normalization affect the model?
+
+A: Networks that place layer normalization after residual connections are called Post-LN, while those that place layer normalization before residual connections are called Pre-LN. Post-LN has a stronger ability to handle representation collapse but is slightly weaker at addressing gradient vanishing, whereas Pre-LN is the opposite.
+
+Q: What does representation collapse mean?
+
+A: During training, the learned representations of the model become less discriminative, meaning different input samples are mapped to similar or even identical feature vectors, causing the model to lose its ability to distinguish between different samples.
+
+---
+
+Q: Why can the Encoder and Decoder parts of the Transformer be used independently to build a language model?
+
+A:
+
+---
+
+
+
 ## Architecture of Large Language Models
 
 ## Parameter-Efficient Fine-Tuning
 
 ## Model Editing
-
