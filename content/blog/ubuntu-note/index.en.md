@@ -635,6 +635,18 @@ tar -xvf file.tar
 tar -xzvf file.tar.gz  
 ```
 
+### Temporary Environment Variables
+
+Sometimes, even with a VPN proxy enabled, the terminal may still be unable to access the internet properly. This is likely due to the terminal being unable to automatically detect the proxy port. The solution is to modify the environment variables, which can be changed permanently (by writing to a file) or temporarily, as shown below:
+
+```shell
+# For use in the PowerShell terminal on Windows
+$env:HTTPS_PROXY="http://127.0.0.1:7890"
+
+# For use in bash or cmd terminals
+set HTTPS_PROXY=http://127.0.0.1:7890
+```
+
 ## References  
 
 - [How to Partition and Mount Disks in Ubuntu](https://cloud.tencent.com/developer/article/2456171)

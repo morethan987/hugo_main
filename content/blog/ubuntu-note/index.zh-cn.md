@@ -635,6 +635,18 @@ tar -xvf file.tar
 tar -xzvf file.tar.gz
 ```
 
+### 临时环境变量
+
+有时即便开启了 VPN 代理，终端仍然无法正常访问外网，这时很有可能就是终端无法自动识别代理端口号导致的。解决方法就是更改环境变量即可，可以永久修改(写入文件)，也可以临时修改，如下：
+
+```shell
+# Windows中的powershell终端中使用
+$env:HTTPS_PROXY="http://127.0.0.1:7890"
+
+# bash或cmd终端中使用
+set HTTPS_PROXY=http://127.0.0.1:7890
+```
+
 ## 引用文献
 
 - [如何在Ubuntu系统中进行磁盘的分区与挂载](https://cloud.tencent.com/developer/article/2456171)
