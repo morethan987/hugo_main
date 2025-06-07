@@ -37,7 +37,7 @@ authors:
 
 这部分内容就是目前大学中最常教授的知识内容：基于 n-grams 的统计学语言建模，基于 RNN 的语言模型和基于 Transformer 的语言模型。下面贴一张 Transformer 架构的流程图。
 
-![Transformer](Transformer.png "引用自第 16 页")
+![Transformer](img/Transformer.png "引用自第 16 页")
 
 模型架构没什么好说的，但这里有几个比较有意思的问题，在我看书之前还比较模糊，看书之后就立刻清晰了。
 
