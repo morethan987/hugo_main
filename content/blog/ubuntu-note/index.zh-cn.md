@@ -144,6 +144,24 @@ ln -s /target/dir ~/桌面
 cd ~/桌面/dir
 ```
 
+## 系统信息
+
+在没有 UI 界面的时候，就需要用命令行来查看系统的相关信息
+
+```bash
+# 系统信息概要
+hostnamectl
+
+# CPU详细信息
+lscpu
+
+# 查看 CPU 使用情况
+top
+
+# 分区使用情况
+df -h
+```
+
 ## 配置Git
 
 Linux 的一大特色就是极致的简洁，因此使用命令行来操纵 Git 是 Linux 用户的首选😃Ubuntu 自带 Git 所以说不用自行安装了，如果想要升级的话见下：

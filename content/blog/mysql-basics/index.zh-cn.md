@@ -125,7 +125,6 @@ SELECT id, name, gender, score
 FROM students
 WHERE class_id = 1
 ORDER BY score DESC;
-
 ```
 
 **分页查询**：
@@ -136,7 +135,6 @@ SELECT id, name, gender, score
 FROM students
 ORDER BY score DESC
 LIMIT 3 OFFSET 0; -- 从第0条记录开始查，往后查最多3条，也可以不足3条
-
 ```
 
 **聚合查询**，利用 MySQL 中的聚合函数来查询：
@@ -164,15 +162,14 @@ SELECT COUNT(*) boys FROM students WHERE gender = 'M';
 
 ```sql
 -- 按class_id分组进行聚合查询, 类似于for循环:
-SELECT COUNT(*) num FROM students GROUP BY class_id;
 -- 注意这里没有选中class_id因此最后的结果表格没有id
+SELECT COUNT(*) num FROM students GROUP BY class_id;
 
 -- 按class_id分组, 并显示class_id:
 SELECT class_id, COUNT(*) num FROM students GROUP BY class_id;
 
 -- 多个分组标准, 例如按class_id, gender分组:
 SELECT class_id, gender, COUNT(*) num FROM students GROUP BY class_id, gender;
-
 ```
 
 **多表查询**(笛卡尔查询)：
@@ -200,8 +197,6 @@ SELECT
     c.id cid,
     c.name cname
 FROM students s, classes c;
-
-
 ```
 
 多表查询的返回依然是一个二维数据表，但是这个数据表是通过**笛卡尔积**的形式组织的，因此也叫笛卡尔查询
@@ -239,7 +234,6 @@ SELECT ... FROM tableA ??? JOIN tableB ON tableA.column1 = tableB.column2;
 
 ![JoinQuery.png](img/JoinQuery.png)
 
-
 #### 修改
 
 - **插入语法**：
@@ -253,6 +247,12 @@ INSERT INTO students (class_id, name, gender, score) VALUES
   (1, '大宝', 'M', 87),
   (2, '二宝', 'M', 81),
   (3, '三宝', 'M', 83);
+
+-- 插入子查询
+INSERT INTO TotalPrice (OID, TotalPrice)
+SELECT OID, SUM(Quantity * Price * Discount)
+FROM Products INNER JOIN OrderItems
+ON Products.PID = OrderItems.PID GROUP BY OID;
 ```
 
 - **更新**：

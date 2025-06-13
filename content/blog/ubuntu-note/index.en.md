@@ -144,6 +144,24 @@ ln -s /target/dir ~/Desktop
 cd ~/Desktop/dir  
 ```  
 
+## System Information
+
+When there is no UI, you need to use the command line to check relevant system information.
+
+```bash
+# Summary of system information
+hostnamectl
+
+# CPU details
+lscpu
+
+# Check CPU usage
+top
+
+# Partition usage
+df -h
+```
+
 ## Configuring Git
 
 One of the standout features of Linux is its extreme simplicity, which is why using the command line to manage Git is the preferred choice for Linux users 😃. Ubuntu comes with Git pre-installed, so there's no need to install it separately. If you want to upgrade, follow these steps:

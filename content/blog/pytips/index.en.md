@@ -274,7 +274,11 @@ conda config --show channels # View Conda's download sources
 
 conda remove -n xxx # Delete the virtual environment named "xxx"
 
-conda create -n env_name # Create a virtual environment with the specified name, using the default Python version
+# Create a virtual environment named xxx using the default Python version
+conda create -n xxx
+
+# Clone an existing environment
+conda create --name xyx --clone xxx
 ```
 
 Adding domestic (Chinese) download sources:  
@@ -304,6 +308,9 @@ conda search package_name
 # List all installed packages and their versions  
 conda list  
 
+# View packages in the environment named xxx
+conda list -n xxx
+
 # Clean unused packages and cache to save disk space  
 conda clean --all  
 
@@ -321,6 +328,8 @@ pip download scikit-image --dest ./scikit_image_files --only-binary :all: --pyth
 # --find-links specifies the folder containing the whl files
 pip install scikit_image-0.25.2-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl --no-index --find-links=./
 ```
+
+Sometimes, errors may occur during download. In this case, you need to go to the [pypi](https://pypi.org/) official website to check if there is a corresponding package, and then fine-tune the command to succeed in downloading.
 
 
 {{< alert icon="triangle-exclamation" cardColor="#ffcc00" textColor="#333333" iconColor="#8B6914" >}}

@@ -274,7 +274,11 @@ conda config --show channels # 查看conda下载源
 
 conda remove -n xxx  # 删除环境名为xxx的虚拟环境
 
-conda create -n 环境名 # 创建环境名为xxx的虚拟环境，使用默认python版本
+# 创建环境名为xxx的虚拟环境，使用默认python版本
+conda create -n xxx
+
+# 克隆已有环境
+conda create --name xyx --clone xxx
 ```
 
 添加国内下载源：
@@ -304,6 +308,9 @@ conda search package_name
 # 列出所有包的名称及版本
 conda list
 
+# 查看名为xxx的环境中的包
+conda list -n xxx
+
 # 删除未使用的包和缓存，节省磁盘空间
 conda clean --all
 
@@ -321,6 +328,8 @@ pip download scikit-image --dest ./scikit_image_files --only-binary :all: --pyth
 # --find-links指定whl所在的文件夹
 pip install scikit_image-0.25.2-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl --no-index --find-links=./
 ```
+
+有些时候下载会出现报错的情况，这个时候就需要上 [pypi](https://pypi.org/) 官网去检查一下是否有对应的包，然后再微调一下命令，这样才能下载成功
 
 
 {{< alert icon="triangle-exclamation" cardColor="#ffcc00" textColor="#333333" iconColor="#8B6914" >}}
