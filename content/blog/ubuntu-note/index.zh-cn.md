@@ -248,6 +248,20 @@ sudo apt remove xxx
 sudo apt autoremove # 清理残留
 ```
 
+如果出现网络访问异常，可能是 apt 的代理设置需要手动指定。apt 默认不使用系统的代理设置，需要在 `/etc/apt/apt.conf.d/99proxy` 文件中明确写入代理设置。
+
+```bash
+# 查看系统的代理设置
+env | grep -i proxy
+
+# 进入配置文件
+sudo nano /etc/apt/apt.conf.d/99proxy
+
+# 写入代理设置，请根据系统代理设置填写
+Acquire::http::Proxy "http://127.0.0.1:7890/";
+Acquire::https::Proxy "http://127.0.0.1:7890/";
+```
+
 ### deb
 
 从浏览器上下载 deb 压缩包之后，直接双击即可直接安装。其内部执行的命令其实就是 apt 安装，因此管理方式也是与 apt 相同的。

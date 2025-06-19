@@ -248,6 +248,20 @@ sudo apt remove xxx
 sudo apt autoremove # Clean up residuals  
 ```  
 
+If there is an abnormality in network access, it might be necessary to manually specify the proxy settings for apt. By default, apt does not use the system's proxy settings; instead, you need to explicitly write the proxy settings into the `/etc/apt/apt.conf.d/99proxy` file.
+
+```bash
+# Check the system's proxy settings
+env | grep -i proxy
+
+# Open the configuration file
+sudo nano /etc/apt/apt.conf.d/99proxy
+
+# Write the proxy settings, filling them out according to your system's proxy settings
+Acquire::http::Proxy "http://127.0.0.1:7890/";
+Acquire::https::Proxy "http://127.0.0.1:7890/";
+```
+
 ### deb  
 
 After downloading a `.deb` package from a browser, double-clicking it will install it directly. Internally, this uses `apt`, so management is the same as with `apt`.  
