@@ -12,7 +12,7 @@ series:
   - Technical Miscellany
 series_order: 8
 date: 2025-05-01
-lastmod: 2025-05-20
+lastmod: 2025-06-20
 authors:
   - Morethan
 ---
@@ -59,6 +59,63 @@ git pull # Fetch the latest code
 
 ./install.sh # Re-run the installation script  
 ```  
+
+## Text Editing
+
+Text editing here specifically refers to editing text in the command line. Editing text in a dedicated text editor is so straightforward and simple that it doesn't require learning. And in most cases, we don't need to edit text in the command line.
+
+However, there are times when you have to edit text in the command line: servers often lack a GUI😢 Even though you can run a GUI editor on a server using VS Code plugins, launching such a "heavyweight" editor just to modify a configuration file feels like overkill🤔
+
+If you simply want to create a file and then edit it with another editor, one simple command will suffice:
+
+```bash
+# Just touch it and it will appear😉
+touch file_name.md
+```
+
+### nano
+This command-line editor is pre-installed in Ubuntu systems, so there's no need for a separate download.
+
+Editing a file is very simple:
+
+```bash
+nano file_name
+```
+
+Once inside nano, there are a few lines of prompts that highlight the relevant shortcuts; just follow the instructions. It’s a very simple command-line text editor.
+
+### vim
+
+I've heard about this "legendary ancient" editor for a long time and learned about its many advantages: keeping your fingers on the keyboard helps with thought flow, once you get used to it you can't quit, it's minimalist and highly customizable, all cool programmers use vim…
+
+After several attempts, I came to the conclusion: vim is great, but I'm really lazy😢 I really don't want to spend weeks getting used to all kinds of key combinations.
+
+Here I only document the most commonly used operations, suitable for those who occasionally use vim for lightweight editing. After mastering these operations, you can claim that you know how to use vim😋
+
+```bash
+i # Enter insert mode
+
+<ESC> # Return to normal mode
+
+: # Enter command mode
+
+:q! # Quit without saving
+
+:wq # Save and quit
+
+y6w # Copy 6 words
+
+p # Paste
+
+dd # Delete a line
+
+dw # Delete a word
+```
+
+
+{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
+There are many detailed vim tutorials online. If you want to learn vim thoroughly, you can check them out👀 It's clear that those tutorials really want me to become a vim master😔 But I'm just too lazy😔
+{{< /alert >}}
 
 ## Fcitx 5  
 
