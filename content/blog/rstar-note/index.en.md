@@ -14,7 +14,7 @@ series:
   - Paper Notes
 series_order: 1
 date: 2025-03-20
-lastmod: 2025-03-20
+lastmod: 2025-06-20
 authors:
   - Morethan
 ---
@@ -170,3 +170,33 @@ $$
 2. When processing the MATH dataset, the maximum depth of MCTS is 8; in other cases, the maximum depth is 5.
 3. The reasoning of the "peer" small model and the target small model can be executed in parallel to improve computational efficiency.
 4. During path evaluation, the truncation point of the path should be between 20% and 80% of the total path.
+
+## In-depth Understanding
+
+rStar generates high-quality paths to solve problems. For example, consider the original figure from the following paper:
+
+![rStar_example.png](img/rStar_example.png)
+
+The entire process is: \(SLM_{1}\) generates a solution path for the problem via MCTS, then this path is masked, and \(SLM_{2}\) attempts to solve the problem under the condition of the original line of thought. If it successfully derives the correct answer, this path is considered a high-quality path.
+
+Below, let's analyze some key points step by step:
+
+1. Problem information: In mathematical problems, the information in the problem should be sufficient to completely solve the mathematical problem, and all necessary information is fully provided within the problem itself.
+2. The final result can be precisely verified.
+
+These characteristics are actually the **prior knowledge** specific to the domain of "mathematical question-answering." Without these priors, the rStar process cannot proceed. As we all know, mathematical question-answering and coding are recognized as relatively closed domains; therefore, AI achieves relatively excellent results when performing reinforcement learning in these areas.
+
+Here, it is important to clarify the connection between rStar and classic reinforcement learning. In classical reinforcement learning, the Agent selects an action, the environment provides feedback, and the Agent immediately updates its parameters (or accumulates a small batch before updating). What rStar essentially does is decouple the data generation and training processes: first, let the Agent generate a large amount of data on its own, then further filter out the high-quality data, and finally train uniformly.
+
+
+{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
+Can the data filtering process of rStar be combined with the real-time update strategy of traditional reinforcement learning? 🤔 Indeed, someone has done this; see [TTRL](https://arxiv.org/abs/2504.16084) for details.
+{{< /alert >}}
+
+In summary, if we want to apply the successful experience of rStar to the field of clinical medical diagnosis, we need to transform clinical medical diagnosis into a closed domain. How to make it a closed domain? This requires considering what existing data can achieve.
+
+What is the existing data? It includes the patient's basic information, admission diagnosis, etc. All of this data is obtained from actual examinations. Here, it can be broken down into individual actions, such as obtaining the result of an "admission diagnosis" after performing it. Then, this result can be compared with real data to provide reverse supervision for fine-tuning the model to better perform admission diagnoses. Similar operations can be performed for each critical step.
+
+In other words, an important prior in the field of clinical medical diagnosis is the **complete diagnostic process that human experts have developed through years of practice**. In this diagnostic process, each step generates data that can be used for model training, and the model ultimately learns to **better complete the aforementioned process**. Although the resulting model cannot fully handle emergencies (these situations are not included in the training data), in fact, emergencies should not be handled by models at all. Models should deal with repetitive general problems, while emergencies should be handled by experienced human experts.
+
+To summarize further, what we can do is to distill and summarize the diagnostic process of human experts into a comprehensive workflow. In each step of the workflow, the model should independently collect relevant information and derive conclusions for that step. During this process, MCTS can be used for search sampling, thereby enabling the model to better autonomously gather information and reason about conclusions.
