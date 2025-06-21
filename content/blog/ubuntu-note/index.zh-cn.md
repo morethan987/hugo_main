@@ -74,6 +74,7 @@ touch file_name.md
 ```
 
 ### nano
+
 这个命令行编辑器是 Umbundu 系统自带的命令行文本编辑器，不用专门下载。
 
 想要编辑文件的话也非常简单：
@@ -699,6 +700,138 @@ echo "✅ 清理完成,你可以使用 sudo journalctl -u clean-up.service 查�
 ```bash
 sudo chmod +x setup-cleanup.sh && sudo ./setup-cleanup.sh
 ```
+
+## 安装Nodejs
+
+Node.js 是一个常用的环境依赖，并且常常会占用大量的硬盘空间，如果对其安装逻辑不清楚，很容易残留大量的无用文件。
+
+我对于这种基础环境依赖的态度一直都是：如不了解，绝不安装。
+
+从官方网站可以查询到标准的安装命令：
+
+```bash
+# 下载并安装nvm:
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
+
+# 当前终端重新加载nvm
+\. "$HOME/.nvm/nvm.sh"
+
+# 下载并安装 Node.js:
+nvm install 22
+
+# 检查 Node.js 版本:
+node -v # 应该是 "v22.16.0".
+nvm current # 应该是 "v22.16.0".
+
+# 检查 npm 版本:
+npm -v # 应该是 "10.9.2".
+
+# 可选，如果需要安装pnpm才执行👇
+# 下载并安装 pnpm:
+corepack enable pnpm
+
+# 检查 pnpm 版本:
+pnpm -v
+```
+
+首先第一条命令就是使用 curl 下载 nvm 管理器，这个工具用于管理 Node.js 的版本。这个工具会被下载到 `~/.nvm` 目录下。具体的使用方法后文会有介绍。
+
+第二条命令用于在当前命令行中加载 nvm，让 nvm 命令被有效识别。重载操作也可以不用命令进行，把命令行窗口关掉重开也行。
+
+第三条命令就是使用 nvm 安装 Node.js。node 主要的程序包会被放置在 `~/.nvm/versions/node/` 目录中，例如 `22.16.0` 版本会被放在 `~/.nvm/versions/node/v22.16.0/` 目录中。
+
+使用 nvm 安装 node 的时候会默认安装对应版本的 npm，因此不用特地去安装 npm🤗
+
+pnpm 需要加一条指令才能够安装，如上所示。一些基本的 pnpm 的简介见后文：[pnpm简介]({{< relref "#pnpm简介" >}})
+
+### nvm简介
+
+和其他包管理工具类似，nvm 本身的使用并不复杂，其目的就是稳定忠实地完成最基本的管理工作。下面是最最常见的命令表：
+
+| 功能            | 命令示例                      |
+| ------------- | ------------------------- |
+| 安装 Node       | `nvm install 22`          |
+| 使用某个版本        | `nvm use 18`              |
+| 设置默认版本        | `nvm alias default 18`    |
+| 查看已装版本        | `nvm ls`                  |
+| 查看可用版本        | `nvm ls-remote`           |
+| 卸载某个版本        | `nvm uninstall 16.20.2`   |
+
+如果还有其他特殊的需求，可以去 nvm 的官方 GitHub 中查看：[nvm](https://github.com/nvm-sh/nvm)
+
+### npm简介
+
+npm 是 Node.js 的一个包管理工具，用于管理项目中的 node 依赖包。
+
+在实际项目开发过程中，我们会使用 npm 来安装某些依赖，这些依赖包会占用大量的硬盘空间。下面是主要的清理项：
+
+```bash
+##### 第一项，项目根目录中的node_modules #####
+# 在对应根目录运行👇查看空间占用
+du -sh node_modules
+
+# 清理方法简单粗暴(按需清理)
+rm -r node_modules
+
+##### 第二项，全局依赖 #####
+# 查询全局依赖位置
+npm root -g
+
+# 查看全局占用大小
+du -sh $(npm root -g)
+
+# 清理方法简单粗暴(按需清理)
+rm -r module_name
+
+##### 第三项，下载缓存 #####
+# 查看缓存位置
+npm config get cache
+
+# 查看缓存大小
+du -sh $(npm config get cache)
+
+# 清理缓存
+npm cache clean --force
+```
+
+### pnpm简介
+
+`pnpm` 也是一个 Node.js 包管理工具，与 `npm` 和 `yarn` 类似，但它在性能、磁盘空间占用和依赖管理方面更高效。
+
+| 特性              | 说明                                                     |
+| --------------- | ------------------------------------------------------ |
+| ✅ 节省磁盘空间        | 使用 **内容寻址（content-addressable）** 方式，把依赖存放在共享存储中，避免重复安装 |
+| ⚡ 安装速度快         | 依赖项软链接，不复制，减少 IO 操作                                    |
+| ✅ 保证依赖隔离        | 使用严格的 `node_modules` 结构，防止隐式依赖                         |
+| ✅ 与 npm/yarn 兼容 | 支持大多数 npm/yarn 脚本和命令                                   |
+
+
+常见命令表格，包含了与 npm 命令的对比：
+
+| 操作    | `npm` 命令            | `pnpm` 替代          |
+| ----- | ------------------- | ------------------ |
+| 初始化项目 | `npm init`          | `pnpm init`        |
+| 安装依赖  | `npm install`       | `pnpm install`     |
+| 添加依赖  | `npm install axios` | `pnpm add axios`   |
+| 移除依赖  | `npm uninstall foo` | `pnpm remove foo`  |
+| 全局安装  | `npm install -g`    | `pnpm add -g`      |
+| 清除缓存  | `npm cache clean`   | `pnpm store prune` |
+
+相比 npm，pnpm 对于空间的管理更干净，下面是一些关键目录：
+
+| 位置               | 作用             |
+| ---------------- | -------------- |
+| `node_modules/`  | 使用硬链接构造的虚拟依赖树  |
+| `~/.pnpm-store/` | 所有依赖包的真实文件存储位置 |
+
+由于 pnpm 在 `node_modules` 中并不存放实际文件，因此也就无所谓全局与局部缓存一说。只需要一行命令就能够清理所有能够清理的依赖：
+
+```bash
+# 清理缓存
+pnpm store prune
+```
+
+pnpm 会扫描所有用过的项目中的 `.pnpm-lock.yaml`，找出未再使用的版本并清理对应缓存。需要的话这行命令可以直接加入[开机自动清理]({{< relref "#开机自动清理" >}})中
 
 ## 其他
 

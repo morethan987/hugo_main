@@ -74,6 +74,7 @@ touch file_name.md
 ```
 
 ### nano
+
 This command-line editor is pre-installed in Ubuntu systems, so there's no need for a separate download.
 
 Editing a file is very simple:
@@ -699,6 +700,138 @@ Finally, run this setup script once and you're done:
 ```bash
 sudo chmod +x setup-cleanup.sh && sudo ./setup-cleanup.sh
 ```
+
+## Install Nodejs
+
+Node.js is a commonly used environment dependency and often takes up a lot of disk space. If you don't understand its installation logic, it's easy to leave behind a large number of useless files.
+
+My attitude towards such basic environment dependencies has always been: if you don't understand it, never install it.
+
+The standard installation command can be found on the official website:
+
+```bash
+# Download and install nvm:
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
+
+# Reload nvm in the current terminal
+. "$HOME/.nvm/nvm.sh"
+
+# Download and install Node.js:
+nvm install 22
+
+# Check Node.js version:
+node -v # Should be "v22.16.0".
+nvm current # Should be "v22.16.0".
+
+# Check npm version:
+npm -v # Should be "10.9.2".
+
+# Optional, execute only if pnpm needs to be installed👇
+# Download and install pnpm:
+corepack enable pnpm
+
+# Check pnpm version:
+pnpm -v
+```
+
+The first command uses curl to download the nvm manager, which is a tool for managing Node.js versions. This tool will be downloaded to the `~/.nvm` directory. Specific usage methods will be introduced later.
+
+The second command is used to load nvm in the current command line so that the nvm command can be effectively recognized. The reload operation can also be done without a command by simply closing and reopening the command-line window.
+
+The third command uses nvm to install Node.js. The main node packages will be placed in the `~/.nvm/versions/node/` directory, for example, the `22.16.0` version will be placed in the `~/.nvm/versions/node/v22.16.0/` directory.
+
+When using nvm to install node, the corresponding version of npm will be installed by default, so there is no need to install npm separately 😊
+
+pnpm requires an additional command to install, as shown above. A brief introduction to pnpm is provided below: [Introduction to pnpm]({{< relref "#introduction-to-pnpm" >}})
+
+### Introduction to nvm
+
+Similar to other package management tools, the use of nvm itself is not complicated, and its purpose is to stably and faithfully complete the most basic management work. Below is the most common command table:
+
+| Function            | Command Example                      |
+| ------------- | ------------------------- |
+| Install Node       | `nvm install 22`          |
+| Use a specific version        | `nvm use 18`              |
+| Set default version        | `nvm alias default 18`    |
+| View installed versions        | `nvm ls`                  |
+| View available versions        | `nvm ls-remote`           |
+| Uninstall a specific version        | `nvm uninstall 16.20.2`   |
+
+If there are any other special requirements, you can check them on nvm's official GitHub: [nvm](https://github.com/nvm-sh/nvm)
+
+### Introduction to npm
+
+npm is a package management tool for Node.js, used to manage node dependency packages in projects.
+
+In actual project development, we use npm to install some dependencies, which can take up a lot of disk space. Below are the main cleanup items:
+
+```bash
+##### First item, node_modules #####
+# Run in the corresponding root directory to view space usage
+du -sh node_modules
+
+# Cleanup method is simple (clean as needed)
+rm -r node_modules
+
+##### Second item, global dependencies #####
+# Query the location of global dependencies
+npm root -g
+
+# View the size of global usage
+du -sh $(npm root -g)
+
+# Cleanup method is simple (clean as needed)
+rm -r module_name
+
+##### Third item, download cache #####
+# View cache location
+npm config get cache
+
+# View cache size
+du -sh $(npm config get cache)
+
+# Clear cache
+npm cache clean --force
+```
+
+### Introduction to pnpm
+
+`pnpm` is another Node.js package manager, similar to `npm` and `yarn`, but it is more efficient in terms of performance, disk space usage, and dependency management.
+
+| Feature              | Description                                                     |
+| --------------- | ------------------------------------------------------ |
+| ✅ Saves disk space        | Uses **content-addressable** storage, placing dependencies in shared storage to avoid redundant installations |
+| ⚡ Faster installation         | Dependency soft links, no copying, reducing IO operations                                    |
+| ✅ Ensures dependency isolation        | Uses strict `node_modules` structure to prevent implicit dependencies                         |
+| ✅ Compatible with npm/yarn | Supports most npm/yarn scripts and commands                                   |
+
+
+Common command table, including comparison with npm commands:
+
+| Operation    | `npm` command            | `pnpm` alternative          |
+| ----- | ------------------- | ------------------ |
+| Initialize project | `npm init`          | `pnpm init`        |
+| Install dependencies  | `npm install`       | `pnpm install`     |
+| Add dependency  | `npm install axios` | `pnpm add axios`   |
+| Remove dependency  | `npm uninstall foo` | `pnpm remove foo`  |
+| Global install  | `npm install -g`    | `pnpm add -g`      |
+| Clear cache  | `npm cache clean`   | `pnpm store prune` |
+
+Compared to npm, pnpm manages space more cleanly. Below are some key directories:
+
+| Location              | Purpose                  |
+| --------------------- | ------------------------ |
+| `node_modules/`       | Virtual dependency tree constructed using hard links |
+| `~/.pnpm-store/`      | Actual storage location for all dependency packages |
+
+Since pnpm does not store actual files in `node_modules`, there is no distinction between global and local caches. A single command is all you need to clean up all removable dependencies:
+
+```bash
+# Clean the cache
+pnpm store prune
+```
+
+pnpm scans all `.pnpm-lock.yaml` files in the projects you've used, identifies unused versions, and cleans up the corresponding cache. If needed, this command can be directly added to [Auto Clean on Boot]({{< relref "#auto-clean-on-boot" >}}).
 
 ## Miscellaneous  
 
