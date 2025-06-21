@@ -808,14 +808,14 @@ npm cache clean --force
 
 Common command table, including comparison with npm commands:
 
-| Operation    | `npm` command            | `pnpm` alternative          |
-| ----- | ------------------- | ------------------ |
-| Initialize project | `npm init`          | `pnpm init`        |
-| Install dependencies  | `npm install`       | `pnpm install`     |
-| Add dependency  | `npm install axios` | `pnpm add axios`   |
-| Remove dependency  | `npm uninstall foo` | `pnpm remove foo`  |
-| Global install  | `npm install -g`    | `pnpm add -g`      |
-| Clear cache  | `npm cache clean`   | `pnpm store prune` |
+| Operation            | `npm` command       | `pnpm` alternative |
+| -------------------- | ------------------- | ------------------ |
+| Initialize project   | `npm init`          | `pnpm init`        |
+| Install dependencies | `npm install`       | `pnpm install`     |
+| Add dependency       | `npm install axios` | `pnpm add axios`   |
+| Remove dependency    | `npm uninstall foo` | `pnpm remove foo`  |
+| Global install       | `npm install -g`    | `pnpm add -g`      |
+| Clear cache          | `npm cache clean`   | `pnpm store prune` |
 
 Compared to npm, pnpm manages space more cleanly. Below are some key directories:
 
@@ -870,7 +870,25 @@ $env:HTTPS_PROXY="http://127.0.0.1:7890"
 set HTTPS_PROXY=http://127.0.0.1:7890
 ```
 
-## References  
+### Temporary File Inspection
+
+For regular files, you can just open them with the corresponding editor. However, for some special files, such as extremely large CSV files, you may only want to quickly check a small portion of the data. In this case, you can use the `head` command:
+
+```bash
+# Read and display the first 10 lines of your_file (without reading the entire file)
+head -n 10 your_file.csv
+```
+
+If garbled text appears, it must be due to an encoding format issue. You can use `iconv` for conversion:
+
+```bash
+# Convert from GBK to UTF-8
+head -n 10 "your_file.csv" | iconv -f gbk -t utf-8
+```
+
+If you're unsure about the original and target encodings, just throw the garbled text to an AI — it's simple and convenient 😋
+
+## References
 
 - [How to Partition and Mount Disks in Ubuntu](https://cloud.tencent.com/developer/article/2456171)
 - [LibreOffice Suite](https://cn.linux-terminal.com/?p=1602)

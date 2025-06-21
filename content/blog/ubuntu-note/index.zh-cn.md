@@ -870,6 +870,24 @@ $env:HTTPS_PROXY="http://127.0.0.1:7890"
 set HTTPS_PROXY=http://127.0.0.1:7890
 ```
 
+### 临时查看文件
+
+一般的文件直接用对应的编辑器打开就行了。但是有一些特殊文件，例如超大的 csv 文件，只想快速查看一小部分数据。这个时候就可以使用 `head` 命令：
+
+```bash
+# 读取your_file文件的前10行并显示(不会读取完整文件)
+head -n 10 your_file.csv
+```
+
+如果出现乱码，一定是编码格式出错了，可以使用 `iconv` 进行转换：
+
+```bash
+# 从gbk转为utf-8
+head -n 10 "your_file.csv" | iconv -f gbk -t utf-8
+```
+
+如果你不清楚到底是什么编码转什么编码，可以直接把乱码丢给 AI，简单方便😋
+
 ## 引用文献
 
 - [如何在Ubuntu系统中进行磁盘的分区与挂载](https://cloud.tencent.com/developer/article/2456171)
