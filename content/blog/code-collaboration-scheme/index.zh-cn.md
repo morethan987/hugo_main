@@ -39,7 +39,7 @@ id1("工作分配")-->id2("VS Code协同")-->id3("MATLAB代码执行");
 
 ### 软件工具
 
-1. VS Code 编辑器，以及 Live Server 插件，MATLAB 插件
+1. VS Code 编辑器，以及 Live Share 插件，MATLAB 插件
 
 2. MATLAB
 

@@ -39,7 +39,7 @@ There are two key points:
 
 ### Software Tools
 
-1. VS Code Editor, along with the Live Server plugin, MATLAB plugin
+1. VS Code Editor, along with the Live Share plugin, MATLAB plugin
 
 2. MATLAB.
 
