@@ -17,14 +17,14 @@ authors:
   - Morethan
 ---
 {{< katex >}}
-{{< lead >}}
-总结 CUMCM2024 比赛经验，针对数学建模国赛 A 题和MATLAB改进的代码协同方案
-{{< /lead >}}
+
+{{< lead >}} 总结 CUMCM2024 比赛经验，针对数学建模国赛 A 题和MATLAB改进的代码协同方案 {{< /lead >}}
 
 ## 流程概览
 
 {{< mermaid >}}
 graph LR;
+
 id1("工作分配")-->id2("VS Code协同")-->id3("MATLAB代码执行");
 {{< /mermaid >}}
 
@@ -131,6 +131,7 @@ run('config.m');
 ### 代码技巧
 
 - **并行运行**
+
 MATLAB 能够支持多线程计算，仅需将一般的 `for` 循环改写为 `parfor` 即可
 
 

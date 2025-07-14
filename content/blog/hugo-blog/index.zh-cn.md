@@ -17,9 +17,7 @@ authors:
   - Morethan
 ---
 
-{{< lead >}}
-博客网站折腾日志，从手搓到 Hugo 的曲折经历。
-{{< /lead >}}
+{{< lead >}} 博客网站折腾日志，从手搓到 Hugo 的曲折经历。 {{< /lead >}}
 
 ## 为什么 Hugo
 
@@ -145,7 +143,7 @@ Hugo 的网站主题很多，具体参考 [Hugo Themes](https://themes.gohugo.io
 3. 对于主题源代码的覆写详见 [mdimporter](https://github.com/morethan987/hugo_main/blob/main/layouts/shortcodes/mdimporter.html) 以及用于去除注入文件开头元数据的 [stripFrontMatter](https://github.com/morethan987/hugo_main/blob/main/layouts/partials/stripFrontMatter.html)；覆写目录参考 GitHub 上的配置
 
 这个插件也是投入了我巨大的精力，虽然也只有几天时间🤔但是那几天还是挺累的😵‍💫
-  
+
 如果这个插件帮助了你，还请转发分享；如果你对于这个插件的功能不满意，你也可以在 GitHub 上向我提交 Issue🫡或者熟悉代码的朋友可以直接把源码拿去修改，注释很完整，代码比较规范🤗
 
 如果你能把你亲自修改升级的代码也分享给我（在 GitHub 上提交 Pull Request）那更是万分感谢！☺️

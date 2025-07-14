@@ -204,6 +204,7 @@ poetry show your-package --tree # 展示特定包的依赖树
 ```
 
 ## UV
+
 一款用 `Rust` 编写的包管理工具，命令格式与 `poetry` 极其类似。
 
 ### 安装
@@ -448,13 +449,12 @@ python -m nuitka --lto=yes --remove-output --onefile main.py
 | `--company-name`, `--product-name`, `--file-version`, `--product-version`, `--file-description` | 设置 Windows 可执行文件的属性。                                      |
 
 ## 参考资料
+
 - Poetry 相关：
-	- [poetry 入门完全指南_poetry使用-CSDN博客](https://blog.csdn.net/weixin_42871919/article/details/137125544)非常详细的资料
-	- [Poetry](https://python-poetry.org/)
-	- [poetry如何更换国内源-数据科学SourceResearch](https://www.resourch.com/archives/66.html)
-
+    - [poetry 入门完全指南_poetry使用-CSDN博客](https://blog.csdn.net/weixin_42871919/article/details/137125544)非常详细的资料
+    - [Poetry](https://python-poetry.org/)
+    - [poetry如何更换国内源-数据科学SourceResearch](https://www.resourch.com/archives/66.html)
 - UV 相关：
-	- [Python 项目和包管理器 uv 安装以及使用 - 深海小涛](https://blog.xtao.de/380)为数不多的写了 `uv python install` 国内源地址的博客
-
+    - [Python 项目和包管理器 uv 安装以及使用 - 深海小涛](https://blog.xtao.de/380)为数不多的写了 `uv python install` 国内源地址的博客
 - Conda 相关：
-	- [conda常用命令的总结 - 知乎](https://zhuanlan.zhihu.com/p/1902762958083298021)
+    - [conda常用命令的总结 - 知乎](https://zhuanlan.zhihu.com/p/1902762958083298021)

@@ -15,13 +15,13 @@ lastmod: 2025-02-15
 authors:
   - Morethan
 ---
-{{< lead >}}
-MySQL 安装部署流程 + 简明语法 CookBook + 学习笔记
-{{< /lead >}}
+
+{{< lead >}} MySQL 安装部署流程 + 简明语法 CookBook + 学习笔记 {{< /lead >}}
 
 ### 信息源
 
--  [SQL教程 - 廖雪峰的官方网站](https://liaoxuefeng.com/books/sql/introduction/index.html)
+- [SQL教程 - 廖雪峰的官方网站](https://liaoxuefeng.com/books/sql/introduction/index.html)
+
 非常非常亲民的 MySQL 教程网站，内置了一个网页版的数据库，方便新手同志们直观了解 MySQL数据库的操作，对于 SQL 的整个背景也有简洁但必要的表述。
 
 ### 安装 MySQL
@@ -232,7 +232,7 @@ ON s.class_id = c.id;
 SELECT ... FROM tableA ??? JOIN tableB ON tableA.column1 = tableB.column2;
 ```
 
-![JoinQuery.png](img/JoinQuery.png)
+![img/JoinQuery.png](img/JoinQuery.png)
 
 #### 修改
 

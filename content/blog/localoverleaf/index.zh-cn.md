@@ -64,7 +64,7 @@ Docker安装完成后就可以双击启动放后台了，我们后面通过命�
 
 打开 `Kali`，直接运行
 
-``` sh
+```sh
 git clone https://github.com/overleaf/toolkit.git ./overleaf-toolkit
 ```
 
