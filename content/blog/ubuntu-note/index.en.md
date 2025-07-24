@@ -16,9 +16,8 @@ lastmod: 2025-06-21
 authors:
   - Morethan
 ---
-{{< lead >}}
-Summarizing and documenting the process of tinkering with Ubuntu for future reference.  
-{{< /lead >}}
+
+{{< lead >}} Summarizing and documenting the process of tinkering with Ubuntu for future reference.   {{< /lead >}}
 
 ## Introduction  
 
@@ -42,23 +41,23 @@ I personally prefer an Apple-style interface, so I specifically chose an Apple-i
 
 The installation process is straightforward:  
 
-```bash  
+```bash
 git clone https://github.com/vinceliuice/WhiteSur-gtk-theme.git --depth=1  
 
 cd WhiteSur-gtk-theme  
 
 ./install.sh # Run the installation script  
-```  
+```
 
 For detailed configuration, refer to the instructions on the GitHub page.  
 
 As for updates, the official guide doesn’t specify, presumably assuming users already know:  
 
-```bash  
+```bash
 git pull # Fetch the latest code  
 
 ./install.sh # Re-run the installation script  
-```  
+```
 
 ## Text Editing
 
@@ -128,7 +127,7 @@ To be honest, I was reluctant to use Fcitx at first 🥲 because its interface i
 
 Approach: Copy font files from Windows to Ubuntu’s dedicated font directory, assign appropriate permissions, refresh Ubuntu’s font cache, and load the new fonts.  
 
-```bash  
+```bash
 # Windows font directory: C:/Windows/Fonts  
 sudo cp /mnt/C/Windows/Fonts/LXGWWenKai-Regular.ttf /usr/share/fonts/custom/LXGWWenKai-Regular.ttf  
 
@@ -143,20 +142,20 @@ sudo mkfontscale
 
 # Refresh cache  
 sudo fc-cache -fv  
-```  
+```
 
 Alternatively, you can download a new `.ttf` file from the web and copy it to the target directory. If you’re using a GUI-based Ubuntu system, you can simply double-click the font file to install it 🥰.  
 
 
 {{< alert icon="triangle-exclamation" cardColor="#ffcc00" textColor="#333333" iconColor="#8B6914" >}}
-Fonts may be installed redundantly, as the system doesn’t check for duplicates. If this happens, manually locate and delete the duplicate files in the relevant directory 🥲. Ubuntu’s font tools can display all font information.
+Fonts may be installed redundantly, as the system doesn’t check for duplicates. If this happens, manually locate and delete the duplicate files in the relevant directory 🥲. Ubuntu’s font tools can display all font information.  
 {{< /alert >}}
 
 ## Mounting Hard Drives  
 
 Since my Ubuntu system is installed on a portable hard drive, the main goal here is to access Windows partitions from Ubuntu. This section doesn’t cover detailed partition operations. For tasks like formatting partitions, refer to: [How to Partition and Mount Disks in Ubuntu](https://cloud.tencent.com/developer/article/2456171).  
 
-```bash  
+```bash
 # View disks and partitions (sudo privileges required)  
 sudo fdisk -l  
 
@@ -176,7 +175,7 @@ vim /etc/fstab
 
 # Append to the end of the file  
 UUID=xxxxxxxx /mnt/E ntfs defaults 0 2  
-```  
+```
 
 - Replace the UUID above with the output from `blkid`. Replace `ntfs` with the appropriate filesystem type (common types include `ntfs` and `ext 4`).  
 - `defaults`: This is a combination of default mount options, such as `rw` (read-write) and `relatime` (reduces inode access time updates).  
@@ -184,23 +183,23 @@ UUID=xxxxxxxx /mnt/E ntfs defaults 0 2
 
 **Testing method**:  
 
-```bash  
+```bash
 # If no errors occur, the configuration is correct  
 sudo mount -a  
-```  
+```
 
 ## Creating Shortcuts  
 
 A common task: placing a quick link to a frequently used folder on the desktop for easy access.  
 
-```bash  
+```bash
 # Place a link to /target/dir in the Desktop folder  
 # Replace with your target directory  
 ln -s /target/dir ~/Desktop  
 
 # Test—if you can cd into it, it works  
 cd ~/Desktop/dir  
-```  
+```
 
 ## System Information
 
@@ -274,6 +273,7 @@ Software installation on Ubuntu generally falls into the following categories:
 Different installation methods require different management approaches. `curl` installations are the most cumbersome to manage, while others can be handled easily with their respective package managers.  
 
 ### Snap  
+
 Simply open the Snap store to install software effortlessly, though the packages are often outdated.  
 
 ### apt  
@@ -304,7 +304,7 @@ sudo apt-cache pkgnames | grep -i wps # View package names containing the keywor
 # Remove packages  
 sudo apt remove xxx  
 sudo apt autoremove # Clean up residuals  
-```  
+```
 
 If there is an abnormality in network access, it might be necessary to manually specify the proxy settings for apt. By default, apt does not use the system's proxy settings; instead, you need to explicitly write the proxy settings into the `/etc/apt/apt.conf.d/99proxy` file.
 
@@ -324,13 +324,13 @@ Acquire::https::Proxy "http://127.0.0.1:7890/";
 
 After downloading a `.deb` package from a browser, double-clicking it will install it directly. Internally, this uses `apt`, so management is the same as with `apt`.  
 
-```bash  
+```bash
 # Install via double-click  
 
 # Uninstall via apt  
 sudo apt remove xxx  
 sudo apt autoremove # Clean up residuals  
-```  
+```
 
 ### AppImage  
 
@@ -370,7 +370,7 @@ du -sh ~/.cache/* | sort -h -r # Check disk usage of folders under .cache
 
 Download and execute installation scripts directly from a URL using `curl`. Software installed this way is harder to manage because the actual installation process is script-driven and difficult to monitor.  
 
-```bash  
+```bash
 # Example: Installing the Zed editor  
 curl -f https://zed.dev/install.sh | sh  
 
@@ -380,7 +380,7 @@ curl -f https://zed.dev/install.sh -o install.sh
 
 # Have an AI parse the script  
 # Then follow the AI’s instructions to manually uninstall  
-```  
+```
 
 ## Major Version Updates  
 
@@ -392,26 +392,26 @@ This section primarily references the WeChat public article: [How to Upgrade fro
 
 This step is essential. Although it might take up dozens of gigabytes of disk space, a major version update is still a risky operation. Better safe than sorry. 😅 You can always delete the backup and free up space after a successful upgrade.  
 
-```bash  
+```bash
 # Install the backup tool  
 sudo apt install deja-dup  
 
 # Run directly  
 deja-dup  
-```  
+```
 
 ### Update Software Packages  
 
 Ensuring the system is up to date minimizes compatibility issues. Execute the following commands one by one:  
 
-```bash  
+```bash
 sudo apt update  
 sudo apt full-upgrade  
 sudo apt autoremove  
 sudo apt autoclean  
 
 sudo reboot # Reboot the system  
-```  
+```
 
 ### Version Upgrade  
 
@@ -422,31 +422,31 @@ The logic is straightforward: point the old version’s software sources to thos
 
 If you want to upgrade from an LTS version to a non-LTS version, you'll need to modify the policy file. The policy file actually contains just one line—change it to the following:  
 
-```txt  
+```txt
 Prompt=normal  
-```  
+```
 
 Next, modify the software source configuration file by running the following command:  
 
-```bash  
+```bash
 sudo sed -i 's/noble/oracular/g' /etc/apt/sources.list.d/ubuntu.sources  
-```  
+```
 
 After modifying the files:
 
-```bash  
+```bash
 # Refresh the index and perform a full upgrade, including the kernel, drivers, and all packages  
 sudo apt update && sudo apt full-upgrade -y  
-```  
+```
 
 
 {{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-The `-y` option means "automatic confirmation." If you prefer to manually type "yes," you can omit it. 😃 Personally, I’d rather not.
+The `-y` option means "automatic confirmation." If you prefer to manually type "yes," you can omit it. 😃 Personally, I’d rather not.  
 {{< /alert >}}
 
 After the upgrade completes:  
 
-```bash  
+```bash
 sudo reboot # Reboot to apply changes  
 
 lsb_release -a # Verify the system version  
@@ -458,24 +458,24 @@ As we all know, Microsoft Office cannot run directly on Linux 😅. However, vie
 
 Therefore, here’s a recommended Office alternative for Linux: **LibreOffice**. The installation steps are as follows:
 
-```bash  
+```bash
 sudo add-apt-repository ppa:libreoffice/ppa  
 sudo apt update  
 sudo apt install libreoffice  
-```  
+```
 
 Before installing LibreOffice, I also tried using **WPS** to edit Office files, but for some reason, it kept causing system errors, so I eventually abandoned it.
 
 
 {{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-If switching away from Office makes you feel lost, [Wine](https://www.winehq.org/) might be your savior—it’s the sorcery that runs Windows apps on Linux!
+If switching away from Office makes you feel lost, [Wine](https://www.winehq.org/) might be your savior—it’s the sorcery that runs Windows apps on Linux!  
 {{< /alert >}}
 
 ## Storage Cleanup  
 
 ### Common Cleanup Tasks
 
-```bash  
+```bash
 # Remove orphaned dependencies  
 sudo apt autoremove  
 
@@ -504,7 +504,7 @@ snap list --all | awk '/disabled|已禁用/{print $1, $3}' | while read snapname
 # Clean up old kernels  
 sudo dpkg --list | grep linux-image # List all kernels  
 sudo apt autoremove --purge # Automatically remove unnecessary kernels  
-```  
+```
 
 ### Auto Clean on Boot
 
@@ -748,14 +748,14 @@ pnpm requires an additional command to install, as shown above. A brief introduc
 
 Similar to other package management tools, the use of nvm itself is not complicated, and its purpose is to stably and faithfully complete the most basic management work. Below is the most common command table:
 
-| Function            | Command Example                      |
-| ------------- | ------------------------- |
-| Install Node       | `nvm install 22`          |
-| Use a specific version        | `nvm use 18`              |
-| Set default version        | `nvm alias default 18`    |
-| View installed versions        | `nvm ls`                  |
-| View available versions        | `nvm ls-remote`           |
-| Uninstall a specific version        | `nvm uninstall 16.20.2`   |
+Function | Command Example
+----- | -----
+Install Node | `nvm install 22`
+Use a specific version | `nvm use 18`
+Set default version | `nvm alias default 18`
+View installed versions | `nvm ls`
+View available versions | `nvm ls-remote`
+Uninstall a specific version | `nvm uninstall 16.20.2`
 
 If there are any other special requirements, you can check them on nvm's official GitHub: [nvm](https://github.com/nvm-sh/nvm)
 
@@ -798,31 +798,30 @@ npm cache clean --force
 
 `pnpm` is another Node.js package manager, similar to `npm` and `yarn`, but it is more efficient in terms of performance, disk space usage, and dependency management.
 
-| Feature              | Description                                                     |
-| --------------- | ------------------------------------------------------ |
-| ✅ Saves disk space        | Uses **content-addressable** storage, placing dependencies in shared storage to avoid redundant installations |
-| ⚡ Faster installation         | Dependency soft links, no copying, reducing IO operations                                    |
-| ✅ Ensures dependency isolation        | Uses strict `node_modules` structure to prevent implicit dependencies                         |
-| ✅ Compatible with npm/yarn | Supports most npm/yarn scripts and commands                                   |
-
+Feature | Description
+----- | -----
+✅ Saves disk space | Uses **content-addressable** storage, placing dependencies in shared storage to avoid redundant installations
+⚡ Faster installation | Dependency soft links, no copying, reducing IO operations
+✅ Ensures dependency isolation | Uses strict `node_modules` structure to prevent implicit dependencies
+✅ Compatible with npm/yarn | Supports most npm/yarn scripts and commands
 
 Common command table, including comparison with npm commands:
 
-| Operation            | `npm` command       | `pnpm` alternative |
-| -------------------- | ------------------- | ------------------ |
-| Initialize project   | `npm init`          | `pnpm init`        |
-| Install dependencies | `npm install`       | `pnpm install`     |
-| Add dependency       | `npm install axios` | `pnpm add axios`   |
-| Remove dependency    | `npm uninstall foo` | `pnpm remove foo`  |
-| Global install       | `npm install -g`    | `pnpm add -g`      |
-| Clear cache          | `npm cache clean`   | `pnpm store prune` |
+Operation | `npm` command | `pnpm` alternative
+----- | ----- | -----
+Initialize project | `npm init` | `pnpm init`
+Install dependencies | `npm install` | `pnpm install`
+Add dependency | `npm install axios` | `pnpm add axios`
+Remove dependency | `npm uninstall foo` | `pnpm remove foo`
+Global install | `npm install -g` | `pnpm add -g`
+Clear cache | `npm cache clean` | `pnpm store prune`
 
 Compared to npm, pnpm manages space more cleanly. Below are some key directories:
 
-| Location              | Purpose                  |
-| --------------------- | ------------------------ |
-| `node_modules/`       | Virtual dependency tree constructed using hard links |
-| `~/.pnpm-store/`      | Actual storage location for all dependency packages |
+Location | Purpose
+----- | -----
+`node_modules/` | Virtual dependency tree constructed using hard links
+`~/.pnpm-store/` | Actual storage location for all dependency packages
 
 Since pnpm does not store actual files in `node_modules`, there is no distinction between global and local caches. A single command is all you need to clean up all removable dependencies:
 
@@ -847,7 +846,7 @@ This section includes some simple yet commonly used commands.
 
 The command varies depending on the file format you need to extract.  
 
-```bash  
+```bash
 # Extract a .zip file  
 unzip file.zip -d /target/directory  
 

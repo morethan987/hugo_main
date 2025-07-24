@@ -16,9 +16,8 @@ authors:
   - Morethan
 ---
 {{< katex >}}
-{{< lead >}}  
-A detailed record of the core features of the Qdrant vector database, helping developers design better databases in practical applications 😋  
-{{< /lead >}}
+
+{{< lead >}}   A detailed record of the core features of the Qdrant vector database, helping developers design better databases in practical applications 😋   {{< /lead >}}
 
 ## Preface  
 
@@ -33,6 +32,7 @@ This article focuses less on specific syntax and more on features and principles
 ## Basic Data Types  
 
 Qdrant defines some abstract data types to better handle vector data. Understanding these types is fundamental to flexible usage.  
+
 ### Point  
 
 Points are the core data type in a vector database. All operations revolve around points.  
@@ -41,23 +41,23 @@ A very basic point contains only its vector, but typically, points are tagged wi
 
 **Thus: Point = Vector + Payload Tags**  
 
-```json  
+```json
 // A simple point  
 {  
     "id": 129,  
     "vector": [0.1, 0.2, 0.3, 0.4],  
     "payload": {"color": "red"},  
 }  
-```  
+```
 
 Qdrant points can be configured with various types of vectors: **Dense Vectors, Sparse Vectors, Multi-Vectors, and Named Vectors**.  
 
-| Vector Type | Description |  
-| ----------- | ----------- |  
-| Dense Vectors | Standard vectors; most embedding models generate this type. |  
-| Sparse Vectors | Variable-length vectors with few non-zero elements; typically used for exact token matching and collaborative filtering. |  
-| Multi-Vectors | Matrices composed of multiple dense vectors; dimensions must match across points, but the number of vectors can vary. Used to store different vector descriptions of the same target. |  
-| Named Vectors | A hybrid of the above types, allowing different vector types to coexist in a single point. These vectors are abstracted as named vectors. |  
+| Vector Type | Description |
+| ----------- | ----------- |
+| Dense Vectors | Standard vectors; most embedding models generate this type. |
+| Sparse Vectors | Variable-length vectors with few non-zero elements; typically used for exact token matching and collaborative filtering. |
+| Multi-Vectors | Matrices composed of multiple dense vectors; dimensions must match across points, but the number of vectors can vary. Used to store different vector descriptions of the same target. |
+| Named Vectors | A hybrid of the above types, allowing different vector types to coexist in a single point. These vectors are abstracted as named vectors. |
 
 Basic CRUD operations are straightforward and won't be elaborated here.  
 
@@ -65,7 +65,7 @@ Basic CRUD operations are straightforward and won't be elaborated here.
 
 Additional metadata attached to vectors, described and stored using JSON syntax. Here's an example:  
 
-```json  
+```json
 {  
     "name": "jacket",  
     "colors": ["red", "blue"],  
@@ -88,7 +88,7 @@ Additional metadata attached to vectors, described and stored using JSON syntax.
         }  
     ]  
 }  
-```  
+```
 
 Since this data is stored in the database, it serves a purpose: vector databases primarily rely on **semantic similarity matching**, and these tags allow you to add additional **logical filtering conditions** on top of that.  
 
@@ -97,6 +97,7 @@ For more on filtering, see: [Filtering]({{< relref "#filtering" >}})
 ### Collection  
 
 A collection is simply a group of points. At this level, you can define:  
+
 1. **Similarity algorithms between points**  
 2. **Vector dimensions**  
 3. **Optimizer configurations**  
@@ -120,11 +121,9 @@ The term "closer" implies a **similarity metric**. Qdrant supports several popul
 - Manhattan Distance  
 
 
-
 {{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-To improve performance, all vectors are normalized before storage. This means dot product similarity and cosine similarity are equivalent in Qdrant.
+To improve performance, all vectors are normalized before storage. This means dot product similarity and cosine similarity are equivalent in Qdrant.  
 {{< /alert >}}
-
 
 For a better user experience, Qdrant provides a complete API for easy invocation: [Search API - Qdrant](https://qdrant.tech/documentation/concepts/search/#search-api).  
 
@@ -139,19 +138,17 @@ In summary, the functionalities you can invoke include:
 7. **Search Planning**: Based on optional indexes, filter complexity, and the total number of points, a heuristic method selects an appropriate search approach (improving performance 🤔).  
 
 
-
 {{< alert icon="triangle-exclamation" cardColor="#ffcc00" textColor="#333333" iconColor="#8B6914" >}}
-If both `group_size` and `limit` are set, `limit` represents the number of groups.
+If both `group_size` and `limit` are set, `limit` represents the number of groups.  
 {{< /alert >}}
-
 
 Additionally, sparse and dense vector searches in Qdrant have key differences:  
 
-| Comparison | Sparse Vectors | Dense Vectors |  
-| ---------- | -------------- | ------------- |  
-| Similarity Algorithm | Defaults to dot product; no need to specify | You can specify supported algorithms |  
-| Search Method | Only exact search | Can use HNSW for approximate search |  
-| Search Results | Returns only vectors with shared non-zero elements | Returns the top `limit` vectors |  
+| Comparison | Sparse Vectors | Dense Vectors |
+| ---------- | -------------- | ------------- |
+| Similarity Algorithm | Defaults to dot product; no need to specify | You can specify supported algorithms |
+| Search Method | Only exact search | Can use HNSW for approximate search |
+| Search Results | Returns only vectors with shared non-zero elements | Returns the top `limit` vectors |
 
 ### Explore  
 
@@ -161,7 +158,7 @@ Explore operations are more flexible searches: they can query based on similarit
 
 "Recommendation" allows you to provide both positive and negative vectors for search. Here's an official example:  
 
-```typescript  
+```typescript
 import { QdrantClient } from "@qdrant/js-client-rest";  
 
 const client = new QdrantClient({ host: "localhost", port: 6333 });  
@@ -186,14 +183,12 @@ client.query("{collection_name}", {
     },  
     limit: 3  
 });  
-```  
-
+```
 
 
 {{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-In the official example, 100 and 231 are vector IDs, each corresponding to a 4-dimensional vector.
+In the official example, 100 and 231 are vector IDs, each corresponding to a 4-dimensional vector.  
 {{< /alert >}}
-
 
 The `strategy` parameter controls the search algorithm. Here are the details:  
 
@@ -201,22 +196,20 @@ The `strategy` parameter controls the search algorithm. Here are the details:
 
 2. **Best Score Algorithm**: Each candidate point is matched against all positive and negative examples to compute scores. The highest scores are selected, and the final score is calculated as:  
 
-```rust  
+```rust
 let score = if best_positive_score > best_negative_score {  
     best_positive_score  
 } else {  
     -(best_negative_score * best_negative_score)  
 };  
-```  
+```
 
 3. **Negative-Only Algorithm**: Uses the best score algorithm 👆 without positive examples, yielding a reverse scoring algorithm to find the least relevant points.  
 
 
-
 {{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-Multi-vectors and other special vectors can also be processed with similar logic, though the syntax differs.
+Multi-vectors and other special vectors can also be processed with similar logic, though the syntax differs.  
 {{< /alert >}}
-
 
 #### Discovery  
 
@@ -225,11 +218,9 @@ Multi-vectors and other special vectors can also be processed with similar logic
 Similar to [Recommendation]({{< relref "#recommendation" >}}), but here you pair positive and negative vectors together as input.  
 
 
-
 {{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-Due to hard partitioning, consider increasing the HNSW `ef` parameter to compensate for precision loss.
+Due to hard partitioning, consider increasing the HNSW `ef` parameter to compensate for precision loss.  
 {{< /alert >}}
-
 
 Discovery operations enable Qdrant to handle two new search requirements:  
 
@@ -238,11 +229,9 @@ Discovery operations enable Qdrant to handle two new search requirements:
 2. **Region Partition Search**: A special case of discovery search 👆 where no target vector is provided. The database partitions the space directly and returns points lying most in positive regions.  
 
 
-
 {{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-In discovery search, contextual constraints are **enforced** with higher priority. In other words, discovery search first performs region partitioning, then standard similarity search.
+In discovery search, contextual constraints are **enforced** with higher priority. In other words, discovery search first performs region partitioning, then standard similarity search.  
 {{< /alert >}}
-
 
 #### Distance Matrix  
 
@@ -262,14 +251,14 @@ The guide briefly lists some functionalities. For complete details, see: [Filter
 
 These refer to **individual filter conditions**, the basic units of filtering. Here are the types:  
 
-| Type | Function |  
-| ---- | -------- |  
-| Match | The condition is a specific value; the attribute must exactly match it. |  
-| Match Any | The condition is a set of options; the attribute must match any of them. |  
-| Match Except | The condition is a set of options; the attribute must not match any of them. |  
-| Range | The condition is a range; the attribute must lie within it. |  
-| Values Count | The attribute is an array; filtering is based on the number of elements. |  
-| Is Empty | Filters based on whether the attribute exists. |  
+| Type | Function |
+| ---- | -------- |
+| Match | The condition is a specific value; the attribute must exactly match it. |
+| Match Any | The condition is a set of options; the attribute must match any of them. |
+| Match Except | The condition is a set of options; the attribute must not match any of them. |
+| Range | The condition is a range; the attribute must lie within it. |
+| Values Count | The attribute is an array; filtering is based on the number of elements. |
+| Is Empty | Filters based on whether the attribute exists. |
 
 These are the basic filter types. Syntax varies for different payload types:  
 

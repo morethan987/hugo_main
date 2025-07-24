@@ -15,13 +15,13 @@ lastmod: 2025-03-16
 authors:
   - Morethan
 ---
-{{< lead >}}
-Detailed documentation of the process of deploying an LLM application from scratch, focusing mainly on the initial setup of cloud servers, continuously updated...
-{{< /lead >}}
+
+{{< lead >}} Detailed documentation of the process of deploying an LLM application from scratch, focusing mainly on the initial setup of cloud servers, continuously updated... {{< /lead >}}
 
 ## Preface
 
 Before deploying your LLM application, you should have already completed:
+
 1. A web front-end framework with core functionalities
 2. A relatively complete back-end code repository
 
@@ -313,6 +313,7 @@ Filing using a corporate entity is not difficult, so I won't elaborate too much 
 
 {{< mermaid >}}
 graph LR;
+
 p1(Server Platform Real-name Authentication)-->p2(Real-name Authentication Purchase Domain)-->p3(Apply for Filing)-->p4(Platform Review)-->p5(Regulatory Authority Review)-->p6(Public Security Filing)
 {{< /mermaid >}}
 

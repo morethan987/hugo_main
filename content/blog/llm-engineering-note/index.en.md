@@ -17,9 +17,8 @@ lastmod: 2025-06-01
 authors:
   - Morethan
 ---
-{{< lead >}}
-This blog post is the zeroth article in the "AI Engineering" series. Besides serving as an index for the entire series, it also summarizes key knowledge points related to practical large model applications.
-{{< /lead >}}
+
+{{< lead >}} This blog post is the zeroth article in the "AI Engineering" series. Besides serving as an index for the entire series, it also summarizes key knowledge points related to practical large model applications. {{< /lead >}}
 
 ## Introduction
 
@@ -122,8 +121,6 @@ Related articles:
 - [Practical LLM Training]({{< ref "/blog/llm-training-playbook/" >}})
 
 ## Model Deployment
-
-
 
 ## Application Development
 

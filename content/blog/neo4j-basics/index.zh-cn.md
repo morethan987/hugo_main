@@ -15,9 +15,8 @@ lastmod: 2025-02-15
 authors:
   - Morethan
 ---
-{{< lead >}}
-Neo4j图数据库的基础信息以及操作方法
-{{< /lead >}}
+
+{{< lead >}} Neo4j图数据库的基础信息以及操作方法 {{< /lead >}}
 
 ## 简介
 
@@ -26,6 +25,7 @@ Neo4j图数据库的基础信息以及操作方法
 ## 标签属性图
 
 **标签属性图**是一种特定类型的图：
+
 - 一个结点有一个或者多个标签来进行类型的定义
 - 关系和节点地位相同，被视为同等重要
 - 每个节点和关系都拥有可供访问的属性
@@ -33,6 +33,7 @@ Neo4j图数据库的基础信息以及操作方法
 ## Cypher
 
 > Cypher 是一种**声明式**查询语言，允许你使用类似**ASCII艺术风格**的语法（包括括号、破折号和箭头）来识别数据中的**模式**。
+
 
 ### 模式
 
@@ -134,6 +135,7 @@ RETURN u, r, m
 无话可说，安装后启动放后台即可
 
 ### 拉取镜像
+
 一般来说直接无脑拉取最新镜像就行：`docker pull neo4j`
 
 但是如果你的项目硬性需要 [APOC](https://neo4j.com/labs/apoc/4.1/installation/) 的话，就需要考虑最新的 APOC 版本，因为镜像有可能领先 APOC 的版本；社区版发布在 [Releases · neo4j/apoc](https://github.com/neo4j/apoc/releases)
@@ -148,20 +150,18 @@ docker run -d -p 7474:7474 -p 7687:7687 -v E:/neo4j/data:/data -v E:/neo4j/logs:
 
 参数说明：
 
--  `-p` 参数用于暴露端口，这里开放了两个端口
+- `-p` 参数用于暴露端口，这里开放了两个端口
 - `-v` 参数用于宿主机的目录挂载（说人话就是指定这个 Docker 应用的存储目录）
 - `-e` 参数用来配置环境变量：带有 `apoc` 的都是 APOC 相关的配置；`NEO4J_AUTH` 表示用户名为 neo4j，密码为 mo123456789；
-
 
 
 {{< alert icon="triangle-exclamation" cardColor="#ffcc00" textColor="#333333" iconColor="#8B6914" >}}
 如果你使用 Neo4j 用于语言模型的增强生成(RAG)，一定要带上述 APOC 相关配置；如果不是的话，那么那些命令可以直接去掉
 {{< /alert >}}
 
-
 运行完上面的命令之后可以去宿主机挂载目录中查看 APOC 插件是否安装：
 
-![Neo4jBasics-1.png](img/Neo4jBasics-1.png)
+![img/Neo4jBasics-1.png](img/Neo4jBasics-1.png)
 
 ### 手动安装 APOC
 

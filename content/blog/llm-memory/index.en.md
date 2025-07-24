@@ -17,9 +17,7 @@ authors:
   - Morethan
 ---
 
-{{< lead >}}
-A summary of thoughts on the memory of large language models
-{{< /lead >}}
+{{< lead >}} A summary of thoughts on the memory of large language models {{< /lead >}}
 
 ## Introduction
 
@@ -54,7 +52,7 @@ First, we provide a general analysis of the current focus of large language mode
 
 There are a multitude of benchmark tests for large language models. Since Qwen 3 recently released its benchmark scores, we will use the benchmark scores from Qwen 3 as an example here.
 
-![qwen3-test.jpg](img/qwen3-test.jpg)
+![img/qwen3-test.jpg](img/qwen3-test.jpg)
 
 #### ArenaHard
 
@@ -237,6 +235,7 @@ The Transformer inherently lacks awareness of the order between tokens—the act
 Similarly, to adapt to streaming data input, we should also encode the **time** at which information is acquired: data from the internet a decade ago should differ from current information. In this process, large models can implicitly learn the "sequence of information" just as they learn "token order," allowing them to grasp the concept of "time" in a latent manner.  
 
 An effective time encoding should have the following characteristics:  
+
 1. The greater the time span, the larger the difference should be.  
 2. It should preserve the **periodicity** of time.
 
@@ -305,17 +304,17 @@ After completing such a large amount of knowledge compression, how to handle new
 
 ## References
 
-* [Arena-Hard: An Open-Source High-Quality Large Language Model Evaluation Benchmark](https://blog.csdn.net/weixin_57291105/article/details/138132998)
-* [Titans](https://arxiv.org/abs/2501.00663v1)
-* [KBLaM](https://github.com/microsoft/KBLaM)
-* [TTRL](https://arxiv.org/abs/2504.16084)
-* [rStar](https://arxiv.org/abs/2408.06195v1)
-* [Tokenformer](https://arxiv.org/abs/2410.23168)
-* [SD-LoRA](https://openreview.net/forum?id=5U1rlpX68A)
-* [Differential Transformer](https://arxiv.org/abs/2410.05258)
-* [A Mathematical Framework for Transformer Circuits](https://transformer-circuits.pub/2021/framework/index.html)
-* [An Intuitive Explanation of the Attention Mechanism, the Core of Transformer](https://www.bilibili.com/video/BV1TZ421j7Ke/?spm_id_from=333.1387.collection.video_card.click&vd_source=38d0addc11facdcdfe9d401e43b75680)
-* [Fact Finding: Attempting to Reverse-Engineer Factual Recall on the Neuron Level (Post 1)](https://www.alignmentforum.org/posts/iGuwZTHWb6DFY3sKB/fact-finding-attempting-to-reverse-engineer-factual-recall)
-* [Fact Finding: Simplifying the Circuit (Post 2)](https://www.alignmentforum.org/posts/3tqJ65kuTkBh8wrRH/fact-finding-simplifying-the-circuit-post-2)
--  [An Intuitive Explanation of How Large Language Models Store Facts](https://www.bilibili.com/video/BV1aTxMehEjK?spm_id_from=333.788.recommend_more_video.-1&vd_source=38d0addc11facdcdfe9d401e43b75680)
+- [Arena-Hard: An Open-Source High-Quality Large Language Model Evaluation Benchmark](https://blog.csdn.net/weixin_57291105/article/details/138132998)
+- [Titans](https://arxiv.org/abs/2501.00663v1)
+- [KBLaM](https://github.com/microsoft/KBLaM)
+- [TTRL](https://arxiv.org/abs/2504.16084)
+- [rStar](https://arxiv.org/abs/2408.06195v1)
+- [Tokenformer](https://arxiv.org/abs/2410.23168)
+- [SD-LoRA](https://openreview.net/forum?id=5U1rlpX68A)
+- [Differential Transformer](https://arxiv.org/abs/2410.05258)
+- [A Mathematical Framework for Transformer Circuits](https://transformer-circuits.pub/2021/framework/index.html)
+- [An Intuitive Explanation of the Attention Mechanism, the Core of Transformer](https://www.bilibili.com/video/BV1TZ421j7Ke/?spm_id_from=333.1387.collection.video_card.click&vd_source=38d0addc11facdcdfe9d401e43b75680)
+- [Fact Finding: Attempting to Reverse-Engineer Factual Recall on the Neuron Level (Post 1)](https://www.alignmentforum.org/posts/iGuwZTHWb6DFY3sKB/fact-finding-attempting-to-reverse-engineer-factual-recall)
+- [Fact Finding: Simplifying the Circuit (Post 2)](https://www.alignmentforum.org/posts/3tqJ65kuTkBh8wrRH/fact-finding-simplifying-the-circuit-post-2)
+- [An Intuitive Explanation of How Large Language Models Store Facts](https://www.bilibili.com/video/BV1aTxMehEjK?spm_id_from=333.788.recommend_more_video.-1&vd_source=38d0addc11facdcdfe9d401e43b75680)
 - [Diff Transformer：让注意力机制更智能，消除噪音，提升大语言模型性能-知乎](https://zhuanlan.zhihu.com/p/15784962358)

@@ -17,9 +17,7 @@ authors:
   - Morethan
 ---
 
-{{< lead >}}
-梳理和总结一下关于大模型记忆的想法
-{{< /lead >}}
+{{< lead >}} 梳理和总结一下关于大模型记忆的想法 {{< /lead >}}
 
 ## 前言
 
@@ -54,7 +52,7 @@ authors:
 
 大模型的基准测试实在是多而杂。最近 Qwen3 上新发布，因此这里直接偷个懒，使用 Qwen3 发布的跑分表中的基准测试来举例子。
 
-![qwen3-test.jpg](img/qwen3-test.jpg)
+![img/qwen3-test.jpg](img/qwen3-test.jpg)
 
 #### ArenaHard
 
@@ -294,8 +292,6 @@ RAG 原本是用于缓解大模型幻觉的技术，但其实质就是利用外�
 
 这方面的工作目前非常稀少，尽管 OpenAI 最新推出了记忆功能，但并没有透露具体的实现方法，网上的讨论度也不高。这里主要概括一下 Titans 架构的实现方法。
 
-
-
 ## 早期想法
 
 这里写目前的想法，都是一些非常早期的想法。
@@ -322,4 +318,3 @@ RAG 原本是用于缓解大模型幻觉的技术，但其实质就是利用外�
 - [Fact Finding: Simplifying the Circuit (Post 2)](https://www.alignmentforum.org/posts/3tqJ65kuTkBh8wrRH/fact-finding-simplifying-the-circuit-post-2)
 - [直观解释大语言模型如何储存事实](https://www.bilibili.com/video/BV1aTxMehEjK?spm_id_from=333.788.recommend_more_video.-1&vd_source=38d0addc11facdcdfe9d401e43b75680)
 - [Diff Transformer：让注意力机制更智能，消除噪音，提升大语言模型性能-知乎](https://zhuanlan.zhihu.com/p/15784962358)
-- 

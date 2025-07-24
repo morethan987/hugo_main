@@ -16,9 +16,8 @@ lastmod: 2025-06-21
 authors:
   - Morethan
 ---
-{{< lead >}}
-总结记录一下折腾Ubuntu系统的过程，以备不时之需
-{{< /lead >}}
+
+{{< lead >}} 总结记录一下折腾Ubuntu系统的过程，以备不时之需 {{< /lead >}}
 
 ## 前言
 
@@ -274,6 +273,7 @@ git remote add origin git@github.com:username/repository.git
 不同的安装方式有不同的管理方案，其中通过 curl 安装的管理最为不便，其他的都可以通过相应的包管理工具轻松管理
 
 ### snap
+
 直接打开 snap 商店就可以直接看到，轻松便捷，但是其中的软件包往往较为落后
 
 ### apt
@@ -748,14 +748,14 @@ pnpm 需要加一条指令才能够安装，如上所示。一些基本的 pnpm 
 
 和其他包管理工具类似，nvm 本身的使用并不复杂，其目的就是稳定忠实地完成最基本的管理工作。下面是最最常见的命令表：
 
-| 功能            | 命令示例                      |
-| ------------- | ------------------------- |
-| 安装 Node       | `nvm install 22`          |
-| 使用某个版本        | `nvm use 18`              |
-| 设置默认版本        | `nvm alias default 18`    |
-| 查看已装版本        | `nvm ls`                  |
-| 查看可用版本        | `nvm ls-remote`           |
-| 卸载某个版本        | `nvm uninstall 16.20.2`   |
+功能 | 命令示例
+----- | -----
+安装 Node | `nvm install 22`
+使用某个版本 | `nvm use 18`
+设置默认版本 | `nvm alias default 18`
+查看已装版本 | `nvm ls`
+查看可用版本 | `nvm ls-remote`
+卸载某个版本 | `nvm uninstall 16.20.2`
 
 如果还有其他特殊的需求，可以去 nvm 的官方 GitHub 中查看：[nvm](https://github.com/nvm-sh/nvm)
 
@@ -798,31 +798,30 @@ npm cache clean --force
 
 `pnpm` 也是一个 Node.js 包管理工具，与 `npm` 和 `yarn` 类似，但它在性能、磁盘空间占用和依赖管理方面更高效。
 
-| 特性              | 说明                                                     |
-| --------------- | ------------------------------------------------------ |
-| ✅ 节省磁盘空间        | 使用 **内容寻址（content-addressable）** 方式，把依赖存放在共享存储中，避免重复安装 |
-| ⚡ 安装速度快         | 依赖项软链接，不复制，减少 IO 操作                                    |
-| ✅ 保证依赖隔离        | 使用严格的 `node_modules` 结构，防止隐式依赖                         |
-| ✅ 与 npm/yarn 兼容 | 支持大多数 npm/yarn 脚本和命令                                   |
-
+特性 | 说明
+----- | -----
+✅ 节省磁盘空间 | 使用 **内容寻址（content-addressable）** 方式，把依赖存放在共享存储中，避免重复安装
+⚡ 安装速度快 | 依赖项软链接，不复制，减少 IO 操作
+✅ 保证依赖隔离 | 使用严格的 `node_modules` 结构，防止隐式依赖
+✅ 与 npm/yarn 兼容 | 支持大多数 npm/yarn 脚本和命令
 
 常见命令表格，包含了与 npm 命令的对比：
 
-| 操作    | `npm` 命令            | `pnpm` 替代          |
-| ----- | ------------------- | ------------------ |
-| 初始化项目 | `npm init`          | `pnpm init`        |
-| 安装依赖  | `npm install`       | `pnpm install`     |
-| 添加依赖  | `npm install axios` | `pnpm add axios`   |
-| 移除依赖  | `npm uninstall foo` | `pnpm remove foo`  |
-| 全局安装  | `npm install -g`    | `pnpm add -g`      |
-| 清除缓存  | `npm cache clean`   | `pnpm store prune` |
+操作 | `npm` 命令 | `pnpm` 替代
+----- | ----- | -----
+初始化项目 | `npm init` | `pnpm init`
+安装依赖 | `npm install` | `pnpm install`
+添加依赖 | `npm install axios` | `pnpm add axios`
+移除依赖 | `npm uninstall foo` | `pnpm remove foo`
+全局安装 | `npm install -g` | `pnpm add -g`
+清除缓存 | `npm cache clean` | `pnpm store prune`
 
 相比 npm，pnpm 对于空间的管理更干净，下面是一些关键目录：
 
-| 位置               | 作用             |
-| ---------------- | -------------- |
-| `node_modules/`  | 使用硬链接构造的虚拟依赖树  |
-| `~/.pnpm-store/` | 所有依赖包的真实文件存储位置 |
+位置 | 作用
+----- | -----
+`node_modules/` | 使用硬链接构造的虚拟依赖树
+`~/.pnpm-store/` | 所有依赖包的真实文件存储位置
 
 由于 pnpm 在 `node_modules` 中并不存放实际文件，因此也就无所谓全局与局部缓存一说。只需要一行命令就能够清理所有能够清理的依赖：
 
