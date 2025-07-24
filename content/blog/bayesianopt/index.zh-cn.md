@@ -75,12 +75,12 @@ fprintf('最优目标值: %.4f\n', bestObjective);
 
 ### 参数说明
 
-| Params                     | Meaning                                     |
-| -------------------------- | ------------------------------------------- |
-| `AcquisitionFunctionName`  | 选择采集函数，这决定了算法在每次采样之后如何选取下一个采样点              |
-| `MaxObjectiveEvaluations`  | 最大迭代轮次                                      |
-| `IsObjectiveDeterministic` | 如果目标函数是确定的，不包含噪声，则设置为 `true` ；否则设置为 `false` |
-| `Verbose`                  | 决定了结果输出的详细程度，所有的输出可能包含多张图表                  |
+Params | Meaning
+----- | -----
+`AcquisitionFunctionName` | 选择采集函数，这决定了算法在每次采样之后如何选取下一个采样点
+`MaxObjectiveEvaluations` | 最大迭代轮次
+`IsObjectiveDeterministic` | 如果目标函数是确定的，不包含噪声，则设置为 `true` ；否则设置为 `false`
+`Verbose` | 决定了结果输出的详细程度，所有的输出可能包含多张图表
 
 每个参数具体的可选值见官方文档: [bayesopt](https://ww2.mathworks.cn/help/stats/bayesopt.html?s_tid=srchtitle_site_search_1_bayesopt)；官方写的相当细致，还有很多样例。
 

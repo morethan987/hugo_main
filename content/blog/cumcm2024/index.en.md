@@ -35,15 +35,15 @@ CUMCM stands for Chinese Undergraduate Mathematical Contest in Modeling; it is c
 
 ## Terminology Explanation
 
-| Term       | Explanation                                        |
-| --------- | -------------------------------------------------- |
-| Computational System | The traditional modeling process, encapsulating a large function |
-| Optimization System | A system used to optimize the adjustable parameters in the computational system to generate the best parameter configuration |
-| Computational Flow | The process of handling input data in the computational system |
-| Computational Flow Node | A key intermediate step in the workflow |
-| Optimization Flow | The main logic of the optimization system |
-| Main Body of the Paper | Includes the abstract, restatement, descriptions of computational and optimization flows, results presentation and analysis, that is, all content before the conclusion of the paper |
-| Conclusion of the Paper | Includes sensitivity analysis and model extension |
+Term | Explanation
+----- | -----
+Computational System | The traditional modeling process, encapsulating a large function
+Optimization System | A system used to optimize the adjustable parameters in the computational system to generate the best parameter configuration
+Computational Flow | The process of handling input data in the computational system
+Computational Flow Node | A key intermediate step in the workflow
+Optimization Flow | The main logic of the optimization system
+Main Body of the Paper | Includes the abstract, restatement, descriptions of computational and optimization flows, results presentation and analysis, that is, all content before the conclusion of the paper
+Conclusion of the Paper | Includes sensitivity analysis and model extension
 
 ## Objective Conditions
 
@@ -58,14 +58,16 @@ Although there were many topics to choose from for the competition, our group ch
 ### Workflow
 
 The coding part of the entire Topic A can be roughly divided into two systems:
+
 - Computational System:
-	- Function: Accept input data and parameters, return the required results
-	- Nature: Directly determined by the problem, different topics have different computational systems, which need to be constructed temporarily
+    - Function: Accept input data and parameters, return the required results
+    - Nature: Directly determined by the problem, different topics have different computational systems, which need to be constructed temporarily
 - Optimization System:
-	- Function: Accept the computational system as the target function to be optimized, execute its own optimization logic, and finally return the computational results
-	- Nature: The method system is relatively mature and can be prepared in **advance of the competition** with various optimization systems
+    - Function: Accept the computational system as the target function to be optimized, execute its own optimization logic, and finally return the computational results
+    - Nature: The method system is relatively mature and can be prepared in **advance of the competition** with various optimization systems
 
 The paper writing part is divided into:
+
 - Overall Framework: Determined by the LaTeX template
 - Main Content Filling: Clear description of the workflow and optimization flow
 - Typesetting and Beautification: Adjust the details of each part, with illustrative images (flowcharts, schematics)
@@ -78,68 +80,64 @@ The paper writing part is divided into:
 - Estimated Time: 3 hours
 
 - Work: All team members conduct a web search to see if there are any literature materials that **basically hit the topic**.
-	- Hit Successful: The most ideal situation, at this time, you can directly study the papers and collect ideas;
-	- Hit Unsuccessful: Although there are no ready-made materials for reference, some ideas have been accumulated in the process of literature review.
+    - Hit Successful: The most ideal situation, at this time, you can directly study the papers and collect ideas;
+    - Hit Unsuccessful: Although there are no ready-made materials for reference, some ideas have been accumulated in the process of literature review.
 
 #### Early Modeling
 
 - Overall Objective: Construct a precise and **optimization method adaptable** computational system
-	- Modeling: Clarify the operations between input data and each computational flow node
-	- Coding: Implement the computational flow with code and achieve data visualization
-	- Paper: Fill in the content of the first question and initially typeset
-
+    - Modeling: Clarify the operations between input data and each computational flow node
+    - Coding: Implement the computational flow with code and achieve data visualization
+    - Paper: Fill in the content of the first question and initially typeset
 - Estimated Time: 30 hours
 
 - Work:
-	1. All team members model together, first clarify the modeling ideas, and provide a complete mathematical derivation process
-	2. Me and CL: Code implementation and paper content filling are carried out simultaneously
-	3. HWJ: Draw more vivid schematic diagrams that cannot be generated by code
+    1. All team members model together, first clarify the modeling ideas, and provide a complete mathematical derivation process
+    2. Me and CL: Code implementation and paper content filling are carried out simultaneously
+    3. HWJ: Draw more vivid schematic diagrams that cannot be generated by code
 
 #### Mid-Modeling
 
 - Overall Objective: Construct a **suitable** optimization system
-	- Modeling: According to the particularity of the computational system, choose the most matching optimization system
-	- Coding: Make minor changes in the implementation of the optimization system to match the computational system
-	- Paper: Complete the main part of the paper and start local detail fine-tuning
-
+    - Modeling: According to the particularity of the computational system, choose the most matching optimization system
+    - Coding: Make minor changes in the implementation of the optimization system to match the computational system
+    - Paper: Complete the main part of the paper and start local detail fine-tuning
 - Estimated Time: 20 hours
 
 - Work: Similar to the previous, but the focus of work has shifted from code writing to paper writing
-	- Simplify the paper, at this time, the paper is very bloated
-	- Fine-tune the logic of the paper to make the context more closely related
-	- Beautify the typesetting, reduce text, increase images
+    - Simplify the paper, at this time, the paper is very bloated
+    - Fine-tune the logic of the paper to make the context more closely related
+    - Beautify the typesetting, reduce text, increase images
 
 #### Late Modeling
 
 - The basic modeling is completed, and all members check for loopholes:
-	- Conventional checks such as typos, inaccurate expressions, formula spelling errors, etc.
-	- Optimize code comments to make them more readable
-	- Focus on checking **personal information**
-
+    - Conventional checks such as typos, inaccurate expressions, formula spelling errors, etc.
+    - Optimize code comments to make them more readable
+    - Focus on checking **personal information**
 
 
 {{< alert icon="fire" cardColor="#e63946" iconColor="#ffffff" textColor="#ffffff" >}}
 Personal information must not be retained in the competition paper, including file paths in the code, such as `C:\Users\Morethan`; retaining personal information is a very serious mistake!
 {{< /alert >}}
 
-
 ### Actual Combat Effectiveness
 
 When we applied the above strategies to the actual combat process, that is, the formal competition of CUMCM 2024, the results were as follows:
 
 - Effective Time:
-	- The total duration of the competition is three days, a total of 72 hours
-	- The team works from seven in the morning to eight in the evening, excluding meal times, with an effective time of 12 hours a day
-	- Time utilization rate is \(50\%\) (quite low in comparison🤔)
+    - The total duration of the competition is three days, a total of 72 hours
+    - The team works from seven in the morning to eight in the evening, excluding meal times, with an effective time of 12 hours a day
+    - Time utilization rate is \(50\%\) (quite low in comparison🤔)
 - Completed Work:
-	- The main body of the paper is 28 A4 pages
-	- The code part is 35 A4 pages, excluding the reused code between each sub-question, there should be about 20 pages
-	- A total of 25 illustrations in the paper
-	- The above data is after the paper has been streamlined, with the initial draft of the paper being nearly 50 pages
+    - The main body of the paper is 28 A4 pages
+    - The code part is 35 A4 pages, excluding the reused code between each sub-question, there should be about 20 pages
+    - A total of 25 illustrations in the paper
+    - The above data is after the paper has been streamlined, with the initial draft of the paper being nearly 50 pages
 - Uncompleted Work:
-	- The final result calculation, due to the large amount of calculation (the code efficiency is not high), the code was finished two hours in advance, but there was not enough time to calculate the results😭😭
-	- The calculation accuracy of the model is not enough, the accuracy is `1s` which does not meet the standard answer's precision
-	- The conclusion part of the paper was not actually completed
+    - The final result calculation, due to the large amount of calculation (the code efficiency is not high), the code was finished two hours in advance, but there was not enough time to calculate the results😭😭
+    - The calculation accuracy of the model is not enough, the accuracy is `1s` which does not meet the standard answer's precision
+    - The conclusion part of the paper was not actually completed
 
 ## Strengths
 
@@ -204,10 +202,9 @@ When we applied the above strategies to the actual combat process, that is, the 
 - Build a set of effective code collaboration plans to enhance code writing speed
 
 - Start building code writing standards:
-	- Variable naming
-	- Documentation at the beginning of the file
-	- **Code writing process standards**
-
+    - Variable naming
+    - Documentation at the beginning of the file
+    - **Code writing process standards**
 - Code parallelization: Add some parallelizable code to the code to increase running speed
 
 
@@ -220,12 +217,11 @@ All code improvements must be implemented in a document! Not just slogans!
 ### Paper
 
 - Study excellent papers
-	- Pay attention to its paper framework
-	- Pay attention to its language style, text readability, detail, illustration logic, and image readability
-
+    - Pay attention to its paper framework
+    - Pay attention to its language style, text readability, detail, illustration logic, and image readability
 - Improve ourselves
-	- Optimize the paper's main logic framework, refine the content of each section
-	- Improvements in language style, text readability, detail, illustration logic, and image readability, etc.
+    - Optimize the paper's main logic framework, refine the content of each section
+    - Improvements in language style, text readability, detail, illustration logic, and image readability, etc.
 
 
 {{< alert icon="triangle-exclamation" cardColor="#ffcc00" textColor="#333333" iconColor="#8B6914" >}}
@@ -235,6 +231,7 @@ The results are fixed in the form of comments in the LaTeX template!
 ## Summary
 
 > A test paper without full marks is more rewarding than one with full marks!
+
 
 Accumulating knowledge of applied mathematics, enhancing paper writing skills, and improving the ability to discover problems are more meaningful than the competition itself. 🫡
 

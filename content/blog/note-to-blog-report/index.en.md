@@ -18,9 +18,7 @@ authors:
   - Morethan
 ---
 
-{{< lead >}}  
-Familiarizing oneself with the project analysis process, this is a practical analysis report.  
-{{< /lead >}}
+{{< lead >}}   Familiarizing oneself with the project analysis process, this is a practical analysis report.   {{< /lead >}}
 
 After I had completed my [small plugin]({{< ref "/blog/plugin-writing-experience/" >}}), I realized that there doesn't seem to be a one-click solution in the **note-to-blog** field. So, I wrote this article to analyze whether it would make sense to create a new project to fill this gap.
 
@@ -39,13 +37,11 @@ Evaluation criteria are as follows:
 - **Privacy:**
     - Does it run locally?
     - Is it open-source?
-
 - **Usability:**
     - How well does it adapt to Obsidian's syntax?
     - How complex is the service deployment?
     - How detailed is the documentation?
     - How easy is it to customize settings?
-
 - **Web Functionality:**
     - Does the default web template include all essential functions (search, day/night mode, etc.)?
     - How visually appealing is the default webpage?
@@ -93,7 +89,6 @@ Official example website: [Welcome to Quartz 4](https://quartz.jzhao.xyz/)
     - Extremely complete functionality
     - The only toolset that successfully handles display wiki links
     - Detailed documentation
-
 - **Cons:**
     - Virtually no drawbacks, but one notable limitation is the lack of Chinese documentation.
 
@@ -115,40 +110,42 @@ Objectively, Flowershow's positioning as a blog webpage generation platform base
 
 - **Pros:**
 
-    - Clear positioning and a straightforward workflow
-    - Comprehensive feature support
-    - Professional team behind maintenance and operations
-    - Highly customizable, suitable for creators who enjoy personalizing their setup
+- Clear positioning and a straightforward workflow
+- Comprehensive feature support
+- Professional team behind maintenance and operations
+- Highly customizable, suitable for creators who enjoy personalizing their setup
+
 - **Cons (as of January 2025):**
 
-    - Some Obsidian features are not handled, such as display wiki links. At least this section is omitted in the documentation.
-    - A reverse link feature is mentioned on the homepage, but it’s unclear in the site’s details.
+- Some Obsidian features are not handled, such as display wiki links. At least this section is omitted in the documentation.
+- A reverse link feature is mentioned on the homepage, but it’s unclear in the site’s details.
+
 Summary: Overall, the project is well done, but some details still need improvement. This solution is suitable for creators who don't require high support for Obsidian syntax.
 
 #### Official Publish
 
-Recommendation: ❤️‍🔥❤️‍🔥❤️‍🔥🩶🩶
-##### Introduction
-Examples of websites using Obsidian's official publishing service:
-- [Obsidian Chinese Tutorial](https://publish.obsidian.md/chinesehelp/01+2021%E6%96%B0%E6%95%99%E7%A8%8B/2021%E5%B9%B4%E6%96%B0%E6%95%99%E7%A8%8B) - A Chinese tutorial website, using the official Obsidian publishing service.
+Recommendation: ❤️‍🔥❤️‍🔥❤️‍🔥🩶🩶 ##### Introduction Examples of websites using Obsidian's official publishing service: - [Obsidian Chinese Tutorial](https://publish.obsidian.md/chinesehelp/01+2021%E6%96%B0%E6%95%99%E7%A8%8B/2021%E5%B9%B4%E6%96%B0%E6%95%99%E7%A8%8B) - A Chinese tutorial website, using the official Obsidian publishing service.
 
 - [Digital 3D Garden](https://stephanlevin.garden/Welcome) - Deep front-end customizations.
 - [Mister Chad](https://mister-chad.com/welcome) - A simple, neat site with rich content.
 - [Discrete Structures for Computer Science](https://publish.obsidian.md/discretecs/START+HERE) - Official simple style.
+
 ##### Review
 
 - **Pros:**
 
-    - The official publish service offers top-notch support for Obsidian’s internal representations, ensuring all Obsidian features are correctly displayed on the webpage.
-    - Continuous maintenance ensures quick adaptation to updates from Obsidian.
-    - Highly customizable settings for users with coding experience, and a wide range of themes from other developers.
-    - Privacy settings, password protection, and access control for internal document management.
-    - SEO support and mobile platform adaptation for greater potential traffic.
+- The official publish service offers top-notch support for Obsidian’s internal representations, ensuring all Obsidian features are correctly displayed on the webpage.
+- Continuous maintenance ensures quick adaptation to updates from Obsidian.
+- Highly customizable settings for users with coding experience, and a wide range of themes from other developers.
+- Privacy settings, password protection, and access control for internal document management.
+- SEO support and mobile platform adaptation for greater potential traffic.
+
 - **Cons:**
 
-    - Costs $8 per month. Since personal websites typically have very little traffic initially, this can become a significant expense over time. This is the **major drawback** of the official service.
-    - If you stop paying, the website becomes inaccessible.
-    - Limited support in certain regions, with traffic constraints in China.
+- Costs $8 per month. Since personal websites typically have very little traffic initially, this can become a significant expense over time. This is the **major drawback** of the official service.
+- If you stop paying, the website becomes inaccessible.
+- Limited support in certain regions, with traffic constraints in China.
+
 Summary: The official service is suitable for users with **sufficient funds** and moderate customization needs.
 
 #### Digital Garden
@@ -165,16 +162,19 @@ Example sites:
 
 - [Aaron Youn](https://ajy.co/) - Created by an individual user
 - [John's Digital Galaxy](https://notes.johnmavrick.com/Digital+Galaxy/Welcome+%F0%9F%8C%8C) - Rich content showcasing Digital Garden’s features, including display links.
+
 ##### Review
 
 - **Pros:**
 
-    - Comprehensive feature support
-    - Supports Obsidian theme migration
+- Comprehensive feature support
+- Supports Obsidian theme migration
+
 - **Cons:**
 
-    - Not friendly with Chinese paths
-    - Web interface customization requires direct handling of source code (`HTML`, `JavaScript`, `CSS`), and the default interface is not very visually appealing.
+- Not friendly with Chinese paths
+- Web interface customization requires direct handling of source code (`HTML`, `JavaScript`, `CSS`), and the default interface is not very visually appealing.
+
 Summary: The workflow is simple, and the feature support is extensive. However, the interface requires effort to improve, and creators who care less about aesthetics can jump straight into using it.
 
 #### Perlite
@@ -188,14 +188,17 @@ Recommendation: ❤️‍🔥❤️‍🔥🩶🩶🩶
 -based file reader with an interface nearly identical to Obsidian’s.
 
 ##### Review
+
 - **Pros:**
 
-    - Supports almost all Obsidian features.
-    - Classic native interface, offering a familiar experience for users.
+- Supports almost all Obsidian features.
+- Classic native interface, offering a familiar experience for users.
+
 - **Cons:**
 
-    - It is not a blog page but a "file reader" instead.
-    - Requires Docker, which can result in slower startup times compared to the simplicity of a plugin experience.
+- It is not a blog page but a "file reader" instead.
+- Requires Docker, which can result in slower startup times compared to the simplicity of a plugin experience.
+
 Summary: Perlite is best suited for those who need a browser-based Obsidian experience, rather than as a public-facing blog.
 
 #### Jekyll + Netlify + GitHub Pages
@@ -212,13 +215,15 @@ Example website by the author: [oldwinter’s Digital Garden](https://notes.oldw
 
 - **Pros:**
 
-    - Simple configuration
-    - Highly customizable
+- Simple configuration
+- Highly customizable
+
 - **Cons:**
 
-    - Does not support certain Obsidian features like callout syntax
-    - No dark mode support
-    - No search functionality
+- Does not support certain Obsidian features like callout syntax
+- No dark mode support
+- No search functionality
+
 Summary: A good solution for converting Obsidian to a blog, but missing some core features, making it unsuitable for creators seeking a complete web experience.
 
 #### TiddlyWiki
@@ -233,21 +238,19 @@ Recommendation: ❤️‍🔥🩶🩶🩶🩶
 
 - **Pros:**
 
-    - Extremely simple and lightweight
+- Extremely simple and lightweight
 
-    - Widely used with a strong user base
-    - Domestic services available with no need for VPNs
+- Widely used with a strong user base
+- Domestic services available with no need for VPNs
 
 - **Cons:**
 
-    - The simplicity might result in a somewhat **primitive** interface.
-    - Not a full-fledged personal blog; lacks SEO and is difficult to access via search engines, limiting traffic potential.
-Summary: TiddlyWiki is ideal for personal note storage but not for creators seeking a blog that attracts traffic.
-## Conclusion
+- The simplicity might result in a somewhat **primitive** interface.
+- Not a full-fledged personal blog; lacks SEO and is difficult to access via search engines, limiting traffic potential.
 
-Before conducting a thorough analysis, I was unaware of the actual landscape in the **note-to-blog** field, which led me to consider creating a simplified plugin. 💡
-However, after systematic research, I must admit that Quartz stands out as the best project in this space. Whether it's the adaptation to Obsidian's syntax, ease of configuration, front-end aesthetics, customization options, or backend blog creation, there is very little room for improvement.
-Thus, there is no need for me to initiate a project to duplicate what’s already been done. I salute all the teams involved in the **note-to-blog** field, whether mentioned in this article or not. 🫡
+Summary: TiddlyWiki is ideal for personal note storage but not for creators seeking a blog that attracts traffic. ## Conclusion
+
+Before conducting a thorough analysis, I was unaware of the actual landscape in the **note-to-blog** field, which led me to consider creating a simplified plugin. 💡 However, after systematic research, I must admit that Quartz stands out as the best project in this space. Whether it's the adaptation to Obsidian's syntax, ease of configuration, front-end aesthetics, customization options, or backend blog creation, there is very little room for improvement. Thus, there is no need for me to initiate a project to duplicate what’s already been done. I salute all the teams involved in the **note-to-blog** field, whether mentioned in this article or not. 🫡
 
 **There are no "better" or "worse" projects, only those that are suitable or not.** The evaluation criteria in this article focus on **whether the solution meets the requirements for a blog webpage**, and thus, some projects may not be ideal for blogging but still offer great value.
 

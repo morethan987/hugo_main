@@ -37,11 +37,11 @@ D:\Python\Python311\python.exe -m venv your_env_name
 
 下面有一些可选参数用于创建自定义的虚拟环境：
 
-| 参数名                      | 含义                                      |
-| ------------------------ | --------------------------------------- |
-| `--system-site-packages` | 创建的虚拟环境将包含全局Python环境中的包，这可以避免重复安装一些常用的包 |
-| `--clear`                | 如果指定的虚拟环境目录已经存在，这会清除目录中的所有内容，然后重新创建虚拟环境 |
-| `--version`              | 用于确认虚拟环境中 Python 的版本                    |
+参数名 | 含义
+----- | -----
+`--system-site-packages` | 创建的虚拟环境将包含全局Python环境中的包，这可以避免重复安装一些常用的包
+`--clear` | 如果指定的虚拟环境目录已经存在，这会清除目录中的所有内容，然后重新创建虚拟环境
+`--version` | 用于确认虚拟环境中 Python 的版本
 
 
 {{< alert icon="circle-info" cardColor="#b0c4de" textColor="#333333" >}}
@@ -386,28 +386,28 @@ pyinstaller -F -w main.py
 pyinstaller -D main.py
 ```
 
-| 参数                                    | 说明                                                         |
-| ------------------------------------- | ---------------------------------------------------------- |
-| `-h, --help`                          | 显示帮助信息并退出                                                  |
-| `-v, --version`                       | 显示程序版本信息并退出                                                |
-| `-F, --onefile`                       | 将所有内容打包为一个独立的可执行文件                                         |
-| `-D, --onedir`                        | 将所有内容打包为一个目录（默认选项）                                         |
-| `-w, --windowed, --noconsole`         | 禁用命令行窗口（仅对 Windows 有效）                                     |
-| `-c, --console, --nowindowed`         | 使用命令行窗口运行程序（默认选项，仅对 Windows 有效）                            |
-| `-a, --ascii`                         | 不包含 Unicode 字符集支持（默认包含）                                    |
-| `-d, --debug`                         | 产生 debug 版本的可执行文件                                          |
-| `-n NAME, --name=NAME`                | 指定生成的可执行文件或目录的名称（默认为脚本名称）                                  |
-| `-o DIR, --out=DIR`                   | 指定 spec 文件的生成目录（默认为当前目录）                                   |
-| `-p DIR, --path=DIR`                  | 设置 Python 导入模块的路径（类似设置 PYTHONPATH）                         |
-| `-i <FILE>, --icon <FILE>`            | 设置可执行文件的图标（支持 `.ico` 或 `.icns` 格式）                         |
-| `--distpath DIR`                      | 指定生成的可执行文件的输出目录（默认为 `./dist`）                              |
-| `--workpath WORKPATH`                 | 指定临时工作文件的目录（默认为 `./build`）                                 |
-| `--add-data <SRC;DEST or SRC:DEST>`   | 添加额外的数据文件或目录到可执行文件中（Windows 使用分号，Linux/OSX 使用冒号分隔源路径和目标路径） |
-| `--add-binary <SRC;DEST or SRC:DEST>` | 添加额外的二进制文件到可执行文件中                                          |
-| `--hidden-import MODULENAME`          | 添加未自动检测到的模块                                                |
-| `--exclude-module EXCLUDES`           | 排除指定的模块                                                    |
-| `--clean`                             | 清理 PyInstaller 缓存和临时文件                                     |
-| `--log-level LEVEL`                   | 设置构建时控制台消息的详细程度（可选值：TRACE、DEBUG、INFO、WARN、ERROR、FATAL）     |
+参数 | 说明
+----- | -----
+`-h, --help` | 显示帮助信息并退出
+`-v, --version` | 显示程序版本信息并退出
+`-F, --onefile` | 将所有内容打包为一个独立的可执行文件
+`-D, --onedir` | 将所有内容打包为一个目录（默认选项）
+`-w, --windowed, --noconsole` | 禁用命令行窗口（仅对 Windows 有效）
+`-c, --console, --nowindowed` | 使用命令行窗口运行程序（默认选项，仅对 Windows 有效）
+`-a, --ascii` | 不包含 Unicode 字符集支持（默认包含）
+`-d, --debug` | 产生 debug 版本的可执行文件
+`-n NAME, --name=NAME` | 指定生成的可执行文件或目录的名称（默认为脚本名称）
+`-o DIR, --out=DIR` | 指定 spec 文件的生成目录（默认为当前目录）
+`-p DIR, --path=DIR` | 设置 Python 导入模块的路径（类似设置 PYTHONPATH）
+`-i <FILE>, --icon <FILE>` | 设置可执行文件的图标（支持 `.ico` 或 `.icns` 格式）
+`--distpath DIR` | 指定生成的可执行文件的输出目录（默认为 `./dist`）
+`--workpath WORKPATH` | 指定临时工作文件的目录（默认为 `./build`）
+`--add-data <SRC;DEST or SRC:DEST>` | 添加额外的数据文件或目录到可执行文件中（Windows 使用分号，Linux/OSX 使用冒号分隔源路径和目标路径）
+`--add-binary <SRC;DEST or SRC:DEST>` | 添加额外的二进制文件到可执行文件中
+`--hidden-import MODULENAME` | 添加未自动检测到的模块
+`--exclude-module EXCLUDES` | 排除指定的模块
+`--clean` | 清理 PyInstaller 缓存和临时文件
+`--log-level LEVEL` | 设置构建时控制台消息的详细程度（可选值：TRACE、DEBUG、INFO、WARN、ERROR、FATAL）
 
 ### Nuitka
 
@@ -428,25 +428,25 @@ pip install -U nuitka
 python -m nuitka --lto=yes --remove-output --onefile main.py
 ```
 
-| 参数                                                                                              | 说明                                                        |
-| ----------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
-| `--standalone`                                                                                  | 创建一个包含所有依赖的独立可执行文件夹。                                      |
-| `--onefile`                                                                                     | 将所有内容打包为一个单独的 `.exe` 文件。                                  |
-| `--optimize=N`                                                                                  | 设置优化级别（`0`、`1` 或 `2`），数字越大，优化越多。                          |
-| `--lto`                                                                                         | 启用链接时优化（Link Time Optimization），可选值为 `no`、`yes` 或 `thin`。 |
-| `--enable-plugin=<plugin_name>`                                                                 | 启用指定插件，如 `tk-inter`、`numpy`、`anti-bloat` 等。               |
-| `--output-dir=<dir>`                                                                            | 指定编译输出目录。                                                 |
-| `--remove-output`                                                                               | 编译完成后删除中间生成的 `.c` 文件和其他临时文件。                              |
-| `--nofollow-imports`                                                                            | 不递归处理任何导入模块。                                              |
-| `--include-package=<package_name>`                                                              | 显式包含整个包及其子模块。                                             |
-| `--include-module=<module_name>`                                                                | 显式包含单个模块。                                                 |
-| `--follow-import-to=<module/package>`                                                           | 指定递归处理的模块或包。                                              |
-| `--nofollow-import-to=<module/package>`                                                         | 指定不递归处理的模块或包。                                             |
-| `--include-data-files=<source>=<dest>`                                                          | 包含指定的数据文件。                                                |
-| `--include-data-dir=<directory>`                                                                | 包含整个目录的数据文件。                                              |
-| `--noinclude-data-files=<pattern>`                                                              | 排除匹配模式的数据文件。                                              |
-| `--windows-icon-from-ico=<path>`                                                                | 设置 Windows 可执行文件的图标。                                      |
-| `--company-name`, `--product-name`, `--file-version`, `--product-version`, `--file-description` | 设置 Windows 可执行文件的属性。                                      |
+参数 | 说明
+----- | -----
+`--standalone` | 创建一个包含所有依赖的独立可执行文件夹。
+`--onefile` | 将所有内容打包为一个单独的 `.exe` 文件。
+`--optimize=N` | 设置优化级别（`0`、`1` 或 `2`），数字越大，优化越多。
+`--lto` | 启用链接时优化（Link Time Optimization），可选值为 `no`、`yes` 或 `thin`。
+`--enable-plugin=<plugin_name>` | 启用指定插件，如 `tk-inter`、`numpy`、`anti-bloat` 等。
+`--output-dir=<dir>` | 指定编译输出目录。
+`--remove-output` | 编译完成后删除中间生成的 `.c` 文件和其他临时文件。
+`--nofollow-imports` | 不递归处理任何导入模块。
+`--include-package=<package_name>` | 显式包含整个包及其子模块。
+`--include-module=<module_name>` | 显式包含单个模块。
+`--follow-import-to=<module/package>` | 指定递归处理的模块或包。
+`--nofollow-import-to=<module/package>` | 指定不递归处理的模块或包。
+`--include-data-files=<source>=<dest>` | 包含指定的数据文件。
+`--include-data-dir=<directory>` | 包含整个目录的数据文件。
+`--noinclude-data-files=<pattern>` | 排除匹配模式的数据文件。
+`--windows-icon-from-ico=<path>` | 设置 Windows 可执行文件的图标。
+`--company-name`, `--product-name`, `--file-version`, `--product-version`, `--file-description` | 设置 Windows 可执行文件的属性。
 
 ## 参考资料
 

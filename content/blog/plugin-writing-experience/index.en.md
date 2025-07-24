@@ -16,9 +16,7 @@ authors:
   - Morethan
 ---
 
-{{< lead >}}  
-A Reflection on Writing a Plugin and What I Learned from the Experience.  
-{{< /lead >}}
+{{< lead >}}   A Reflection on Writing a Plugin and What I Learned from the Experience.   {{< /lead >}}
 
 ### The Beginning
 

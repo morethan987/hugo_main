@@ -17,9 +17,7 @@ authors:
   - Morethan
 ---
 
-{{< lead >}}  
-A blog website journey, from hand-coding to Hugo, a story of twists and turns.  
-{{< /lead >}}
+{{< lead >}}   A blog website journey, from hand-coding to Hugo, a story of twists and turns.   {{< /lead >}}
 
 ## Why Hugo?
 
@@ -27,15 +25,15 @@ It all started with hearing that Hugo could generate webpages and that it was in
 
 Of course, words are just words, so here’s the output I got when I compiled and ran Hugo locally without the `public` folder at the beginning:
 
-|                  | ZH-CN | EN  |
-| ---------------- | ----- | --- |
-| Pages            | 53    | 51  |
-| Paginator pages  | 0     | 0   |
-| Non-page files   | 13    | 13  |
-| Static files     | 7     | 7   |
-| Processed images | 3     | 0   |
-| Aliases          | 18    | 17  |
-| Cleaned          | 0     | 0   |
+ | ZH-CN | EN
+----- | ----- | -----
+Pages | 53 | 51
+Paginator pages | 0 | 0
+Non-page files | 13 | 13
+Static files | 7 | 7
+Processed images | 3 | 0
+Aliases | 18 | 17
+Cleaned | 0 | 0
 
 Built in 872 ms
 
@@ -65,7 +63,7 @@ Honestly, setting up Hugo is one of the easiest setups I've ever seen, no exagge
 
 
 {{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-Hugo is really convenient. I tried Hexo before, but the Node.js setup turned me away. Even now, I have no idea why it failed to compile. 😢
+Hugo is really convenient. I tried Hexo before, but the Node.js setup turned me away. Even now, I have no idea why it failed to compile. 😢  
 {{< /alert >}}
 
 The only slight difficulty is adding the directory containing `hugo.exe` to your environment variables.
@@ -76,14 +74,14 @@ Open the terminal in the folder where `hugo.exe` is located and run the command 
 
 The **template system** sounds advanced, but it’s just a special folder structure created in the same directory as `hugo.exe`. You can’t arbitrarily modify its contents because each folder has a specific purpose.
 
-| Name          | Purpose                      |
-| ------------- | ---------------------------- |
-| `asset`       | Stores images, icons, and other assets used by the website |
-| `config`      | Website configuration folder (may not exist initially; some themes require it) |
-| `hugo.toml`   | One of the website configuration files |
-| `content`     | All content goes here         |
-| `public`      | The folder containing the fully compiled website (empty initially) |
-| `themes`      | Stores your website’s themes   |
+Name | Purpose
+----- | -----
+`asset` | Stores images, icons, and other assets used by the website
+`config` | Website configuration folder (may not exist initially; some themes require it)
+`hugo.toml` | One of the website configuration files
+`content` | All content goes here
+`public` | The folder containing the fully compiled website (empty initially)
+`themes` | Stores your website’s themes
 
 ### Basic Theme Configuration
 

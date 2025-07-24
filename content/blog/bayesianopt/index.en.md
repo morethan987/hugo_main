@@ -38,7 +38,7 @@ My understanding of Bayesian optimization is also limited, mainly referencing th
 
 ## Advantages and Algorithm Principles  
 
-This section focuses on the advantages of Bayesian optimization and its algorithmic principles. If you are only interested in "how to use it," you can first learn about the advantages of Bayesian optimization and then skip to [ MATLAB Usage]({{< relref "#matlab-usage" >}}).  
+This section focuses on the advantages of Bayesian optimization and its algorithmic principles. If you are only interested in "how to use it," you can first learn about the advantages of Bayesian optimization and then skip to [MATLAB Usage]({{< relref "#matlab-usage" >}}).  
 
 ### Advantages  
 
@@ -48,7 +48,7 @@ This section focuses on the advantages of Bayesian optimization and its algorith
 
 ### Code Overview  
 
-```matlab  
+```matlab
 % Define the objective function  
 function y = objectiveFcn(x)  
     y = (1 - x.x1)^2 + 100 * (x.x2 - x.x1^2)^2;  
@@ -71,16 +71,16 @@ bestObjective = results.MinObjective;
 
 fprintf('Optimal solution x1: %.4f, x2: %.4f\n', bestPoint.x1, bestPoint.x2);  
 fprintf('Optimal objective value: %.4f\n', bestObjective);  
-```  
+```
 
 ### Parameter Explanation  
 
-| Params                     | Meaning                                     |  
-| -------------------------- | ------------------------------------------- |  
-| `AcquisitionFunctionName`  | Selects the acquisition function, which determines how the algorithm chooses the next sampling point after each iteration. |  
-| `MaxObjectiveEvaluations`  | Maximum number of iterations.               |  
-| `IsObjectiveDeterministic` | Set to `true` if the objective function is deterministic (no noise); otherwise, set to `false`. |  
-| `Verbose`                  | Controls the verbosity of the output, which may include multiple charts. |  
+Params | Meaning
+----- | -----
+`AcquisitionFunctionName` | Selects the acquisition function, which determines how the algorithm chooses the next sampling point after each iteration.
+`MaxObjectiveEvaluations` | Maximum number of iterations.
+`IsObjectiveDeterministic` | Set to `true` if the objective function is deterministic (no noise); otherwise, set to `false`.
+`Verbose` | Controls the verbosity of the output, which may include multiple charts.
 
 For specific options for each parameter, refer to the official documentation: [bayesopt](https://ww2.mathworks.cn/help/stats/bayesopt.html?s_tid=srchtitle_site_search_1_bayesopt). The official documentation is very detailed and includes many examples.  
 
@@ -88,4 +88,3 @@ For specific options for each parameter, refer to the official documentation: [b
 {{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
 One of the essential skills for mathematical modelers is reading documentation 😝
 {{< /alert >}}
-

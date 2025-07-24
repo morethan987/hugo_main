@@ -37,11 +37,11 @@ D:\Python\Python311\python.exe -m venv your_env_name
 
 Below are some optional parameters for creating customized virtual environments:
 
-| Parameter                     | Description                                                                 |
-| ----------------------------- | -------------------------------------------------------------------------- |
-| `--system-site-packages`      | Includes packages from the global Python environment to avoid redundant installations |
-| `--clear`                     | Clears the target directory if it already exists before creating the virtual environment |
-| `--version`                   | Confirms the Python version in the virtual environment                     |
+Parameter | Description
+----- | -----
+`--system-site-packages` | Includes packages from the global Python environment to avoid redundant installations
+`--clear` | Clears the target directory if it already exists before creating the virtual environment
+`--version` | Confirms the Python version in the virtual environment
 
 
 {{< alert icon="circle-info" cardColor="#b0c4de" textColor="#333333" >}}
@@ -204,6 +204,7 @@ poetry show your-package --tree # Displays the dependency tree for a specific pa
 ```
 
 ## UV
+
 A package management tool written in `Rust`, with a command structure very similar to `poetry`.
 
 ### Installation
@@ -283,7 +284,7 @@ conda create --name xyx --clone xxx
 
 Adding domestic (Chinese) download sources:  
 
-```bash  
+```bash
 conda config --show channels # View Conda's download sources  
 
 # Add Tsinghua's mirror source  
@@ -292,7 +293,7 @@ conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/m
 
 Managing Python packages:
 
-```bash  
+```bash
 # Install a specific package
 conda install package_name
 
@@ -316,7 +317,7 @@ conda clean --all
 
 # Install packages from a requirements.txt file  
 conda install -f requirements.txt  
-```  
+```
 
 Manual installation of dependency packages for handling extreme offline situations:
 
@@ -344,13 +345,13 @@ For a local Windows machine, SSH-related configuration files are usually stored 
 
 1. Configure the `config` file. A sample configuration is as follows:  
 
-```txt  
+```txt
 # Replace <User_name> with your local machine's username  
 Host 3090  
     HostName xx.xxx.xx.xx  
     User morethan  
     IdentityFile "C:\Users\<User_name>\.ssh\id_rsa"  
-```  
+```
 
 2. Generate the authentication file `id_rsa.pub`.  
 
@@ -385,28 +386,28 @@ pyinstaller -F -w main.py
 pyinstaller -D main.py
 ```
 
-| Parameter                                   | Description                                                                 |
-| ------------------------------------------ | -------------------------------------------------------------------------- |
-| `-h, --help`                               | Show help message and exit.                                               |
-| `-v, --version`                            | Show program version and exit.                                            |
-| `-F, --onefile`                            | Package everything into a single executable.                              |
-| `-D, --onedir`                             | Package everything into a directory (default).                            |
-| `-w, --windowed, --noconsole`              | Disable the console window (Windows only).                                |
-| `-c, --console, --nowindowed`              | Run the program with a console window (default, Windows only).            |
-| `-a, --ascii`                              | Exclude Unicode character set support (included by default).              |
-| `-d, --debug`                              | Generate a debug version of the executable.                               |
-| `-n NAME, --name=NAME`                     | Specify the name of the generated executable or directory (default: script name). |
-| `-o DIR, --out=DIR`                        | Specify the directory for the spec file (default: current directory).     |
-| `-p DIR, --path=DIR`                       | Set the Python import path (similar to PYTHONPATH).                       |
-| `-i <FILE>, --icon <FILE>`                 | Set the executable's icon (supports `.ico` or `.icns` formats).           |
-| `--distpath DIR`                           | Specify the output directory for the executable (default: `./dist`).      |
-| `--workpath WORKPATH`                      | Specify the directory for temporary files (default: `./build`).           |
-| `--add-data <SRC;DEST or SRC:DEST>`        | Add additional data files or directories (Windows uses semicolons; Linux/OSX uses colons). |
-| `--add-binary <SRC;DEST or SRC:DEST>`      | Add additional binary files.                                              |
-| `--hidden-import MODULENAME`               | Add modules not automatically detected.                                   |
-| `--exclude-module EXCLUDES`                | Exclude specified modules.                                                |
-| `--clean`                                  | Clean PyInstaller cache and temporary files.                              |
-| `--log-level LEVEL`                        | Set verbosity for console messages (options: TRACE, DEBUG, INFO, WARN, ERROR, FATAL). |
+Parameter | Description
+----- | -----
+`-h, --help` | Show help message and exit.
+`-v, --version` | Show program version and exit.
+`-F, --onefile` | Package everything into a single executable.
+`-D, --onedir` | Package everything into a directory (default).
+`-w, --windowed, --noconsole` | Disable the console window (Windows only).
+`-c, --console, --nowindowed` | Run the program with a console window (default, Windows only).
+`-a, --ascii` | Exclude Unicode character set support (included by default).
+`-d, --debug` | Generate a debug version of the executable.
+`-n NAME, --name=NAME` | Specify the name of the generated executable or directory (default: script name).
+`-o DIR, --out=DIR` | Specify the directory for the spec file (default: current directory).
+`-p DIR, --path=DIR` | Set the Python import path (similar to PYTHONPATH).
+`-i <FILE>, --icon <FILE>` | Set the executable's icon (supports `.ico` or `.icns` formats).
+`--distpath DIR` | Specify the output directory for the executable (default: `./dist`).
+`--workpath WORKPATH` | Specify the directory for temporary files (default: `./build`).
+`--add-data <SRC;DEST or SRC:DEST>` | Add additional data files or directories (Windows uses semicolons; Linux/OSX uses colons).
+`--add-binary <SRC;DEST or SRC:DEST>` | Add additional binary files.
+`--hidden-import MODULENAME` | Add modules not automatically detected.
+`--exclude-module EXCLUDES` | Exclude specified modules.
+`--clean` | Clean PyInstaller cache and temporary files.
+`--log-level LEVEL` | Set verbosity for console messages (options: TRACE, DEBUG, INFO, WARN, ERROR, FATAL).
 
 ### Nuitka
 
@@ -427,34 +428,33 @@ Common usage commands:
 python -m nuitka --lto=yes --remove-output --onefile main.py
 ```
 
-| Parameter                                                                                       | Description                                                                        |
-| ----------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
-| `--standalone`                                                                                  | Creates a standalone executable with all dependencies.                             |
-| `--onefile`                                                                                     | Packages everything into a single `.exe` file.                                     |
-| `--optimize=N`                                                                                  | Sets optimization level (`0`, `1`, or `2`); higher numbers mean more optimization. |
-| `--lto`                                                                                         | Enables Link Time Optimization (options: `no`, `yes`, or `thin`).                  |
-| `--enable-plugin=<plugin_name>`                                                                 | Enables specified plugins (e.g., `tk-inter`, `numpy`, `anti-bloat`).               |
-| `--output-dir=<dir>`                                                                            | Specifies the output directory for compilation.                                    |
-| `--remove-output`                                                                               | Deletes intermediate `.c` files and other temporary files after compilation.       |
-| `--nofollow-imports`                                                                            | Does not recursively process any imported modules.                                 |
-| `--include-package=<package_name>`                                                              | Explicitly includes an entire package and its submodules.                          |
-| `--include-module=<module_name>`                                                                | Explicitly includes a single module.                                               |
-| `--follow-import-to=<module/package>`                                                           | Specifies modules or packages to process recursively.                              |
-| `--nofollow-import-to=<module/package>`                                                         | Specifies modules or packages to exclude from recursive processing.                |
-| `--include-data-files=<source>=<dest>`                                                          | Includes specified data files.                                                     |
-| `--include-data-dir=<directory>`                                                                | Includes all data files in a directory.                                            |
-| `--noinclude-data-files=<pattern>`                                                              | Excludes data files matching a pattern.                                            |
-| `--windows-icon-from-ico=<path>`                                                                | Sets the icon for the Windows executable.                                          |
-| `--company-name`, `--product-name`, `--file-version`, `--product-version`, `--file-description` | Sets properties for the Windows executable.                                        |
+Parameter | Description
+----- | -----
+`--standalone` | Creates a standalone executable with all dependencies.
+`--onefile` | Packages everything into a single `.exe` file.
+`--optimize=N` | Sets optimization level (`0`, `1`, or `2`); higher numbers mean more optimization.
+`--lto` | Enables Link Time Optimization (options: `no`, `yes`, or `thin`).
+`--enable-plugin=<plugin_name>` | Enables specified plugins (e.g., `tk-inter`, `numpy`, `anti-bloat`).
+`--output-dir=<dir>` | Specifies the output directory for compilation.
+`--remove-output` | Deletes intermediate `.c` files and other temporary files after compilation.
+`--nofollow-imports` | Does not recursively process any imported modules.
+`--include-package=<package_name>` | Explicitly includes an entire package and its submodules.
+`--include-module=<module_name>` | Explicitly includes a single module.
+`--follow-import-to=<module/package>` | Specifies modules or packages to process recursively.
+`--nofollow-import-to=<module/package>` | Specifies modules or packages to exclude from recursive processing.
+`--include-data-files=<source>=<dest>` | Includes specified data files.
+`--include-data-dir=<directory>` | Includes all data files in a directory.
+`--noinclude-data-files=<pattern>` | Excludes data files matching a pattern.
+`--windows-icon-from-ico=<path>` | Sets the icon for the Windows executable.
+`--company-name`, `--product-name`, `--file-version`, `--product-version`, `--file-description` | Sets properties for the Windows executable.
 
 ## References
+
 - Poetry-related:
-	- [Poetry Beginner's Guide_Using Poetry-CSDN Blog](https://blog.csdn.net/weixin_42871919/article/details/137125544) Very detailed resource.
-	- [Poetry](https://python-poetry.org/)
-	- [How to Change Poetry's Domestic Mirror - Data Science SourceResearch](https://www.resourch.com/archives/66.html)
-
+    - [Poetry Beginner's Guide_Using Poetry-CSDN Blog](https://blog.csdn.net/weixin_42871919/article/details/137125544) Very detailed resource.
+    - [Poetry](https://python-poetry.org/)
+    - [How to Change Poetry's Domestic Mirror - Data Science SourceResearch](https://www.resourch.com/archives/66.html)
 - UV-related:
-	- [Installing and Using Python Project and Package Manager UV - Deep Sea Xiao Tao](https://blog.xtao.de/380) One of the few blogs that includes the domestic mirror address for `uv python install`.
-
+    - [Installing and Using Python Project and Package Manager UV - Deep Sea Xiao Tao](https://blog.xtao.de/380) One of the few blogs that includes the domestic mirror address for `uv python install`.
 - Conda-related：
-	- [Summary of Commonly Used Conda Commands - Zhihu](https://zhuanlan.zhihu.com/p/1902762958083298021)
+    - [Summary of Commonly Used Conda Commands - Zhihu](https://zhuanlan.zhihu.com/p/1902762958083298021)

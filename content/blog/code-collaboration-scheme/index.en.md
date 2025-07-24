@@ -17,14 +17,14 @@ authors:
   - Morethan
 ---
 {{< katex >}}
-{{< lead >}}  
-Summary of CUMCM 2024 competition experience, focusing on the A problem and the collaborative approach with MATLAB code improvement  
-{{< /lead >}}
+
+{{< lead >}}   Summary of CUMCM 2024 competition experience, focusing on the A problem and the collaborative approach with MATLAB code improvement   {{< /lead >}}
 
 ## Process Overview
 
 {{< mermaid >}}
 graph LR;
+
 id1("Task Allocation")-->id2("VS Code Collaboration")-->id3("MATLAB Code Execution");
 {{< /mermaid >}}
 
@@ -131,6 +131,7 @@ In order to develop a project as fast and well-defined as possible, I have creat
 ### Code Tips
 
 - **Parallel Execution**  
+
     MATLAB supports multi-threaded computing. You can convert a typical `for` loop to a `parfor` loop for parallel execution.
 
 

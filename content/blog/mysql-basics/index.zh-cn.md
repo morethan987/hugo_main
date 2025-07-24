@@ -44,14 +44,14 @@ docker run -d --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=password -v /User
 
 参数解释：
 
-| 参数                                | 含义                                                                             |
-| --------------------------------- | ------------------------------------------------------------------------------ |
-| `-d`                              | 表示后台运行                                                                         |
-| `--name`                          | 表示容器的名字，不输入 Docker 会自动选择一个名字                                                   |
-| `-p 3306:3306`                    | 表示把容器的端口 3306 映射到本机，这样可以在本机通过 3306 端口连接 MySQL                                  |
-| `-e MYSQL_ROOT_PASSWORD=password` | 表示传入一个环境变量，作为root的口令，这里设置的口令是 `password`，不输入此项则会自动生成一个口令，需要查看日志才能知道口令，**建议设置** |
-| `-v /path:/var/lib/mysql`         | 表示将本地目录映射到容器目录 `/var/lib/mysql` 作为 MySQL 数据库存放的位置，需要将 `/path` 改为你的电脑上的实际目录     |
-| `mysql`                           | 告诉 Docker 你要运行的镜像的名称                                                           |
+参数 | 含义
+----- | -----
+`-d` | 表示后台运行
+`--name` | 表示容器的名字，不输入 Docker 会自动选择一个名字
+`-p 3306:3306` | 表示把容器的端口 3306 映射到本机，这样可以在本机通过 3306 端口连接 MySQL
+`-e MYSQL_ROOT_PASSWORD=password` | 表示传入一个环境变量，作为root的口令，这里设置的口令是 `password`，不输入此项则会自动生成一个口令，需要查看日志才能知道口令，**建议设置**
+`-v /path:/var/lib/mysql` | 表示将本地目录映射到容器目录 `/var/lib/mysql` 作为 MySQL 数据库存放的位置，需要将 `/path` 改为你的电脑上的实际目录
+`mysql` | 告诉 Docker 你要运行的镜像的名称
 
 
 {{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}

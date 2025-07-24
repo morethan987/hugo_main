@@ -15,13 +15,13 @@ lastmod: 2025-02-15
 authors:
   - Morethan
 ---
-{{< lead >}}
-MySQL Installation and Deployment Process + Quick Syntax CookBook + Study Notes
-{{< /lead >}}
+
+{{< lead >}} MySQL Installation and Deployment Process + Quick Syntax CookBook + Study Notes {{< /lead >}}
 
 ### Information Source
 
 - [SQL Tutorial - Liao Xuefeng's Official Website](https://liaoxuefeng.com/books/sql/introduction/index.html)  
+
     This is an extremely user-friendly MySQL tutorial website with an embedded web-based database, making it easy for beginners to get a hands-on understanding of MySQL operations. It also provides concise yet essential explanations of the background of SQL.
 
 ### MySQL Installation
@@ -44,14 +44,14 @@ docker run -d --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=password -v /User
 
 **Parameter Explanation**:
 
-|Parameter|Description|
-|---|---|
-|`-d`|Run the container in the background|
-|`--name`|Assign a name to the container (if not specified, Docker will choose one automatically)|
-|`-p 3306:3306`|Map the container's port 3306 to the local machine, allowing you to connect to MySQL through port 3306|
-|`-e MYSQL_ROOT_PASSWORD=password`|Set the root password for MySQL (in this case, the password is `password`). If not set, Docker will generate a password, which you’ll need to check the logs to retrieve. **It’s recommended to set a password.**|
-|`-v /path:/var/lib/mysql`|Mount a local directory to `/var/lib/mysql` in the container, which will store MySQL data. Replace `/path` with the actual directory path on your machine|
-|`mysql`|Specifies the name of the Docker image you want to run|
+Parameter | Description
+----- | -----
+`-d` | Run the container in the background
+`--name` | Assign a name to the container (if not specified, Docker will choose one automatically)
+`-p 3306:3306` | Map the container's port 3306 to the local machine, allowing you to connect to MySQL through port 3306
+`-e MYSQL_ROOT_PASSWORD=password` | Set the root password for MySQL (in this case, the password is `password`). If not set, Docker will generate a password, which you’ll need to check the logs to retrieve. **It’s recommended to set a password.**
+`-v /path:/var/lib/mysql` | Mount a local directory to `/var/lib/mysql` in the container, which will store MySQL data. Replace `/path` with the actual directory path on your machine
+`mysql` | Specifies the name of the Docker image you want to run
 
 
 {{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
@@ -232,7 +232,7 @@ Understanding method: You can think of it as sets, where `tableA` is the main ta
 SELECT ... FROM tableA ??? JOIN tableB ON tableA.column1 = tableB.column2;
 ```
 
-![JoinQuery.png](img/JoinQuery.png)
+![img/JoinQuery.png](img/JoinQuery.png)
 
 #### Modifying Data
 

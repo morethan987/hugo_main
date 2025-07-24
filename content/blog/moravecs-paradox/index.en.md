@@ -18,4 +18,3 @@ authors:
 ---
 
 Morethan's dummy blog page~
-

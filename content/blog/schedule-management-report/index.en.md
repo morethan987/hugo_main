@@ -17,10 +17,8 @@ lastmod: 2025-04-08
 authors:
   - Morethan
 ---
-TODO_UPDATE
-{{< lead >}}
-Analysis Report on the Current State of Schedule Management Software Functionality  
-{{< /lead >}}
+
+TODO_UPDATE {{< lead >}} Analysis Report on the Current State of Schedule Management Software Functionality   {{< /lead >}}
 
 ## Preface  
 
@@ -35,20 +33,17 @@ On the surface, "schedule management" seems like a common concept, but in realit
 Depending on different needs, it can be categorized into the following types:  
 
 1. **Personal Growth and Self-Improvement**:  
-   - Characteristics: Entirely dependent on personal will, often with a broad goal but no specific events or timelines, possibly with a quantitative metric.  
-   - Primary Purpose: Facilitate long-term personal growth, improve quality of life, and enhance satisfaction.  
-
+    - Characteristics: Entirely dependent on personal will, often with a broad goal but no specific events or timelines, possibly with a quantitative metric.  
+    - Primary Purpose: Facilitate long-term personal growth, improve quality of life, and enhance satisfaction.  
 2. **Professional and Academic Management**:  
-   - Characteristics: Highly specific events and timelines, not driven by personal preference, often requiring collaboration with others, usually with one or more quantitative metrics.  
-   - Primary Purpose: Achieve concrete career goals, enhance professional skills, and improve efficiency.  
-
+    - Characteristics: Highly specific events and timelines, not driven by personal preference, often requiring collaboration with others, usually with one or more quantitative metrics.  
+    - Primary Purpose: Achieve concrete career goals, enhance professional skills, and improve efficiency.  
 3. **Social and Relationship Management**:  
-   - Characteristics: Involves complex interpersonal dynamics, lacks quantitative metrics, is unpredictable, and has low controllability.  
-   - Primary Purpose: Maintain, expand, and optimize social networks, increase social capital.  
-
+    - Characteristics: Involves complex interpersonal dynamics, lacks quantitative metrics, is unpredictable, and has low controllability.  
+    - Primary Purpose: Maintain, expand, and optimize social networks, increase social capital.  
 4. **Financial and Daily Life Management**:  
-   - Characteristics: Tasks are trivial, frequently repetitive, flexible yet follow periodic patterns, and generally short in duration.  
-   - Primary Purpose: Ensure a sense of order and stability in life.  
+    - Characteristics: Tasks are trivial, frequently repetitive, flexible yet follow periodic patterns, and generally short in duration.  
+    - Primary Purpose: Ensure a sense of order and stability in life.  
 
 In reality, schedules are a mix of the above aspects. Thus, when we casually refer to "schedule management," we vaguely mean "managing all aspects of life," leading to a very ambiguous understanding of the concept. 
 
@@ -78,12 +73,12 @@ Below is a list of existing schedule management solutions. However, to be honest
 
 TickTick offers comprehensive functionality with a clean design, representing a classic static schedule management app. Its logic for schedule management is roughly as follows:  
 
-```mermaid  
+{{< mermaid >}}
 graph LR;  
 
 id1("Schedule Collection")-->id2("Manual Schedule Arrangement")-->id3("Execute Schedule on Time");  
 id2("Manual Schedule Arrangement")-->id4("Schedule Not Executed on Time")-->id5("Manual Adjustment");  
-```  
+{{< /mermaid >}}
 
 #### Dola
 
@@ -91,13 +86,13 @@ id2("Manual Schedule Arrangement")-->id4("Schedule Not Executed on Time")-->id5(
 
 Based on official descriptions, here’s an approximate user flow:  
 
-```mermaid  
+{{< mermaid >}}
 graph LR;  
 
 id1("Send Message via Platform")-->id2("AI Analyzes and Generates Schedule")-->id3("Store Schedule Internally");  
 id1("Send Message via Platform")-->id4("AI Analyzes and Modifies Schedule");  
 id1("Send Message via Platform")-->id5("AI Analyzes and Returns Query Results")  
-```  
+{{< /mermaid >}}
 
 #### Motion  
 
@@ -127,7 +122,7 @@ To break this vicious cycle, three strategies exist:
 
 
 {{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-I’ve used several static schedule management apps but struggled to stick with them: either the learning curve was too steep, or rigid schedules were impractical to follow.
+I’ve used several static schedule management apps but struggled to stick with them: either the learning curve was too steep, or rigid schedules were impractical to follow.  
 {{< /alert >}}
 
 Thus, a truly meaningful schedule management tool shouldn’t demand a life free of surprises or strict adherence to plans. Instead, it should provide solutions for when things go off track.  
@@ -197,7 +192,7 @@ To maintain simplicity, only two elements are displayed:
 
 ## System Implementation  
 
-![arch.jpg](img/arch.jpg)  
+![img/arch.jpg](img/arch.jpg)  
 
 The system architecture is shown above, with the following workflow:  
 
@@ -208,6 +203,7 @@ The system architecture is shown above, with the following workflow:
 5. **Response Generation**: Update logs are formatted into XML prompts, and the LLM generates a user-friendly response.  
 
 ### Schedule Storage Implementation  
+
 #### Vector Schedule Database  
 
 #### Schedule Table  

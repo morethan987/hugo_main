@@ -52,12 +52,12 @@ A very basic point contains only its vector, but typically, points are tagged wi
 
 Qdrant points can be configured with various types of vectors: **Dense Vectors, Sparse Vectors, Multi-Vectors, and Named Vectors**.  
 
-| Vector Type | Description |
-| ----------- | ----------- |
-| Dense Vectors | Standard vectors; most embedding models generate this type. |
-| Sparse Vectors | Variable-length vectors with few non-zero elements; typically used for exact token matching and collaborative filtering. |
-| Multi-Vectors | Matrices composed of multiple dense vectors; dimensions must match across points, but the number of vectors can vary. Used to store different vector descriptions of the same target. |
-| Named Vectors | A hybrid of the above types, allowing different vector types to coexist in a single point. These vectors are abstracted as named vectors. |
+Vector Type | Description
+----- | -----
+Dense Vectors | Standard vectors; most embedding models generate this type.
+Sparse Vectors | Variable-length vectors with few non-zero elements; typically used for exact token matching and collaborative filtering.
+Multi-Vectors | Matrices composed of multiple dense vectors; dimensions must match across points, but the number of vectors can vary. Used to store different vector descriptions of the same target.
+Named Vectors | A hybrid of the above types, allowing different vector types to coexist in a single point. These vectors are abstracted as named vectors.
 
 Basic CRUD operations are straightforward and won't be elaborated here.  
 
@@ -144,11 +144,11 @@ If both `group_size` and `limit` are set, `limit` represents the number of group
 
 Additionally, sparse and dense vector searches in Qdrant have key differences:  
 
-| Comparison | Sparse Vectors | Dense Vectors |
-| ---------- | -------------- | ------------- |
-| Similarity Algorithm | Defaults to dot product; no need to specify | You can specify supported algorithms |
-| Search Method | Only exact search | Can use HNSW for approximate search |
-| Search Results | Returns only vectors with shared non-zero elements | Returns the top `limit` vectors |
+Comparison | Sparse Vectors | Dense Vectors
+----- | ----- | -----
+Similarity Algorithm | Defaults to dot product; no need to specify | You can specify supported algorithms
+Search Method | Only exact search | Can use HNSW for approximate search
+Search Results | Returns only vectors with shared non-zero elements | Returns the top `limit` vectors
 
 ### Explore  
 
@@ -251,14 +251,14 @@ The guide briefly lists some functionalities. For complete details, see: [Filter
 
 These refer to **individual filter conditions**, the basic units of filtering. Here are the types:  
 
-| Type | Function |
-| ---- | -------- |
-| Match | The condition is a specific value; the attribute must exactly match it. |
-| Match Any | The condition is a set of options; the attribute must match any of them. |
-| Match Except | The condition is a set of options; the attribute must not match any of them. |
-| Range | The condition is a range; the attribute must lie within it. |
-| Values Count | The attribute is an array; filtering is based on the number of elements. |
-| Is Empty | Filters based on whether the attribute exists. |
+Type | Function
+----- | -----
+Match | The condition is a specific value; the attribute must exactly match it.
+Match Any | The condition is a set of options; the attribute must match any of them.
+Match Except | The condition is a set of options; the attribute must not match any of them.
+Range | The condition is a range; the attribute must lie within it.
+Values Count | The attribute is an array; filtering is based on the number of elements.
+Is Empty | Filters based on whether the attribute exists.
 
 These are the basic filter types. Syntax varies for different payload types:  
 

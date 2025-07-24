@@ -25,15 +25,15 @@ authors:
 
 当然，口说无凭，下面就是我初次本地编译运行 Hugo 得到的输出，即在完全没有 `public` 文件夹的情况下的输出：
 
-|                  | ZH-CN | EN  |
-| ---------------- | ----- | --- |
-| Pages            | 53    | 51  |
-| Paginator pages  | 0     | 0   |
-| Non-page files   | 13    | 13  |
-| Static files     | 7     | 7   |
-| Processed images | 3     | 0   |
-| Aliases          | 18    | 17  |
-| Cleaned          | 0     | 0   |
+ | ZH-CN | EN
+----- | ----- | -----
+Pages | 53 | 51
+Paginator pages | 0 | 0
+Non-page files | 13 | 13
+Static files | 7 | 7
+Processed images | 3 | 0
+Aliases | 18 | 17
+Cleaned | 0 | 0
 
 Built in 872 ms
 
@@ -74,14 +74,14 @@ Hugo 真的是太方便了，我曾经尝试过 Hexo 但是 Node.js 的配置就
 
 **模板系统**听着很高级，其实就是在你的 `hugo.exe` 的同级目录下面建一个文件夹，但是里面的所有文件夹都有特殊的含义，不能随便改动。
 
-| 名称          | 含义                      |
-| ----------- | ----------------------- |
-| `asset`     | 存放网站结构用到的图片，图标等资产       |
-| `config`    | 网站配置文件夹（初始时可能没有，有些主题需要） |
-| `hugo.toml` | 网站配置文件之一                |
-| `content`   | 所有内容都在这里面               |
-| `public`    | 是编译后生成的完整网页，一开始没有       |
-| `themes`    | 存放你的网站主题                |
+名称 | 含义
+----- | -----
+`asset` | 存放网站结构用到的图片，图标等资产
+`config` | 网站配置文件夹（初始时可能没有，有些主题需要）
+`hugo.toml` | 网站配置文件之一
+`content` | 所有内容都在这里面
+`public` | 是编译后生成的完整网页，一开始没有
+`themes` | 存放你的网站主题
 
 ### 主题配置基本操作
 
