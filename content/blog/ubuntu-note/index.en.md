@@ -12,7 +12,7 @@ series:
   - Technical Miscellany
 series_order: 8
 date: 2025-05-01
-lastmod: 2025-06-21
+lastmod: 2025-10-01
 authors:
   - Morethan
 ---
