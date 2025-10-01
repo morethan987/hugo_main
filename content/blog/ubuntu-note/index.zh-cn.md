@@ -74,7 +74,7 @@ touch file_name.md
 
 ### nano
 
-这个命令行编辑器是 Umbundu 系统自带的命令行文本编辑器，不用专门下载。
+这个命令行编辑器是 Ubuntu 系统自带的命令行文本编辑器，不用专门下载。
 
 想要编辑文件的话也非常简单：
 
@@ -117,6 +117,47 @@ dw # 删除一个词
 网上有很多非常详细的 vim 教程，如果想仔细学 vim 的话可以去看看👀看得出来，那些教程真的很想让我成为一个 vim 大师😔但我是真的懒😔
 {{< /alert >}}
 
+### neovim
+
+出于各种各样不可抗的原因，偶尔不得不使用终端 IDE 来进行项目开发😢但是传统的 vim 实在是太"硬核"了，偶然听说 neovim 非常好用故尝试一下。
+
+**Neovim** 是 Vim 的现代重构版本，全称 *Neo (New) Vim*，目标是为老牌编辑器 Vim 带来现代化的特性，包括：
+
+- 更好的插件系统（异步、Lua 支持）
+- 更强的语言服务集成（LSP）
+- 更友好的可配置性（用 Lua 而不是 VimScript）   
+- 更适合与 IDE 特性集成（调试、补全、跳转等）
+
+#### 目录结构
+
+目录 | 位置 | 作用
+----- | ----- | -----
+`~/.config/nvim/` | 主配置目录 | 存放 `init.lua/init.vim` 和自定义插件配置
+`~/.local/share/nvim/` | 数据目录 | 插件仓库、自动下载的插件等内容（由插件管理器创建）
+`~/.cache/nvim/` | 缓存目录 | 保存缓存、LSP 日志、telescope 索引、treesitter 缓存等
+`~/.local/state/nvim/` | 状态目录 | 运行时的临时状态（崩溃记录、运行中数据）
+`~/.config/nvim/lazy/` | 插件配置 | 插件管理器生成的插件加载信息
+
+主配置目录结构：
+
+```text
+~/.config/nvim/
+├── init.lua                 # 入口文件，类似 VS Code 的 settings.json
+├── lua/                     # 存放你所有 Lua 配置模块
+│   ├── core/                # 通用设置、快捷键、自定义函数等
+│   ├── plugins/             # 插件配置文件（每个插件一个文件）
+│   └── lazy.lua             # lazy.nvim 插件加载器初始化文件
+├── after/                   # 在插件加载之后执行的额外设置
+│   └── plugin/              # 如文件类型自动命令
+└── plugin/                  # 自动加载的 Lua/Vim 脚本
+```
+
+#### 配置方案
+
+现在许多非常酷炫的终端 IDE 的背后其实就是 neovim，而这些 IDE 本身其实是 neovim 的一套成品配置方案，是 neovim 玩家自己折腾出来的成果。比较出名的有：[LazyVim](https://github.com/LazyVim/LazyVim) 和 [NvChad](https://github.com/NvChad/NvChad)
+
+这些第三方的配置方案一般都有比较完善的说明文档，按照官方说明直接安装即可。
+
 ## Fcitx 5
 
 主要参考：[在 Ubuntu 安装配置 Fcitx 5 中文输入法](https://muzing.top/posts/3fc249cf/)；之前有考虑过使用搜狗输入法，但是看到官方给的安装流程就头大，而且也需要安装 Fcitx 5，所以不如直接用 Fcitx5 了
@@ -150,6 +191,56 @@ sudo fc-cache -fv
 {{< alert icon="triangle-exclamation" cardColor="#ffcc00" textColor="#333333" iconColor="#8B6914" >}}
 字体可能会重复安装，系统不会检查某个字体是否重复安装；如果安装重复了请自行去相关文件夹中查找并手动删除🥲Ubuntu 中字体工具可以查看所有字体信息
 {{< /alert >}}
+
+## 配置VPN
+
+本人一般使用 clash+airport 来获取外部网络资源
+
+首先当然是按照 airport 的教程说明，下载 clash 并获取配置文件，然后一般会通过一个命令来启动 VPN：
+
+```bash
+./clash -d .
+```
+
+然而，这条命令会占用一个终端，并且每次开机之后都要手动输入一遍，非常不方便。
+
+于是可以把这个命令封装为一个系统服务，可以使用 `systemctl` 来进行控制管理，也可以直接设置为开机自启动。
+
+样例配置文件，需要写入 `/etc/systemd/system/clash.service` 中：
+
+```service
+[Unit]
+Description=Clash Service
+After=network.target
+
+[Service]
+Type=simple
+User=morethan
+ExecStart=/home/morethan/Program/clash/clash -d /home/morethan/Program/clash
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+```
+
+设置为开机自启动：
+
+```bash
+sudo systemctl daemon-reexec && sudo systemctl enable clash.service
+```
+
+使用 `systemctl` 进行控制：
+
+```bash
+# 立即启动
+sudo systemctl start clean-up.service
+
+# 立即停止
+sudo systemctl start clean-up.service
+```
+
+当然，也可以在：`系统设置 --> 网络 --> 代理` 中手动进行设置
 
 ## 挂载硬盘
 
@@ -838,9 +929,18 @@ pnpm 会扫描所有用过的项目中的 `.pnpm-lock.yaml`，找出未再使用
 
 ### 系统控制
 
-- 立刻关机：`shutdown now`
+- 立刻关机：`shutdown now` 或者 `systemctl poweroff`
 
-- 立即重启：`sudo reboot`
+- 立即重启：`sudo reboot` 或者 `systemctl reboot`
+
+一般来说，使用 `systemctl` 的命令都更加"优雅"，能够让正在执行的进程自主结束后再关机，而不是直接强行杀死。
+
+这里推荐两个使用 alias 命令来关机和重启：
+
+```bash
+alias seeu='systemctl poweroff'
+alias again='systemctl reboot'
+```
 
 ### 解压
 
