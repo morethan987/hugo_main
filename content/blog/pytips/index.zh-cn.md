@@ -337,35 +337,6 @@ pip install scikit_image-0.25.2-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_
 注意不要改 whl 文件的名字😢
 {{< /alert >}}
 
-## VS免密登录
-
-对于没有本地 GPU 的学生党来说，直接在服务器上编辑并运行文件是非常方便的，而 VSCode 插件 `remote-ssh` 也能够在服务器上直接呈现一个 VSCode 的界面。为了省去不断输入密码的痛苦，可以进行如下操作实现免密登录😄
-
-本地机为 Windows，一般来说在 `C:\Users\<User_name>\.ssh` 文件夹中会存放 `ssh` 相关的配置文件，实现免密登录就只需要操作这里面的文件即可。
-
-1. 配置 `config` 文件，样例配置如下：
-
-```txt
-# 把<User_name>替换为你的本地机用户名
-Host 3090
-    HostName xx.xxx.xx.xx
-    User morethan
-    IdentityFile "C:\Users\<User_name>\.ssh\id_rsa"
-```
-
-2. 生成验证文件 `id_rsa.pub`
-
-3. 本地创建 `authorized_keys` 文件，并将 `id_rsa.pub` 中的内容写入这个文件
-
-4. 在服务器中默认目录下创建 `.ssh` 文件夹，然后将 `authorized_keys` 文件从本地拷贝进去即可
-
-然后用 VSCode 登录服务器就发现已经完成了免密登录
-
-
-{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-上述繁琐的步骤只需要初次执行一次就行，当需要给下一台服务器配置免密登录时，只需要改 config 文件然后把 authorized_keys 文件拷贝到服务器就完成了，不需要改写任何文件😄
-{{< /alert >}}
-
 ## 程序打包
 
 我们经常需要把自己写的 Python 程序分享出去。然而只分享源代码会使得不太懂代码的用户非常苦恼，因为源代码的运行还需要搭建本地运行环境，因此打包程序应运而生。

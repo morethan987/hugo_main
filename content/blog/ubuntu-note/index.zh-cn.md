@@ -242,6 +242,121 @@ sudo systemctl start clean-up.service
 
 当然，也可以在：`系统设置 --> 网络 --> 代理` 中手动进行设置
 
+## ssh反向代理
+
+很多时候我们都需要使用远程服务器来进行代码开发工作，但是国内远程服务器的网络有非常难以处理的特性：连不上外网，甚至根本就无法访问国内网络。
+
+之所以说这是特性，主要原因是我还真就没见过能够同时满足上述两个网络需求的服务器😭我的一份干了好几个月的代码就因为网络原因丢失了，现在想起来都十分痛心😭
+
+于是我痛定思痛，决定彻底解决这个棘手的问题：以后只要我能够连接上这个远程服务器，我就一定要让其能够流畅地访问外部网络。俗话说得好，磨刀不误砍柴工，网络问题真的不是一个可以忽视的问题。
+
+下面这些内容主要来自于这篇博客文章：[SSH反向隧道使远程计算机连接互联网教程](https://www.bonanzhu.com/blog/2024/ssh-reverse-proxy-usage-chinese/)
+
+核心命令如下：
+
+```
+# 开启一个终端并启动反向代理
+ssh -R 7890:localhost:7890 username@remote_host
+```
+
+这个命令的含义是：在远程电脑上打开7890端口，并将所有发往这个端口的数据转发到本地电脑的7890端口（即你的代理服务器）。这个命令执行之后就会开启一个远程服务器的终端，在这个终端中可以立即测试代理是否成功：
+
+```bash
+https_proxy=http://localhost:7890 curl https://www.baidu.com
+```
+
+如果你的本地电脑上的 7890 端口恰好运行了一个 VPN，那么你还能够尝试访问外网的资源：
+
+```bash
+https_proxy=http://localhost:7890 curl https://www.google.com
+```
+
+如果一切正常的话你现在应该能够获取到外部网络的资源了😄
+
+但是上面这种方法我觉得不太优雅：每次想要给一个服务器进行反向代理就需要运行这个命令，并且还会占用一个终端窗口
+
+因此我将这个功能封装为了一个系统服务模板，能够使用类似下面这个命令来进行控制：
+
+```bash
+# 启动反向代理
+sudo systemctl start ssh-reverse-proxy@A6000.service
+
+# 查看代理状态
+sudo systemctl status ssh-reverse-proxy@A6000.service
+
+# 停止反向代理
+sudo systemctl stop ssh-reverse-proxy@A6000.service
+```
+
+其中@后面的是一个可变参数，你只需要填入你想访问的目标服务器的别名即可。当然，你需要在 `~/.ssh/config` 中写入你的服务器别名。当然为了方便起见，还需要配置免密登陆，详见下一节的内容：[ssh免密登录]({{< relref "#ssh免密登录" >}})
+
+当然还可以将上面这个冗长的命令封装为一个 alias，具体 alias 的命名就看个人喜好了，简洁易懂就行。
+
+下面是配置系统级服务的命令操作：
+
+```bash
+sudo vim /etc/systemd/system/ssh-reverse-proxy@.service
+```
+
+写入下面这些内容，当然有一些必要内容是要修改的：
+
+```service
+[Unit]
+# Description中的'%i'会被您传入的参数（SSH别名）替换
+Description=SSH Reverse Proxy to %i
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+# [务必修改] 替换为您的本地用户名，以便服务能找到您的SSH密钥
+User=your_local_user
+
+# ExecStart中的'%i'也会被替换为SSH别名
+# 这就是实现参数化的核心
+ExecStart=/usr/bin/ssh -NT \
+    -o ServerAliveInterval=60 \
+    -o ExitOnForwardFailure=yes \
+    -R 7890:localhost:7890 %i
+
+# 自动重启策略
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+```
+
+然后重载一下系统服务，就可以使用上文提及到的 `systemctl` 来控制这个反向代理服务了😄
+
+## ssh免密登录
+
+对于没有本地 GPU 的学生党来说，直接在服务器上编辑并运行文件是非常方便的，而 VSCode 插件 `remote-ssh` 也能够在服务器上直接呈现一个 VSCode 的界面。为了省去不断输入密码的痛苦，可以进行如下操作实现免密登录😄
+
+本地机为 Windows，一般来说在 `C:\Users\<User_name>\.ssh` 文件夹中会存放 `ssh` 相关的配置文件，实现免密登录就只需要操作这里面的文件即可。
+
+1. 配置 `config` 文件，样例配置如下：
+
+```txt
+# 把<User_name>替换为你的本地机用户名
+Host 3090
+    HostName xx.xxx.xx.xx
+    User morethan
+    IdentityFile "C:\Users\<User_name>\.ssh\id_rsa"
+```
+
+2. 生成验证文件 `id_rsa.pub`
+
+3. 本地创建 `authorized_keys` 文件，并将 `id_rsa.pub` 中的内容写入这个文件
+
+4. 在服务器中默认目录下创建 `.ssh` 文件夹，然后将 `authorized_keys` 文件从本地拷贝进去即可
+
+然后用 VSCode 登录服务器就发现已经完成了免密登录
+
+
+{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
+上述繁琐的步骤只需要初次执行一次就行，当需要给下一台服务器配置免密登录时，只需要改 config 文件然后把 authorized_keys 文件拷贝到服务器就完成了，不需要改写任何文件😄
+{{< /alert >}}
+
 ## 挂载硬盘
 
 由于我的 Ubuntu 系统安装在移动硬盘上，因此这里主要解决的问题是：如何在 Ubuntu 上访问 Winodws 中的盘区。因此不涉及对于分区的具体处理，如果需要对分区进行格式化等等操作，详见：[如何在Ubuntu系统中进行磁盘的分区与挂载](https://cloud.tencent.com/developer/article/2456171)

@@ -337,35 +337,6 @@ Sometimes, errors may occur during download. In this case, you need to go to the
 Do not rename the whl files 😢
 {{< /alert >}}
 
-## Passwordless Login via VSCode  
-
-For students without a local GPU, editing and running files directly on a server is very convenient. The VSCode extension `remote-ssh` can also display a VSCode interface directly on the server. To avoid the hassle of repeatedly entering passwords, you can set up passwordless login as follows 😄.  
-
-For a local Windows machine, SSH-related configuration files are usually stored in the `C:\Users\<User_name>\.ssh` folder. Passwordless login can be achieved by modifying files in this directory.  
-
-1. Configure the `config` file. A sample configuration is as follows:  
-
-```txt
-# Replace <User_name> with your local machine's username  
-Host 3090  
-    HostName xx.xxx.xx.xx  
-    User morethan  
-    IdentityFile "C:\Users\<User_name>\.ssh\id_rsa"  
-```
-
-2. Generate the authentication file `id_rsa.pub`.  
-
-3. Locally create an `authorized_keys` file and copy the contents of `id_rsa.pub` into it.  
-
-4. On the server, create a `.ssh` folder in the default directory and copy the `authorized_keys` file from your local machine into it.  
-
-Now, when logging into the server via VSCode, you’ll find that passwordless login is enabled.  
-
-
-{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-The steps above only need to be performed once initially. When configuring passwordless login for another server, you only need to modify the `config` file and copy the `authorized_keys` file to the server—no further file modifications are required 😄.
-{{< /alert >}}
-
 ## Packaging Applications
 
 We often need to share Python programs we've written. However, sharing only the source code can be frustrating for users unfamiliar with coding, as running the source requires setting up a local environment. Hence, packaging tools come into play.

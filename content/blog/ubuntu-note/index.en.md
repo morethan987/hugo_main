@@ -242,7 +242,122 @@ sudo systemctl stop clash.service
 
 Of course, you can also manually configure it in: `System Settings --> Network --> Proxy`.
 
-## Mounting Hard Drives  
+## SSH Reverse Proxy
+
+We often need to use remote servers for code development work. However, networks of domestic remote servers have particularly tricky characteristics: they cannot connect to the external internet, or sometimes even cannot access the domestic network at all.
+
+The reason I call it a 'characteristic' is mainly because I honestly have never seen a server that can fulfill both of the aforementioned network requirements 😭. I once lost code I had worked on for several months due to network issues, and it still pains me to think about it 😭.
+
+So, after much reflection, I decided to thoroughly solve this thorny problem: henceforth, whenever I can connect to a remote server, I must ensure it can smoothly access the external network. As the saying goes, sharpening the axe won't delay the job of cutting wood. Network issues are truly not something that can be overlooked.
+
+The following content is primarily sourced from this blog post: [Tutorial on Using SSH Reverse Tunnels to Connect Remote Computers to the Internet](https://www.bonanzhu.com/blog/2024/ssh-reverse-proxy-usage-chinese/)
+
+The core command is as follows:
+
+```
+# Open a terminal and start the reverse proxy
+ssh -R 7890:localhost:7890 username@remote_host
+```
+
+The meaning of this command is: open port 7890 on the remote computer and forward all data sent to this port to port 7890 on the local computer (i.e., your proxy server). After executing this command, a terminal session to the remote server will open. You can immediately test if the proxy is successful in this terminal:
+
+```bash
+https_proxy=http://localhost:7890 curl https://www.baidu.com
+```
+
+If a VPN happens to be running on port 7890 of your local computer, you can also try accessing resources on the external network:
+
+```bash
+https_proxy=http://localhost:7890 curl https://www.google.com
+```
+
+If everything goes well, you should now be able to access external network resources 😄.
+
+However, I find the method above somewhat inelegant: every time you want to set up a reverse proxy for a server, you need to run this command, and it also occupies a terminal window.
+
+Therefore, I encapsulated this functionality into a system service template, allowing control using commands similar to the following:
+
+```bash
+# Start the reverse proxy
+sudo systemctl start ssh-reverse-proxy@A6000.service
+
+# Check the proxy status
+sudo systemctl status ssh-reverse-proxy@A6000.service
+
+# Stop the reverse proxy
+sudo systemctl stop ssh-reverse-proxy@A6000.service
+```
+
+The part after the `@` is a variable parameter; you just need to fill in the alias of the target server you want to access. Of course, you need to define your server aliases in `~/.ssh/config`. Also, for convenience, password-less login should be configured. See the next section for details: [Password-less SSH Login]({{< relref "#password-less-ssh-login" >}})
+
+You can also wrap the lengthy command above into an alias; the specific name is a matter of personal preference, as long as it's concise and understandable.
+
+Here are the command operations for configuring the system-level service:
+
+```bash
+sudo vim /etc/systemd/system/ssh-reverse-proxy@.service
+```
+
+Write the following content (note, some essential parts need modification):
+
+```service
+[Unit]
+# The '%i' in Description will be replaced by the parameter you pass (the SSH alias)
+Description=SSH Reverse Proxy to %i
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+# [MUST MODIFY] Replace with your local username so the service can find your SSH keys
+User=your_local_user
+
+# The '%i' in ExecStart will also be replaced by the SSH alias
+# This is the core enabling parameterization
+ExecStart=/usr/bin/ssh -NT \
+    -o ServerAliveInterval=60 \
+    -o ExitOnForwardFailure=yes \
+    -R 7890:localhost:7890 %i
+
+# Automatic restart policy
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Then reload the systemd configuration, and you can use the `systemctl` commands mentioned above to control this reverse proxy service 😄.
+
+## Password-less SSH Login
+
+For students without a local GPU, editing and running files directly on the server is very convenient, and the VSCode `remote-ssh` extension can also present a VSCode interface directly from the server. To avoid the pain of constantly entering passwords, you can perform the following operations to achieve password-less login 😄.
+
+Assuming the local machine is Windows, SSH-related configuration files are generally stored in the `C:\Users\<User_name>\.ssh` folder. Achieving password-less login only requires working with the files in this directory.
+
+1. Configure the `config` file. A sample configuration is as follows:
+
+```txt
+# Replace <User_name> with your local machine username
+Host 3090
+    HostName xx.xxx.xx.xx
+    User morethan
+    IdentityFile "C:\Users\<User_name>\.ssh\id_rsa"
+```
+
+2. Generate the authentication file `id_rsa.pub` (if not already present).
+
+3. Locally create an `authorized_keys` file and write the contents of `id_rsa.pub` into this file.
+
+4. Create a `.ssh` folder in the default directory on the server, and then copy the local `authorized_keys` file into it.
+
+After that, when you try to log into the server using VSCode, you'll find that password-less login is already set up.
+
+
+{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
+The cumbersome steps above only need to be performed once initially. When you need to configure password-less login for the next server, you only need to modify the config file and then copy the `authorized_keys` file to the new server. There's no need to rewrite any files 😄.
+{{< /alert >}}
+
+## Mounting Hard Drives
 
 Since my Ubuntu system is installed on a portable hard drive, the main goal here is to access Windows partitions from Ubuntu. This section doesn’t cover detailed partition operations. For tasks like formatting partitions, refer to: [How to Partition and Mount Disks in Ubuntu](https://cloud.tencent.com/developer/article/2456171).  
 
