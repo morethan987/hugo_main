@@ -328,6 +328,25 @@ WantedBy=multi-user.target
 
 Then reload the systemd configuration, and you can use the `systemctl` commands mentioned above to control this reverse proxy service 😄.
 
+If you want to use Git, you'll need to route SSH traffic through HTTPS using `netcat`. It might sound abstract, but the actual steps are quite straightforward. Simply add the following content to your `~/.ssh/config`:
+
+```
+Host github.com gitlab.com
+  # Match multiple hosts separated by spaces
+
+  # [Core Configuration]
+  # Use netcat (nc) to connect via an HTTP proxy
+  # -x connect_address:port specifies the HTTP proxy address
+  # -X 5 specifies the proxy protocol as SOCKS5 (if the proxy supports it)
+  #  - or -
+  # -X connect specifies the use of HTTP CONNECT (more universal)
+  ProxyCommand nc -X connect -x localhost:7890 %h %p
+  
+  User git
+```
+
+Then, follow the instructions in [GitHub-SSH]({{< relref "#github-ssh" >}}) to configure password-free push for GitHub.
+
 ## Password-less SSH Login
 
 For students without a local GPU, editing and running files directly on the server is very convenient, and the VSCode `remote-ssh` extension can also present a VSCode interface directly from the server. To avoid the pain of constantly entering passwords, you can perform the following operations to achieve password-less login 😄.

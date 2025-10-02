@@ -328,6 +328,25 @@ WantedBy=multi-user.target
 
 然后重载一下系统服务，就可以使用上文提及到的 `systemctl` 来控制这个反向代理服务了😄
 
+另外如果想要使用 git 的话，就需要利用 `netcat` 将 ssh 的流量转接到 https。说着比较抽象，但是实际上具体需要做的操作并不多，只需要在 `~/.ssh/config` 中写入下面的内容：
+
+```
+Host github.com gitlab.com
+  # 匹配多个主机，用空格隔开
+
+  # [核心配置]
+  # 使用 netcat (nc) 通过 HTTP 代理连接
+  # -x connect_address:port 指定HTTP代理地址
+  # -X 5 指定代理协议为 SOCKS5 (如果代理支持)
+  #  - or -
+  # -X connect 指定使用 HTTP CONNECT (更通用)
+  ProxyCommand nc -X connect -x localhost:7890 %h %p
+  
+  User git
+```
+
+然后按照 [GitHub-SSH]({{< relref "#github-ssh" >}}) 中的内容配置 GitHub 免密推送即可
+
 ## ssh免密登录
 
 对于没有本地 GPU 的学生党来说，直接在服务器上编辑并运行文件是非常方便的，而 VSCode 插件 `remote-ssh` 也能够在服务器上直接呈现一个 VSCode 的界面。为了省去不断输入密码的痛苦，可以进行如下操作实现免密登录😄
