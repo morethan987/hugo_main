@@ -328,7 +328,7 @@ WantedBy=multi-user.target
 
 Then reload the systemd configuration, and you can use the `systemctl` commands mentioned above to control this reverse proxy service 😄.
 
-If you want to use Git, you'll need to route SSH traffic through HTTPS using `netcat`. It might sound abstract, but the actual steps are quite straightforward. Simply add the following content to your `~/.ssh/config`:
+If you want to use Git, you'll need to route SSH traffic through HTTPS using `netcat`. It might sound abstract, but the actual steps are quite straightforward. Simply add the following content to the `~/.ssh/config` file on the server:
 
 ```
 Host github.com gitlab.com

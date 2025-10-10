@@ -328,7 +328,7 @@ WantedBy=multi-user.target
 
 然后重载一下系统服务，就可以使用上文提及到的 `systemctl` 来控制这个反向代理服务了😄
 
-另外如果想要使用 git 的话，就需要利用 `netcat` 将 ssh 的流量转接到 https。说着比较抽象，但是实际上具体需要做的操作并不多，只需要在 `~/.ssh/config` 中写入下面的内容：
+另外如果想要使用 git 的话，就需要利用 `netcat` 将 ssh 的流量转接到 https。说着比较抽象，但是实际上具体需要做的操作并不多，只需要在服务器上的 `~/.ssh/config` 中写入下面的内容：
 
 ```
 Host github.com gitlab.com
