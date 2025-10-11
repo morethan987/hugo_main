@@ -12,7 +12,7 @@ series:
   - 技术杂项
 series_order: 8
 date: 2025-05-01
-lastmod: 2025-10-01
+lastmod: 2025-10-11
 authors:
   - Morethan
 ---
@@ -412,6 +412,103 @@ UUID=xxxxxxxx /mnt/E ntfs defaults 0 2
 # 运行后如果没有报错则说明配置正确
 sudo mount -a
 ```
+
+## 硬盘监控
+
+由于我的 Ubuntu 安装在一个移动硬盘上，所以为了系统安全，就需要监控一下硬盘的状态。
+
+用我的个人经历来说明为什么要监控硬盘。因为是外接的一块硬盘，偶尔会有不慎触碰导致硬盘直接掉电的情况。然后直接软关机在开机，系统貌似没有任何影响，但是很有可能硬盘已经出现了永久性损坏了😭也就是所谓的"坏块"。当我意识到的时候，坏块的数量已经到 262 个了。
+
+另外，如果坏块数量在短期内快速上升，比如一个星期就多了 10 个坏块，那么就需要赶紧备份数据，准备更换硬盘了。
+
+
+{{< alert icon="fire" cardColor="#e63946" iconColor="#ffffff" textColor="#ffffff" >}}
+追悔莫及啊，千万不要让硬盘强制掉电😭
+{{< /alert >}}
+
+其实硬盘监控已经是一个非常常见的需求了，因此有一个 `smartmontools` 的软件可以进行硬盘监控。运行下面这个命令进行安装：
+
+```bash
+sudo apt update && sudo apt install smartmontools
+```
+
+然后去修改配置文件，去监控特定的硬盘设备：
+
+```bash
+sudo vim /etc/smartd.conf
+
+# 注释掉原来的其他内容，然后在末尾添加
+/dev/sdb -a -d sat -o on -S on -I 194
+```
+
+注意，上面增加的内容需要根据实际情况调整，比如开头的硬盘名字。
+
+配置完成之后就可以直接启动，监控程序就会在开机之后自动运行了：
+
+```bash
+# 启动
+sudo systemctl start smartd
+
+# 查看状态
+sudo systemctl status smartd
+```
+
+想要查看状态的话可以直接访问系统日志：
+
+```bash
+# 查看所有smartd相关的日志
+journalctl -u smartd
+
+# 只看warning及以上级别的信息
+journalctl -u smartd -p warning
+```
+
+下面的操作是**可选的**，目的是将 `smartd` 相关的日志转存到另外一个文件中。因为我设置了系统自动清理，因此系统日志只有两天的内容，然而硬盘监控一般至少都是按照月份来计量的。
+
+修改系统日志服务的配置文件：
+
+```bash
+sudo vim /etc/rsyslog.d/60-smartd.conf
+```
+
+写入下面这个内容：
+
+```text
+if $programname == 'smartd' then /var/log/smartd.log
+& stop
+```
+
+这段内容的具体含义是：将所有 `smartd` 相关的日志都转入到 `/var/log/smartd.log` 文件中，并禁止其写入系统日志(避免内容重复)
+
+然后重启服务：
+
+```bash
+# 重启日志服务
+sudo systemctl restart rsyslog
+
+# 重启smartd
+sudo systemctl restart smartd
+
+# 验证smartd状态
+sudo systemctl status smartd
+
+# 验证日志转存
+cat /var/log/smartd.log
+```
+
+可以发现，`smartd.log` 中的内容非常繁杂，因此可以封装一个 alias 来过滤这些信息，只显示重要的内容：
+
+```bash
+alias checksmartd='grep -iE "Reallocated_Sector|warning|error|fail|changed" /var/log/smartd.log | grep -v "Offline Testing failed" | grep -v "ignoring -l error"'
+```
+
+然后重启终端，运行：
+
+```bash
+checksmartd
+```
+
+一般刚配置完成没有输出是正常的，但是如果有坏块的增加，那么就会输出相关内容。
 
 ## 创建快捷方式
 

@@ -12,7 +12,7 @@ series:
   - Technical Miscellany
 series_order: 8
 date: 2025-05-01
-lastmod: 2025-10-01
+lastmod: 2025-10-11
 authors:
   - Morethan
 ---
@@ -412,6 +412,103 @@ UUID=xxxxxxxx /mnt/E ntfs defaults 0 2
 # If no errors occur, the configuration is correct  
 sudo mount -a  
 ```
+
+## Hard Drive Monitoring
+
+Since my Ubuntu is installed on an external hard drive, monitoring the drive's status is necessary for system security.
+
+Let me explain why hard drive monitoring is needed with my personal experience. Because it's an external drive, it occasionally gets accidentally bumped, causing the drive to lose power abruptly. After a forced shutdown and restart, the system might seem fine on the surface, but there's a high chance the drive has already suffered permanent damage 😭 – specifically, what are known as "bad blocks." By the time I realized it, the number of bad blocks had already reached 262.
+
+Furthermore, if the number of bad blocks increases rapidly in a short period—for example, increasing by 10 within a week—it's crucial to back up your data immediately and prepare to replace the drive.
+
+
+{{< alert icon="fire" cardColor="#e63946" iconColor="#ffffff" textColor="#ffffff" >}}
+Too late for regrets! Never force an external hard drive to power off abruptly 😭
+{{< /alert >}}
+
+Fortunately, hard drive monitoring is a very common requirement, so there's a software called `smartmontools` available for this purpose. Run the following command to install it:
+
+```bash
+sudo apt update && sudo apt install smartmontools
+```
+
+Then, modify the configuration file to monitor the specific drive device:
+
+```bash
+sudo vim /etc/smartd.conf
+
+# Comment out all existing content, and add the following line at the end:
+/dev/sdb -a -d sat -o on -S on -I 194
+```
+
+Note: The content added above needs to be adjusted based on your actual situation, such as the drive name at the beginning.
+
+Once configured, you can start the service directly. The monitoring program will then run automatically after boot:
+
+```bash
+# Start the service
+sudo systemctl start smartd
+
+# Check its status
+sudo systemctl status smartd
+```
+
+To view the status, you can directly check the system logs:
+
+```bash
+# View all logs related to smartd
+journalctl -u smartd
+
+# View only messages of warning level and above
+journalctl -u smartd -p warning
+```
+
+The following steps are **optional** and aim to redirect `smartd` related logs to a separate file. Since I have system auto-cleanup enabled, system logs are only retained for two days. However, hard drive monitoring typically needs to be assessed over longer periods, like months.
+
+Modify the system logging service configuration file:
+
+```bash
+sudo vim /etc/rsyslog.d/60-smartd.conf
+```
+
+Add the following content:
+
+```text
+if $programname == 'smartd' then /var/log/smartd.log
+& stop
+```
+
+The specific meaning of this configuration is: Redirect all logs related to `smartd` to the `/var/log/smartd.log` file and prevent them from being written to the system log (to avoid duplication).
+
+Then restart the services:
+
+```bash
+# Restart the logging service
+sudo systemctl restart rsyslog
+
+# Restart smartd
+sudo systemctl restart smartd
+
+# Verify smartd status
+sudo systemctl status smartd
+
+# Verify log redirection
+cat /var/log/smartd.log
+```
+
+You'll notice that the content in `smartd.log` is quite verbose. Therefore, you can create an alias to filter this information, showing only the important details:
+
+```bash
+alias checksmartd='grep -iE "Reallocated_Sector|warning|error|fail|changed" /var/log/smartd.log | grep -v "Offline Testing failed" | grep -v "ignoring -l error"'
+```
+
+After restarting your terminal, run:
+
+```bash
+checksmartd
+```
+
+It's normal to see no output immediately after configuration. However, if bad blocks increase, relevant content will be displayed.
 
 ## Creating Shortcuts  
 
