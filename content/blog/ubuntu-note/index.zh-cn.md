@@ -12,7 +12,7 @@ series:
   - 技术杂项
 series_order: 8
 date: 2025-05-01
-lastmod: 2025-10-11
+lastmod: 2025-10-29
 authors:
   - Morethan
 ---
@@ -125,7 +125,7 @@ dw # 删除一个词
 
 - 更好的插件系统（异步、Lua 支持）
 - 更强的语言服务集成（LSP）
-- 更友好的可配置性（用 Lua 而不是 VimScript）   
+- 更友好的可配置性（用 Lua 而不是 VimScript）
 - 更适合与 IDE 特性集成（调试、补全、跳转等）
 
 #### 目录结构
@@ -341,7 +341,7 @@ Host github.com gitlab.com
   #  - or -
   # -X connect 指定使用 HTTP CONNECT (更通用)
   ProxyCommand nc -X connect -x localhost:7890 %h %p
-  
+
   User git
 ```
 
@@ -539,6 +539,158 @@ top
 
 # 分区使用情况
 df -h
+```
+
+## 剪贴板同步
+
+一个日常生活中非常频繁的需求：我在手机上复制了一个文本，然后我希望我能够直接从电脑的剪贴板中粘贴，就好像我的电脑和手机共用了一个剪贴板😄
+
+这个需求听上去很简单，但是实际上要实现起来却并不容易😢首先从原理上来说，你的手机和电脑需要通过网络进行数据传输，因此你的手机需要知道你的电脑的**公网** IP 地址，反之亦然。但众所周知，个人用户哪里来的公网 IP 地址？所以有两种办法：
+
+1. 使用局域网通信
+
+2. 购买一个有公网 IP 的云服务器
+
+首先 PASS 掉购买云服务器的方案，毕竟我只是想要一个剪贴板同步功能，买服务器太大材小用了😅
+
+局域网通信，简而言之就是让手机和电脑处于同一个网络中，避免使用 IP 协议进行跨网络的数据传输。这里推荐一个非常优雅的解决方案，兼顾便捷与安全：[WindSend](https://github.com/doraemonkeys/WindSend)，中文名为"风传"，一组应用程序，用于在不同设备之间快速安全的传递剪切板，传输文件或文件夹(支持图片与文件剪切板)。
+
+### 安装
+
+风传的安装过程简直不能再简洁了：在 [Release](https://github.com/doraemonkeys/WindSend/releases) 界面中安装对应版本的 `.zip` 压缩包，然后解压到某个文件夹中，然后命令行运行：
+
+```bash
+ sudo apt install libxdo3 # 安装键盘模拟依赖
+```
+
+从上面这个依赖包就可以大致猜出来：风传的原理是通过模拟键盘输入来实现剪贴板数据写入的😄
+
+
+{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
+如果你是 Arch Linux 用户，那么就不能安装这个包，而需要`xdotool` 和 `libayatana-appindicator`；前者用来进行键盘模拟，后者显示托盘图标
+{{< /alert >}}
+
+### 使用
+
+在安装文件夹中直接运行那个没有后缀的可执行文件即可：`./WindSend-S-Rust`
+
+然后在手机上启动软件，进行自动搜索连接即可😄在手机上的设置中可以设置"默认同步设备"，这样你打开软件之后直接下拉就可以完成数据的同步。
+
+总结下来，整体的使用流程就是：手机切换网络，打开风传，电脑打开风传，手机复制文本，然后下拉同步。
+
+好吧，事实上也没那么简单😅其实作者也考虑过直接自动化数据传输，但是鉴于现手机操作系统的安全策略，不开 root 几乎是不可能让后台应用读取/写入剪贴板数据的😢而开启 root 又是一个麻烦的事情：现在国内各大手机厂商都在开发自己的手机操作系统并且严格限制 root 权限的获取，因此只能采用手动下拉的方式来触发数据传输了😅
+
+
+{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
+你问我为什么微信输入法可以？那你得问问微信输入法了😄我猜的话是微信输入法本身有一套数据存储机制，并不会真的直接后台写入剪贴板。另外抛开偶尔失灵不谈，这个同步机制还是挺不错的
+{{< /alert >}}
+
+虽然麻烦，但总归是安全可靠：数据的在局域网加密传输，并且传输只发生在用户主动操作的时候。另外可以发现整个操作流程都是在手机端触发的，也就是说，当你想要从电脑传输文本到手机的时候，也是在手机上进行下拉操作。
+
+### PC端命令封装
+
+直接运行命令会直接占用一个终端，但是简单粗暴地 nohup 掉又没法控制软件是否开启。一个常规的思路是封装一个 systemd 服务，然后使用 `systemctl` 来进行控制😅但是如果你的桌面协议是 wayland 的话，那么与手机端类似，后台进程"悄悄"访问剪贴板是不被允许的😢
+
+退而求其次，封装一个简单的函数来进行启动和关闭，在你的 .bash_aliases 文件中写入：
+
+```bash
+# windsend
+# 1. 程序的固定工作目录（配置文件所在目录）
+WS_BASE_DIR="/home/morethan/WindSend"
+
+# 2. PID 文件路径
+WS_PID_FILE="$WS_BASE_DIR/windsend.pid"
+
+# 3. 可执行文件的完整路径
+WS_EXEC_PATH="/usr/local/bin/windsend"
+
+# 定义一个函数来管理 windsend 服务
+ws() {
+    # 检查基本目录是否存在
+    if [ ! -d "$WS_BASE_DIR" ]; then
+        echo "错误：windsend 基本目录 $WS_BASE_DIR 不存在。"
+        return 1
+    fi
+
+    if [ -z "$1" ]; then
+        echo "用法: ws <start|stop|status>"
+        return 1
+    fi
+
+    case "$1" in
+        start)
+            # 检查服务是否已运行
+            if [ -f "$WS_PID_FILE" ] && ps -p $(cat "$WS_PID_FILE") > /dev/null; then
+                echo "windsend 已经在运行 (PID: $(cat "$WS_PID_FILE"))."
+                return 0
+            fi
+
+            echo "正在启动 windsend..."
+
+            # 切换到固定工作目录，然后执行 nohup
+            (
+                cd "$WS_BASE_DIR" || exit 1 # 切换目录，如果失败则退出子 Shell
+                # 注意：这里我们使用 $WS_EXEC_PATH 来执行程序
+                nohup "$WS_EXEC_PATH" > /dev/null 2>&1 &
+                # 将 PID 写入文件
+                echo $! > "$WS_PID_FILE"
+            )
+
+            # 检查启动结果
+            sleep 1
+            if [ -f "$WS_PID_FILE" ] && ps -p $(cat "$WS_PID_FILE") > /dev/null; then
+                echo "windsend 已启动 (PID: $(cat "$WS_PID_FILE"))."
+            else
+                echo "windsend 启动失败，请检查 $WS_BASE_DIR 目录下的配置和权限。"
+            fi
+            ;;
+
+        stop)
+            # ... (这部分逻辑与之前保持一致，只检查和终止进程) ...
+            if [ -f "$WS_PID_FILE" ]; then
+                WS_PID=$(cat "$WS_PID_FILE")
+                if ps -p $WS_PID > /dev/null; then
+                    kill $WS_PID
+                    echo "windsend (PID $WS_PID) 已发送终止信号."
+                    sleep 1
+                    rm -f "$WS_PID_FILE"
+                else
+                    echo "windsend 进程未找到，但 PID 文件存在。已删除文件。"
+                    rm -f "$WS_PID_FILE"
+                fi
+            else
+                echo "windsend PID 文件不存在，服务可能未运行."
+            fi
+            ;;
+
+        status)
+            # ... (这部分逻辑与之前保持一致) ...
+            if [ -f "$WS_PID_FILE" ]; then
+                WS_PID=$(cat "$WS_PID_FILE")
+                if ps -p $WS_PID > /dev/null; then
+                    echo "windsend 正在运行 (PID: $WS_PID). 工作目录: $WS_BASE_DIR"
+                else
+                    echo "windsend PID 文件存在 ($WS_PID)，但进程未找到。请使用 'ws stop' 清理。"
+                fi
+            else
+                echo "windsend 未运行 (PID 文件不存在)."
+            fi
+            ;;
+
+        *)
+            echo "无效参数。用法: ws <start|stop|status>"
+            return 1
+            ;;
+    esac
+}
+```
+
+这其中有三个可以配置的变量，注释中已经写明了用途，按照实际情况修改即可。然后重启终端，运行：
+
+```bash
+ws start # 启动windsend
+ws status # 查看状态
+ws stop # 关闭windsend
 ```
 
 ## 配置Git

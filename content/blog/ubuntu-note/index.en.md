@@ -12,7 +12,7 @@ series:
   - Technical Miscellany
 series_order: 8
 date: 2025-05-01
-lastmod: 2025-10-11
+lastmod: 2025-10-29
 authors:
   - Morethan
 ---
@@ -539,6 +539,158 @@ top
 
 # Partition usage
 df -h
+```
+
+## Clipboard Sync
+
+This is one of those everyday needs we all run into: you copy a piece of text on your phone, and you’d love to just paste it directly on your computer — as if your phone and your computer shared the same clipboard 😄
+
+It sounds simple, but in reality, it’s not so easy to achieve 😢. At its core, your phone and computer need to **transfer data over a network**, which means your phone has to know your computer’s **public IP address**, and vice versa. But of course, most home users don’t have a public IP. That leaves us with two options:
+
+1. Communicate over the local network (LAN), or
+
+2. Rent a cloud server that does have a public IP.
+
+We can immediately cross out option 2 — buying a whole server just to sync the clipboard is massive overkill 😅
+
+So that leaves **local network communication**, which basically means keeping both devices on the same Wi-Fi or LAN so data doesn’t need to go across the wider Internet. Here’s a beautifully elegant solution that’s both **convenient and secure**: [**WindSend**](https://github.com/doraemonkeys/WindSend) — an app suite designed for fast, secure sharing of clipboards, text, and even files or folders (including images and file clips) between different devices.
+
+### Installation
+
+Installing WindSend couldn’t be easier. Just download the appropriate `.zip` archive from the [**Release** page](https://github.com/doraemonkeys/WindSend/releases), extract it anywhere you like, and then run this command in the terminal:
+
+```bash
+sudo apt install libxdo3   # install keyboard simulation dependency
+```
+
+From this dependency alone, you can probably guess how it works: WindSend uses **keyboard input simulation** to inject the clipboard content 😄
+
+
+{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
+If you’re on **Arch Linux**, you’ll need to install `xdotool` and `libayatana-appindicator` instead —- the former handles keyboard simulation, and the latter enables the system tray icon.
+{{< /alert >}}
+
+### Usage
+
+Just run the executable (the one without any file extension) in the extracted folder:
+
+```bash
+./WindSend-S-Rust
+```
+
+Then launch the app on your phone — it will automatically search for and connect to your PC 😄 In the mobile app’s settings, you can set a **“default sync device”**, which allows you to sync instantly by simply pulling down in the app.
+
+In summary, the workflow is: Switch your phone to the same network → open WindSend on both devices → copy text on your phone → pull down to sync.
+
+Well, it’s not entirely “automatic” 😅 — the developer actually considered full background sync, but due to modern mobile OS security policies, apps can’t read or write clipboard data in the background unless the device is **rooted**. And rooting, as we know, is a whole other mess: most major phone manufacturers today have **heavily restricted root access**, especially in their customized Android systems. So for now, the manual pull-down gesture is the most practical solution 😅
+
+
+{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
+You might ask: _"Then how come the WeChat keyboard can do it?"_ Well… that’s a question for WeChat 😄 My guess is their input method has its own private data syncing mechanism and doesn’t directly access the system clipboard. Anyway, apart from the occasional hiccup, WeChat keyboard's approach works surprisingly well.
+{{< /alert >}}
+
+So while it’s not 100% seamless, it’s still **safe and reliable** — data is **encrypted and transmitted only within your local network**, and transfers only happen when **you actively trigger them**. Interestingly, the whole sync process is **initiated from the phone side**, meaning that even if you want to send text **from your PC to your phone**, you’ll still perform the pull-down action on your phone.
+
+Perfect 👍 Here’s a fluent **English version** of that section — written in the same **friendly, explanatory blog tone** as before, while keeping all the technical content accurate and natural:
+
+### Command Wrapper
+
+Running the executable directly will occupy a terminal window, but using a quick and dirty `nohup` approach makes it hard to control whether the app is actually running. A more structured way would be to wrap it in a **systemd service** and use `systemctl` to manage it 😅. However, if your desktop environment runs on **Wayland**, then just like on mobile systems, background processes **aren’t allowed to access the clipboard silently** 😢.
+
+So as a compromise, we can wrap it in a simple **shell function** for convenient start/stop control. Add the following snippet to your `.bash_aliases` (or `.zshrc` if you’re using zsh):
+
+```bash
+# windsend
+# 1. Base working directory (where configs are stored)
+WS_BASE_DIR="/home/morethan/WindSend"
+
+# 2. PID file path
+WS_PID_FILE="$WS_BASE_DIR/windsend.pid"
+
+# 3. Executable path
+WS_EXEC_PATH="/usr/local/bin/windsend"
+
+# Define a function to manage the windsend service
+ws() {
+    # Check if the base directory exists
+    if [ ! -d "$WS_BASE_DIR" ]; then
+        echo "Error: base directory $WS_BASE_DIR does not exist."
+        return 1
+    fi
+
+    if [ -z "$1" ]; then
+        echo "Usage: ws <start|stop|status>"
+        return 1
+    fi
+
+    case "$1" in
+        start)
+            # Check if already running
+            if [ -f "$WS_PID_FILE" ] && ps -p $(cat "$WS_PID_FILE") > /dev/null; then
+                echo "windsend is already running (PID: $(cat "$WS_PID_FILE"))."
+                return 0
+            fi
+
+            echo "Starting windsend..."
+
+            (
+                cd "$WS_BASE_DIR" || exit 1
+                nohup "$WS_EXEC_PATH" > /dev/null 2>&1 &
+                echo $! > "$WS_PID_FILE"
+            )
+
+            sleep 1
+            if [ -f "$WS_PID_FILE" ] && ps -p $(cat "$WS_PID_FILE") > /dev/null; then
+                echo "windsend started (PID: $(cat "$WS_PID_FILE"))."
+            else
+                echo "Failed to start windsend. Check configs and permissions in $WS_BASE_DIR."
+            fi
+            ;;
+
+        stop)
+            if [ -f "$WS_PID_FILE" ]; then
+                WS_PID=$(cat "$WS_PID_FILE")
+                if ps -p $WS_PID > /dev/null; then
+                    kill $WS_PID
+                    echo "Sent termination signal to windsend (PID $WS_PID)."
+                    sleep 1
+                    rm -f "$WS_PID_FILE"
+                else
+                    echo "PID file exists but process not found. Cleaning up..."
+                    rm -f "$WS_PID_FILE"
+                fi
+            else
+                echo "No PID file found. windsend might not be running."
+            fi
+            ;;
+
+        status)
+            if [ -f "$WS_PID_FILE" ]; then
+                WS_PID=$(cat "$WS_PID_FILE")
+                if ps -p $WS_PID > /dev/null; then
+                    echo "windsend is running (PID: $WS_PID). Working directory: $WS_BASE_DIR"
+                else
+                    echo "PID file exists ($WS_PID), but process not found. Run 'ws stop' to clean up."
+                fi
+            else
+                echo "windsend is not running (no PID file found)."
+            fi
+            ;;
+
+        *)
+            echo "Invalid argument. Usage: ws <start|stop|status>"
+            return 1
+            ;;
+    esac
+}
+```
+
+There are three configurable variables at the top — their purposes are explained in the comments. Modify them according to your setup, then restart your terminal and use the following commands:
+
+```bash
+ws start   # Start WindSend
+ws status  # Check status
+ws stop    # Stop WindSend
 ```
 
 ## Configuring Git
