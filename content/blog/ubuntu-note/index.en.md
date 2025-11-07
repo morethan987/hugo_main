@@ -19,13 +19,13 @@ authors:
 
 {{< lead >}} Summarizing and documenting the process of tinkering with Ubuntu for future reference.   {{< /lead >}}
 
-## Introduction  
+## Introduction
 
-Ubuntu, as a popular Linux distribution, offers better ecosystem support compared to other Linux distros. The most notable advantage is that when you encounter issues, you're more likely to find tutorials and solutions for Ubuntu.  
+Ubuntu, as a popular Linux distribution, offers better ecosystem support compared to other Linux distros. The most notable advantage is that when you encounter issues, you're more likely to find tutorials and solutions for Ubuntu.
 
-This article primarily focuses on the GUI-based personal edition of Ubuntu. For server-specific Ubuntu systems, operations depend on your actual business needs. The article [Cloud Service Deployment]({{< ref "/blog/cloud-server-build/" >}}) can serve as a reference.  
+This article primarily focuses on the GUI-based personal edition of Ubuntu. For server-specific Ubuntu systems, operations depend on your actual business needs. The article [Cloud Service Deployment]({{< ref "/blog/cloud-server-build/" >}}) can serve as a reference.
 
-## Ubuntu Installation  
+## Ubuntu Installation
 
 The installation was done a long time ago, so no detailed records exist. If needed, please search for keywords like "installing Ubuntu on a portable hard drive." Here’s a relatively recent guide: [Installing Ubuntu on a Portable Hard Drive](https://blog.csdn.net/qq_52034548/article/details/131581118).  
 
@@ -691,6 +691,73 @@ There are three configurable variables at the top — their purposes are explain
 ws start   # Start WindSend
 ws status  # Check status
 ws stop    # Stop WindSend
+```
+
+## Media Player
+
+If you have searched for "the media player on linux", you will absolutely see a string `mpv` being hailed as the best. I mistake it for `mvp` at first and leading to a "No such package" error 😅.
+
+Actually, I just need to play `.mp4` file occasionally. So my demand is simple: a soft ware can open mp4 and be lightweight as much as possible. `mpv` fits my core need perfectly and no redundant features.
+
+## ScreenRecorder
+
+Not a function frequently used, but it's essential to have on your system 😄. That's why I strongly recommend `wl-screenrec`, a fantastic screen recorder for Wayland on Linux. Written in Rust, it's fast and lightweight—which won me over immediately.
+
+Its parameters are a bit tedious to use directly, so I created a shell function to hide that complexity for daily use.
+
+```shell
+# Usage：wsr [bitrate MB]
+# Example：
+# 1. take default 5 MB/s bitrate：wsr
+# 2. take 10 MB/s ：wsr 10
+# 3. take 2 MB/s ：wsr 2
+wsr() {
+    local BITRATE_MBS="5"
+    
+    # set the first param as bitrate
+    if [[ -n "$1" ]]; then
+        # remove redundant unit
+        if [[ "$1" =~ ^[0-9]+ ]]; then
+            BITRATE_MBS="${BASH_REMATCH[0]}"
+        fi
+    fi
+    
+    # construct the param wl-screenrec expected 
+    # example: "10 MB"
+    local BITRATE_STR="${BITRATE_MBS} MB"
+    
+    # set output path
+    local OUTPUT_DIR="$HOME/Videos"
+    local FILENAME="wl-screenrec_$(date +%Y%m%d_%H%M%S).mp4"
+    local OUTPUT_PATH="$OUTPUT_DIR/$FILENAME"
+
+    # ensure the Videos folder exsits
+    mkdir -p "$OUTPUT_DIR"
+
+    echo "--- Start wl-screenrec ---"
+    echo "  >> Encoder: HEVC (H.265)"
+    echo "  >> BitRate: ${BITRATE_STR}"
+    echo "  >> OutputFike: ${OUTPUT_PATH}"
+    echo "  >> Select with mouse, press Ctrl+C to stop"
+    echo "--------------------------"
+
+    # Execute
+    # --codec hevc: use H.265/HEVC encoder, more efficient
+    # --low-power=off: disable low-power mode，to remove a warnning on AMD/Intel 
+    # -g "$(slurp)": select the recording region with slurp
+    wl-screenrec \
+        --codec hevc \
+        --low-power=off \
+        --bitrate "${BITRATE_STR}" \
+        -g "$(slurp)" \
+        -f "${OUTPUT_PATH}"
+
+    if [[ $? -eq 0 ]]; then
+        echo "✅ Successful！Saved to: ${OUTPUT_PATH}"
+    else
+        echo "❌ Error occured or interrupted!"
+    fi
+}
 ```
 
 ## Configuring Git

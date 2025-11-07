@@ -693,6 +693,72 @@ ws status # 查看状态
 ws stop # 关闭windsend
 ```
 
+## 媒体播放器
+
+如果你在网上搜索“Linux媒体播放器”，你一定会看到一个名字频繁出现——`mpv`，被誉为最好的播放器。我一开始还把它看成了 `mvp`，结果报了个“No such package”错误 😅。
+
+其实我只是偶尔需要播放 `.mp4` 文件，所以我的需求非常简单：能打开 mp4 文件、越轻量越好。`mpv` 完全符合这个核心需求，没有多余功能，干净利落。
+
+## 屏幕录制工具
+
+虽然不是经常用的功能，但系统里有个屏幕录制器总归是必要的 😄。这就是我强烈推荐 **`wl-screenrec`** 的原因——一款专为 Wayland 打造的优秀 Linux 录屏工具。   它用 Rust 编写，速度快、占用少，这一点让我深得我心。
+
+它的参数有点繁琐，不太方便直接使用，所以我写了一个 shell 函数，把复杂参数都封装起来，方便日常调用：
+
+```shell
+# 用法：wsr [码率 MB]
+# 示例：
+# 1. 默认 5 MB/s 码率：wsr
+# 2. 设置 10 MB/s：wsr 10
+# 3. 设置 2 MB/s：wsr 2
+wsr() {
+    local BITRATE_MBS="5"
+    
+    # 第一个参数作为码率
+    if [[ -n "$1" ]]; then
+        # 去掉多余单位
+        if [[ "$1" =~ ^[0-9]+ ]]; then
+            BITRATE_MBS="${BASH_REMATCH[0]}"
+        fi
+    fi
+    
+    # wl-screenrec 期望的参数格式，如 "10 MB"
+    local BITRATE_STR="${BITRATE_MBS} MB"
+    
+    # 输出路径
+    local OUTPUT_DIR="$HOME/Videos"
+    local FILENAME="wl-screenrec_$(date +%Y%m%d_%H%M%S).mp4"
+    local OUTPUT_PATH="$OUTPUT_DIR/$FILENAME"
+
+    # 确保 Videos 文件夹存在
+    mkdir -p "$OUTPUT_DIR"
+
+    echo "--- 开始录制 wl-screenrec ---"
+    echo "  >> 编码器：HEVC (H.265)"
+    echo "  >> 码率：${BITRATE_STR}"
+    echo "  >> 输出文件：${OUTPUT_PATH}"
+    echo "  >> 鼠标框选录制区域，按 Ctrl+C 停止"
+    echo "------------------------------"
+
+    # 执行录制
+    # --codec hevc：使用 H.265/HEVC 编码，更高效
+    # --low-power=off：关闭低功耗模式，避免 AMD/Intel 下的警告
+    # -g "$(slurp)"：用 slurp 选择录制区域
+    wl-screenrec \
+        --codec hevc \
+        --low-power=off \
+        --bitrate "${BITRATE_STR}" \
+        -g "$(slurp)" \
+        -f "${OUTPUT_PATH}"
+
+    if [[ $? -eq 0 ]]; then
+        echo "✅ 录制成功！文件已保存到：${OUTPUT_PATH}"
+    else
+        echo "❌ 出现错误或被中断！"
+    fi
+}
+```
+
 ## 配置Git
 
 Linux 的一大特色就是极致的简洁，因此使用命令行来操纵 Git 是 Linux 用户的首选😃Ubuntu 自带 Git 所以说不用自行安装了，如果想要升级的话见下：
