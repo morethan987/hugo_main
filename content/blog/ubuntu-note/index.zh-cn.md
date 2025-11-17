@@ -12,7 +12,7 @@ series:
   - 技术杂项
 series_order: 8
 date: 2025-05-01
-lastmod: 2025-10-29
+lastmod: 2025-11-17
 authors:
   - Morethan
 ---
@@ -252,7 +252,7 @@ sudo systemctl start clean-up.service
 
 下面这些内容主要来自于这篇博客文章：[SSH反向隧道使远程计算机连接互联网教程](https://www.bonanzhu.com/blog/2024/ssh-reverse-proxy-usage-chinese/)
 
-核心命令如下：
+在本机执行的核心命令如下：
 
 ```
 # 开启一个终端并启动反向代理
@@ -271,7 +271,14 @@ https_proxy=http://localhost:7890 curl https://www.baidu.com
 https_proxy=http://localhost:7890 curl https://www.google.com
 ```
 
-如果一切正常的话你现在应该能够获取到外部网络的资源了😄
+然后在远程服务器上设置网络代理的环境变量，将下面这两行写入 `.bashrc` 中：
+
+```bash
+export http_proxy=127.0.0.1:7890
+export https_proxy=127.0.0.1:7890
+```
+
+然后重新启动一个远程 ssh 终端，如果一切正常的话你现在应该能够获取到外部网络的资源了😄
 
 但是上面这种方法我觉得不太优雅：每次想要给一个服务器进行反向代理就需要运行这个命令，并且还会占用一个终端窗口
 
@@ -327,6 +334,11 @@ WantedBy=multi-user.target
 ```
 
 然后重载一下系统服务，就可以使用上文提及到的 `systemctl` 来控制这个反向代理服务了😄
+
+
+{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
+上述简化操作只是针对本机启动 ssh 反向代理而言，在远程服务器上还是需要设置网络代理相关的环境变量
+{{< /alert >}}
 
 另外如果想要使用 git 的话，就需要利用 `netcat` 将 ssh 的流量转接到 https。说着比较抽象，但是实际上具体需要做的操作并不多，只需要在服务器上的 `~/.ssh/config` 中写入下面的内容：
 

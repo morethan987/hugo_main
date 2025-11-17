@@ -12,7 +12,7 @@ series:
   - Technical Miscellany
 series_order: 8
 date: 2025-05-01
-lastmod: 2025-10-29
+lastmod: 2025-11-17
 authors:
   - Morethan
 ---
@@ -252,7 +252,7 @@ So, after much reflection, I decided to thoroughly solve this thorny problem: he
 
 The following content is primarily sourced from this blog post: [Tutorial on Using SSH Reverse Tunnels to Connect Remote Computers to the Internet](https://www.bonanzhu.com/blog/2024/ssh-reverse-proxy-usage-chinese/)
 
-The core command is as follows:
+The core command on your local mechine is as follows:
 
 ```
 # Open a terminal and start the reverse proxy
@@ -271,7 +271,14 @@ If a VPN happens to be running on port 7890 of your local computer, you can also
 https_proxy=http://localhost:7890 curl https://www.google.com
 ```
 
-If everything goes well, you should now be able to access external network resources 😄.
+To permanently enabel the proxy, you should set the environment variables in `.bashrc`:
+
+```bash
+export http_proxy=127.0.0.1:7890
+export https_proxy=127.0.0.1:7890
+```
+
+Reload the ssh terminal, if everything goes well, you should now be able to access external network resources 😄.
 
 However, I find the method above somewhat inelegant: every time you want to set up a reverse proxy for a server, you need to run this command, and it also occupies a terminal window.
 
@@ -327,6 +334,11 @@ WantedBy=multi-user.target
 ```
 
 Then reload the systemd configuration, and you can use the `systemctl` commands mentioned above to control this reverse proxy service 😄.
+
+
+{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
+The steps above only makes it easier to use locally. You still have to set the environment variables manually on remote server.
+{{< /alert >}}
 
 If you want to use Git, you'll need to route SSH traffic through HTTPS using `netcat`. It might sound abstract, but the actual steps are quite straightforward. Simply add the following content to the `~/.ssh/config` file on the server:
 
