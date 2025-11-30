@@ -12,7 +12,7 @@ series:
   - 技术杂项
 series_order: 8
 date: 2025-05-01
-lastmod: 2025-11-17
+lastmod: 2025-11-30
 authors:
   - Morethan
 ---
@@ -601,9 +601,43 @@ df -h
 
 ### PC端命令封装
 
-直接运行命令会直接占用一个终端，但是简单粗暴地 nohup 掉又没法控制软件是否开启。一个常规的思路是封装一个 systemd 服务，然后使用 `systemctl` 来进行控制😅但是如果你的桌面协议是 wayland 的话，那么与手机端类似，后台进程"悄悄"访问剪贴板是不被允许的😢
+直接运行命令会直接占用一个终端，但是简单粗暴地 nohup 掉又没法控制软件是否开启。一个常规的思路是封装一个 systemd 服务，然后使用 `systemctl` 来进行控制。但是这里需要注意，系统级的 `systemctl` 是没法工作的，需要使用 `systemctl --user` 来启动。
 
-退而求其次，封装一个简单的函数来进行启动和关闭，在你的 .bash_aliases 文件中写入：
+首先在 `~/.config/systemd/user` 目录中写入 `windsend.service` 文件：
+
+```toml
+[Unit]
+Description=WindSend Clipboard Sync Service
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+
+# 等价于 cd /home/morethan/WindSend
+WorkingDirectory=/home/morethan/WindSend
+
+# 程序完整路径
+ExecStart=/usr/local/bin/windsend
+
+# 自动重启策略
+Restart=on-failure
+RestartSec=3
+
+# 标准输出处理（避免 nohup）
+StandardOutput=null
+StandardError=journal
+
+# 环境变量（可选）
+# Environment=WS_BASE_DIR=/home/morethan/WindSend
+
+[Install]
+WantedBy=graphical-session.target
+```
+
+然后使用 `systemctl --user start windsend.service` 进行启动测试，如果能够成功启动那么就使用 `systemctl --user enable windsend.service` 来开启 windsend 的开机自启动。
+
+另外如果你更喜欢手动控制，那么也可以封装一个简单的 shell 函数来进行启动和关闭，在你的 .bash_aliases 文件或者别的专门的脚本文件中写入：
 
 ```bash
 # windsend
@@ -639,16 +673,12 @@ ws() {
 
             echo "正在启动 windsend..."
 
-            # 切换到固定工作目录，然后执行 nohup
             (
-                cd "$WS_BASE_DIR" || exit 1 # 切换目录，如果失败则退出子 Shell
-                # 注意：这里我们使用 $WS_EXEC_PATH 来执行程序
+                cd "$WS_BASE_DIR" || exit 1
                 nohup "$WS_EXEC_PATH" > /dev/null 2>&1 &
-                # 将 PID 写入文件
                 echo $! > "$WS_PID_FILE"
             )
 
-            # 检查启动结果
             sleep 1
             if [ -f "$WS_PID_FILE" ] && ps -p $(cat "$WS_PID_FILE") > /dev/null; then
                 echo "windsend 已启动 (PID: $(cat "$WS_PID_FILE"))."
@@ -658,7 +688,6 @@ ws() {
             ;;
 
         stop)
-            # ... (这部分逻辑与之前保持一致，只检查和终止进程) ...
             if [ -f "$WS_PID_FILE" ]; then
                 WS_PID=$(cat "$WS_PID_FILE")
                 if ps -p $WS_PID > /dev/null; then
@@ -676,7 +705,6 @@ ws() {
             ;;
 
         status)
-            # ... (这部分逻辑与之前保持一致) ...
             if [ -f "$WS_PID_FILE" ]; then
                 WS_PID=$(cat "$WS_PID_FILE")
                 if ps -p $WS_PID > /dev/null; then

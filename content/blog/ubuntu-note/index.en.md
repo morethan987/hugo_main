@@ -12,7 +12,7 @@ series:
   - Technical Miscellany
 series_order: 8
 date: 2025-05-01
-lastmod: 2025-11-17
+lastmod: 2025-11-30
 authors:
   - Morethan
 ---
@@ -584,11 +584,7 @@ If you’re on **Arch Linux**, you’ll need to install `xdotool` and `libayatan
 
 ### Usage
 
-Just run the executable (the one without any file extension) in the extracted folder:
-
-```bash
-./WindSend-S-Rust
-```
+Just run the executable (the one without any file extension) in the extracted folder: `./WindSend-S-Rust`
 
 Then launch the app on your phone — it will automatically search for and connect to your PC 😄 In the mobile app’s settings, you can set a **“default sync device”**, which allows you to sync instantly by simply pulling down in the app.
 
@@ -603,13 +599,45 @@ You might ask: _"Then how come the WeChat keyboard can do it?"_ Well… that’s
 
 So while it’s not 100% seamless, it’s still **safe and reliable** — data is **encrypted and transmitted only within your local network**, and transfers only happen when **you actively trigger them**. Interestingly, the whole sync process is **initiated from the phone side**, meaning that even if you want to send text **from your PC to your phone**, you’ll still perform the pull-down action on your phone.
 
-Perfect 👍 Here’s a fluent **English version** of that section — written in the same **friendly, explanatory blog tone** as before, while keeping all the technical content accurate and natural:
-
 ### Command Wrapper
 
-Running the executable directly will occupy a terminal window, but using a quick and dirty `nohup` approach makes it hard to control whether the app is actually running. A more structured way would be to wrap it in a **systemd service** and use `systemctl` to manage it 😅. However, if your desktop environment runs on **Wayland**, then just like on mobile systems, background processes **aren’t allowed to access the clipboard silently** 😢.
+Running the command directly will occupy a terminal session, but bluntly using `nohup` makes it hard to control whether the program is actually running. A conventional approach is to wrap it as a systemd service and manage it via `systemctl`. Note that the system-level `systemctl` will not work here; you must use `systemctl --user` instead.
 
-So as a compromise, we can wrap it in a simple **shell function** for convenient start/stop control. Add the following snippet to your `.bash_aliases` (or `.zshrc` if you’re using zsh):
+First, create a `windsend.service` file under the `~/.config/systemd/user` directory:
+
+```toml
+[Unit]
+Description=WindSend Clipboard Sync Service
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+
+# Equivalent to cd /home/morethan/WindSend
+WorkingDirectory=/home/morethan/WindSend
+
+# Full path to the program
+ExecStart=/usr/local/bin/windsend
+
+# Auto-restart policy
+Restart=on-failure
+RestartSec=3
+
+# Standard output handling (avoid nohup)
+StandardOutput=null
+StandardError=journal
+
+# Environment variables (optional)
+# Environment=WS_BASE_DIR=/home/morethan/WindSend
+
+[Install]
+WantedBy=graphical-session.target
+```
+
+Then start it for a test run with `systemctl --user start windsend.service`. If it starts successfully, enable auto-start on login using `systemctl --user enable windsend.service`.
+
+Alternatively, if you prefer manual control, you can also wrap a simple shell function to start and stop it by adding the following to your `.bash_aliases` or another dedicated script file:
 
 ```bash
 # windsend
