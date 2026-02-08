@@ -13,7 +13,7 @@ series:
   - AI工程
 series_order: 2
 date: 2025-05-28
-lastmod: 2025-05-28
+lastmod: 2026-02-08
 authors:
   - Morethan
 ---
@@ -61,7 +61,7 @@ A：在训练过程中，模型学习到的表示变得缺乏区分性，也就�
 
 Q：为什么 Transformer 的 Encoder 部分和 Decoder 部分可以单独构建语言模型？
 
-A：
+A：通过后文对 [主流架构]({{< relref "#主流架构" >}}) 的介绍，可以发现只有 Encoder-Decoder 和 Decoder-only 架构才能够单独构建我们印象中的能够流畅生成文本的"语言模型"，而 Encoder-only 的架构其实是很局限的，一般用于产生文本的嵌入表示。
 
 ---
 
@@ -109,6 +109,33 @@ N_{opt}\propto C^{0.46}, D_{opt}\propto C^{0.54}
 $$
 
 ### 主流架构
+
+主流的架构分为 Encoder-only，Encoder-Decoder 和 Decoder-only 架构
+
+Encoder-only 架构直观上真的就只有一个编码器，其中特征编码部分包括了自注意力层和全连接层。一个非常自然的问题是：只有编码如何训练？实际上，在预训练过程中使用一个全连接层将编码转换为掩码预测任务，在处理实际任务的时候需要另行定制专门的任务处理层
+
+![775](img/encoder-only.png)
+
+Encoder-Decoder 架构是非常标准的 Transformer 结构，在训练阶段使用输入和真实输出(Ground Truth)进行训练：首先输入文本被编码为向量序列，然后在特征编码器中被转化为内部上下文特征；在解码器部分使用 Teacher-Forcing 技术，使用真实输出中的已知部分作为输入并结合从编码模块得到的输入上下文来预测下一个 Token 然后计算损失，通过反向传播更新模型参数
+
+![img/encoder-decoder.png](img/encoder-decoder.png)
+
+Decoder-only 架构出现的原因是：有效缩减了模型的规模，降低了整体的复杂度；与之前类似，在训练阶段这种架构同样首先将输入编码为向量组，然后使用 Teacher-Forcing技术进行自回归训练(将输入文本与真实输出的已知文本拼接逐步训练)
+
+![img/decoder-only.png](img/decoder-only.png)
+
+### 三种主流架构功能对比
+
+三种架构在注意力矩阵上有很大的差别，因此也决定了这三种架构适用于不同的任务；如下图所示，Encoder-only 架构中的注意力矩阵呈现出完全的注意力形态，也就是**双向注意力**，在这种注意力下能够建模复杂的语义联系与上下文依赖；Encoder-Decoder 中输入部分为双向注意力，而输出本分为单向注意力，后一个 Token 只关注前面的 Token；Decoder-only 架构中的注意力来自掩码自注意力模块，预测当前 Token 时只能够依赖历史生成的 Token，是完全的单向注意力
+
+![img/attention-matrix.png](img/attention-matrix.png)
+
+综上所述，Encoder-only 适合**自然语言理解任务**，如情感分析、文本分类等判别任务，但在自然语言生成任务上可能不如其他两种架构；Encoder-Decoder 架构适合**有条件生成任务**，如机器翻译、文本摘要和问答系统等需要同时处理输入和输出的场景，但是新添加的解码器同样带来了计算规模庞大的问题；Decoder-only 架构适合**无条件文本生成任务**，能够生成高质量连贯文本，在自动故事生成、新闻编写等不需要特定输入文本的任务；但是在规模有限的情况下，Decoder-only 架构对复杂文本的理解存在局限性，表现可能不如 Encoder-Decoder 架构
+
+
+{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
+这里对于Decoder-only架构的局限性的描述措辞其实比较微妙，必须要在规模受限的情况下，Decoder-only 才比 Encoder-Decoder 的文本理解能力更差；但是 Decoder-only 凭借更加出色的任务泛化性，成为了目前最主流的架构
+{{< /alert >}}
 
 ## 参数高效微调
 
