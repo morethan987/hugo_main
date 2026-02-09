@@ -31,10 +31,8 @@ authors:
 
 在 `Windows App Store` 里面直接搜索一个Linux发行版本并下载，笔者选择的是`Kali`。安装完成后可以在开始菜单中直接打开，打开后会跳出命令行窗口，初次打开需要填写需要用户名与密码进行注册。
 
-
-{{< alert  >}}
-此时你的命令行应该有一个 Warning 提示。这是因为你还没有安装 WSL(Windows Subsystem for Linux)；同时，在填写密码的时候你的输入不会显示在命令行，但已经被记录了
-{{< /alert >}}
+> [!warning]+ 新手必看
+> 此时你的命令行应该有一个 Warning 提示。这是因为你还没有安装 WSL(Windows Subsystem for Linux)；同时，在填写密码的时候你的输入不会显示在命令行，但已经被记录了
 
 为什么需要一个Linux系统？因为OverLeaf的sharelatex模型需要Linux环境。也正因如此，据说在Linux系统上运行的`OverLeaf`更加流畅。
 
@@ -90,10 +88,8 @@ vim ./config/variables.env
 
 按照提示注册Administrator Account之后，就会跳转到 `http://localhost/project` ；这时基本的OverLeaf网页已经可以显示了。
 
-
-{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-但现在你丢一个文件进去编译多半是会报错的 `ᕕ( ᐛ )ᕗ` ；因为此时 sharelatex 里面的宏包严重不足，不是红包「手动狗头」
-{{< /alert >}}
+> [!NOTE]+ 说明
+> 但现在你丢一个文件进去编译多半是会报错的 `ᕕ( ᐛ )ᕗ` ；因为此时 sharelatex 里面的宏包严重不足，不是红包「手动狗头」
 
 ### 安装扩展包
 
@@ -157,17 +153,13 @@ vim /usr/local/texlive/2023/texmf.cnf
 
 进入配置文件，在最底下加入一句 `shell_escape = t`
 
-
-{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-我也不知道这有什么用，属于是前辈传承了🤔
-{{< /alert >}}
+> [!NOTE]- 小声嘀咕
+> 我也不知道这有什么用，属于是前辈传承了🤔
 
 注意，如果Texlive(扩展包的官名)版本不同的话，目录地址也会有所变化，因此需要根据实际的地址来填写，例如将`2023`改成`2024`。
 
-
-{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-在Linux命令行中可以用 `ls -l` 来查看当前目录下所有的文件
-{{< /alert >}}
+> [!TIP]- 如果你不知道如何用命令查看文件
+> 在Linux命令行中可以用 `ls -al` 来查看当前目录下所有的文件
 
 ## 部署成功
 
