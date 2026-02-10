@@ -84,7 +84,5 @@ Params | Meaning
 
 For specific options for each parameter, refer to the official documentation: [bayesopt](https://ww2.mathworks.cn/help/stats/bayesopt.html?s_tid=srchtitle_site_search_1_bayesopt). The official documentation is very detailed and includes many examples.  
 
-
-{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-One of the essential skills for mathematical modelers is reading documentation 😝
-{{< /alert >}}
+> [!NOTE] Note
+> One of the essential skills for mathematical modelers is reading documentation 😝
