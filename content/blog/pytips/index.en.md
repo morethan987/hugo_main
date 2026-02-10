@@ -43,10 +43,8 @@ Parameter | Description
 `--clear` | Clears the target directory if it already exists before creating the virtual environment
 `--version` | Confirms the Python version in the virtual environment
 
-
-{{< alert icon="circle-info" cardColor="#b0c4de" textColor="#333333" >}}
-All parameter descriptions can be obtained by running `python -m venv -h`—no need to search elsewhere for documentation~😆
-{{< /alert >}}
+> [!tip]- Tip
+> All parameter descriptions can be obtained by running `python -m venv -h`—no need to search elsewhere for documentation~😆
 
 #### Activation
 
@@ -332,10 +330,8 @@ pip install scikit_image-0.25.2-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_
 
 Sometimes, errors may occur during download. In this case, you need to go to the [pypi](https://pypi.org/) official website to check if there is a corresponding package, and then fine-tune the command to succeed in downloading.
 
-
-{{< alert icon="triangle-exclamation" cardColor="#ffcc00" textColor="#333333" iconColor="#8B6914" >}}
-Do not rename the whl files 😢
-{{< /alert >}}
+> [!warning]+ Notice
+> Do not rename the whl files 😢
 
 ## Packaging Applications
 

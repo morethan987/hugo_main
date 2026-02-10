@@ -84,10 +84,8 @@ ORDER BY released DESC LIMIT 5
 
 这会筛选出最新的 5 个电影。
 
-
-{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-Cypher 关键字对大小写不敏感；属性名、变量名等其他的都是大小写敏感的
-{{< /alert >}}
+> [!NOTE] 注意
+> Cypher 关键字对大小写不敏感；属性名、变量名等其他的都是大小写敏感的
 
 ### 数据写入
 
@@ -154,10 +152,8 @@ docker run -d -p 7474:7474 -p 7687:7687 -v E:/neo4j/data:/data -v E:/neo4j/logs:
 - `-v` 参数用于宿主机的目录挂载（说人话就是指定这个 Docker 应用的存储目录）
 - `-e` 参数用来配置环境变量：带有 `apoc` 的都是 APOC 相关的配置；`NEO4J_AUTH` 表示用户名为 neo4j，密码为 mo123456789；
 
-
-{{< alert icon="triangle-exclamation" cardColor="#ffcc00" textColor="#333333" iconColor="#8B6914" >}}
-如果你使用 Neo4j 用于语言模型的增强生成(RAG)，一定要带上述 APOC 相关配置；如果不是的话，那么那些命令可以直接去掉
-{{< /alert >}}
+> [!warning] 注意
+> 如果你使用 Neo4j 用于语言模型的增强生成(RAG)，一定要带上述 APOC 相关配置；如果不是的话，那么那些命令可以直接去掉
 
 运行完上面的命令之后可以去宿主机挂载目录中查看 APOC 插件是否安装：
 

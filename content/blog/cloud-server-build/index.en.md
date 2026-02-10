@@ -117,10 +117,8 @@ I randomly chose Tabby, which makes remote connections more convenient and has b
 
 Of course, more traditional solutions include using [FileZilla](https://filezilla-project.org/download.php); and if you don't mind the hassle, you can directly use terminal commands: use `rsync` or `scp` commands.
 
-
-{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-If you are using a Tencent Cloud server and are curious about what the `lighthouse` folder is🤨: this folder is the account for one-click password-free login.
-{{< /alert >}}
+> [!NOTE] Note
+> If you are using a Tencent Cloud server and are curious about what the `lighthouse` folder is🤨: this folder is the account for one-click password-free login.
 
 #### Install Docker
 
@@ -157,10 +155,8 @@ sudo systemctl status docker       # Verify service status
 
 ```
 
-
-{{< alert icon="triangle-exclamation" cardColor="#ffcc00" textColor="#333333" iconColor="#8B6914" >}}
-After running the last command, you will enter a paged log view mode, similar to a Vim editor. Enter `:q` to return to the regular command line.
-{{< /alert >}}
+> [!warning] Warning
+> After running the last command, you will enter a paged log view mode, similar to a Vim editor. Enter `:q` to return to the regular command line.
 
 #### Use Docker
 
@@ -200,19 +196,15 @@ sudo docker compose up -d
 sudo docker compose down
 ```
 
-
-{{< alert icon="triangle-exclamation" cardColor="#ffcc00" textColor="#333333" iconColor="#8B6914" >}}
-Before using the `docker compose` command, please create `docker-compose.yml` and `Dockerfile` according to the official tutorial.
-{{< /alert >}}
+> [!warning] Warning
+> Before using the `docker compose` command, please create `docker-compose.yml` and `Dockerfile` according to the official tutorial.
 
 #### Configure pip/poetry
 
 Strangely, Tencent Cloud installs Python by default at the system level but does not install pip🤔 So you need to manually install it. Before installation, please confirm whether Python is installed.
 
-
-{{< alert icon="triangle-exclamation" cardColor="#ffcc00" textColor="#333333" iconColor="#8B6914" >}}
-If you are not using pip at the system level but pip inside a Docker container, then changing the pip source at the system level will not have any effect.
-{{< /alert >}}
+> [!WARNING] Warning
+> If you are not using pip at the system level but pip inside a Docker container, then changing the pip source at the system level will not have any effect.
 
 Change pip source at the system level:
 
@@ -255,10 +247,8 @@ sudo apt install python3-poetry
 sudo poetry config repositories.tencentyun https://mirrors.tencentyun.com/pypi/simple
 ```
 
-
-{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-If your system does not have pip installed by default, it is not recommended to install pip first and then install poetry.
-{{< /alert >}}
+> [!NOTE] Note
+> If your system does not have pip installed by default, it is not recommended to install pip first and then install poetry.
 
 #### SSL/TLS
 

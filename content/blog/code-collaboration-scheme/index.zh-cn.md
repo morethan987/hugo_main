@@ -78,19 +78,15 @@ numEpochs = 100; % 迭代次数
 run('config.m');
 ```
 
-
-{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-尽管参数被转移到了其他地方但是 VS Code 仍然能够进行自动检测并给出补全提示！
-{{< /alert >}}
+> [!NOTE] 注意
+> 尽管参数被转移到了其他地方但是 VS Code 仍然能够进行自动检测并给出补全提示！
 
 #### 函数内部使用的参数
 
 函数内部所有使用的变量都应该在主程序开始之前明确定义，并在变量后添加简要的中文注释；
 
-
-{{< alert icon="triangle-exclamation" cardColor="#ffcc00" textColor="#333333" iconColor="#8B6914" >}}
-如果有一些表达相同含义的参数在多个文件中使用，请使用统一的命名，尤其是 AI 生成的代码，请在 VS Code 中使用 `F2` 进行重命名
-{{< /alert >}}
+> [!warning] 注意
+> 如果有一些表达相同含义的参数在多个文件中使用，请使用统一的命名，尤其是 AI 生成的代码，请在 VS Code 中使用 `F2` 进行重命名
 
 ### 代码格式化
 
@@ -134,10 +130,8 @@ run('config.m');
 
 MATLAB 能够支持多线程计算，仅需将一般的 `for` 循环改写为 `parfor` 即可
 
-
-{{< alert icon="triangle-exclamation" cardColor="#ffcc00" textColor="#333333" iconColor="#8B6914" >}}
-parfor 函数的执行要求十分严格，具体参阅[官方说明](https://ww2.mathworks.cn/help/parallel-computing/parfor.html)
-{{< /alert >}}
+> [!warning] 注意
+> parfor 函数的执行要求十分严格，具体参阅[官方说明](https://ww2.mathworks.cn/help/parallel-computing/parfor.html)
 
 ### 大型表格处理
 

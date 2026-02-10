@@ -78,19 +78,15 @@ To use this configuration file in other code files, simply include the following
 run('config.m');
 ```
 
-
-{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-Even the parameters are transformed into another file, the VS Code can also recognizes it and provide complement suggestion.
-{{< /alert >}}
+> [!NOTE] Attention
+> Even the parameters are transformed into another file, the VS Code can also recognizes it and provide complement suggestion.
 
 #### Function-Internal Parameters
 
 All variables used within a function should be explicitly defined at the beginning of the function and should include brief Chinese comments.
 
-
-{{< alert icon="triangle-exclamation" cardColor="#ffcc00" textColor="#333333" iconColor="#8B6914" >}}
-If similar parameters are used across multiple files, make sure to use consistent naming, especially in AI-generated code. Use `F2` in VS Code to rename them.
-{{< /alert >}}
+> [!warning] Attention
+> If similar parameters are used across multiple files, make sure to use consistent naming, especially in AI-generated code. Use `F2` in VS Code to rename them.
 
 ### Code Formatting
 
@@ -134,10 +130,8 @@ In order to develop a project as fast and well-defined as possible, I have creat
 
     MATLAB supports multi-threaded computing. You can convert a typical `for` loop to a `parfor` loop for parallel execution.
 
-
-{{< alert icon="triangle-exclamation" cardColor="#ffcc00" textColor="#333333" iconColor="#8B6914" >}}
-The execution of `parfor` functions is subject to strict requirements. Please refer to the [official documentation](https://ww2.mathworks.cn/help/parallel-computing/parfor.html) for more details.
-{{< /alert >}}
+> [!warning] Attention
+> The execution of `parfor` functions is subject to strict requirements. Please refer to the [official documentation](https://ww2.mathworks.cn/help/parallel-computing/parfor.html) for more details.
 
 ### Huge Table Process
 

@@ -120,10 +120,8 @@ Collection 简而言之就是一组数据点的集合。在这个数据类型的
 - 欧氏距离
 - 曼哈顿距离
 
-
-{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-为了提高数据库的性能，所有向量在存入的时候都会被"归一化"，这也意味着点积相似度和余弦相似度在 Qdrant 中是等价的
-{{< /alert >}}
+> [!NOTE] 注意
+> 为了提高数据库的性能，所有向量在存入的时候都会被"归一化"，这也意味着点积相似度和余弦相似度在 Qdrant 中是等价的
 
 为了更良好的用户体验，Qdrant 提供了一套完整的程序接口，让用户能够方便地调用：[Search API - Qdrant](https://qdrant.tech/documentation/concepts/search/#search-api)
 
@@ -137,10 +135,8 @@ Collection 简而言之就是一组数据点的集合。在这个数据类型的
 6. **搜索分组**：能够对搜索结果按照某些标签进行分组，参数 `group_size` 可以设置每组的结果个数
 7. **搜索规划**：依据可选索引、过滤条件的复杂性和总共的数据点的数量，以启发式的方法选择一个合适的搜索方式(提高性能🤔)
 
-
-{{< alert icon="triangle-exclamation" cardColor="#ffcc00" textColor="#333333" iconColor="#8B6914" >}}
-如果 `group_size` 和 `limit` 被同时设置，那么此时 `limit` 参数表示分组的数量
-{{< /alert >}}
+> [!WARNING] 注意
+> 如果 `group_size` 和 `limit` 被同时设置，那么此时 `limit` 参数表示分组的数量
 
 另外，在 Qdrant 中，稀疏向量和密集向量的搜索有一些关键的不同，对比结果如下：
 
@@ -185,10 +181,8 @@ client.query("{collection_name}", {
 });
 ```
 
-
-{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-官方给出的例子中 100,231 是向量编号，每一个编号都对应一个四维的向量
-{{< /alert >}}
+> [!NOTE] 说明
+> 官方给出的例子中 100,231 是向量编号，每一个编号都对应一个四维的向量
 
 其中 `strategy` 参数用于调控搜索算法，下面是具体的算法说明：
 
@@ -206,10 +200,8 @@ let score = if best_positive_score > best_negative_score {
 
 3. **只考虑负例算法**：使用最佳评分算法👆同时不提供正例，你就会得到一个反向评分算法，能够找到最不相关的数据点
 
-
-{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-多重向量和别的特殊向量也是能够被处理的，处理逻辑相同，只是代码写法不同
-{{< /alert >}}
+> [!NOTE] 说明
+> 多重向量和别的特殊向量也是能够被处理的，处理逻辑相同，只是代码写法不同
 
 #### 发现·Discovery
 
@@ -217,10 +209,8 @@ let score = if best_positive_score > best_negative_score {
 
 和[推荐·Recommendation]({{< relref "#推荐recommendation" >}}) 类似，但是这里你需要将正向量和负向量组合成一对来输入。
 
-
-{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-由于进行了样本空间的硬划分，因此可以考虑提高 HNSW 算法中的 ef 参数来弥补硬划分产生的精度损失
-{{< /alert >}}
+> [!NOTE] 说明
+> 由于进行了样本空间的硬划分，因此可以考虑提高 HNSW 算法中的 ef 参数来弥补硬划分产生的精度损失
 
 通过发现操作，Qdrant 能够处理一下两种新的搜索需求：
 
@@ -228,10 +218,8 @@ let score = if best_positive_score > best_negative_score {
 
 2. **区域划分搜索**：是发现型搜索👆的特例，在不提供目标向量的情况下，数据库会直接使用正负向量对进行区域划分，并最后返回处在正区域中最多的数据点
 
-
-{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-在发现型搜索中，通过算法保证了上下文约束条件的**强制性**，优先级更高；换言之，发现型搜索先执行区域划分搜索，然后再进行普通的相似度搜索
-{{< /alert >}}
+> [!NOTE] 说明
+> 在发现型搜索中，通过算法保证了上下文约束条件的**强制性**，优先级更高；换言之，发现型搜索先执行区域划分搜索，然后再进行普通的相似度搜索
 
 #### 距离矩阵·Distance-Matrix
 

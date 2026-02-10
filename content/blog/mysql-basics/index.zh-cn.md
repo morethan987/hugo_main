@@ -53,10 +53,8 @@ docker run -d --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=password -v /User
 `-v /path:/var/lib/mysql` | 表示将本地目录映射到容器目录 `/var/lib/mysql` 作为 MySQL 数据库存放的位置，需要将 `/path` 改为你的电脑上的实际目录
 `mysql` | 告诉 Docker 你要运行的镜像的名称
 
-
-{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-使用 Docker 运行 MySQL 时，任何时候都可以删除 MySQL 容器并重新运行；如果删除了本地映射的目录，重新运行就相当于一个全新的 MySQL ；
-{{< /alert >}}
+> [!NOTE] 温馨提示
+> 使用 Docker 运行 MySQL 时，任何时候都可以删除 MySQL 容器并重新运行；如果删除了本地映射的目录，重新运行就相当于一个全新的 MySQL ；
 
 #### docker-compose启动MySQL
 
@@ -151,10 +149,8 @@ SELECT COUNT(*) boys FROM students WHERE gender = 'M';
 
 ```
 
-
-{{< alert  >}}
-虽然 `COUNT(*)` 的结果是一个标量，但是返回仍然是一个二维表格，只是表格只有一行一列
-{{< /alert >}}
+> [!Waring] 注意
+> 虽然 `COUNT(*)` 的结果是一个标量，但是返回仍然是一个二维表格，只是表格只有一行一列
 
 另外还有一些常用的聚合函数：`MAX()`，`MIN()`，`AVG()`，`SUM()` 等，与 `COUNT()` 类似
 

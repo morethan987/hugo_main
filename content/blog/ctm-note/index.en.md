@@ -29,10 +29,8 @@ The most intuitive example is the official "maze model." From the visualized res
 
 Moreover, the official [code repository](https://github.com/SakanaAI/continuous-thought-machines) includes detailed documentation and code comments, with clean and intuitive file organization—a kind of "artistic sense" only programmers would appreciate.  
 
-
-{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-After wading through mountains of spaghetti code, one might truly appreciate the "elegance" of well-structured code 😇 and deeply understand the effort behind this "elegance."
-{{< /alert >}}
+> [!NOTE] Title
+> After wading through mountains of spaghetti code, one might truly appreciate the "elegance" of well-structured code 😇 and deeply understand the effort behind this "elegance."
 
 ## Introduction  
 
@@ -54,10 +52,8 @@ Of course, without delving into the code implementation, these terms are meaning
 2. Interesting side effects: CTM's internal loops resemble human thinking. Without any explicit supervision, it **automatically allocates appropriate computational resources to tasks of varying difficulty**—simple tasks terminate early, while complex tasks undergo deeper computation.  
 3. **Information can be encoded in temporal dynamics**, granting the network stronger information compression capabilities.  
 
-
-{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-My thoughts on the third point: According to the "compression is intelligence" view, encoding information into temporal dynamics would greatly enhance the network's information "compression rate," thereby improving "intelligence" to some extent.  
-{{< /alert >}}
+> [!NOTE] Title
+> My thoughts on the third point: According to the "compression is intelligence" view, encoding information into temporal dynamics would greatly enhance the network's information "compression rate," thereby improving "intelligence" to some extent.  
 
 Finally, the author clarifies the goal of this research:  
 
@@ -89,10 +85,8 @@ This internal dimension is not a new concept—RNNs and Transformers also use it
 
 For example, RNNs also have an internal temporal dimension, but at each time step, the model receives a new token input, generates the next token based on the internal hidden state, and updates the hidden state. If we only look at token inputs, we essentially default to using the data's inherent order as the model's internal temporal dimension.  
 
-
-{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-Transformers are inherently "orderless": At each time step, the attention mechanism processes all tokens in parallel. Perhaps this is the source of their power 🤔. The only step related to input data order is "positional embedding."  
-{{< /alert >}}
+> [!NOTE] Title
+> Transformers are inherently "orderless": At each time step, the attention mechanism processes all tokens in parallel. Perhaps this is the source of their power 🤔. The only step related to input data order is "positional embedding."  
 
 CTM completely decouples this association, making internal processing independent of input data. It's not just order-agnostic but also independent of input sequence length, which might be the point the author emphasizes more 🤔.  
 
@@ -113,10 +107,8 @@ $$
 
 Here, \(z^t\in R^D\) represents the **post-activation vector** at time step \(t\), and \(o^t\) is the **modulated data** computed in the previous time step. These are concatenated and fed into the **synaptic model** to produce \(a^t\), the **pre-activation vector**.  
 
-
-{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-Note the lowercase \(z\) here versus the uppercase \(Z\) in the diagram: \(z\) refers to the post-activation vector for a single neuron, while \(Z\) is a matrix of post-activation vectors for all neurons.  
-{{< /alert >}}
+> [!NOTE] Title
+> Note the lowercase \(z\) here versus the uppercase \(Z\) in the diagram: \(z\) refers to the post-activation vector for a single neuron, while \(Z\) is a matrix of post-activation vectors for all neurons.  
 
 The synaptic model is essentially a function \(f_{\theta_{syn}}\), which can be expressed in various ways. Experiments in the paper use an MLP, specifically a U-NET-esque MLP.  
 
@@ -129,10 +121,8 @@ $$
 
 The first \(M\) elements in the history sequence and the initial \(z\) values at \(t=1\) require initialization. Experiments show that making them learnable parameters yields the best results.  
 
-
-{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-Note that \(z^t\) is not the input data at time step \(t\)! As shown in the diagram, the entire computation flow hardly involves input data—only when computing \(o^t\) (the orange block) does external input data participate 🤔.  
-{{< /alert >}}
+> [!NOTE] Title
+> Note that \(z^t\) is not the input data at time step \(t\)! As shown in the diagram, the entire computation flow hardly involves input data—only when computing \(o^t\) (the orange block) does external input data participate 🤔.  
 
 ### Parameter-Private Neuron-Level Models  
 
@@ -156,10 +146,8 @@ $$
 
 In plain terms, this step means: Each neuron generates its next post-activation value based on its last \(M\) pre-activation values.  
 
-
-{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-😢 I initially thought \(z_{d}^t\) was a vector, but it's actually a scalar.  
-{{< /alert >}}
+> [!NOTE] Title
+> 😢 I initially thought \(z_{d}^t\) was a vector, but it's actually a scalar.  
 
 ### Neuron Synchronization: Input and Output Modulation  
 
@@ -177,10 +165,8 @@ $$
 S^t=Z^t \cdot (Z^t)^T\in R^{D\times D}
 $$
 
-
-{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-Mathematically, \(S^t\) is an unnormalized covariance matrix where the \((i,j)\) element represents the "degree of coordination" between the \(i\)-th neuron and the \(j\)-th neuron across all time steps, which is what the paper refers to as "neural synchronization."
-{{< /alert >}}
+> [!NOTE] Title
+> Mathematically, \(S^t\) is an unnormalized covariance matrix where the \((i,j)\) element represents the "degree of coordination" between the \(i\)-th neuron and the \(j\)-th neuron across all time steps, which is what the paper refers to as "neural synchronization."
 
 This neuron synchronization matrix undergoes **downsampling**: Randomly select \(D_{out}\) and \(D_{action}\) elements to form two neuron synchronization **representation vectors**, \(S^t_{out}\in R^{D_{out}}\) and \(S^t_{action}\in R^{D_{action}}\).  
 
@@ -223,10 +209,8 @@ $$
 \mathbf{S}_{i j}^{t}=\frac{\left(\mathbf{Z}_{i}^{t}\right)^{\top} \cdot \operatorname{diag}\left(\mathbf{R}_{i j}^{t}\right) \cdot\left(\mathbf{Z}_{j}^{t}\right)}{\sqrt{\sum_{\tau=1}^{t}\left[\mathbf{R}_{i j}^{t}\right]_{\tau}}}
 $$
 
-
-{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-The author's experiments show that these learnable decay coefficients are rarely used: In ImageNet classification, only 3 out of 8196 coefficients are effective; in maze-solving, it's slightly higher but still around 3%.  
-{{< /alert >}}
+> [!NOTE] Title
+> The author's experiments show that these learnable decay coefficients are rarely used: In ImageNet classification, only 3 out of 8196 coefficients are effective; in maze-solving, it's slightly higher but still around 3%.  
 
 ### Loss Function: Optimization Across Time Steps  
 
@@ -299,10 +283,8 @@ How does the model interact with external data? It is achieved by downsampling t
 
 A very reasonable idea is: would replacing this matrix with an MLP network yield better results? 🤔 Does the downsampling strategy impact the capabilities of the CTM model? Could some form of attention mechanism be used to construct an "intelligent" downsampling strategy?  
 
-
-{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-🤔 I’m actually quite curious: if the number of neurons \(D\) is scaled up to the magnitude of neurons in the human brain, and an attention mechanism is employed, would some form of sparse activation features naturally emerge?
-{{< /alert >}}
+> [!NOTE] Title
+> 🤔 I’m actually quite curious: if the number of neurons \(D\) is scaled up to the magnitude of neurons in the human brain, and an attention mechanism is employed, would some form of sparse activation features naturally emerge?
 
 ### About Temporal Information
 
@@ -312,19 +294,15 @@ However, the equations corresponding to SNNs are mathematically non-differentiab
 
 CTM implements a neural network capable of utilizing temporal information based on traditional neuron models. Moreover, it can be seen from the paper's description that the authors have constructed a new type of neuron, where the activation value at time \(t+1\) is connected to the historical activation states of many other neurons through both neuron-level and synaptic-level models. Thus, the output of each neuron can integrate a large amount of historical information.
 
-
-{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-A somewhat less rigorous thought: SNN processes temporal information and activation values simultaneously, leading to higher model complexity, whereas CTM decouples the computation of temporal information and activation values 🤔
-{{< /alert >}}
+> [!NOTE] Title
+> A somewhat less rigorous thought: SNN processes temporal information and activation values simultaneously, leading to higher model complexity, whereas CTM decouples the computation of temporal information and activation values 🤔
 
 ## Code Analysis
 
 The official `README.md` file provides a clear explanation of the project's directory structure, so I won't go into detail here. After briefly reviewing the model code in the `models` folder, you can directly look at the specific training code in the `tasks` folder.
 
-
-{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-Just looking at the model code actually makes it not very easy to understand how the model interacts with the data🤔
-{{< /alert >}}
+> [!NOTE] Title
+> Just looking at the model code actually makes it not very easy to understand how the model interacts with the data🤔
 
 ### Maze Problem
 

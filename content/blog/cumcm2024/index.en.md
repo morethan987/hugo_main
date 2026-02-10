@@ -28,10 +28,8 @@ There were moments of excitement and surprise, as well as disappointment; we mus
 
 In short, this experience is truly unforgettable, and it is even more worth summarizing and learning from the experience to prepare for next year's competition.
 
-
-{{< alert icon="circle-info" cardColor="#b0c4de" textColor="#333333" >}}
-CUMCM stands for Chinese Undergraduate Mathematical Contest in Modeling; it is commonly referred to as the "National Mathematical Modeling Competition".
-{{< /alert >}}
+> [!info]- Note
+> CUMCM stands for Chinese Undergraduate Mathematical Contest in Modeling; it is commonly referred to as the "National Mathematical Modeling Competition".
 
 ## Terminology Explanation
 
@@ -116,10 +114,8 @@ The paper writing part is divided into:
     - Optimize code comments to make them more readable
     - Focus on checking **personal information**
 
-
-{{< alert icon="fire" cardColor="#e63946" iconColor="#ffffff" textColor="#ffffff" >}}
-Personal information must not be retained in the competition paper, including file paths in the code, such as `C:\Users\Morethan`; retaining personal information is a very serious mistake!
-{{< /alert >}}
+> [!danger] Especially Notice
+> Personal information must not be retained in the competition paper, including file paths in the code, such as `C:\Users\Morethan`; retaining personal information is a very serious mistake!
 
 ### Actual Combat Effectiveness
 
@@ -207,10 +203,8 @@ When we applied the above strategies to the actual combat process, that is, the 
     - **Code writing process standards**
 - Code parallelization: Add some parallelizable code to the code to increase running speed
 
-
-{{< alert icon="triangle-exclamation" cardColor="#ffcc00" textColor="#333333" iconColor="#8B6914" >}}
-All code improvements must be implemented in a document! Not just slogans!
-{{< /alert >}}
+> [!warning]- True Action
+> All code improvements must be implemented in a document! Not just slogans!
 
 - The final output: [Code Collaboration Scheme]({{< ref "/blog/code-collaboration-scheme/" >}})
 
@@ -223,10 +217,8 @@ All code improvements must be implemented in a document! Not just slogans!
     - Optimize the paper's main logic framework, refine the content of each section
     - Improvements in language style, text readability, detail, illustration logic, and image readability, etc.
 
-
-{{< alert icon="triangle-exclamation" cardColor="#ffcc00" textColor="#333333" iconColor="#8B6914" >}}
-The results are fixed in the form of comments in the LaTeX template!
-{{< /alert >}}
+> [!warning]- True Action
+> The results are fixed in the form of comments in the LaTeX template!
 
 ## Summary
 

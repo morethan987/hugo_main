@@ -84,10 +84,8 @@ ORDER BY released DESC LIMIT 5
 
 This will filter out the 5 most recent movies.
 
-
-{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-Cypher keywords are case-insensitive; property names, variable names, and other identifiers are case-sensitive.
-{{< /alert >}}
+> [!NOTE] Note
+> Cypher keywords are case-insensitive; property names, variable names, and other identifiers are case-sensitive.
 
 ### Data Writing
 
@@ -154,10 +152,8 @@ Explanation of the parameters:
 - The `-v` option mounts directories from the host machine (this means specifying where the Docker application will store its data).
 - The `-e` option configures environment variables. The `apoc`-related configurations are for the APOC plugin; `NEO4J_AUTH` sets the username to `neo4j` and the password to `mo123456789`.
 
-
-{{< alert icon="triangle-exclamation" cardColor="#ffcc00" textColor="#333333" iconColor="#8B6914" >}}
-If you use Neo4j for language model-enhanced generation (RAG), be sure to include the APOC-related configurations. Otherwise, you can omit these settings.
-{{< /alert >}}
+> [!warning] Warning
+> If you use Neo4j for language model-enhanced generation (RAG), be sure to include the APOC-related configurations. Otherwise, you can omit these settings.
 
 After running the command above, check the host machine's mounted directory to confirm if the APOC plugin is installed:
 

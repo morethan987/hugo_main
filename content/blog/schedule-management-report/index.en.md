@@ -120,10 +120,8 @@ To break this vicious cycle, three strategies exist:
 
 **Time vacuums and their cascading effects are the Achilles' heel of static schedule management apps**, severely limiting their adoption. Consequently, schedule management is often seen as a niche activity for highly disciplined individuals, and the software is perceived as catering only to this small group.  
 
-
-{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-I’ve used several static schedule management apps but struggled to stick with them: either the learning curve was too steep, or rigid schedules were impractical to follow.  
-{{< /alert >}}
+> [!NOTE] Personal Experience
+> I’ve used several static schedule management apps but struggled to stick with them: either the learning curve was too steep, or rigid schedules were impractical to follow.  
 
 Thus, a truly meaningful schedule management tool shouldn’t demand a life free of surprises or strict adherence to plans. Instead, it should provide solutions for when things go off track.  
 

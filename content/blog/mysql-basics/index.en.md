@@ -53,10 +53,8 @@ Parameter | Description
 `-v /path:/var/lib/mysql` | Mount a local directory to `/var/lib/mysql` in the container, which will store MySQL data. Replace `/path` with the actual directory path on your machine
 `mysql` | Specifies the name of the Docker image you want to run
 
-
-{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-When using Docker to run MySQL, you can always delete the MySQL container and rerun it. If you delete the locally mounted directory, rerunning the container is equivalent to starting with a fresh MySQL instance.
-{{< /alert >}}
+> [!NOTE] Title
+> When using Docker to run MySQL, you can always delete the MySQL container and rerun it. If you delete the locally mounted directory, rerunning the container is equivalent to starting with a fresh MySQL instance.
 
 #### Run MySQL With docker-compose
 
@@ -151,10 +149,8 @@ SELECT COUNT(*) boys FROM students WHERE gender = 'M';
 
 ```
 
-
-{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-Even though `COUNT(*)` returns a scalar value, the result is still a two-dimensional table, but with only one row and one column.
-{{< /alert >}}
+> [!NOTE] Attention
+> Even though `COUNT(*)` returns a scalar value, the result is still a two-dimensional table, but with only one row and one column.
 
 Other commonly used aggregation functions: `MAX()`, `MIN()`, `AVG()`, `SUM()`, etc., similar to `COUNT()`.
 

@@ -43,10 +43,8 @@ D:\Python\Python311\python.exe -m venv your_env_name
 `--clear` | 如果指定的虚拟环境目录已经存在，这会清除目录中的所有内容，然后重新创建虚拟环境
 `--version` | 用于确认虚拟环境中 Python 的版本
 
-
-{{< alert icon="circle-info" cardColor="#b0c4de" textColor="#333333" >}}
-所有的参数说明都可以通过运行 `python -m venv -h` 来获得；不用到处查文档了~😆
-{{< /alert >}}
+> [!tip]- 技巧
+> 所有的参数说明都可以通过运行 `python -m venv -h` 来获得；不用到处查文档了~😆
 
 #### 激活
 
@@ -332,10 +330,8 @@ pip install scikit_image-0.25.2-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_
 
 有些时候下载会出现报错的情况，这个时候就需要上 [pypi](https://pypi.org/) 官网去检查一下是否有对应的包，然后再微调一下命令，这样才能下载成功
 
-
-{{< alert icon="triangle-exclamation" cardColor="#ffcc00" textColor="#333333" iconColor="#8B6914" >}}
-注意不要改 whl 文件的名字😢
-{{< /alert >}}
+> [!warning]+ 注意
+> 注意不要改 whl 文件的名字😢
 
 ## 程序打包
 

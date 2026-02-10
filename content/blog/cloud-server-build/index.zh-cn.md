@@ -117,10 +117,8 @@ DNS 解析是啥？域名相当于你家小区的名字，但外地人根本就�
 
 当然，传统一些的方案可以选择使用 [FileZilla](https://filezilla-project.org/download.php)；而且不怕麻烦的话直接用终端命令也是可以的：使用 `rsync` 或者 `scp` 命令就行
 
-
-{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-如果你用的是腾讯云的服务器，同时你也好奇 `lighthouse` 文件夹是什么🤨：这个文件夹就是一键免密登录的账户
-{{< /alert >}}
+> [!NOTE] 说明
+> 如果你用的是腾讯云的服务器，同时你也好奇 `lighthouse` 文件夹是什么🤨：这个文件夹就是一键免密登录的账户
 
 #### 安装Docker
 
@@ -157,10 +155,8 @@ sudo systemctl status docker       # 验证服务状态
 
 ```
 
-
-{{< alert icon="triangle-exclamation" cardColor="#ffcc00" textColor="#333333" iconColor="#8B6914" >}}
-运行完最后一条指令，会进入分页查看日志模式，类似于一个 Vim 编辑器，输入 `:q` 回到常规命令行
-{{< /alert >}}
+> [!warning] 注意
+> 运行完最后一条指令，会进入分页查看日志模式，类似于一个 Vim 编辑器，输入 `:q` 回到常规命令行
 
 #### 使用Docker
 
@@ -200,19 +196,15 @@ sudo docker compose up -d
 sudo docker compose down
 ```
 
-
-{{< alert icon="triangle-exclamation" cardColor="#ffcc00" textColor="#333333" iconColor="#8B6914" >}}
-在使用 `docker compose` 命令之前，请按照官方教程自行创建 `docker-compose.yml` 和 `Dockerfile`
-{{< /alert >}}
+> [!warning] 注意
+> 在使用 `docker compose` 命令之前，请按照官方教程自行创建 `docker-compose.yml` 和 `Dockerfile`
 
 #### 配置pip/poetry
 
 很奇怪，腾讯云在系统层面默认安装了 Python，但是没有安装 pip 🤔所以需要手动安装一下，在安装前请先确认一下 Python 是否安装
 
-
-{{< alert icon="triangle-exclamation" cardColor="#ffcc00" textColor="#333333" iconColor="#8B6914" >}}
-如果你使用的不是系统层面的 pip，而是 Docker 容器内部的 pip，那么对外部系统层面的 pip 进行换源操作没有效果
-{{< /alert >}}
+> [!WARNING] 注意
+> 如果你使用的不是系统层面的 pip，而是 Docker 容器内部的 pip，那么对外部系统层面的 pip 进行换源操作没有效果
 
 系统层面更换 pip 源：
 
@@ -255,10 +247,8 @@ sudo apt install python3-poetry
 sudo poetry config repositories.tencentyun https://mirrors.tencentyun.com/pypi/simple
 ```
 
-
-{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-如果你的系统没有默认安装 pip，那么不建议先安装 pip 再安装
-{{< /alert >}}
+> [!NOTE] 说明
+> 如果你的系统没有默认安装 pip，那么不建议先安装 pip 再安装
 
 #### SSL/TLS
 

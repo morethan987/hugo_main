@@ -132,10 +132,8 @@ Decoder-only 架构出现的原因是：有效缩减了模型的规模，降低�
 
 综上所述，Encoder-only 适合**自然语言理解任务**，如情感分析、文本分类等判别任务，但在自然语言生成任务上可能不如其他两种架构；Encoder-Decoder 架构适合**有条件生成任务**，如机器翻译、文本摘要和问答系统等需要同时处理输入和输出的场景，但是新添加的解码器同样带来了计算规模庞大的问题；Decoder-only 架构适合**无条件文本生成任务**，能够生成高质量连贯文本，在自动故事生成、新闻编写等不需要特定输入文本的任务；但是在规模有限的情况下，Decoder-only 架构对复杂文本的理解存在局限性，表现可能不如 Encoder-Decoder 架构
 
-
-{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-这里对于Decoder-only架构的局限性的描述措辞其实比较微妙，必须要在规模受限的情况下，Decoder-only 才比 Encoder-Decoder 的文本理解能力更差；但是 Decoder-only 凭借更加出色的任务泛化性，成为了目前最主流的架构
-{{< /alert >}}
+> [!NOTE] Title
+> 这里对于Decoder-only架构的局限性的描述措辞其实比较微妙，必须要在规模受限的情况下，Decoder-only 才比 Encoder-Decoder 的文本理解能力更差；但是 Decoder-only 凭借更加出色的任务泛化性，成为了目前最主流的架构
 
 ## 参数高效微调
 

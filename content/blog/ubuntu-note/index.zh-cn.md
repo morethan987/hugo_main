@@ -112,10 +112,8 @@ dd # 删除行
 dw # 删除一个词
 ```
 
-
-{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-网上有很多非常详细的 vim 教程，如果想仔细学 vim 的话可以去看看👀看得出来，那些教程真的很想让我成为一个 vim 大师😔但我是真的懒😔
-{{< /alert >}}
+> [!NOTE] 说明
+> 网上有很多非常详细的 vim 教程，如果想仔细学 vim 的话可以去看看👀看得出来，那些教程真的很想让我成为一个 vim 大师😔但我是真的懒😔
 
 ### neovim
 
@@ -187,10 +185,8 @@ sudo fc-cache -fv
 
 当然，你也可以直接从网上下一个新的 `.ttf` 文件然后再复制到指定文件夹中。而且如果你使用的是带有 GUI 界面的 Ubuntu 系统，下载文件之后你可以直接双击字体文件来安装🥰
 
-
-{{< alert icon="triangle-exclamation" cardColor="#ffcc00" textColor="#333333" iconColor="#8B6914" >}}
-字体可能会重复安装，系统不会检查某个字体是否重复安装；如果安装重复了请自行去相关文件夹中查找并手动删除🥲Ubuntu 中字体工具可以查看所有字体信息
-{{< /alert >}}
+> [!warning] 注意
+> 字体可能会重复安装，系统不会检查某个字体是否重复安装；如果安装重复了请自行去相关文件夹中查找并手动删除🥲Ubuntu 中字体工具可以查看所有字体信息
 
 ## 配置VPN
 
@@ -335,10 +331,8 @@ WantedBy=multi-user.target
 
 然后重载一下系统服务，就可以使用上文提及到的 `systemctl` 来控制这个反向代理服务了😄
 
-
-{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-上述简化操作只是针对本机启动 ssh 反向代理而言，在远程服务器上还是需要设置网络代理相关的环境变量
-{{< /alert >}}
+> [!NOTE] 说明
+> 上述简化操作只是针对本机启动 ssh 反向代理而言，在远程服务器上还是需要设置网络代理相关的环境变量
 
 另外如果想要使用 git 的话，就需要利用 `netcat` 将 ssh 的流量转接到 https。说着比较抽象，但是实际上具体需要做的操作并不多，只需要在服务器上的 `~/.ssh/config` 中写入下面的内容：
 
@@ -383,10 +377,8 @@ Host 3090
 
 然后用 VSCode 登录服务器就发现已经完成了免密登录
 
-
-{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-上述繁琐的步骤只需要初次执行一次就行，当需要给下一台服务器配置免密登录时，只需要改 config 文件然后把 authorized_keys 文件拷贝到服务器就完成了，不需要改写任何文件😄
-{{< /alert >}}
+> [!NOTE] Title
+> 上述繁琐的步骤只需要初次执行一次就行，当需要给下一台服务器配置免密登录时，只需要改 config 文件然后把 authorized_keys 文件拷贝到服务器就完成了，不需要改写任何文件😄
 
 ## 挂载硬盘
 
@@ -433,10 +425,8 @@ sudo mount -a
 
 另外，如果坏块数量在短期内快速上升，比如一个星期就多了 10 个坏块，那么就需要赶紧备份数据，准备更换硬盘了。
 
-
-{{< alert icon="fire" cardColor="#e63946" iconColor="#ffffff" textColor="#ffffff" >}}
-追悔莫及啊，千万不要让硬盘强制掉电😭
-{{< /alert >}}
+> [!error] Title
+> 追悔莫及啊，千万不要让硬盘强制掉电😭
 
 其实硬盘监控已经是一个非常常见的需求了，因此有一个 `smartmontools` 的软件可以进行硬盘监控。运行下面这个命令进行安装：
 
@@ -577,10 +567,8 @@ df -h
 
 从上面这个依赖包就可以大致猜出来：风传的原理是通过模拟键盘输入来实现剪贴板数据写入的😄
 
-
-{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-如果你是 Arch Linux 用户，那么就不能安装这个包，而需要`xdotool` 和 `libayatana-appindicator`；前者用来进行键盘模拟，后者显示托盘图标
-{{< /alert >}}
+> [!NOTE] 说明
+> 如果你是 Arch Linux 用户，那么就不能安装这个包，而需要`xdotool` 和 `libayatana-appindicator`；前者用来进行键盘模拟，后者显示托盘图标
 
 ### 使用
 
@@ -592,10 +580,8 @@ df -h
 
 好吧，事实上也没那么简单😅其实作者也考虑过直接自动化数据传输，但是鉴于现手机操作系统的安全策略，不开 root 几乎是不可能让后台应用读取/写入剪贴板数据的😢而开启 root 又是一个麻烦的事情：现在国内各大手机厂商都在开发自己的手机操作系统并且严格限制 root 权限的获取，因此只能采用手动下拉的方式来触发数据传输了😅
 
-
-{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-你问我为什么微信输入法可以？那你得问问微信输入法了😄我猜的话是微信输入法本身有一套数据存储机制，并不会真的直接后台写入剪贴板。另外抛开偶尔失灵不谈，这个同步机制还是挺不错的
-{{< /alert >}}
+> [!NOTE] 说明
+> 你问我为什么微信输入法可以？那你得问问微信输入法了😄我猜的话是微信输入法本身有一套数据存储机制，并不会真的直接后台写入剪贴板。另外抛开偶尔失灵不谈，这个同步机制还是挺不错的
 
 虽然麻烦，但总归是安全可靠：数据的在局域网加密传输，并且传输只发生在用户主动操作的时候。另外可以发现整个操作流程都是在手机端触发的，也就是说，当你想要从电脑传输文本到手机的时候，也是在手机上进行下拉操作。
 
@@ -930,10 +916,8 @@ chmod +x file_name.AppImage
 
 然后双击软件包就能启动了😃
 
-
-{{< alert icon="fire" cardColor="#e63946" iconColor="#ffffff" textColor="#ffffff" >}}
-千万不要直接安装 fuse ，这会自动卸载 fuse3，导致新版本的 Ubuntu 文件系统崩溃！如果不小心安装了，请移除 fuse，然后查看 apt 的操作日志，将自动卸载的包手动重新安装回来！
-{{< /alert >}}
+> [!ERROR] Title
+> 千万不要直接安装 fuse ，这会自动卸载 fuse3，导致新版本的 Ubuntu 文件系统崩溃！如果不小心安装了，请移除 fuse，然后查看 apt 的操作日志，将自动卸载的包手动重新安装回来！
 
 如果你想卸载软件的话，也非常方便：直接把软件包删除就行了。当然，如果你和我一样有"洁癖"，可以去检查下面的这些目录，彻底清除残留：
 
@@ -1019,10 +1003,8 @@ sudo sed -i 's/noble/oracular/g' /etc/apt/sources.list.d/ubuntu.sources
 sudo apt update && sudo apt full-upgrade -y
 ```
 
-
-{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-其中的 `-y` 选项是"自动确认"的意思，如果你想手动输入 yes 的话可以不加😃我反正不想
-{{< /alert >}}
+> [!NOTE] Title
+> 其中的 `-y` 选项是"自动确认"的意思，如果你想手动输入 yes 的话可以不加😃我反正不想
 
 升级完成后：
 
@@ -1046,10 +1028,8 @@ sudo apt install libreoffice
 
 在安装 LibreOffice 之前也尝试过使用 WPS 来编辑 Office 文件，但是不知为何总是会引起系统报错，索性就直接弃用了
 
-
-{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-如果你是 Office 的深度用户，换了软件就浑身难受，那么你可以尝试一下 [Wine](https://www.winehq.org/)，一个能在 Linux 上跑 Winodws 程序的神奇工具
-{{< /alert >}}
+> [!NOTE] Title
+> 如果你是 Office 的深度用户，换了软件就浑身难受，那么你可以尝试一下 [Wine](https://www.winehq.org/)，一个能在 Linux 上跑 Winodws 程序的神奇工具
 
 ## 存储清理
 

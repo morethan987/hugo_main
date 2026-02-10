@@ -132,10 +132,8 @@ The three architectures differ significantly in their attention matrices, which 
 
 In summary, the Encoder-only architecture is suitable for **natural language understanding tasks**, such as sentiment analysis, text classification, and other discriminative tasks, but it may not perform as well as the other two architectures in natural language generation tasks. The Encoder-Decoder architecture is suitable for **conditional generation tasks**, such as machine translation, text summarization, and question-answering systems—scenarios that require simultaneous processing of input and output. However, the newly added decoder also introduces computational complexity. The Decoder-only architecture is suitable for **unconditional text generation tasks**, capable of generating high-quality, coherent text, such as in automatic story generation or news writing tasks that do not require specific input text. However, under limited scale, the Decoder-only architecture may have limitations in understanding complex text and may perform worse than the Encoder-Decoder architecture.
 
-
-{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-The wording here regarding the limitations of the Decoder-only architecture is actually quite nuanced: it must be under **limited scale** that Decoder-only performs worse than Encoder-Decoder in text understanding. However, due to its superior task generalization, Decoder-only has become the most mainstream architecture today.
-{{< /alert >}}
+> [!NOTE] Title
+> The wording here regarding the limitations of the Decoder-only architecture is actually quite nuanced: it must be under **limited scale** that Decoder-only performs worse than Encoder-Decoder in text understanding. However, due to its superior task generalization, Decoder-only has become the most mainstream architecture today.
 
 ## Parameter-Efficient Fine-Tuning
 

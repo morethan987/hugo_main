@@ -112,10 +112,8 @@ dd # Delete a line
 dw # Delete a word
 ```
 
-
-{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-There are many detailed vim tutorials online. If you want to learn vim thoroughly, you can check them out👀 It's clear that those tutorials really want me to become a vim master😔 But I'm just too lazy😔
-{{< /alert >}}
+> [!NOTE] Note
+> There are many detailed vim tutorials online. If you want to learn vim thoroughly, you can check them out👀 It's clear that those tutorials really want me to become a vim master😔 But I'm just too lazy😔
 
 ### neovim
 
@@ -187,10 +185,8 @@ sudo fc-cache -fv
 
 Alternatively, you can download a new `.ttf` file from the web and copy it to the target directory. If you’re using a GUI-based Ubuntu system, you can simply double-click the font file to install it 🥰.  
 
-
-{{< alert icon="triangle-exclamation" cardColor="#ffcc00" textColor="#333333" iconColor="#8B6914" >}}
-Fonts may be installed redundantly, as the system doesn’t check for duplicates. If this happens, manually locate and delete the duplicate files in the relevant directory 🥲. Ubuntu’s font tools can display all font information.  
-{{< /alert >}}
+> [!warning] Note
+> Fonts may be installed redundantly, as the system doesn’t check for duplicates. If this happens, manually locate and delete the duplicate files in the relevant directory 🥲. Ubuntu’s font tools can display all font information.  
 
 ## Setting Up VPN
 
@@ -335,10 +331,8 @@ WantedBy=multi-user.target
 
 Then reload the systemd configuration, and you can use the `systemctl` commands mentioned above to control this reverse proxy service 😄.
 
-
-{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-The steps above only makes it easier to use locally. You still have to set the environment variables manually on remote server.
-{{< /alert >}}
+> [!NOTE] Title
+> The steps above only makes it easier to use locally. You still have to set the environment variables manually on remote server.
 
 If you want to use Git, you'll need to route SSH traffic through HTTPS using `netcat`. It might sound abstract, but the actual steps are quite straightforward. Simply add the following content to the `~/.ssh/config` file on the server:
 
@@ -383,10 +377,8 @@ Host 3090
 
 After that, when you try to log into the server using VSCode, you'll find that password-less login is already set up.
 
-
-{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-The cumbersome steps above only need to be performed once initially. When you need to configure password-less login for the next server, you only need to modify the config file and then copy the `authorized_keys` file to the new server. There's no need to rewrite any files 😄.
-{{< /alert >}}
+> [!NOTE] Title
+> The cumbersome steps above only need to be performed once initially. When you need to configure password-less login for the next server, you only need to modify the config file and then copy the `authorized_keys` file to the new server. There's no need to rewrite any files 😄.
 
 ## Mounting Hard Drives
 
@@ -433,10 +425,8 @@ Let me explain why hard drive monitoring is needed with my personal experience. 
 
 Furthermore, if the number of bad blocks increases rapidly in a short period—for example, increasing by 10 within a week—it's crucial to back up your data immediately and prepare to replace the drive.
 
-
-{{< alert icon="fire" cardColor="#e63946" iconColor="#ffffff" textColor="#ffffff" >}}
-Too late for regrets! Never force an external hard drive to power off abruptly 😭
-{{< /alert >}}
+> [!error] Title
+> Too late for regrets! Never force an external hard drive to power off abruptly 😭
 
 Fortunately, hard drive monitoring is a very common requirement, so there's a software called `smartmontools` available for this purpose. Run the following command to install it:
 
@@ -577,10 +567,8 @@ sudo apt install libxdo3   # install keyboard simulation dependency
 
 From this dependency alone, you can probably guess how it works: WindSend uses **keyboard input simulation** to inject the clipboard content 😄
 
-
-{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-If you’re on **Arch Linux**, you’ll need to install `xdotool` and `libayatana-appindicator` instead —- the former handles keyboard simulation, and the latter enables the system tray icon.
-{{< /alert >}}
+> [!NOTE] 
+> If you’re on **Arch Linux**, you’ll need to install `xdotool` and `libayatana-appindicator` instead —- the former handles keyboard simulation, and the latter enables the system tray icon.
 
 ### Usage
 
@@ -592,10 +580,8 @@ In summary, the workflow is: Switch your phone to the same network → open Wind
 
 Well, it’s not entirely “automatic” 😅 — the developer actually considered full background sync, but due to modern mobile OS security policies, apps can’t read or write clipboard data in the background unless the device is **rooted**. And rooting, as we know, is a whole other mess: most major phone manufacturers today have **heavily restricted root access**, especially in their customized Android systems. So for now, the manual pull-down gesture is the most practical solution 😅
 
-
-{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-You might ask: _"Then how come the WeChat keyboard can do it?"_ Well… that’s a question for WeChat 😄 My guess is their input method has its own private data syncing mechanism and doesn’t directly access the system clipboard. Anyway, apart from the occasional hiccup, WeChat keyboard's approach works surprisingly well.
-{{< /alert >}}
+> [!NOTE] 
+> You might ask: _"Then how come the WeChat keyboard can do it?"_ Well… that’s a question for WeChat 😄 My guess is their input method has its own private data syncing mechanism and doesn’t directly access the system clipboard. Anyway, apart from the occasional hiccup, WeChat keyboard's approach works surprisingly well.
 
 So while it’s not 100% seamless, it’s still **safe and reliable** — data is **encrypted and transmitted only within your local network**, and transfers only happen when **you actively trigger them**. Interestingly, the whole sync process is **initiated from the phone side**, meaning that even if you want to send text **from your PC to your phone**, you’ll still perform the pull-down action on your phone.
 
@@ -931,10 +917,8 @@ chmod +x file_name.AppImage
 
 After installation, you can simply double-click the package to launch the application 😃.
 
-
-{{< alert icon="fire" cardColor="#e63946" iconColor="#ffffff" textColor="#ffffff" >}}
-**Never install fuse directly**, as this will automatically uninstall fuse3, causing the file system in newer Ubuntu versions to crash! If you accidentally install it, remove fuse and check the apt operation log to manually reinstall any automatically removed packages.
-{{< /alert >}}
+> [!ERROR] Title
+> **Never install fuse directly**, as this will automatically uninstall fuse3, causing the file system in newer Ubuntu versions to crash! If you accidentally install it, remove fuse and check the apt operation log to manually reinstall any automatically removed packages.
 
 If you want to uninstall the software, it’s very straightforward: just delete the package. However, if you’re a perfectionist like me, you can check the following directories to completely clean up any residual files:
 
@@ -1020,10 +1004,8 @@ After modifying the files:
 sudo apt update && sudo apt full-upgrade -y  
 ```
 
-
-{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-The `-y` option means "automatic confirmation." If you prefer to manually type "yes," you can omit it. 😃 Personally, I’d rather not.  
-{{< /alert >}}
+> [!NOTE] Title
+> The `-y` option means "automatic confirmation." If you prefer to manually type "yes," you can omit it. 😃 Personally, I’d rather not.  
 
 After the upgrade completes:  
 
@@ -1047,10 +1029,8 @@ sudo apt install libreoffice
 
 Before installing LibreOffice, I also tried using **WPS** to edit Office files, but for some reason, it kept causing system errors, so I eventually abandoned it.
 
-
-{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-If switching away from Office makes you feel lost, [Wine](https://www.winehq.org/) might be your savior—it’s the sorcery that runs Windows apps on Linux!  
-{{< /alert >}}
+> [!NOTE] Title
+> If switching away from Office makes you feel lost, [Wine](https://www.winehq.org/) might be your savior—it’s the sorcery that runs Windows apps on Linux!  
 
 ## Storage Cleanup  
 

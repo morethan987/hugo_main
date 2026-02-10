@@ -117,10 +117,8 @@ Do large language models have memory? Yes, but only short-term memory. The curre
 
 The so-called "short-term" memory is reflected in its "short" duration: no longer than the length of the large language model's context window. The specific implementation method is to simply put all the interaction history between the user and the model into the window.
 
-
-{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-Although the context window of existing large language models is getting longer and longer, and can even reach 2 million tokens (equivalent to 1.5 copies of Dream of the Red Chamber), this does not mean that we can put all interaction information into the window and expect the model to generate content at a low cost and with high accuracy.😢
-{{< /alert >}}
+> [!NOTE] Title
+> Although the context window of existing large language models is getting longer and longer, and can even reach 2 million tokens (equivalent to 1.5 copies of Dream of the Red Chamber), this does not mean that we can put all interaction information into the window and expect the model to generate content at a low cost and with high accuracy.😢
 
 ### Summary
 
@@ -202,10 +200,8 @@ The vectors processed by the multi-head attention have been shifted to the corre
 
 For example, when using an extended matrix to detect the token "relativity," a certain row might simultaneously check: "whether it is an academic concept + whether it is a ball sport + whether it is the name of a galaxy." The detection results could be relevant or irrelevant, but they will all be linearly combined in the end.
 
-
-{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-Why can they be combined? Because of the distributive property of vector dot products: "combine first then match" is equivalent to "match first then combine."
-{{< /alert >}}
+> [!NOTE] Title
+> Why can they be combined? Because of the distributive property of vector dot products: "combine first then match" is equivalent to "match first then combine."
 
 The projection matrix then acts as the "calculation of fact increment": based on the matching scores, it calculates which factual information needs to be added to the original word vectors, adds all the necessary factual information together to form a fact increment vector.
 
@@ -219,10 +215,8 @@ It should be noted that the injection of factual information does not occur in a
 
 This complex mechanism of factual information injection poses significant challenges to interpretability efforts and makes it difficult to precisely control the flow of information within large models. However, this process precisely highlights the advantage of storing factual information in neural networks: for a given piece of complex information, it initially associates with a broad and ambiguous set of related information. Then, through computations in each layer of the network, it progressively refines and eventually converges to the most highly relevant information.  
 
-
-{{< alert icon="pencil" cardColor="#1E3A8A" textColor="#E0E7FF" >}}
-This is also one of the reasons why Attention Layers and MLP Layers alternate: after factual information is injected in the MLP Layer, the Attention Layer is immediately used to trim it—weakening weaker associations and amplifying stronger ones—preventing a flood of redundant information from propagating to the next MLP Layer, which could trigger even more chaotic associations.
-{{< /alert >}}
+> [!NOTE] Title
+> This is also one of the reasons why Attention Layers and MLP Layers alternate: after factual information is injected in the MLP Layer, the Attention Layer is immediately used to trim it—weakening weaker associations and amplifying stronger ones—preventing a flood of redundant information from propagating to the next MLP Layer, which could trigger even more chaotic associations.
 
 #### Time Encoding  
 
