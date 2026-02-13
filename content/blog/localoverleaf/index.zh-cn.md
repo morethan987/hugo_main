@@ -25,6 +25,9 @@ authors:
 
 - 懂一些Vim的基本操作，比如：如何开启插入模式，如何保存退出，不保存退出等
 
+> [!NOTE]+ 更好的选择
+> 如果你不是“非 LaTeX 不可”，仅仅只是在寻找一个类似的排版工具，我更推荐 [Typst](https://typst.app/docs/)，一个更加现代化的软件，语法可读性更高，支持真正意义上的增量更新渲染；如果你只是觉得 Overleaf 编译时限太短了，那么我推荐 [KeepResearch](https://www.keepresearch.com/)，其完全兼容 LaTeX 并且没有编译时限
+
 ## 部署全流程
 
 ### 安装Linux

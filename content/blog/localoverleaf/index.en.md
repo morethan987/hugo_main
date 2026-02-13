@@ -25,6 +25,9 @@ authors:
 
 - Basic familiarity with Vim operations is useful, such as: how to enter insert mode, how to save and exit, how to exit without saving, etc.
 
+> [!NOTE]+ Better Choices
+> If you are not a dead 'overleafer' and just searching for a similar app to write paper, I recommend [Typst](https://typst.app/docs/), a modern LaTeX substitute with more readable syntax and real hot-reload. If you just want another LaTeX online editor with longer compile time threshold, [KeepResearch](https://www.keepresearch.com/) is a better choice for you.
+
 ## Full Deployment Process
 
 ### Installing Linux
