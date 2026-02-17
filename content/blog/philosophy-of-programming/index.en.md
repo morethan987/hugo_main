@@ -12,7 +12,7 @@ series:
   - Casual essay
 series_order: 2
 date: 2025-11-28
-lastmod: 2025-11-28
+lastmod: 2026-02-17
 authors:
   - Morethan
 ---
@@ -38,3 +38,20 @@ The official documentation includes a section called [Thinking in React](https:/
 To quote the documentation: React changes the way you think about visual design and application structure. When building a user interface with React, you first break it down into individual **components**, and then connect them so that data flows through the system.
 
 After approaching a large React codebase with the wrong way of thinking, revisiting this short guide may finally make everything _click_. And perhaps that is the point of philosophy in programming after all.
+
+## Rust  
+
+I recently took a shallow dive into Rust programming, and my biggest takeaway is that Rust is incredibly straightforward in its design. Below is a description of Rust's design goals from the [official documentation](https://doc.rust-lang.org/book/ch00-00-introduction.html):  
+
+In a nutshell, Rust’s most important goal is to eliminate the trade-offs that programmers have accepted for decades, allowing **safety and efficiency, speed and ease of use to coexist**.  
+
+From my very basic exploration, Rust indeed achieves the above. By introducing the ownership mechanism and lifetimes, it eliminates null pointers and the need for a garbage collector. Generics prevent redundant code, and Traits are used to constrain the behavior of generics. Other concepts are quite similar to those in other programming languages.  
+
+In short, Rust has truly delivered on its promises. As for the criticism Rust receives online, I believe it mostly stems from the complexity introduced to achieve these goals. After all, some concepts that are hidden within the compiler or runtime in other mainstream languages are brought to the forefront in Rust, but this is a necessary trade-off.  
+
+To make the Rust programming experience even better, its compiler deserves the most praise. The precise and detailed error messages quickly pinpoint the source of issues. Moreover, in this era of "vibe coding," Rust's rigorous and meticulous compile-time checks—bordering on pedantic—also enable AI to produce higher-quality code without the need for manual fine-tuning.  
+
+> [!NOTE]- Opinion
+> Personally, I think Rust's syntax is not hard to read. If you strip away some of the flashy syntactic sugar, Rust's syntax requires almost no learning at all.  
+
+In conclusion, Rust feels like an attempt to improve upon C. It comes at the cost of added complexity and a steeper learning curve, but it maintains C's efficiency while making the code significantly safer.
