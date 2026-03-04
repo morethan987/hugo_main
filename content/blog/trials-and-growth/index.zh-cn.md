@@ -1,15 +1,15 @@
 ---
-title: Trials and Growth-My University Tinkering Chronicles
+title: 试错、回响与生长-我的大学折腾札记
 weight: -120
 draft: false
-description: A record of my journey through trials and errors during my college years.
+description: 记录自己大学一路折腾与试错的经历
 slug: trials-and-growth
 language: zh-cn
 tags:
-  - Experience
-  - Life-Summary
+  - 经历
+  - 小结
 series:
-  - Casual essay
+  - 随笔
 series_order: 3
 date: 2026-02-17
 lastmod: 2026-03-04
@@ -17,278 +17,278 @@ authors:
   - Morethan
 ---
 
-{{< lead >}} A record of the tinkering and trials along the way—the path that made me who I am today. {{< /lead >}}
+{{< lead >}} 记录这一路的折腾与试错，一段我之所以是我的来时路。 {{< /lead >}}
 
-## Preface
+## 前言
 
-Next semester marks the start of the graduate school nomination season. Looking back at the past three years, I’ve certainly been a "tinkerer." Some of these trials and errors are already starting to blur in my memory. I’m using the quiet of this winter break to document these fragments—partly as a keepsake, and partly as raw material for my personal statement.
+下学期就要到保研的日子了。回望大学三年，我自己可真是喜欢折腾啊。有些折腾与试错我自己都快要记不清了，趁着寒假的空闲，将这些模糊的记忆都记录下来，也算是为我自己的个人陈述找点素材吧。
 
-> [!NOTE]- Frustration
-> I’ve tinkered a lot, but "successes" are surprisingly rare. Writing a resume is genuinely painful. 😭
+> [!NOTE]- 烦恼
+> 虽然折腾挺多，但成功的却异常稀少，简历着实难写啊😭
 
-## Before University
+## 大学之前
 
-### First Impressions of ChatGPT
+### ChatGPT初印象
 
-Before the Gaokao (College Entrance Exam), our class used to watch the evening news on the classroom's electronic whiteboard after dinner. That was the first time I heard the term: **ChatGPT**.
+在高考之前，当时班级上晚饭之后都会用教室的白板大屏放晚间新闻，我也是从那个上面第一次听到了这个词语：ChatGPT
 
-One data chart left a deep impression on me: a comparison of the time it took for electricity, mobile phones, the internet, and ChatGPT to reach a certain user milestone. Even though I felt the comparison wasn't entirely rigorous—ChatGPT's growth relied heavily on the pre-existing infrastructure of the internet—the "right-angle" spike of its user growth was staggering.
+当时看到的一张数据图令我印象深刻：一张电力、移动电话、互联网和 ChatGPT 用户数量随时间变化的一张对比图。尽管我当时就觉得这种对比不甚严谨，毕竟 ChatGPT 的用户增长与其前置基础设施的普及有很大关系，但是 ChatGPT 的"直角"式增长还是令人大受震撼。
 
-A seed was planted. I was curious about how it worked. Before ChatGPT, my impression of AI was limited to facial recognition and AlphaGo; I never imagined it could converse so naturally.
+至此我的心中便埋下了一粒种子，我很好奇 ChatGPT 是如何做到的，毕竟之前我对 AI 的印象几乎没有。在 ChatGPT 之前我只知道 AI 能够做人脸识别和下围棋，我可不觉得它能够如此自然地与我交流。
 
-### Tutoring
+### 家教
 
-During the post-Gaokao summer, boredom set in. Games I usually loved became tedious within days. At a classmate's suggestion, I spent a month as a tutor, teaching chemistry to a student transitioning from middle to high school.
+在高考完的暑假，百无聊赖，之前从来都玩不腻的游戏几天之内就无聊透顶了。然后我在同学的推荐下还去当了一个月的家教，教的是初中升高中的化学知识，说是为了接下来的高中生活提前铺路。
 
-The kid was a "typical" Chinese student: no real interest in knowledge, just told by parents and school to get high scores. His parents were ordinary, kind, and slightly "Zen" about his future—perhaps having lost their edge after years of seeing his performance. The experience ended quietly, and I earned my first "bucket of gold."
+那个孩子我觉得是很典型的中国式孩子，对知识没有什么兴趣也不知道为什么要学习，只是被父母和学校告知要努力学习考一个好的分数。父母也是普普通通，待人和善，对孩子抱有一些期待但也有几分佛系，不知是被孩子从小的表现磨去了棱角还是一直如此。最后这段家教经历也没什么波澜地结束了，我也收获了人生的第一桶金。
 
-I still think about that kid. He made me ask: Why don't kids today like learning? Or more broadly, *why do we learn?*
+我现在都对那个孩子的表现印象深刻，他让我不得不问一个问题，为什么现在的孩子不喜欢学习？或许更加通用一些，为什么要学习呢？
 
-Neither the kids nor the parents seem to have a satisfying answer. "For a good university," "for a good job," "for a better life..." These aren't wrong, but they explain one abstract concept with another. What is a "good" job? What defines a "better" life? Most kids only know that TikTok and Bilibili are fun, and "life" is just eating three meals and watching TV with parents.
+这个问题不只是孩子，连很多家长也无法给出令人满意的答案：或是为了考一所好的大学，为了一份好的工作，为了更好的生活......这些答案没错，但这些回答本质上在用一个抽象的东西解释另一个抽象的东西，解释了但好像没有解释：好的大学是什么？好的工作又是什么？什么叫更好的生活呢？大部分孩子只知道手机上的抖音和哔站上有很多好看的视频，网络游戏很好玩，生活就是和父母一日三餐看看电视。
 
-Knowledge has never solved a problem for them or made their lives easier. Its only utility is the brief relief that follows a high test score. And it’s only brief, because the next exam is always around the corner. **Learning was meant to be a tool for solving problems, but now learning itself has become the problem. When the means become the end, the motivation is doomed to be unsustainable.**
+总之，知识从来没有给他们的生活带来任何便利，也没有用自己的知识解决过任何问题，知识最有用的地方就是考试获得高分之后稍微的轻松。也仅仅是稍微，因为马上就有下一场考试。**学习知识本是用于解决问题，但现在学习知识本身却成为了问题，当手段成为了目的本身，因果颠倒的动机注定无法长久**。
 
-Through these experiences, I’ve come to a realization about motivation: **it comes from solving problems—any problem.** If a child sees something as a problem worth solving, they will naturally seek out the knowledge needed to tackle it. If they value scores, they’ll learn how to analyze papers and optimize study habits. If they don't, let them solve something else first. The confidence gained from solving *any* problem becomes the foundation for everything else.
+但经历了这么多，我总算是对如何培养学习动机有一点感悟了，**那就是去解决问题，不管是什么问题**，只要孩子认为那是一个需要解决的问题，那么自然而然在解决越来越复杂的问题的时候就会学习越来越多的知识：如果他认可考试分数是一个问题，那么就去学习如何分析考试试卷，如何获得学习方法，如何高效刷题；如果对考试分数不感兴趣，那就先去解决别的问题，等考试分数的意义能够被他理解之后，解决其他问题所累积的经验和自信自然会成为其最大的底气。
 
-Of course, I wasn't this enlightened back then. I was dealing with my own greatest setbacks: failing the Physics Competition and underperforming on the Gaokao (largely due to a high fever from a COVID reinfection). These were choices I made myself. I had ignored my family's advice to pursue the Physics Competition—a path less traveled and far more treacherous than the standard curriculum.
+当然，当时的我是不可能如此通透的，在高考完之后我经历了人生中最大的挫折：物理竞赛失利、高考成绩不理想(很大程度上是因为复阳了，发着烧去考试)，特别是这些选择都是我自己做的。当时我不顾家人的劝阻参与了物理竞赛，这条道路虽鲜有人但凶险程度并不亚于高考，毕竟知道这条道路的人大都是精英家庭背景，通过大量学习超前的知识从而在同龄人中获得难以企及的竞赛分数。
 
-> [!NOTE]+ Reflection
-> This is likely why "involution" (internal competition) starts so young. Once people taste the advantage of "getting a head start," they can't resist. The superiority of crushing peers and the fear of being crushed are the twin engines of this cycle.
+> [!NOTE]+ 感想
+> 或许这也是为什么内卷越来越低龄化了，毕竟只要尝过了"打提前抢"的甜头，没有人会拒绝这么一笔划算的买卖，那种对同龄人绝对碾压的优越感和被碾压的恐惧感是驱动内卷的不竭动力。
 
-I tried to find some stability in books. In the second half of 2023, I logged 253 hours on WeChat Reading. I read everything: sci-fi, political economy (*Das Kapital*), programming languages, operating systems, business management, psychology, and biographies. I even tackled the *Princeton Calculus Analysis* and *The Feynman Lectures on Physics*. I clearly still loved physics, but the competition failure made me realize that physics is a field for geniuses—it requires quality over quantity. From a career perspective, Computer Science felt like a safer bet.
+然后我就尝试从书中寻找一些生活的定力，于是我在 2023 年剩下的半年时间内在微信读书阅读了 253 小时 57 分钟，从科幻小说到政治经济学《资本论》，从编程语言到操作系统，从如何经营店铺到个人医疗健康，一些心理学和名人传记，甚至还有《普林斯顿微积分读本》和《费曼物理学讲义》，可见我还真是挺喜欢物理学的。但物理竞赛的失败让我大学没有选择物理系，我清晰地意识到了物理学是一门过于基础的学科，这种学科需要天才来驱动，需要质量而非数量，从个体发展的角度来看还是计算机最为稳妥。
 
-> [!NOTE]- Note
-> My interest in physics lies in how it is both immensely complex and beautifully simple. Complex in its phenomena, simple in its mathematical intuition. By solving countless problems, I learned to build mappings between different fields to find new perspectives—often the key to breaking a deadlock.
+> [!NOTE]- 说明
+> 我对物理学的兴趣点其实在于其足够复杂又足够简洁，复杂在各种物理学现象，简洁在其恰到好处的物理直觉与数学原理。在不断地刷题的过程中，我观测了大量精巧的物理数学模型，明白了在两个不同领域之间建立映射关系会带来不同的思考角度，而这往往是破局的关键
 
-## Freshman Year
+## 大学一年级
 
-### Tinkering with a Personal Blog
+### 折腾个人博客
 
-As I stepped into university life, my skill tree began to branch out.
+高考之后我也正式步入大学生活，也正式开始了我的折腾与试错，技能树也被逐步点亮。
 
-Step one: bypassing the Great Firewall. This unlocked GitHub, Google, and a whole new world. I won't go into details, but it was a gateway drug. I spent my time juggling coursework, setting up C/C++ environments in VSCode, drafting my blog, and cramming for English exams.
+首先需要实现的就是访问外网，然后就可以进一步解锁 GitHub、Google 账号等，可谓是打开了一片新天地。具体操作就不细讲了，但最终确实是很简单地就成功了。然后就是经典单人 CPU 异步并发：完成课内准备考试，折腾 C/C++ 环境熟悉地表最强代码开发工具 VSCode，初步构思打造个人博客，备考英语四级，延续暑假作风继续在微信读书上高强度刷书。
 
-Looking back, my first blog tech stack was "green." It was just a static resume template—the classic trio of HTML, CSS, and JavaScript. To post, I had to manually edit HTML and push to GitHub Pages. My domain was a clunky `morethan987.github.io`.
+现在看来当时的博客技术栈只能用"青涩"来形容了，我最原始的博客版本是在网上找的一个静态简历模板，纯网页三件套(HTML + CSS + JavaScript)。写博客需要手工编辑修改 HTML 文档之后上传到 GitHub Pages 进行免费托管并自动获得一个类似：morethan987.github.io 的免费域名。
 
-I gave up on a custom `.cn` domain after seeing the registration fees. I figured if only people with a VPN could see it, so be it; it wasn't like I expected a huge audience anyway.
+当然，这个域名国内网络环境是没法访问的，但我发现国内访问还需要配置国内域名并还要支付域名持有费用之后我就果断放弃了。只有外网能看也无所谓了，反正估计也不会有很多人看的。
 
-![old_blog_prepage](img/old_blog_prepage.png "Old Blog - Cover" )
+![old_blog_prepage](img/old_blog_prepage.png "旧博客-封面页" )
 
-![old_blog_list](img/old_blog_list.png "Old Blog - List" )
+![old_blog_list](img/old_blog_list.png "旧博客-列表页" )
 
-> [!NOTE]+ Side Note
-> If you're reading this, you're on the new blog. 🤣 The evolution is obvious.
+> [!NOTE]+ 话里话外
+> 如果你能看到这篇文章的话，那你应该在我的新博客里面😁改动之大不言而喻
 
-Despite the inconveniences, I spent hours polishing the details: icons, new pages, glassmorphism designs, and light/dark mode toggles. It was my first "real" project: building a platform to publish my thoughts.
+尽管我的旧博客有诸多不便，但我还是花费了挺多经理去打磨其样式细节：更换图标、开发新的页面、设计导航栏增加拟态白色风格、调试明暗主题切换等等；虽然只是在他人代码结构之上进行的扩充和修改，但这也算是我自己动手解决的第一个项目吧：拥有一个可以发布文章的博客网站。
 
-However, the experience was miserable. Editing HTML to write prose is a productivity killer. I knew my patience would eventually run out, and the site would become another "internet ruin."
+当然，也正如前面提到的，博客的样式设计非常粗糙，纯粹的网页三件套难以进行精致页面的设计，并且写新的博客也需要直接编辑 HTML 文件，文字输出体验异常糟糕，这种情况下可以预计我的耐心用不了多久就会被消磨掉，然后这个网站就会成为互联网上又一个废弃的页面。
 
-This project taught me the importance of **Code Quality and Architecture**. Good design frees you from the "maintenance trap," allowing you to focus on what matters. I realized that rather than relying on willpower, it's better to spend time lowering the cost of maintenance. That’s the principle of **compound interest**—do things that have long-term benefits.
+虽然这个项目最终效果并不理想，但我也从中真正理解了代码质量和架构设计有多重要：高质量的代码和优良的设计架构能够让你从繁琐的维护泥潭之中解脱出来，让你去做真正有意义的事情而非空耗精力。另外我也意识到了想让人坚持做一件事情是困难的，与其磨炼自己的意志力不如花一些时间去降低维护的成本，维护时间越长这种思路节省的时间也越多——这就是复利，人应该去做一些具有长期效益的事情。
 
-> [!NOTE]+ Rant
-> This is why I’ve always disliked exams. After months or years of study, the knowledge suddenly loses its "value" the moment the timer hits zero. I’m not denying the "thinking skills" or the doors exams open, but the specific details we etch into our brains often vanish from our lives after the final bell. In the adult world, "selection" often trumps "cultivation." I choose to tinker and try "inefficient" things because they make me feel like a human, not a mass-produced part.
+> [!NOTE]+ 吐槽
+> 这也是我一直以来不甚喜欢考试的原因，短短几个小时的时间之后，你会发现先前你花了一个学期甚至数年学习的知识瞬间就没有了价值。我不想去争论什么"思维能力"之类的抽象的东西，也不否认一些考试能够深远地地改变你的平台和资源。但单论那些知识，那些熬夜蚀刻进脑中的一个细节也生怕放过的知识，考试结束铃响之后貌似确乎是与我们人生的后续无缘了。但无可奈何，有些东西的意义本就只是筛选和否定罢了。成年人的世界只做筛选不做培养，深以为然，但我还是选择去折腾与尝试，做了一些"低效"但我认为有意义的事情，这让我更像一个人而非批量生产的零件。
 
-### Self-Teaching Machine Learning
+### 机器学习自学
 
-Winter break gave me time to explore my interest in Large Language Models (LLMs). I had zero foundation in ML, but my linear algebra was solid. I started an impromptu journey: reading Dr. Jiang’s *Iris Book* series, the classic "Deep Learning" (the Flower Book), and building a simple neural network from scratch using only NumPy. I even delved into neuroscience with *A Thousand Brains* and used ChatGPT to learn the Transformer architecture, aided by the [Transformer Explainer](https://poloclub.github.io/transformer-explainer/) website.
+寒假终于是有足够的空闲时间可以进行自学了，我之前一直对大语言模型挺感兴趣，但我当时甚至连一点机器学习基础都没有，不过好在线性代数基础还在并且时间充裕。于是我就开始了一场即兴探索之旅：看姜博士的鸢尾花书系列，经典花书《深度学习》，实操纯 Numpy 编写简单神经网络《Python 神经网络编程》，甚至还包括脑科学的书籍《千脑智能》，包括与 ChatGPT 直接对话学习 Transformer 的架构，在网上还找到了一个可视化 Transformer 的网站[Transformer Explainer](https://poloclub.github.io/transformer-explainer/)
 
-By the end of the break, I had a blurry intuition of how Transformers worked. I remember feeling a sense of dissonance—this architecture felt nothing like a biological brain. Most importantly, it couldn't "continually learn."
+经过一个寒假的自学，我也差不多建立了对 Transformer 的模糊的直觉，一种模糊到现在都已经完全忘记的认知。但我还是清晰地记得那种违和感，感觉这个简单的模型架构与生物大脑貌似完全不同啊，并且存在一个明显的弊端：没法持续学习。
 
-Influenced by *A Thousand Brains*, I began wondering how to build AI based on biological principles. My logic was simple: humans are the only known general intelligence, so what else is there to reference? I started reading papers on cortical columns, Global Workspace Theory, the hippocampus, and Spiking Neural Networks (SNNs).
+也是在《千脑智能》这本书的影响下，我开始思考如何借鉴脑科学的知识来构建人工智能系统，而我产生这种想法的根本理由也很简单：人类是目前唯一已知的通用智能，除此之外还能参考什么呢？于是从这个出发点开发，我阅读了一些英文的论文文献，了解了皮质柱、全局工作理论、海马体与长期记忆、脉冲神经网络(号称下一代神经网络)。
 
-The more I read, the more I realized the gap between neuroscience and AI is a chasm. Yet, I clung to this "biomimetic" fantasy. I once tried to treat neuron weights as part of the loss function, theorizing that biological neurons require energy to maintain strong connections. I later learned from an AI that I had independently "discovered" **L 1 Regularization**.
+然而阅读了这么多文献，我逐渐发现脑科学的复杂程度远超想象，能够直接应用到人工神经网络设计之中的方法少之又少，从脑科学发现的现象到人工神经网络的设计之间存在难以跨越的鸿沟。尽管如此，我还是对这种"借鉴生物"的方法抱有一些幻想，在接下来的日子之中我也偶尔从生物学与物理学的角度去构建一些人工神经网络需要满足的约束，希望在满足足够多的约束的情况下，人工神经网络能够展现出更类人的表现。例如我曾经尝试将神经元的权重值作为损失函数中的一项，因为生物神经元要维持高强度连接是需要能量的，异常高的权重参数应该被理解为一种损失。当时我还没有意识到，但当我与 AI 交流想法之后，我才知道我的想法就是经典的 L1 正则化。
 
-> [!NOTE]- Reflection
-> It’s not much to brag about, but discovering regularization through my own logic gave me a much deeper understanding of the "why" behind the math.
+> [!NOTE]- 思考
+> 虽然也不是什么值得夸耀的，但我貌似确实是从自己的思路发现了正则化这个方法，也是一种新的理解思路吧
 
-### Mathematical Modeling
+### 数学建模
 
-My schedule was packed with English exams and modeling competitions. Research was relegated to reading WeChat blog posts in my spare time.
+这段时间仍然非常紧，排课很多并且还要准备英语六级和数学建模大赛，因此学术上的推进就被压缩为了空闲时间阅读公众号推文了。
 
-The Mathematical Modeling competition felt tailor-made for me. The models were like simpler versions of physics competition problems. Still, our first mock trial was a mess. Modeling isn't just about accuracy; it's about whether the model can be coded and optimized.
+首先是数学建模大赛，这个比赛真的是为我量身定制一般：题目中的数学模型和物理竞赛中的模型简直如出一辙，甚至更加简单明了。虽然但是，在第一次模拟赛的时候还是挺手忙脚乱的：建模不仅要考虑模型是否精确，还要考虑是否能够代码化并且能够被正确优化。队友之间的配合也需要磨合，进行建模的工具链、工作流程和技术水平还需要进一步打磨。
 
-![math_model_1](img/math_model_1.png "First Mock - Abstract" )
+![math_model_1](img/math_model_1.png "第一次模拟赛-摘要开头" )
 
-We eventually settled on a "Power Team" structure. My teammate and I, both having physics backgrounds, handled the modeling and coding, while a third teammate did the illustrations. We specialized in "Problem A" (optimization).
+尽管过程曲折，但是在完成第一篇模拟赛论文之后我们就基本解决了上面大部分问题。考虑到我们队伍的成员能力，我们决定专精 A 题，也就是建模优化问题，套路固定侧重建模与代码实现能力，我们队伍中另外一个同学也有物理竞赛背景，因此我们两个人几乎就能够完成一篇完整的论文，我负责建模与代码，他负责建模与论文，再加上一个队友进行复杂示意图的绘制基本上能够轻松拿出一篇像样的论文。
 
-Our toolchain became: **LaTeX** (via Overleaf) for typesetting and **MATLAB** for computation. Our workflow: spend the first few hours scouring literature. If you find a relevant paper, you've won half the battle. (For more details, see my [MCM/ICM Summary]({{< ref "/blog/cumcm2024/" >}})).
+工具链我们也在此时几乎确定：使用 LaTeX 编写进行论文排版，利用 Overleaf 进行在线论文协同，利用 MATLAB 进行计算与 debug。工作流程也几乎确定：优先广泛搜集资料，有些建模题目本身就有广泛的论文可供参考，如果能够找到一篇合适的论文那将极大提高建模效率，其他更具体的工作流与方法论见：[数模国赛总结]({{< ref "/blog/cumcm2024/" >}})。至于本身的建模和优化能力则主要通过阅读大量参考书籍来实现：《高等应用数学问题的 MATLAB 求解》《最优化方法及其 MATLAB 实现》《MATLAB 在数学建模中的应用》《数学模型》，可以看出我们的重心完全放在了优化算法及其代码实现上。
 
-![math_model_books](img/math_model_books.png "Math Modeling Bookshelf" )
+![math_model_books](img/math_model_books.png "数学建模相关书籍" )
 
-> [!NOTE]- Recommendation
-> I highly recommend Professor Xue Dingyu’s *MATLAB Solutions to Higher Applied Mathematics Problems*. It is incredibly detailed, especially the cross-comparisons of different algorithms.
+> [!NOTE]- 安利
+> 强烈推荐薛定宇老师的《高等应用数学问题的 MATLAB 求解》，内容非常非常详细，特别是对于同一个目的不同实现方式的交叉对比，对于算法选型非常有帮助
 
-We also "templated" everything. Why do the work during the competition if you can do it before? I wrote a rigorous LaTeX template with detailed comments and prepared a library of optimization scripts.
+另外我们在模拟赛中也发现了一个巧妙的办法：论文模板化和优化代码模板化。思路的出发点也很简单：为什么所有工作必须要在比赛进行的时候完成呢？将一些固定的框架与套路在比赛之前就通过模板的形式固定下来能够极大提高效率。通过数次的模拟赛经验以及对往年优秀论文的观摩，我们已经大概能够想象出优秀论文的整体结构了，因此我着手编写了一个论证思路严谨的 LaTeX 模板并配以详细的注释说明。然后对于各种比赛中可能出现的优化问题都准备了一套应对方案：可微与否，计算成本是否高昂，精度和速度是否有要求等等。
 
-Winning the **National Second Prize** taught me the "Geek Spirit": extreme focus, extreme efficiency, extreme optimization. It’s an addictive feeling when everything you’ve learned converts directly into results.
+从一开始的迷茫彷徨，查询到数模获奖率极低时的畏惧，到将整个工作流程的细致拆解与优化，再到最终获得国家级二等奖。从中我也初步体会到了所谓的"极客精神"，极致的专注、极致的效率、极致的优化。这是一种非常令人沉迷的感觉，你会发现你所学习的知识几乎全部都转化为了实打实的效果，每一个知识都有了"为何要学"的理由。
 
-### Dive into Deep Learning
+### 动手深度学习
 
-Regarding my journey into AI, while keeping up with the trending papers pushed by WeChat official accounts, I was also following *Dive into Deep Learning* and other resources to master classic model architectures from the pre-Transformer era, while further solidifying my foundational knowledge and implementation skills in deep learning.
+至于人工智能的学习，在平时阅读微信公众号推送的火爆论文的同时，也在跟着《动手深度学习》等进一步掌握其他 Transformer 出现之前的经典模型架构同时进一步巩固深度学习的基础知识和代码实现能力。
 
-What impressed me most were the principles of translation invariance and locality in Convolutional Neural Networks (CNNs). These two principles clearly illustrate the transition from fully connected networks to CNNs: leveraging the inherent structures within natural images to optimize the parameter efficiency of the neural network.
+其中最让我印象深刻的就是卷积神经网络中的平移不变性和局部性这两个原理，这两个原理清晰地表明了从全连接网络到卷积网络的思路：利用自然图像中的已知结构优化神经网络的参数效率。
 
-> [!NOTE]+ Thinking🤔
-> This phenomenon directly demonstrates that improvements in network architecture can lead to higher parameter efficiency. But is the CNN truly the most efficient architecture for image data? Does this imply that model architecture and parameter efficiency are two sides of a balanced seesaw? We could invest massive amounts of data, parameters, and compute to make a fully-connected network achieve better results, but we could also allocate a portion of that compute and those parameters toward architectural optimization to boost parameter efficiency. However, it seems that current Neural Architecture Search (NAS) is still limited to the coarse-grained permutation of modules. Perhaps a more fine-grained search method, combined with reinforcement learning, is needed to enable machines to autonomously design architectures that surpass human capabilities.
+> [!NOTE]+ 思考🤔
+> 这个现象直接说明了网络架构的改进能够让参数效率更高，那卷积网络是在图像数据上效率最高的网络架构吗？这是否意味着模型架构与参数效率是一个需要平衡的跷跷板？我们可以投入大量数据、大量参数、大量算力让全连接网络达到更好的效果，但我们也可以将一部分算力和参数分配给架构优化用以提升参数效率。然而貌似目前的神经网络架构搜索(NAS)还局限在粗粒度模块的排列组合，或许还需要一种更加细粒度的方法进行搜索并使用一些强化学习的思路才能够让机器自主设计出超越人类的网络架构
 
-As for the posts on WeChat, my reading became quite superficial. Initially, I would occasionally read them carefully, but later I only skimmed the general ideas of the papers. On one hand, the impressions were fleeting and I remembered very little; on the other hand, many papers were quite far removed from my own line of thinking at the time. In my view, current large models are already performing exceptionally well—if they could only learn efficiently from real-time interaction, I wouldn't ask for anything more. At the time, I was still wrestling with how to extract key inspirations for continual learning from the working mechanisms of the human brain, but that path was undeniably arduous.
+而对于微信公众号上的推文，阅读就比较粗糙了，一开始的时候那些推文我还偶尔会仔细阅读一下，但后来就只看看论文的大致思路了：一来则是印象很轻看完之后没有记住什么，二来很多论文的与我当时的思路相去甚远，在我看来目前的大模型效果已经非常不错了，要是能够高效地从实时交互中学习的话，简直就完美不用再奢求更多了。并且我当时还在纠结如何从人脑的工作机制中提取出持续学习的关键启发，但这条思路着实有些艰难。
 
-## Sophomore Year
+## 大学二年级
 
-### Blog Tech Stack Upgrade
+### 博客技术栈升级
 
-After the major allocation process, I transitioned from the undergraduate academy to the School of Computer Science and Engineering as a Computer Science and Technology major, becoming a traditional, "orthodox" CS student. With a new dormitory and new friends, I began studying more professional computer science knowledge and participated in a three-day national mathematical modeling competition with my teammates; all of this alongside daily coursework and preparation for my second attempt at the English CET-6.
+从本科生院经过分流进入了计算机学院的计算机科学与技术专业，成为一个老牌正统 CS 人了。换了新宿舍，认识了新朋友，开始学习更专业的计算机知识，与队友参加了为期三天的数模国赛，与这些相伴的还有平时的日常课程还有准备二刷的英语六级。
 
-The pain points of my original blog were, as mentioned before, simply too numerous. Consequently, I was constantly on the lookout for a new tech stack that could align with my writing habits while remaining easy to manage and maintain—and if performance could be improved further, that would be even better. I was extremely fortunate to discover Hugo, which fits my criteria almost perfectly: it uses Markdown for content creation and automatically compiles it into HTML. I chose the [Blowfish](https://blowfish.page/zh-cn/) theme, which features detailed documentation, is easy to configure, and supports high customization with a rich feature set and elegant aesthetics. Plus, the build speed is incredibly fast. Combined with GitHub Actions, I can achieve automatic push-updates, realizing a Git-triggered automated web blog deployment. For details, see [Hugo Blog Setup]({{< ref "/blog/hugo-blog/" >}}).
+我原来博客的槽点如前所述，实在是有点太多了，故平时都有意无意地在寻求一些新的技术栈，适配我平时写作习惯的同时也能够轻松管理维护，在此基础上如果性能也能再进一步的话那就再好不过了。运气非常好的是我发现了 Hugo 这个工具，几乎完美符合我上面所说的标准：使用 Markdown 进行内容写作然后自动编译为 HTML 网页，我选择的 [Blowfish](https://blowfish.page/zh-cn/) 主题有非常详细的文档，易于配置的同时也支持高度的自定义，功能齐全样式美观，最后编译速度非常快。再配合 GitHub Actions 就可以实现网页内容的自动推送更新，实现了由 Git 触发的自动网页博客发布。具体的细节见 [Hugo博客搭建]({{< ref "/blog/hugo-blog/" >}})
 
-However, the one slight drawback was that the syntax of Obsidian, which I use daily, has certain discrepancies with Hugo's syntax, and I also needed to consider image copying and standardized folder structures. I wanted to be able to fully control the blog deployment process from within Obsidian, but after scouring the plugin marketplace, I couldn't find one that fully met my needs. Thus, I decided to develop my own Obsidian plugin: [Plugin Development]({{< ref "/blog/plugin-writing-experience/" >}}).
+但唯一美中不足的是，我平时使用的 Obsidian 的语法与 Hugo 的语法有一定的区别，并且还需要考虑图片复制和文件夹的规范构建。我想在 Obsidian 中就能够完全掌控整个博客的推送流程，但是我在插件市场中逛了一圈都没有发现完全满足我需求的插件，于是我准备自己开发一个 Obsidian 插件：[插件开发]({{< ref "/blog/plugin-writing-experience/" >}})
 
-Initially, this plugin utilized pure Regular Expressions for string replacement, but the resulting code was highly coupled. Different conversion processes interfered with one another, increasing code complexity and making it difficult to add new parsing methods. I then drew inspiration from compiler design and built an Abstract Syntax Tree (AST) parser for Markdown, accompanied by abstract classes for rule definitions, a rule executor, and a printer to flatten the tree structure back into a string. With components decoupled and testing separated, it allowed for better development, testing, and functional expansion.
+这个插件最开始使用的是纯正则表达的方式进行替换，但这样的写出来的代码耦合度非常高，不同的转化流程之间彼此交叉影响，增加了代码复杂度的同时也难以进行新的解析方法的添加。然后我就参照编译器中使用的方法，为 Markdown 构建抽象语法树(AST)解析器，同时配套增加规则定义抽象类，执行规则的执行器和将树形结构扁平化为字符串的打印器。不同组件之间功能分离，测试分离，能够更好地进行开发测试并进行功能扩展。
 
-After introducing the AST structure, the overall conversion capability was significantly enhanced, making it quite simple to derive various other file types from Markdown. Taking advantage of this, I added a push feature for WeChat Official Accounts: referencing an existing open-source project, I converted Markdown into HTML with inlined CSS for rich-text pasting into the clipboard. During this process, images are embedded as base 64 strings, eliminating the dependency on external image hosting.
+另外在引入 AST 结构之后，整体的转换能力也得到了大幅增强，能够非常简单地从 Markdown 得到其他各种类型的文件，因此我也顺便添加了向微信公众号的推送功能：参考一个已有的开源项目，将 Markdown 转化为一个内联了 CSS 的 HTML 以富文本粘贴的方式写入剪贴板中，在这个过程中会将图片嵌入为 base64 字符串从而避免了对外部图床的依赖。
 
-Building on this foundation, I added some "dessert" features: Git query and push functions, a differential translation feature dependent on `git diff`, and batch export capabilities. The final result feels quite good to me—at least, it is more than sufficient for personal use 😄.
+然后在这个基础上添加一些附加的甜点功能：Git 查询和推送功能，依赖 Git diff 实现的差异化翻译功能以及批量导出功能。最终实现的效果个人感觉比较好，至少自用是完全足够了😄
 
-![hugo-blowfish-exporter](img/hugo-blowfish-exporter.png "Using the plugin in Obsidian" )
+![hugo-blowfish-exporter](img/hugo-blowfish-exporter.png "插件在 Obsidian 中的使用" )
 
-It is worth mentioning that before writing the plugin, I seriously considered whether I could create a GitHub open-source project to publish Obsidian notes as a webpage. For this, I conducted a comprehensive investigation: [Notes-to-Blog Research Report]({{< ref "/blog/note-to-blog-report/" >}}).
+值得一提的是，在编写插件之前我还认真考虑过能不能做一个 GitHub 开源项目，用于将 Obsidian 中的笔记发布为一个网页，为此我还特地进行了一个全面的调查：[笔记转博客调研]({{< ref "/blog/note-to-blog-report/" >}})
 
-Ultimately, I found that Quartz was incredibly feature-rich—essentially a web-based version of Obsidian—and its style was among the most attractive in its category. However, precisely because its interface was so similar to Obsidian, I felt such a layout was better suited for a knowledge base site. The logic was roughly: the knowledge base contains rough notes, which are then summarized and distilled into refined blog posts. Therefore, I embedded a small link in my original Hugo blog to jump to this knowledge base page, looking something like this:
+最后发现 Quartz 的功能做得实在是太齐全了，简直是做了一个 Web 版的 Obsidian，并且样式在一众同类产品中也是比较好看的。但也正是因为其界面与 Obsidian 太相似了，因此我觉得这样的界面更适合做一个知识库网站。大致的逻辑就是，知识库网站中存放一些粗糙的笔记，然后经过总结归纳之后发布到博客之中。因此我也在我原本的 Hugo 博客中嵌入了一个小链接能够跳转到这个知识库页面，类似下面这个样子。
 
-![quartz](img/quartz.png "Quartz knowledge base web style" )
+![quartz](img/quartz.png "Quartz知识库网页样式" )
 
-Of course, I haven't used this knowledge base for a long time now. I realized I don't really need the step of "distilling rough notes into refined blog posts"; I prefer writing long-form blog articles directly. Furthermore, since I wasn't that familiar with Quartz, its CLI interface has faded from my memory. In a way, this was another instance of trial and error.
+当然了，最后这个知识库也很久没有使用了，毕竟我发现我好像不太需要"从粗糙笔记蒸馏为精致博客"这个步骤，我更喜欢直接写博客长文。另外，毕竟 Quartz 我确实不太熟悉，在模糊的印象中我已经记不清它的 CLI 接口是什么样的了。故这某种程度上来说又是一次试错吧。
 
-### Ubuntu Launch
+### Ubuntu启动
 
-I decided to try Linux as a native OS, thinking it might be more stable than WSL. I documented the journey in [Ubuntu Tinkering Notes]({{< ref "/blog/ubuntu-note/" >}}). I learned about file hierarchies, shell RCs, and the ancient art of Vim. My guiding principle: simple usage, complex config, maximum performance.
+在这个学期的末尾，我突然就想整一个 Linux 操作系统来玩玩，当时的考虑是原生 Linux 环境在某些情况下可能比 WSL 和虚拟机更方便稳定一些。另外也听别人说了很多 Linux 的坏话和好话，于是我决定来亲身体验一下，也有了这篇文章 [Ubuntu折腾札记]({{< ref "/blog/ubuntu-note/" >}})，里面记录了我折腾 Ubuntu 系统的几乎全部细节。在这个过程中我也不知不觉掌握了 Linux 系统的文件目录划分，shell 的 rc 文件的功能，上古编辑器 Vim 的用法等等。这些通过亲身实践得出来的经验都遵守一个原则：尽可能简洁的使用方式，稍微复杂一些的初始化配置方法，尽量广泛的通用性，尽可能小的内存占用。
 
-There’s a unique feeling when a computer does exactly what you tell it to do. I call it "understanding the principles just enough."
+虽然过程琐碎折腾，但这么一来你才会感觉到电脑是如此轻盈而准确地按照你的规划运行。我认为使用一个工具最合适的状态就是"略懂原理"，可以在学习成本不那么高的前提下调整一些更加底层的东西，让自己的使用体验更佳从而长久地提升生产效率。
 
-I didn't intend to make Ubuntu my main OS, but I slowly found myself staying there longer. Windows always felt... "stuttery." You don't notice it until you have a comparison. Ubuntu felt like a "driving experience"—light, responsive, and exhilarating.
+当然这个时候我还是没有将 Linux 作为我的主力操作系统的打算，但使用 Ubuntu 的时间正在逐渐增加，我对 Linux 的熟悉度也在增加。并且我发现了一个 Windows 始终难以解决的一个问题：Windows 总是卡卡的，这种卡顿感在只使用 Windows 的情况下可能不太明显，但是没有对比就没有伤害😅 这种差异是如此明显以至于使用 Ubuntu 的时候总是有一种莫名的爽快的感觉，这种感觉真的很令人上头。忽然理解了车迷口中的"驾驶感"是什么意思了😄
 
-![ubuntu_desktop](img/ubuntu_desktop.png "My Ubuntu Desktop" )
+![ubuntu_desktop](img/ubuntu_desktop.png "Ubuntu桌面样式" )
 
-### The Undergraduate Innovation Program
+### 大创
 
-> Dachuang, refers to the Undergraduate Innovation and Entrepreneurship Training Program, which combines scientific research with entrepreneurial training. Simply put, it involves taking a project from a mentor and using it to enter competitions, eventually obtaining project certification through several defenses over the course of a year.
+> 大创，即大学生创新创业计划项目，兼具科研与创业训练的能力。简而言之就是从导师手中获取项目并用之参赛，然后在一年的时间内通过数次答辩最终获得项目认定。
 
 
-During this semester, I also joined a professor's lab to try my hand at a "Dachuang" project. Briefly, the project focused on spatio-temporal disease prediction. However, I wasn't the team leader, and I personally felt the foundation was quite unstable: the data volume was too small (only a few thousand entries), the training targets were ill-defined, and the technical roadmap was unclear. It felt truly difficult to move forward. The most problematic issue was the data size; as is well known, deep learning models are "data monsters," and it is very hard to achieve good results without massive amounts of data for pre-training. Consequently, during the proposal defense, this point was the most criticized: how can you train a model without sufficient data? This question was incredibly difficult to answer; no matter how one argued, a few thousand entries seemed pitifully sparse 😓. As a result, this Dachuang project failed even to pass the initial proposal stage.
+在这个学期，我也加入了一个老师的实验室，尝试参加大创项目。简单来说这个项目是进行疾病的时空预测，不过这个项目我并非队长，我个人感觉这个项目的根基是有些不稳的：数据量太少(只有几千条)，训练的目标不明确，技术路线不清晰，感觉真的是挺难做下去的。其中最最难以处理的其实是数据量的问题，众所周知深度学习模型是数据怪兽，没有大量的数据进行预训练很难出效果。因此在立项答辩的时候这个点也是遭受批判最多的一个点：没有数据量怎么进行模型训练？这个问题真的很难回答，无论如何辩解几千条数据怎么看都少得可怜😓因此这个大创项目连立项都没能够通过。
 
-> [!NOTE]+ Thoughts from the present
-> This project could be modeled as a "distribution sequence to distribution sequence" prediction, very similar to a standard Transformer, and could be trained using the Teacher-Forcing approach. But data volume remains an unavoidable Achilles' heel. The problem of data volume has always existed, and in recent years, it has become even more absurd—the data of the entire internet is now just the baseline for today's LLMs. From a certain perspective, this is indeed a question worth pondering: how can we improve data efficiency? Or, more comparatively: why don't humans need that much data for training?
+> [!NOTE]+ 来自现在的想法
+> 这个项目可以建模为一个"分布序列到分布序列"的预测，与标准 Transformer 非常类似，能够使用 Teacher-Forcing 的思路进行训练，但数据量仍然是一个绕不过去的死穴。数据量的问题其实一直都存在，甚至近年来更加离谱，整个互联网的数据对当今的 LLM 来说只是标配，这从某种程度上来说确实是一个需要思考的问题：如何提高数据效率？或者更有对比性的，为什么人类不用那么多数据进行训练？
 
-From this failed Dachuang experience, I also felt a sense of confusion: even algorithms that seem so perfect in theory still encounter problems in practical application. But looking at it from another angle, perhaps only through actual use can one discover real problems. Therefore, during the winter break, I planned to use LLMs extensively for coding and learning, accumulating practical experience with LLMs to understand what the current LLM-driven ecosystem really looks like.
+从这次失败的大创经历我也感受到了一些困惑：那些看上去如此完美的算法在实际使用的时候还是会出现问题。但从另一个角度来想，或许也只有在实际使用的过程中才能够发现真正的问题。因此在寒假的时候我准备大量使用 LLM 进行代码编写与学习，积累一些实际使用 LLM 的经验，了解现在 LLM 驱动的生态到底是什么样子。
 
-### Schedule Management & AI4Coding
+### 日程管理与AI4Coding
 
-Over the winter break, I tried to solve a personal problem: I had too many things to do (papers, classes, coding, gym) and my brain was tired of managing the schedule. I wanted an AI assistant to handle it.
+寒假的时候，我开始尝试优化一个长期以来困扰着我的问题，我每天想做的事情实在是太多了：前沿AI论文阅读、日常课程学习、代码开发、身体锻炼等等。这些事情用脑子安排起来实在是费神费力，并且常常会被一些突然出现的事项打断，被打断之后的日程重排也很费力。于是我设想要是有一个AI助手能够帮我完成日程的管理，这样我每天就能够更轻松地完成更多的事情了。基于这个初步的想法我开始构思如何实现我期望的效果，包括构建桌面应用所需的技术栈、项目需要实现的核心功能、实现核心功能的思路等。
 
-Since I was eager to try "AI-driven coding," I jumped into development using **Electron** without a clear plan. I didn't even understand the concept of a backend yet; I just knew I could call an API.
+由于经验不足的缘故并且当时急于体验 AI4Coding的效果，当时的我竟然连核心功能如何实现的思路都没有就开始了桌面软件的开发。在经过慎重的对比选择之后，我选择使用 Electron 进行桌面软件的开发。我当时甚至连前后端的概念都没有，只是知道能够通过API接口调用外部大模型就能够实现基础的对话聊天功能，我最初想法也是先构建一个桌面端对话聊天应用，然后再在聊天对话的基础之上赋予软件从中获取用户的日程并学习用户的习惯与偏好的功能。
 
-> [!NOTE]+ Hindsight
-> I made a classic mistake: no requirement analysis, no success metrics. I tried to cram every feature into the "Assistant," hitting the ceiling of current LLM capabilities. AI is actually quite bad at handling complex, preference-based scheduling, and the token cost was astronomical.
+> [!NOTE]+ 反思
+> 现在看来当时还是犯了很多错误，最重要的就是核心需求没有分析清楚，具体要做到什么效果、如何检验测评效果也没有考虑清楚。并且野心还不小，什么样的功能都想往这个"日程助手"里面塞，直接就捅破了目前 LLM 的上限，最终的实践发现 AI 很难处理考虑用户偏好的复杂日程排期，并且调用成本异常昂贵。
 
-I ended up with a basic desktop chat app. I learned that while AI is great at writing code, its knowledge is often outdated. It forgets context, makes "hallucinated" mistakes, and requires constant human intervention.
+寒假结束的时候最终是构建了一个基本的桌面 AI 聊天软件，其中绝大部分功夫都花在了写出符合 Electron 逻辑的代码并调优样式。这个过程中我大量地使用了 LLM 进行代码编写并得出了一些自己的体会：现在 AI 的代码能力确实是挺强，但是其知识储备过时这个问题仍然非常严重；Token 的效率其实是不够高的，AI 会反复地探索代码仓库并犯低级错误，甚至忘记自己写过什么；AI 对项目的目标总是会产生微妙的偏移，这种偏移往往会严重影响最终的结果，因此需要反复强调目标并且需要人工干预。
 
-> [!NOTE]+ Note
-> The solution today is "Vibe Coding" frameworks that constrain LLM uncertainty. If you provide clear testing methods and a high token budget, LLMs can build almost anything. I used to think LLMs shouldn't need "frameworks," but now I see that engineering scaffolding is the only way to make them useful in the real world.
+> [!NOTE]+ 说明
+> 这些问题目前的解决方案是使用一些专为 VibeCoding 设计的工作框架，将 LLM 的不确定性限制在可接受的范围内，并通过这套框架赋予 LLM 一些工具调用的能力，让 AI4Coding 的效果更加稳定。并且不得不说，这种工程补丁的效果着实显著，甚至我认为这就是 LLM 能够深度介入现实的最好方案了。我之前还比较天真，觉得 LLM 不应该需要框架进行规范，但现在看来只要提供明确的测试方法和充足的调用预算，LLM 几乎能够准确实现所有代码，甚至还能够指出一些不切实际的设想并提供一个更加落地的方案
 
-### Switching Research Groups
+### 换课题组
 
-Winter break hurried to an end, and the new semester brought a course load significantly heavier than the last. The time available for exploration dwindled accordingly; after all, energy is a finite resource.
+寒假就这样急匆匆地过完了，又是一个新学期平时的课业也比上学期繁重不少。各种用于探索的时间也因此变得更少了，毕竟精力有限。
 
-The first major decision I made this semester was leaving my previous mentor's lab to join my current research group. My previous mentor was a rising star in the database field—serious, responsible, and possessed of an excellent academic background and network. He had a vast number of undergraduate and graduate students, often filling the meeting room to capacity during group sessions.
+这个学期我进行的第一件重要的决策应该是从我上一个导师的实验室离开并加入新的导师的课题组。我的上一个老师是一个数据库领域的青年才俊，做事认真负责，学术背景和人脉资源都挺优秀的。手底下的本科生和研究生也非常多，开会的时候经常能把一个会议室坐得满满当当。
 
-Initially, my sole reason for joining that lab was to participate in a "Dachuang" project: a classmate had invited me to join her team, but the project required all members to belong to the same lab. So, I joined. To be honest, I had no passion for databases or data mining. My attention was entirely fixed on LLMs, particularly frontier model and algorithm design. Furthermore, because that mentor was so famous and the lab was teeming with talent, it was a classic case of "too many monks and not enough porridge." My daily tasks consisted of trivial and simple database maintenance which had little to do with LLMs—it was quite draining.
+首先，我当初加入这个老师的实验室的目的其实是参与大创：我同学邀请我参加她的大创项目，但是这个项目只接受同实验室的人参与。因此我就加入了这个老师的实验室，说来惭愧，我本人对数据库和数据挖掘并不感冒。我当时的注意力全部都放在 LLM 模型上，特别是一些前沿的模型算法设计。另外一个原因是那个老师名气实在是太大了，实验室人才济济，属实是有些僧多粥少了。我平时的工作也是一些琐碎而简单的数据库维护工作，与 LLM 关系不大，属实是有些耗费心神。
 
-Upon hearing of another professor working on LLM-related research, I "jumped ship" to my current mentor's group to produce academic results as efficiently as possible. This mentor is a junior academic (a so-called "academic green pepper"), making communication much easier; he understands exactly why undergraduates are so anxious to produce results.
+于是在听说另外一个老师在做 LLM 相关的工作后，为了尽可能高效地产出学术成果，我也就跳槽到了目前这个导师的课题组。这个老师是一枚学术青椒，沟通交流起来没有那么困难，也理解为什么本科生那么着急想要出学术成果。
 
-> [!NOTE]+ Helplessness 😮‍💨
-> Some professors might feel that today's undergraduates are too "flickery"—rushing for success and results without the patience to do solid research. However, I believe this isn't a choice made by individual students, but a reflection of the severe "involution" in our current environment. If you don't pursue efficiency and output, you become extremely vulnerable at critical junctures like the graduate school nomination process: the gap between vague talk of "research literacy" and a solid CCF-A paper is self-evident. Moreover, looking at the info on a certain "red social app" (Xiaohongshu), most successful candidates have a few papers under their belt, with some high-achievers even having five or more. Therefore, I believe the undergraduate rush for results is not an individual choice, but a concrete manifestation of environmental pressure—essentially: there is no other choice.
+> [!NOTE]+ 无奈😮‍💨
+> 一些老师可能会觉得现在的本科生过于浮躁了，急于求成，急于出成果，没有耐心踏踏实实做科研。但我觉得这并非学生个体能够决定的，毕竟现在这个环境内卷实在是严重。如果真的不追求效率，不追求成果产出的话，那在保研等后续关键节点是非常非常被动的：毕竟什么"科研素养"之类的说辞与一篇实实在在的 CCF-A 论文之间的差距不言自明。更何况，从某红色阅读软件上的信息来看，大部分保研人多多少少手上都有几篇论文，甚至一些高手有五篇以上。因此我个人认为本科生急于求成并非个体选择，而是一种环境压力的具体体现，也就是：没的选。
 
-In short, after switching research groups, my objectives became much clearer: accumulate academic output. Cutting out most ineffective actions and heading straight for the goal to achieve end-to-end task execution is the essential survival skill of the moment. Younger professors tend to understand this point better.
+总之，我就切换了课题组之后对自己的目的也更加明确了：积攒学术成果。砍掉大部分无效的动作，直奔目标，实现端到端的任务执行，这才是当下生存的要术。更年轻的老师也更加理解这一点。
 
-### Computer Design Competition
+### 计算机设计大赛
 
-Of course, before truly embarking on my research journey, I needed to put the coding experience accumulated since winter break to the test: I decided to enter the Computer Design Competition with my half-baked project.
+当然在真正开始我的科研征程之前，我还需要将我寒假以来积累的代码经验付诸实践检验：我决定将我这个半生不熟的项目拿去参与计算机设计大赛。
 
-Looking back, it was a truly chaotic time. Since we were building from scratch, I saw the balcony of Huxi at 3:30 AM more times than I can count.
+现在想来，那真是一段兵荒马乱的时光。因为是从零开始构建，因此凌晨三点半的虎溪阳台我见得可真是太多了。
 
-First was the general conception of the software. As mentioned, I hoped to use an LLM to create something akin to a personal schedule assistant. I must say, this was an exceptionally grand vision—a fact I didn't realize when the project began.
+首先是软件的大致构思，如前所述，我希望能够使用 LLM 做出一个类似个人日程助理的软件。不得不说，这确实是一个异常宏大的愿景，这一点我在项目开始并没有意识到。
 
-First, the software needed to extract schedule information, habits, and preferences from user dialogue. This involved key information extraction, storage modeling of complex schedules, serialization and deserialization, preference loading, and reference association. To put it more bluntly: our software needed to record user schedules and preferences during interaction. But how to store schedule info? How to store preferences? When a user mentions a specific event, how to accurately link it to the data store? How to associate the right preference? These questions alone are both low-level and far-reaching.
+首先软件需要从用户的对话中，获取用户的日程信息、习惯与偏好，这一步涉及关键信息的抽取、复杂日程信息的存储建模、复杂日程信息的序列化与反序列化、用户偏好的存储与加载、日程指涉的关联与提取。说的更加直白一些就是，我们的软件需要在与用户的交互过程中记录用户的日程信息与行为偏好信息，但是如何存储日程信息？如何存储用户偏好？当用户提及某一个日程的时候如何从数据存储中关联到准确的日程数据？又该如何关联到正确的用户偏好信息？仅仅这一个功能涉及的问题就非常底层并且广泛了。
 
-To model user needs more clearly, I even launched a small-scale questionnaire on campus, collecting various questions users expected to ask this schedule assistant.
+为了能够更清晰地建模用户需求，我甚至还在校内发起了一个小型的问卷调查，搜集到的各种各样的用户期望对这个日程管理助手的提问。
 
-![cs_design_user_need](img/cs_design_user_need.png "Computer Design Competition - User Needs Research" )
+![cs_design_user_need](img/cs_design_user_need.png "计算机设计大赛-用户需求调研" )
 
-It turned out some questions were quite difficult to answer. Supporting so many functions perfectly would require an incredibly complex underlying data pipeline. Moreover, a major hurdle for LLMs lies here: response speed. While dozens of tokens per second isn't slow for a simple chat, it becomes a severe issue when you layer multiple nested LLM calls. Therefore, from this perspective, LLM usage should be minimized. But from another angle, to solve these seemingly simple questions, is there any better way besides LLMs? Apparently not. Thus, the first principle was: limit the LLM call structure to at most two layers and implement system-level asynchronous concurrency to reduce response time while maintaining generality.
+可以发现，有些提问实际上并不好回答。如果要完美支持这么多的功能，那背后需要构建的数据管道将会非常复杂。并且大模型的一个非常难以解决的问题就在这里：响应太慢了。尽管每秒数十个 token 对于简单聊天来说并不慢，但是当你层叠嵌套多层大模型调用的时候这就是一个非常严重的问题。因此从这个角度来说，应该尽量避免使用大模型。但换一个角度，为了能够解决上面这些看似简单提问，除了大模型还有什么更好的办法吗？貌似还真没有。因此第一个原则就是：将软件的 LLM 调用结构尽可能限制在两层，并且需要进行系统层面的异步并发执行，这样才能够在保证处理问题的通用性的同时减少响应时间。
 
-So, my roommate and I began designing the backend data pipeline. After long iterations of the tech stack—three times in total—we finally decided to use PocketFlow, a concise asynchronous framework, to build the Agent. We used a vector database and a relational database together to store user schedules, supporting both fuzzy semantic search and precise relational queries. The architecture featured one Manager and three Sub-Agents, with all dialogue messages recorded in a public memory space where each Agent viewed messages through a "filter" to avoid context window explosion.
+于是我和我的室友开始着手设计后端的数据管线。经过漫长的技术栈迭代，前前后后进行了三次迭代。最终，我们决定采用 PocketFlow 这个简洁的异步框架来搭建这个 Agent，使用向量数据库和关系数据库共同存储用户的日程信息以便支持模糊的语义查询和精确的关系查询。架构上采用一个 Manager 与三个 SubAgent 的结构，所有的对话消息将记录在一个公共内存空间之中，每一个 Agent 都通过一个滤镜来查看公共对话空间中的消息，避免上下文窗口爆炸。
 
-![cs_design_pipline](img/cs_design_pipline.jpeg "Computer Design Competition - Data Pipeline" )
+![cs_design_pipline](img/cs_design_pipline.jpeg "计算机设计大赛-数据管线" )
 
-The resulting data pipeline was truly complex. PS: This diagram honestly gave me psychological trauma; I don't ever want to look at it a second time. It feels like being strangled by a giant python. 😵
+最终设计出来的数据管线，实在是非常复杂。PS：这幅图真的给我整出心理阴影了，我自己都不想再看第二次。如巨蟒缠绕般的窒息感😵
 
-Beyond the brain-burning task of system design, there were even more time-consuming matters: code development and deployment. This was divided into three parts: frontend, backend, and server deployment. Every single one was a hard nut to crack. 😭
+除了系统设计这种烧脑的任务，还有更加耗费时间经历的事情：代码开发与部署。主要分为三个部分：前端、后端与服务器部署。每一个都是难啃的骨头😭
 
-For the frontend, to quickly build a usable page, we used a template written by someone else. How should I put it... it seemed to save UI build time then, but the time spent handling data passing actually increased. At the time, I knew almost nothing about the React and Vercel ecosystems, and looking back, that frontend code was atrocious. It made the frontend workload extremely heavy, and in the end, we barely managed a functional web chat interface. The frontend code was a textbook "sh*t mountain."
+前端为了能够快速构建一个可用的页面，我们使用了别人写的模板。怎么说呢，当时看来减少了构建 UI 的时间，但是处理数据传递的时间反而增加了。当时对于 React 和 Vercel 的生态近乎一无所知，并且那个前端的代码现在看来属实糟糕，导致前端的工作负担很重，最终也只是勉强实现了一个能用的网页对话界面。前端代码简直是当之无愧的屎山。
 
-![cs_design_frontend](img/cs_design_frontend.png "Computer Design Competition - Frontend Interface" )
+![cs_design_frontend](img/cs_design_frontend.png "计算机设计大赛-前端界面" )
 
-> [!NOTE]+ Heartfelt Voice
-> You know nothing of "sh*t mountains" until you've written one yourself and struggled through it. 😭😭😭😭 It was pure, heart-wrenching agony... Don't give me that "as long as it runs" line; I was nearly choked to death by the code before it even ran.
+> [!NOTE]+ 心声
+> 在你自己亲手写出一堆屎山代码并在其中艰难前行之前，你对屎山一无所知😭😭😭😭痛，太痛了，痛彻心扉......不要说什么能跑就行，在代码跑通之前我就要被屎山代码噎死了
 
-The backend primarily involved implementing that complex data pipeline, where asynchronous programming and WebSockets further added to the difficulty. Parts involving LLM operations were especially hard to debug; weaker models performed poorly under complex prompt conditions. Thus, to adapt to more models, I had to repeatedly emphasize formats, operations, and output specifications in the prompts. Although it looked complex, it was fundamentally understandable, and the minimalist PocketFlow Agent framework helped solve some tedious issues.
+后端主要就是实现那个复杂的数据管线，异步编程和 WebSocket 则进一步增加了实现的难度。并且其中涉及 LLM 操作的部分更是难以进行调试，较弱的模型在复杂提示词条件下会出现一些难评的表现。因此为了适配更多的模型，还需要在提示词中反复强调格式、操作和输出规范。尽管看上去很复杂，但基本上还是可以理解的，并且 PocketFlow 这个极简的 Agent 框架也帮我们解决了一些繁琐的问题。
 
-Then came server deployment. Generally, we used Docker for containerization, but the actual process remained exceptionally tedious and time-consuming. See [Deploying Services on Cloud Servers]({{< ref "/blog/cloud-server-build/" >}}) for details, where I recorded mostly cloud-server-related issues; you'll see how fragmented the operations were. Yet that was only part of it. Building Docker containers was a chore: you had to wrap the Qdrant vector database and MySQL relational database, build internal network communication between modules, use Nginx to expose ports externally while using Certbot for automatic SSL certificates, and handle frontend CORS issues.
+然后是服务器部署，总的来说是使用 Docker 进行容器化构建，但实际操作起来仍然是异常繁琐和耗时的。详见[在云服务器上部署服务]({{< ref "/blog/cloud-server-build/" >}})，其中主要记录了与云服务器相关的问题，可以发现其中的操作已经非常琐碎了。然而这还只是问题的一部分，构建 Docker 容器也是一个麻烦事：你需要将 Qdrant 向量数据库和 MySQL 关系数据库封装进去，然后构建这些模块之间的内部网络通信，然后使用 Nginx 统一对外暴露端口并配合 Certbot 进行自动 SSL 证书申请，还需要处理前端页面的跨域资源请求问题。
 
-![cs_design_arch](img/cs_design_arch.jpeg "Computer Design Competition - Technical Roadmap" )
+![cs_design_arch](img/cs_design_arch.jpeg "计算机设计大赛-技术路线图" )
 
-Finally, after solving all the above, we got the final personal schedule assistant. I hate to admit it, but the end result was... underwhelming. 😭 Despite the async concurrency, the response speed was still slow. Though it could basically achieve our envisioned effects, hidden bugs and instabilities cropped up constantly. The prompts, despite heavy tuning, were bloated and required strong models to drive them (weak models failed to execute correctly)... In short, it was far from my expectations. The final competition result was also bare-bones: just a Provincial Third Prize, essentially a participation award. 😭
+最后，把上面这些问题统统解决之后，也就得到了最终的个人日程助手。虽然很不想承认，但最终的效果确实一言难尽😭尽管做了异步并发但响应速度还是很慢，尽管能够基本完成我们之前所设想的效果，但是各种隐性 Bug 和不稳定情况层出不穷，尽管提示词已经经过了大量的调试但仍然臃肿并且需要强模型进行驱动(弱模型难以正确执行)......总之就是离我自己的设想差得很远。最终的比赛结果也非常骨感，只拿了一个省级三等奖，类似于一个参与奖了😭
 
-From this experience, I clearly realized: effort doesn't necessarily yield good results; direction is more important. That is to say, if one wants to achieve a truly meaningful personal intelligent assistant, this kind of engineered "Context Engineering" can hardly reach production-grade effects. In the field of AI 4 Coding, there is clear and effective software engineering theory to support us; we can construct an effective Context, AI can easily edit code text, and compilers or test suites can verify code quality to keep the Context clean.
+从这个经历中我也清楚地意识到了：努力不一定有好的结果，方向更加重要。也就是说，如果想要实现真正意义上的个人智能助手，这种工程化的 Context Engineering 是难以达到生产级效果的。在 AI4Coding 这个领域中，有明确有效的软件工程理论支撑，我们能够构造出一个有效的 Context，AI 也能够方便地进行代码文本的编辑，并且编译器和测试工程也能够检验出代码的质量从而保持 Context 的纯洁性。
 
-After understanding the development of AI 4 Coding, I suddenly realized that a truly effective Agent might not need so many fancy data pipelines and tools. Perhaps an appropriately sized Markdown file for storing important memories is enough—even reaching the current ceiling of what LLMs can do. To go further, one would need a breakthrough in underlying models: we need a model that can truly learn continuously, compressing information into network weights. After all, weights can store far more information than a Markdown file, and one wouldn't need to worry about "searching" for info—a single forward pass would solve it.
+在理解了 AI4Coding 的发展之后，我突然意识到貌似真正有效的 Agent 不需要那么多花里胡哨的数据管线和工具加持。或许真的只需要一个合适容量的 Markdown 文件用来存储重要记忆就已经足够了，甚至已经达到了目前的 LLM 能够做到的天花板级别的效果。如果还要更进一步的话，就需要从底层模型进行突破了，我们需要一个真正能够持续学习的模型，将信息压缩入网络权重之中，毕竟网络权重能够存储的信息量可比一个 Markdown 文件大多了并且也不用考虑如何"查找"有关信息的问题，毕竟一个 Forward 就能够解决。
 
-> [!NOTE]+ Thinking
-> Truth is simple; no words needed. Simplicity and effectiveness are a form of decision-making aesthetics.
+> [!NOTE]+ 思考
+> 大道至简，无需多言，简洁而有效是一种决策审美。
 
-### Software Practicum
+### 软件实训
 
-Our task: build a Smart Home System in 14 days (Frontend + Backend + Hardware). We used MQTT for hardware and a mix of HTTP/WebSockets for the rest.
+14 天的时间内做出一个智能家居管理系统，前端后端和硬件三联动，硬件和后端使用 MQTT 协议，后端与前端使用 HTTP 辅助 WebSocket 提高网络利用率的同时支持全双工通信。
 
-With my previous modeling and full-stack experience, this was a breeze. We hit every milestone early. Our team was eerily quiet—no arguments, no procrastination. We just... worked. It felt like we had been colleagues for years.
+有了之前数学建模和计算机设计大赛的带队经验，再加上之前折腾了那么久的全栈开发经验，这次的项目几乎没有什么大的意外，工作进度稳步推进，最终是支持了几乎所有场景和硬件的联动，利用外部大模型 API 接口做了硬件的自然语言控制功能。总之效果还是很不错的😄
 
-The only regret: no celebratory dinner. Everyone was busy. My strongest memory of that time is walking down the middle of an empty road at midnight, the humid Chongqing air making everything feel slightly surreal.
+对比其他小组，我们小组内部几乎没有什么激烈的讨论，也没有谁拖沓摆烂。就，很平静，平静到像上了好几年班一样。唯一有点遗憾的是验收答辩之后没有组队聚餐，大家都各自有事儿就不了了之了。这导致这段经历中最令人印象深刻的就是在凌晨 12 点空无一人的马路中间大摇大摆地乱走。潮湿而闷热的空气带着一种不太真实的感觉沉淀在记忆之中。
 
-### Campus Network Remote Access System
+### 校园网远程访问系统
 
-To enable remote access to the computing servers within the campus intranet, I decided to build a campus network remote access system myself. At that time, I hadn't yet studied computer networks; I completed this system in a single day, almost entirely with the assistance of AI.
+为了能够远程访问校园内网的算力服务器，我决定自己搭建一套校园网远程访问系统。当时还没有学过计算机网络，几乎全程在 AI 的辅助之下，花了一天的时间完成了这个系统。
 
-I tried many methods back then, such as using `frp` for NAT traversal and `Tailscale` for P 2 P direct connections. However, as is well known, both carrier-grade NATs and campus networks are extremely difficult to penetrate; for this reason, Tailscale's P 2 P direct connection also failed (it could only route through overseas relay servers, resulting in extremely high latency). Ultimately, I chose to use WireGuard and leverage a public cloud server to establish a reverse connection to an industrial PC (jump box) within the campus network, finally enabling bi-directional communication under such difficult circumstances.
+当时尝试了很多方法，比如 frp 进行内网穿透、使用 TailScale 进行 P2P 直连，但众所周知运营商大内网和校园网都是及其难以穿透的，也是因为这个原因 TailScale 的 P2P 直连也失败了(只能走海外服务器但延时极高)。最终是选择了使用 WireGuard 并借助公网云服务器反向连接校园内网的工控机(跳板机)，这样才能够在如此困难地情况下进行双向的通信。
 
 {{< mermaid >}}
 graph LR
-subgraph "Outside"
-User["💻 Remote User<br/>(WG Client)"]
+subgraph "外部环境"
+User["💻 远程用户<br/>(WG Client)"]
 end
 
-subgraph "Cloud (Relay Node)"
-Cloud["☁️ Public Cloud Server<br/>(WG Server / Hub)"]
+subgraph "云端中转 (中继节点)"
+Cloud["☁️ 公网云服务器<br/>(WG Server / Hub)"]
 end
 
-subgraph "Campus Network"
-Jump["📟 Jump Box/Gateway<br/>(WG Client)"]
-Target["🚀 Compute Server"]
+subgraph "校园内网 (封闭环境)"
+Jump["📟 工控机/跳板机<br/>(WG Client)"]
+Target["🚀 算力服务器<br/>(Computing Server)"]
 end
 
-User <== "Encrypted Tunnel" ==> Cloud
-Jump -- "1.Initiate Connection" --> Cloud
-Cloud <== "2.Establish Bi-directional Tunnel" ==> Jump
-Jump -. "3.LAN Forwarding" .-> Target
+User <== "加密隧道" ==> Cloud
+Jump -- "1.主动发起连接" --> Cloud
+Cloud <== "2.建立双向隧道" ==> Jump
+Jump -. "3.局域网转发 (SSH/TCP)" .-> Target
 
 style User fill:#e1f5fe,stroke:#01579b
 style Cloud fill:#fff3e0,stroke:#e65100,stroke-width:2px
@@ -296,79 +296,79 @@ style Jump fill:#f3e5f5,stroke:#4a148c
 style Target fill:#e8f5e9,stroke:#1b5e20,stroke-width:2px
 {{< /mermaid >}}
 
-To briefly explain what a reverse connection is: current firewalls and NAT systems generally block unsolicited incoming traffic from the outside. However, if a request is initiated from the inside, the corresponding response traffic from the outside can enter the internal network at any depth with almost no resistance. After all, if responses to internal requests were blocked, it would be no different from being disconnected from the internet. By exploiting this characteristic, a client deep within the intranet can actively access a public server and use heartbeats to keep the connection alive, easily establishing a bi-directional tunnel. Since the data receiver initiates the connection to receive data, it is called a reverse connection.
+简单说说反向连接是怎么回事。现在的防火墙和 NAT 系统阻止的一般都是从外部来的主动流量，如果是从内部发出请求再从外部传递的响应流量几乎没有阻力就可以进入任意深度的内网。毕竟如果内部请求的响应都拦截了，就和断网没有区别了。于是利用这个特性从深内网的客户端主动访问公网服务器并使用心跳持活，这样就可以轻松建立双向隧道了。因为是数据接收方主动发起连接，目的是接收数据，因此叫作反向连接。
 
-The only downside is that the public cloud server costs money 😅; everything else is virtually impeccable: an extremely low latency of 20 ms, exceptional stability (able to handle intermittent campus network logouts, power outages, etc.), ease of use, and powerful functionality (it can even act as an HTTP proxy when paired with Clash).
+唯一的缺点是公网云服务器要付费😅其他的简直无可挑剔：20ms 极致低延时，异常稳定(能够应对校园网间歇性退出登录、间歇性断电等等)，易于操作，功能强大(与 Clash 配合甚至能够进行 HTTP 代理)
 
-> [!NOTE]+ Note
-> Theoretically, double-sided symmetric NAT hole punching is possible, and there are even several software tools capable of this ([EasyTier](https://github.com/EasyTier/EasyTier.git) and [OpenP2P](https://github.com/openp2p-cn/openp2p.git)). Both use "birthday attacks" to penetrate such difficult NATs; while theoretically feasible, the success rate in practice is low, and the traffic behavior closely resembles a DoS attack, which might lead to a MAC address ban 😢.
+> [!NOTE]+ 说明
+> 理论上是能够进行双侧对称型 NAT 打洞的，甚至已经有了很多软件能够实现这个功能([EasyTier](https://github.com/EasyTier/EasyTier.git)和[OpenP2P](https://github.com/openp2p-cn/openp2p.git))；均使用"生日攻击"的方式穿透如此困难的 NAT，理论可行但实际上成功率较低并且流量行为极其类似 Dos 可能会被封禁 MAC 地址😢
 
-## Junior Year
+## 大学三年级
 
-### Joining the Arch Cult
+### 加入Arch邪教
 
-After tinkering with Ubuntu for nearly a year, various more novel Linux systems gradually entered my field of vision. For example, Mint is said to be the most popular system for beginners, Fedora is the choice of Linus Torvalds (the father of Linux), and Manjaro, derived from Arch, provides a graphical installation interface and stable software repositories. There is even SteamOS, which, as its name suggests, is born for Steam gaming 🐸.
+在折腾了接近一年的 Ubuntu 之后，各种各样更加新奇的 Linux 系统也慢慢进入了我的视野。例如 Mint 据说是最受新手欢迎的系统，Fedora 是 Linux 之父 Linus 的选择，Manjaro 派生自 Arch 提供了图形化安装界面和稳定的软件仓库。甚至还有 SteamOS 系统如其名，专为 Steam 游戏而生🐸
 
-Since my pursuit is extreme performance, high customization, and the latest software experience, I ultimately chose Arch Linux—rumored to be the most minimalist yet hardest-to-master Linux distribution, and said to be somewhat unstable, occasionally crashing due to rolling updates. Because people who "fall into the pit" often find it hard to pull themselves out, it has been dubbed the "Arch Cult." With so many labels stacked on it, my curiosity was piqued; I really wanted to see what this so-called "monster" was all about 🤔. Thus, in the middle of the first semester of my junior year, I resolutely set aside three days to tinker with it.
+由于我的追求是极致的性能、高度的自定义和最新的软件体验，因此我最终选择了 Arch Linux，传闻中最简洁也最难上手的 Linux 发行版，还据说不太稳定偶尔会因为滚动更新而崩溃。并且因为入坑之后就难以自拔，于是也被冠以"Arch"邪教的称号。标签都叠了这么多了，我的好奇心也被勾了起来，我还真想试试这所谓的邪教。于是，大三上学期中旬，我果断抽了 3 天时间来折腾，我倒要看看这是什么妖魔鬼怪🤔
 
-Following the [Arch Linux Brief Guide](https://arch.icekylin.online), I began my Arch journey. This guide is extremely detailed, especially regarding low-level configurations like networking, file systems, and system bootloaders.
+于是我就根据 [Arch Linux 简明指南](https://arch.icekylin.online)的帮助下开始了 Arch 之旅。这本指南非常详细，特别是网络、文件系统和系统引导之类的底层配置。
 
-![arch_brief_guide](img/arch_brief_guide.png "Arch Linux Brief Guide" )
+![arch_brief_guide](img/arch_brief_guide.png "Arch Linux 简明指南" )
 
-After this "smooth combo" of operations, congratulations! 🎉 You finally have a black command-line interface. Yes, after all that work, you haven't even installed a graphical interface yet. It took me nearly a day and a half to get to this point, and that was with my prior experience with Ubuntu and some understanding of Linux systems; I can't imagine what it would be like for a complete beginner. Therefore, I reiterate a common warning found online: Arch Linux is not recommended for beginners 😢.
+这一套丝滑小连招之后，恭喜🎉你终于获得了一个黑色的命令行界面，是的这么多的操作甚至还没有安装好图形界面。到这里我花了接近一天半的时间，这还是我接触过 Ubuntu 对 Linux 系统有一定的了解的情况下，如果完全零基础的话我都不敢想象。因此我在这里重申一下网上广为流传的一句警言：不建议零基础上手 Arch Linux😢
 
-Then, for the installation of the Graphical User Interface (GUI), I stopped following that tutorial. This was because even before installing Arch, I already had my heart set on one: the [niri](https://github.com/niri-wm/niri.git) desktop compositor. Here is a large image from the official GitHub 😁. In short, niri is an infinite-scrolling tiling window manager. I had previously looked into Hyprland and other tiling managers, but I personally disliked the approach of forced window compression; niri, however, perfectly hit my core vision for a tiling desktop—elegant, concise, efficient, and beautiful.
+然后图形用户界面的安装我就没有按照这个教程来了。因为我在安装 Arch 之前就已经心有所属了：[niri](https://github.com/niri-wm/niri.git) 桌面混成器。这里放一张官方 GitHub 的大图😁概括来说，niri 是一个无限滚动平铺桌面。我之前也了解过 Hyperland 等其他平铺桌面管理器，但我个人不太喜欢那种强制压缩窗口的平铺思路，而 niri 则非常精准地命中了我对于平铺桌面的核心想象，优雅简洁高效美观。
 
-![niri_official](img/niri_official.png "niri official display image" )
+![niri_official](img/niri_official.png "niri 官方展示图片" )
 
-> [!NOTE]- Mood 😄
-> It was truly love at first sight with niri. Just as you are mentally modeling the problem of tiling window management, a solution appears that perfectly fits your train of thought.
+> [!NOTE]- 心情😄
+> 对 niri 真的是一见倾心，当你正在脑中构思建模一个平铺窗口管理这个问题的时候，突然就有一个完美贴合你的思路的解决方案
 
-So, I opened Google AI Studio and the Arch Wiki on my phone as assistants and began the journey toward the niri desktop environment. Of course, once the underlying file system and other configurations are done, installing the desktop environment is simple: just use `pacman` to install it. The tedious part is the adjustment of other desktop components and configuration files: the status bar, desktop wallpaper, login manager, input methods, and so on. The final result of all that tinkering was a clean and efficient Arch desktop system.
+于是我就在手机上开了一个 Google AI Studio 和 Arch Wiki 作为辅助，然后就开始了折腾，朝着 niri 桌面环境进发。当然，在底层文件系统等配置完成的情况下，安装桌面环境就非常简单了：直接使用 pacman 安装就行了。比较繁琐的是其他桌面配套组件以及配置文件的调整：状态栏、桌面壁纸、登录管理界面、输入法等等。折腾的最终结果就是得到了一个干净高效的 Arch 桌面系统。
 
-![niri_fastfetch](img/niri_fastfetch.png "fastfetch time! 😁" )
+![niri_fastfetch](img/niri_fastfetch.png "fastfetch time!😁" )
 
-Next came various choices and optimizations regarding user experience—countless small tools and system tuning. Most of the important, reusable content has been merged into [Ubuntu Tinkering Notes]({{< ref "/blog/ubuntu-note/" >}}), so I didn't create a separate blog post for it. Additionally, I referred to experiences on YouTube to build a [dotfiles](https://github.com/morethan987/arch-dotfiles.git) repository to facilitate configuration management and migration.
+然后就是各种用户体验方面的选择与优化了，各种各样的小工具与系统调试，大部分重要的可复用的内容都合并到 [Ubuntu折腾札记]({{< ref "/blog/ubuntu-note/" >}})之中了，并没有单开一篇博客进行记录。另外我还参考 YouTube 上的经验构建了一个 [dotfiles](https://github.com/morethan987/arch-dotfiles.git) 仓库，方便进行配置管理与迁移。
 
-> [!NOTE]- Thinking
-> At first, I didn't understand what "dotfiles" were; I saw the term many times but paid no attention. It wasn't until I saw it too many times that I got curious, and then I unlocked a very useful configuration management tool. This kind of accidental encounter is one of the great joys of Linux.
+> [!NOTE]- 思考
+> 一开始我还不理解 dotfiles 是什么东西，看到了很多次但都没有注意。直到我真的看到太多次了，我才好奇这是什么，然后我又解锁了一个好用的配置文件管理工具。这种不经意之间的偶遇也是 Linux 的一大乐趣吧
 
-In the days that followed, I completely switched my primary operating system to Arch Linux. This "rough stone" of an operating system was polished like a pebble—becoming smoother and smoother, and more and more aligned with my vision of a perfect OS: concise, efficient, easy to manage, and smooth to use. I finally understood why Arch is a cult: even the most exquisite mass-produced industrial product cannot compare to a hand-crafted piece of art that iterates through its own use. People feel a resonance with things born from their own hands and their own choices.
+后续的日子我也将主力操作系统完全切换到了 Arch Linux 上，这样一个粗糙的操作系统就像一颗鹅卵石一样被打磨得越来越光滑，越来越符合我心目中的完美操作系统，简洁高效、易于管理、使用流畅。我也终于理解了 Arch 为什么会是邪教了：再精美的工业批量产品也比不上手工打磨、在使用过程中不断迭代的工艺品。人们会对出自自己之手，从自己的选择之中诞生的东西产生共鸣。
 
-> [!NOTE]+ Thinking
-> Next-generation consumer hardware should achieve something similar. Hardware starts depreciating from the moment it is sold, but the data settled in time actually holds high value; hardware should capture this value. This process is very much like panning for gold within information streams.
+> [!NOTE]+ 思考
+> 下一步的消费级硬件也应实现类似的功能，硬件从售出之后就在不断贬值，但实际上沉淀在时间之中的数据具有很高的价值，硬件应该捕获这种价值。这个过程非常类似于淘金，从信息流中淘金。
 
-Furthermore, once you have such a versatile tool, you can easily solidify knowledge into small utilities. For example, the [ssh reverse proxy tool]({{< ref "/blog/ubuntu-note/#ssh反向代理" >}}) allows every server I can SSH into to conveniently access the external network; a watchdog tool helps me monitor the running status of long processes and send WeChat notifications; and an `mping` tool monitors my mailbox and sends a WeChat notification when I receive reviewer comments. The significance of these inconspicuous little things lies in transferring the trivial work that requires your energy to maintain over to the computer—tireless and reliable.
+另外当你有了一个如此通用的工具，你可以非常方便地将知识固化为小工具，例如 [ssh 反向代理工具]({{< ref "/blog/ubuntu-note/#ssh反向代理" >}}) 能够让所有我能够 ssh 上的服务器全部都能够便捷地访问外网，看门狗工具能够帮我监视长进程的运行状态并发送微信通知，mping 工具能够监视我的邮箱并在收到审稿意见的时候发送微信通知。这些不起眼的小玩意儿的意义在于：将你需要消耗精力去维持的琐碎工作转嫁给计算机，不知疲倦且稳定可靠。
 
-That is the entirety of my Linux tinkering. No world-shaking achievements, just iterative optimizations accumulated bit by bit. I am occasionally asked why I use Linux, with the viewpoint being: since Windows can do everything, there is no need for Linux. I admit this is a fact—current mainstream operating systems are almost identical in functionality, with the only moat being the software ecosystem. But my reason for using Linux is simple: I just wanted to try "another solution." It was pure curiosity. Initially, I had no intention of making Linux my primary OS, but after tinkering for a long time, I found that I prefer the freedom and efficiency of the Linux ecosystem. Compared to the intuitiveness of a GUI, I prefer the conciseness of the command line; compared to mere usage, I prefer exploring the principles. All in all, Linux is just an option—I chose this option through practical experience and quite enjoy it. That’s all.
+这就是我折腾 Linux 的全部了，没有惊天动地的成果，只是点滴积累的优化。我偶尔会被别人问起为什么会使用 Linux 系统，他们的观点是：既然 Windows 系统啥都能做那就没必要用 Linux 了。我承认这句话是事实，目前的主流操作系统从功能上来说几乎一致，唯一的护城河只有软件生态。但我使用 Linux 的理由也很简单，就是想尝试一下"另一种方案"，是一种单纯的好奇。一开始是完全没有将 Linux 作为主力操作系统的打算的，但折腾久了发现我更喜欢 Linux 生态的自由与效率，相比于 GUI 的直观我更喜欢命令行的简洁，比起单纯的使用我更喜欢探究原理。总而言之，Linux 只是一个选项，我从实践体验中选择了这个选项，并且还挺乐在其中，仅此而已。
 
-### The Knowledge Graph Paper
+### 知识图谱论文
 
-After completing the software practicum, I almost immediately plunged into my paper experiments. Although I also set up the campus network remote access system and tinkered with Arch Linux along the way, the bulk of my energy was truly dedicated to the paper.
+在我完成软件实训之后，我几乎就立马投入了论文的实验之中。虽然中途还建立了校园网远程访问系统、玩了玩 Arch Linux 但主要的精力确实都投入到论文中了。
 
-The background of this paper is addressing the sparsity problem in Knowledge Graph (KG) reasoning. Simply put, certain entities in a KG have so few associated edges that reasoning performance suffers (resulting in low MRR scores). Thus, we proposed a KG reasoning framework to alleviate this issue (a problem that seems impossible to "solve" entirely, only to mitigate).
+这篇论文的背景是为了解决知识图谱推理中的稀疏问题。简而言之就是知识图谱中某些实体的关联边实在是太少了，导致其推理效果很差(MRR 跑分很低)，于是我们提出了一种知识图谱推理框架缓解这个问题(这个问题貌似没法解决只能说缓解)
 
-The context when I started was: a senior student had already done some preliminary work and established the main theme of data augmentation, and then my mentor suggested the idea of using MCTS to solve the problem.
+入手工作时的背景是：学姐之前做了一部分工作也奠定了进行数据增强的主基调，然后老师给了一个思路让我使用 MCTS 来解决这个问题。
 
-From there, I began the constant iteration of the core algorithm. Initially, I tried using an LLM as an Agent to "wander" around the knowledge graph, but upon reflection, the time cost was too high and the results weren't necessarily guaranteed. So, I began analyzing the problem from first principles: the core question is, how do we add new relations to sparse entities?
+然后我就开始了核心算法的不断迭代。一开始是尝试将 LLM 作为 Agent 放到知识图谱上面去乱逛，但仔细一想时间成本太高并且效果不一定很好。于是我开始使用第一性原理尝试分析这个问题：首先这个问题的描述就是，如何在稀疏实体之上添加新的关系？
 
-Obviously, the most brute-force approach would be to take a sparse entity as a head or tail entity and pair it with every existing relation and every other entity in the KG. The advantage is that, theoretically, this is the ceiling for sparse entity augmentation (all possible relations are included); the disadvantage is that the noise is off the charts.
+非常显然，最暴力的做法就是将这个稀疏实体作为头实体、尾实体，然后与知识图谱中原有的所有关系与其他实体全部都配对一遍。这种做法优点在于，理论上稀疏实体增强的天花板就是这个了(所有可能的关系都已经包括进去了)，而缺点在于噪声大的离谱。
 
-I then considered introducing a high-quality triple discriminator for validation, which led to a second problem: the higher the discriminator's accuracy, the longer it takes. LLMs are the best as triple discriminators, reaching nearly 75% accuracy, but the calling costs are astronomical. If an LLM discriminator were to brute-force search every possible combination, it would take an estimated 370,000 hours—clearly unacceptable.
+于是考虑引入一个高质量的三元组判别器进行鉴别，然后就遇到了第二个问题：判别准确率越高的模型耗时越长。其中 LLM 作为三元组判别器的质量是最好的，能够达到接近 75% 的判别准确率，然而调用成本也异常高。如果让 LLM 判别器暴力搜索一遍所有可能的组合，那么预计耗时 37 万小时，显然这是不可接受的。
 
-To solve this, I introduced MCTS to balance exploration and exploitation, avoiding the brute-force search. However, noise still exists in the newly added data. To further reduce the impact of noise on training results, I utilized the ideas of adaptive message aggregation and large-loss suppression.
+于是为了解决这个问题，引入了 MCTS 平衡探索与利用，避免了暴力搜索。然而新增加的数据中仍然存在噪声，为了进一步降低噪声对于训练结果的影响，使用了自适应消息聚合与大损失抑制的思路。
 
-Indeed, the logic of the entire paper is very clean, without bloated modules. I consider it a great practice of first principles. The final results were also quite good, with an MRR improvement of 18% and 16% over the best baseline across two datasets. This is the paper's biggest selling point, and it can be considered a new SOTA.
+是的，整篇论文的思路很清爽，没有拖泥带水堆砌模块，个人认为是一次第一性原理很好的实践。最终的效果也挺好，在两个数据集上相对最佳基线的 MRR 提升为 18% 和 16%。这也是论文最大的卖点，也算是产出了一篇新的 SOTA 了。
 
-> [!NOTE]+ Thinking
-> Looking back after a paper is done, it feels quite simple. But when you are in the thick of it, things aren't so clear—you either can't trim down your various ideas or you get stuck in a dead end. In short, writing a paper is really not easy 😓.
+> [!NOTE]+ 思考
+> 当一篇论文做完了之后再来回顾就会感觉，好像很简单的样子。但当你还身处其中的时候就没那么明朗了，要么是各种各样的想法没法裁剪，要么是进入死胡同动弹不得。总之啊，写论文还是很不容的😓
 
-Naturally, following the mindset learned from Arch Linux, I also tried to model an AI-assisted scientific research framework. I attempted to model a complete research process as a tree structure—from reading literature and organizing ideas to algorithm implementation and benchmarking. Every critical decision is a branch point; some branches can be pruned early, while others require clear experimental results to judge. From this perspective, research transforms from a game of luck into a pure search and verification problem. Does this large-scale search and verification problem sound familiar? 😁 Yes, exactly—AlphaZero. The research process can almost be mapped directly into the shell of Go, where an LLM can drive the entire "research flywheel" continuously. The only problem is: how to let the AI continuously learn from a vast amount of research experience? To be honest, I've encountered this issue of continual learning more than once; it feels like the "Sophon" from *The Three-Body Problem*.
+当然，遵循着从 Arch Linux 上习得的思维，我也尝试建模一种 AI 辅助的科研框架。我尝试将一次完整的科研流程建模为树形结构，从阅读文献整理思路到算法实现和跑分测试，每一次关键的决策都是一个分支点，有一些分支可以提前剪枝但有一些分支则需要明确的实验结果来判断。从这个角度来看，科研从碰运气变成了纯粹的搜索与验证问题。这种大规模搜索与验证问题有没有很眼熟？😁是的没错就是 AlphaZero，科研流程几乎可以原封不动地套进围棋的壳子之中，LLM 几乎可以驱动整个"科研飞轮"持续不断地转动。唯一的问题就是：如何让 AI 在从大量的科研经历中持续地学习经验？说实话，持续学习这个问题我已经不止一次遇到了，就好像《三体》中的智子一样。
 
-Coincidentally aligning with my thoughts is the recently viral FARS: capable of pumping out papers at a rate of one short paper every two hours. Combined with the AI peer-review system led by Andrew Ng, it has reached the average human level in evaluations. This is truly a good thing; it signals that scientific research is entering the era of industrial mass production. Moreover, this could completely end the "obsessive focus on paper count": when FARS can churn out short papers every two hours, how much significance does the sheer number of papers still hold? It’s worth pondering.
+与我的思路不谋而合的是最近火爆全网的 FARS：能以两小时一篇 Short Paper 的效率疯狂灌水论文，结合吴恩达主导开发的 AI 审稿系统的测评下达到了人类平均水平。这真的是好事儿，这预示着科学研究步入工业批量化时代。并且这也能够彻底终结"唯论文数量论"：当 FARS 以平均两小时一篇 Short Paper 的效率疯狂灌水论文的时候，论文数量还有多少参考意义值得深思。
 
-Of course, we haven't reached the era of true mass production yet, so the metric of paper count still holds some reference value for now. But after all, there isn't much time left for humans to "hand-craft" papers using traditional methods. Cherish it while you can 🐸.
+当然了，现在还没有真正到量产的时代嘛，所以说目前论文数量这个指标还是有参考意义的。但毕竟留给人类古法手工灌水的时间也不多了，且灌且珍惜吧🐸
 
-## The Future
+## 未来
 
-I want to solve **Continual Learning** for LLMs. This "mysterious threshold" has appeared in every real-world problem I've faced. If we cross it, we are much closer to AGI.
+无需多言，我要做 LLM 的持续学习，毕竟这个神秘的门槛已经在我亲身经历的多个实际问题中已经出现了。如果这个门槛被跨越了的话，某种意义上的 AGI 也异常接近了。
