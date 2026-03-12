@@ -12,7 +12,7 @@ series:
   - Casual essay
 series_order: 3
 date: 2026-02-17
-lastmod: 2026-03-04
+lastmod: 2026-03-11
 authors:
   - Morethan
 ---
@@ -290,10 +290,10 @@ Jump -- "1.Initiate Connection" --> Cloud
 Cloud <== "2.Establish Bi-directional Tunnel" ==> Jump
 Jump -. "3.LAN Forwarding" .-> Target
 
-style User fill:#e1f5fe,stroke:#01579b
-style Cloud fill:#fff3e0,stroke:#e65100,stroke-width:2px
-style Jump fill:#f3e5f5,stroke:#4a148c
-style Target fill:#e8f5e9,stroke:#1b5e20,stroke-width:2px
+style User fill:#e1f5fe,stroke:#01579b,color:#333
+style Cloud fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#333
+style Jump fill:#f3e5f5,stroke:#4a148c,color:#333
+style Target fill:#e8f5e9,stroke:#1b5e20,stroke-width:2px,color:#333
 {{< /mermaid >}}
 
 To briefly explain what a reverse connection is: current firewalls and NAT systems generally block unsolicited incoming traffic from the outside. However, if a request is initiated from the inside, the corresponding response traffic from the outside can enter the internal network at any depth with almost no resistance. After all, if responses to internal requests were blocked, it would be no different from being disconnected from the internet. By exploiting this characteristic, a client deep within the intranet can actively access a public server and use heartbeats to keep the connection alive, easily establishing a bi-directional tunnel. Since the data receiver initiates the connection to receive data, it is called a reverse connection.
@@ -358,7 +358,7 @@ I then considered introducing a high-quality triple discriminator for validation
 
 To solve this, I introduced MCTS to balance exploration and exploitation, avoiding the brute-force search. However, noise still exists in the newly added data. To further reduce the impact of noise on training results, I utilized the ideas of adaptive message aggregation and large-loss suppression.
 
-Indeed, the logic of the entire paper is very clean, without bloated modules. I consider it a great practice of first principles. The final results were also quite good, with an MRR improvement of 18% and 16% over the best baseline across two datasets. This is the paper's biggest selling point, and it can be considered a new SOTA.
+Indeed, the logic of the entire paper is very clean, without bloated modules. I consider it a great practice of first principles. The final results were also quite good, with an MRR improvement of 14% and 16% over the best baseline across two datasets. This is the paper's biggest selling point, and it can be considered a new SOTA. This paper is currently under submission for the Journal of Computer Science.
 
 > [!NOTE]+ Thinking
 > Looking back after a paper is done, it feels quite simple. But when you are in the thick of it, things aren't so clear—you either can't trim down your various ideas or you get stuck in a dead end. In short, writing a paper is really not easy 😓.
@@ -369,6 +369,72 @@ Coincidentally aligning with my thoughts is the recently viral FARS: capable of 
 
 Of course, we haven't reached the era of true mass production yet, so the metric of paper count still holds some reference value for now. But after all, there isn't much time left for humans to "hand-craft" papers using traditional methods. Cherish it while you can 🐸.
 
-## The Future
+## Future Directions
 
-I want to solve **Continual Learning** for LLMs. This "mysterious threshold" has appeared in every real-world problem I've faced. If we cross it, we are much closer to AGI.
+Standing in the present, I look toward the future. Without a doubt, I will pursue research related to LLMs, and my career will likely revolve around them as well—after all, it is the most promising field right now.
+
+### The Present State of LLMs
+
+To know where we are going, we must first understand where we are. I’ll start with a question: How do LLMs "remember" my conversations with them?
+
+My curiosity about this began the first time I used ChatGPT. I asked it: "How do you remember our conversation?" The answer I got was utterly disappointing 😅: it simply fed the entire chat history back into itself. Yet, this crude, brute-force method achieved excellent engineering results. From the earliest RAG to Vibe Coding, and now the trending Agent systems, the essence remains building a complex context pipeline *outside* of the LLM.
+
+Though my intuition told me something felt "off," this is the dominant paradigm. Guided by this vision, I spent a massive amount of effort during the [Computer Design Competition]({{< relref "#computer-design-competition" >}}) attempting to build an AI scheduling assistant capable of continuous learning and user data storage. I equipped it with a data pipeline I thought would perfectly solve the problem. In the end, the results were poor—it honestly would have been better to just let the LLM write a Markdown file.
+
+After such a painful experience, I have to admit: explicit context management is not the future. When you exhaust every method to optimize a model, only to see performance drop instead of rise, it’s a sign that you need deeper, foundational improvements.
+
+Of course, this failure might be due to my lack of expertise in Agent orchestration. I must acknowledge that the context management paradigm *does* achieve commercial-grade stability. Prime examples include Claude Code and the Opencode + oh-my-opencode suite I use daily. Their concise, highly optimized Agent frameworks allow LLMs to complete complex coding tasks end-to-end without human intervention. However, I believe this is an extreme outlier; the deciding factors are actually years of human software engineering experience and the dense feedback nature of coding tasks. This reminds me of the classic Stone Soup fable.
+
+> [!NOTE]- The Story of Stone Soup 😁 In case you don't know it
+> A traveler arrives in a stingy village where no one wants to share food. He claims he can make soup out of a stone. He puts water and a stone in a pot to "boil," attracting curious villagers. He then suggests that if they added a little salt, a carrot, a potato, or meat, it would taste better. Driven by curiosity or a sense of participation, the villagers contribute their own ingredients, eventually creating a feast for everyone. The stone itself contributed nothing. This fable illustrates that true value comes from collective contribution, and the "stone" is merely a catalyst. In a modern context, it highlights how the capabilities of many systems (like AI) are built upon data and knowledge provided by humanity as a whole.
+
+Another noteworthy case is the recently skyrocketing OpenClaw. At first, I had zero interest in it; I couldn't see how it differed from Manus, which went viral last year. Yet, this little crayfish has somehow taken the world by storm—even a friend outside of Computer Science asked me, "Have you heard of OpenClaw?"
+
+I must admit, when I witnessed the fanatical enthusiasm of OpenClaw users, my brain just buzzed 😵. Has the Large Model finally smoothed over all obstacles and achieved mass commercialization? Did OpenClaw solve the instability that plagues LLMs? How did it do it? How could this even be possible? Did the breakthrough really come from a toy a programmer tinkered with in his spare time? I was so incredulous that I rented a cloud server to deploy OpenClaw and test it myself. You ask why I didn't deploy it locally? 😄 I don't trust it, and the facts proved my choice was absolutely correct.
+
+I gave this crayfish a somewhat complex task: "Please use this [Zhihu tutorial](https://zhuanlan.zhihu.com/p/2012467385257459750) to connect yourself to QQ. Note that this is not the official QQBot integration, which is severely limited and only supports group chats; I want a more flexible method. Also, I am a postgraduate candidate in Computer Science; please collect the background information for all teachers on [this page](https://collegeai.tsinghua.edu.cn/rydw.htm#sz2) who are working on mainstream LLM directions, organize the results into individual reports (one Markdown file per teacher), and notify me via QQ once you’re done."
+
+The crayfish then tried all sorts of methods to access the Zhihu tutorial. Because of Zhihu's anti-crawler mechanism, the crayfish couldn't see the post at all. To my frustration, it didn't stop to ask for my help. After silently consuming an unknown number of tokens in the background, it gave me a conclusion: "I have successfully connected to QQ via QQBot." I think this example is quite convincing. I gave the crayfish many more opportunities, wanting to see its ability to evolve itself through "skills." But there were no miracles: after consuming nearly 5 million tokens, this crayfish didn't complete a single task. In the end, I had to write a [bfs_crawler](https://github.com/morethan987/bfs_crawler.git) myself using Opencode to satisfy my needs perfectly.
+
+Before I started using OpenClaw, I even self-deluded myself about why its "performance was so good." I speculated that OpenClaw might have a perfect, skill-based self-evolution mechanism—where skills act as genes passed down through generations, stably allowing the crayfish to evolve. The facts, however, proved that while such a mechanism is feasible, it is limited to expensive, top-tier closed-source models.
+
+To this end, I concluded that OpenClaw achieved no real breakthrough; its capabilities originate from the foundation models and unconstrained token consumption.
+
+> [!warning]- Some Industry Jargon
+> Looking back at the process of OpenClaw going viral, I fully realized what was happening: a capital-driven scheme. OpenClaw doesn't even have a stop button; once running, it’s a true token-gobbling machine, which happens to solve the problem of oversupply for LLM vendors. From top to bottom—knowing full well that the output of most ordinary consumers using OpenClaw wouldn't cover the token costs—massive social exposure was injected into this money-printing machine to make it viral in such an absurd way. But no absurdity can stay detached from reality for too long. As rationality returns, when will OpenClaw suddenly become Manus?
+
+In short, I stand by my view on LLMs: they are extremely unstable and can only achieve commercial viability within meticulously tuned frameworks and very specific scenarios. LLMs still require some critical, fundamental breakthroughs.
+
+### The Thorny Path Ahead
+
+The flaws of Large Models are obvious, but how to improve them? That is a difficult question—a thorny path indeed.
+
+To answer this, we must first understand what the leading experts are doing: Ilya is in seclusion at SSI with almost no public information; Hinton is experimenting with non-gradient FF neural network training algorithms; LeCun and Fei-Fei Li are focusing on World Models; Google has proposed the Titans architecture and the more recent Nested Learning for context windows, followed by the TTT-E 2 E architecture from NVIDIA researchers; DeepSeek introduced the Engram conditional memory module... These are just the reports in the media; there are many more directions that require dedicated research to uncover.
+
+In short, both academia and industry are making various attempts: every experiment seems promising, but ultimately feels like something is missing. And my approach? My previous strategy was akin to "Brain-inspired Intelligence," where I invested a lot of thought but ended up with nothing.
+
+[Back in my first year]({{< relref "#self-teaching-machine-learning" >}}), I didn't even understand the Transformer architecture and was already trying to improve LLMs. Looking back, it’s kind of funny. My idea then was: since humans are the only entities that possess general intelligence, LLMs should look to the brain. I can still find those naïve notes on Flomo 😵‍🍞.
+
+![flomo_2024|700](img/flomo_2024.png "Scribbles on brain-inspired intelligence" )
+
+In any case, my approach back then was to hope to discover key characteristics in the human brain that artificial neural networks lack, thereby improving them and making them more biologically plausible. Days went by; I went to class, took exams, and kept recording these random thoughts. But I increasingly felt that the gap between the human brain and artificial neural networks was just too vast. This doubt persisted until the winter break of 2026: I attempted to build two models—a brain-inspired model based on memory mechanisms and a universal computation graph search model.
+
+The first model: A brain-inspired computational model based on hippocampal memory mechanisms and OGC (Offset Geometric Contact) physics simulation ideas. The main idea was to model the human hippocampal memory system, dividing the model into three layers: a long-term layer (a static network simulating inherent synaptic connections), an activation network (simulating current electrical signal states), and a tag network (to record accumulated activity states). The core logic was to record activation network states from moments of high reward or punishment into the tag network, then use a sleep-replay mechanism to internalize information into the long-term network.
+
+Reason for failure: I gave up before it even became code. This design philosophy is too far removed from mainstream neural network architectures and leans more towards Spiking Neural Networks. It isn't well-adapted to current hardware infrastructure, and the training algorithms don't support large-scale training. I decided to abandon it.
+
+> [!NOTE]+ Reflection
+> After this failure, I finally truly understood the meaning of the phrase "the human brain is not a blank slate." Intelligence requires two kinds of computation: the iteration of the model architecture, and the training of the model on real data. The human brain naturally possesses advantages like extreme energy efficiency and sustainable learning, but the cost is an architecture so complex that it took hundreds of millions of years to iterate.
+
+So, guided by that conclusion, I attempted to allocate some computational resources to architecture search—NAS. My second model was: A universal neural network architecture search model that sinks down to the basic operators of a computation graph. Traditional NAS usually permutes and combines known modules, but I tried to push the basic elements of NAS down to the operator level, "softening" the large computation graph and embedding it into a high-dimensional continuous space. The goal was to build a differentiable, universal NAS framework that could autonomously search for CNNs, Transformers, etc., following the spirit of *The Bitter Lesson*: using compute to search rather than manually designing architectures.
+
+Reason for failure: Again, I gave up before coding it. There were three obstacles: the softening/embedding of large computation graphs, the high cost of architectural evaluation, and sparse rewards. The first was theoretically possible, but the latter three were impossible to handle. Given a computation graph, how do you score it? The most intuitive way is to train it with data, but the time cost is unsustainable. Often, graphs must meet specific constraints to run, meaning many generated graphs are completely invalid, necessitating a solution for sparse rewards. Additionally, Google's NAS-Bench studies pointed out the issue of NAS algorithm collapse, so evaluating architectures cannot be done by simple brute-force training. Ultimately, limited undergraduate energy and compute led me to give up.
+
+> [!NOTE]- Note
+> I realize this doesn't count as a "research experience," so I can't put it on my CV 😭. But that doesn't stop me from writing about it on my own blog for some self-consolation. I've had so many failed attempts that I've become quite indifferent to it.
+
+### Next Steps
+
+After writing the [The Knowledge Graph Paper]({{< relref "#the-knowledge-graph-paper" >}}) and tinkering with the models mentioned above, I feel a bit lost. My explorations seem far removed from the academic mainstream, making it hard to produce papers quickly. Perhaps the most viable path forward is to attempt to mitigate the drift problem in model online updates, building upon NVIDIA’s TTT-E2E architecture.
+
+Furthermore, my research method is more like a depth-first search, which is far too narrow. Intuitively, the only solution is to read more literature, but that is inefficient and leads to getting lost in the sea of methods. Therefore, I plan to upgrade my research workflow by introducing more Agent frameworks to accelerate progress while ensuring quality. I am currently experiencing current solutions, such as the Zotero literature management Agent plugin built by Harvard scholars: [Beaver](https://www.beaverapp.ai/). However, merely having a tool for literature management only solves the problems of sourcing ideas and analyzing the status quo. I still need a tool that can stably and deeply explore a specific idea. Since I already had [some thoughts](https://morethan987.github.io/en/blog/trials-and-growth/#the-knowledge-graph-paper:~:text=Naturally%2C%20following%20the,Body%20Problem.) on this issue, I am now setting out to implement my own ideas.
