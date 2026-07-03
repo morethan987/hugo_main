@@ -14,7 +14,7 @@ series:
   - Paper Notes
 series_order: 3
 date: 2026-07-03
-lastmod: 2026-07-03
+lastmod: 2026-07-04
 authors:
   - Morethan
 ---
