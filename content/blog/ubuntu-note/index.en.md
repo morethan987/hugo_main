@@ -719,6 +719,60 @@ ws status  # Check status
 ws stop    # Stop WindSend
 ```
 
+## Password Manager
+
+Manage your passwords with [pass](https://www.passwordstore.org/) and `gnupg`, friendly for terminal-guys. The follwing content mainly reference this [Youtube video](https://youtu.be/joUIdxPOrZY?si=Y_J1WvYVgyb4iQeQ). 
+
+`pass` is a password manager relys on `gnupg`. You can simply take `pass` as a CLI frontend of `gnupg`. 
+
+> Note that you should first create you gnupg account with you email address.
+
+
+### gnupg Basic
+
+#### Installation 
+
+For linux user, `gnupg` maybe already install which can be checked by:
+
+```sh
+gpg --version
+```
+
+> `gnupg` is the package name, `gpg` is the cli name.
+
+
+For Mac user, you need to install it manually.
+
+```sh
+brew install gnupg
+```
+
+#### Create Account
+
+You just need to run a single cmd to create an account.
+
+```sh
+gpg --full-generate-key
+```
+
+Then follow the promt and you will finally get your account. To check that you can run this cmd.
+
+```sh
+gpg --list-secret-keys --keyid-format long
+```
+
+And you should see your username and email address be listed. 
+
+### pass
+
+`pass` can be installed by this cmd:
+
+```sh
+sudo pacman -S pass
+```
+
+Then see more information in `pass help`. It's simple to use.
+
 ## Media Player
 
 If you have searched for "the media player on linux", you will absolutely see a string `mpv` being hailed as the best. I mistake it for `mvp` at first and leading to a "No such package" error 😅.
@@ -1456,6 +1510,14 @@ head -n 10 "your_file.csv" | iconv -f gbk -t utf-8
 ```
 
 If you're unsure about the original and target encodings, just throw the garbled text to an AI — it's simple and convenient 😋
+
+### Clean Dirty Bit
+
+When an ntfs external hard drive errorly exit, it will be marked as dirty, causing the file system to refuse to mount. Here's the cmd you can fix it.
+
+```bash
+sudo ntfsfix -d /dev/sda6
+```
 
 ## References
 

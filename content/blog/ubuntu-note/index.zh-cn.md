@@ -719,6 +719,60 @@ ws status # 查看状态
 ws stop # 关闭windsend
 ```
 
+## 密码管理器
+
+使用 `gnupg` + `pass` 来进行密码管理，终端用户友好。主要内容参考这个[油管视频](https://youtu.be/joUIdxPOrZY?si=Y_J1WvYVgyb4iQeQ)，另外这是 [pass官方主页](https://www.passwordstore.org/)
+
+`pass` 是一个依赖于 `gnupg` 的密码管理器。你可以简单地把 `pass` 看作是 `gnupg` 的命令行前端。
+
+> 注意：你首先需要使用你的电子邮件地址创建一个 gnupg 账户
+
+
+### gnupg 基础
+
+#### 安装
+
+对于 Linux 用户，`gnupg` 可能已经安装，可以通过以下命令检查：
+
+```sh
+gpg --version
+```
+
+> `gnupg` 是软件包名称，`gpg` 是命令行名称
+
+
+对于 Mac 用户，需要手动安装。
+
+```sh
+brew install gnupg
+```
+
+#### 创建账户
+
+只需运行一条命令即可创建账户：
+
+```sh
+gpg --full-generate-key
+```
+
+然后按照提示操作，最终你将获得你的账户。要进行检查，可以运行以下命令：
+
+```sh
+gpg --list-secret-keys --keyid-format long
+```
+
+你应该能看到你的用户名和电子邮件地址被列出
+
+### pass
+
+通过下面的命令进行安装：
+
+```sh
+sudo pacman -S pass
+```
+
+然后通过 `pass help` 查看更多信息，它的使用很简单。
+
 ## 媒体播放器
 
 如果你在网上搜索“Linux媒体播放器”，你一定会看到一个名字频繁出现——`mpv`，被誉为最好的播放器。我一开始还把它看成了 `mvp`，结果报了个“No such package”错误 😅。
@@ -1455,6 +1509,14 @@ head -n 10 "your_file.csv" | iconv -f gbk -t utf-8
 ```
 
 如果你不清楚到底是什么编码转什么编码，可以直接把乱码丢给 AI，简单方便😋
+
+### 磁盘脏位清除
+
+当 NTFS 移动硬盘在 Linux 系统上意外退出的时候会被标记脏位，导致文件系统拒绝挂载，可以使用下面的命令修复
+
+```bash
+sudo ntfsfix -d /dev/sda6
+```
 
 ## 引用文献
 

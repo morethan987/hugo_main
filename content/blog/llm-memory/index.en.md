@@ -247,36 +247,18 @@ If we knew the answers to the above questions, we could build a framework that c
 
 This section mainly answers: What are the current methods to achieve "long-term memory"? What are their respective advantages and disadvantages?
 
-#### RAG
+#### Context Engineering
 
-RAG was originally designed to alleviate the hallucination problem in large language models, but its essence is to use an external information processing module (vector database) to directly incorporate useful natural language information into the prompt.
+Context engineering, simply put, is the painstaking craft of constructing the messages you send to an LLM. A more general way to think about it is as a complex string-processing graph, where every node represents some kind of operation on the context: some nodes involve database queries, others require the LLM's participation, some are responsible for reading in strings, and yet others handle outputting results.
 
-Following this line of thinking, not only can it alleviate the hallucination problem in large language models, but it can also enable the model to perform specific tasks directly (prompt engineering). Many current AI applications are implemented in this way:
+This kind of string data pipeline constitutes practically every real-world LLM deployment today (as of 2026.03.28)—Claude Code, OpenClaw, Cursor, and so on. You could even call it a paradigm at this point.
 
-1. Cursor: Automatically adds background information about the code repository and a variety of tools, then relies on the model's own capabilities to complete complex code writing tasks.
-2. Manus: Provides more complex information processing tools, using the large language model's ultra-long context to record all collected information to complete tasks.
-3. MCP: Although it is just a tool calling protocol, its underlying layer is still prompt engineering.
+> [!NOTE]- Musings
+> It's striking that every LLM product that has actually managed to ship is, without exception, a product of context engineering. It makes you wonder: is there really any point in cramming all this dynamically changing information into model parameters? Context may be limited in capacity, but it wins hands down in controllability and interpretability.
 
-There have been many promising results in using RAG to achieve long-term memory:
+One survey paper dives deep into the anatomy of this paradigm and offers some more nuanced reflections: [A Survey of Workflow Optimization for LLM Agents](https://arxiv.org/abs/2603.22386)
 
-1. [mem0](https://github.com/mem0ai/mem0): A large language model memory system based on a vector database, allowing the model to remember user preferences from conversations.
-2. [graphiti](https://github.com/getzep/graphiti): A memory system based on a vectorized graph database, building a real-time knowledge graph for large language models, capable of storing a large amount of past factual information and accurately extracting relevant memories.
-3. [memobase](https://github.com/memodb-io/memobase): A memory system based on file storage combined with a vector database, writing user preferences and other information into user profile files and continuously updating them.
-
-The advantages of this approach are very clear:
-
-1. Simple and convenient: Humans are very familiar with natural language, so using natural language to drive program execution is relatively easy to understand.
-2. Controllable information: By explicitly programming to integrate information into a long but logically coherent prompt, it is easy to control complex information.
-3. Application of large language model technology: The large language model itself is a top-tier natural language processing technology, capable of participating in various aspects of background information organization and enhancing the ability to handle complex information.
-
-The disadvantages of using RAG are also present:
-
-1. Context window limitation: The attention layer of the large language model can only support a limited context, and too long a context will be automatically truncated.
-2. Attention dispersion: Filling too much information into the context window will degrade the performance of the model's attention mechanism, making it difficult to capture truly important information.
-3. Limited expressive ability: Complex information is difficult to express in natural language, and even if it is forcibly expressed, key information will be lost, leading to understanding 偏差 by the large language model. For example, the development philosophy of a complex software project, if not experienced in practice, will become empty words when described in natural language.
-4. Difficult memory maintenance: Even with the support of large language model technology, updating, maintaining, and extracting memories remains a tricky problem, and it is difficult to balance response speed, accuracy, and cost.
-
-#### Fine-Tuning  
+#### Fine-Tuning
 
 I need to look into papers on fine-tuning, especially those on **"efficient fine-tuning"**, to see if they can enhance online learning capabilities. 🤔 If possible, I should also check out research on **incremental learning**.  
 
