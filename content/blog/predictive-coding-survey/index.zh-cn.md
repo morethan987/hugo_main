@@ -1,6 +1,6 @@
 ---
 title: 预测编码调研
-weight: -130
+weight: -125
 draft: false
 description: 从预测编码出发进行的一次小调研活动
 slug: predictive-coding-survey

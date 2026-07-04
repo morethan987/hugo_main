@@ -1,6 +1,6 @@
 ---
 title: A Survey on Predictive Coding
-weight: -130
+weight: -125
 draft: false
 description: A small survey journey starting from predictive coding
 slug: predictive-coding-survey
