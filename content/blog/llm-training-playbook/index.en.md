@@ -13,7 +13,7 @@ series:
   - AI Engineering
 series_order: 0
 date: 2025-05-28
-lastmod: 2026-08-09
+lastmod: 2026-08-31
 authors:
   - Morethan
 ---
@@ -29,8 +29,8 @@ Large model architectures come in all shapes and sizes, but if you really want t
 
 The content can be broadly divided into five parts:
 
-1. Fundamentals: tokenizers, resource inventory, model architectures, training strategies
-2. Systems engineering: kernels, parallelism, inference
+1. [Fundamentals]({{< relref "#fundamentals" >}}): tokenizers, resource inventory, model architectures, training strategies
+2. [Systems engineering]({{< relref "#systems-engineering" >}}): kernels, parallelism, inference
 3. Scaling laws
 4. Data engineering: pretraining data engineering—messy, but absolutely critical
 5. Model alignment: RL post-training fine-tuning
@@ -107,6 +107,18 @@ Here is a rough memory footprint estimation for an MLP. Assuming the input, acti
 
 Some methods to reduce memory footprint include gradient accumulation—where a `micro_batch_size` parameter is used to compute and accumulate gradients across \(\frac{\text{batch\_size}}{\text{micro\_batch\_size}}\) steps before updating parameters—and selective activation storage, where you might only keep pre-activation data instead of both pre- and post-activation data, recomputing post-activation values on the fly when needed. More aggressive strategies even omit caching across matrix multiplications, though this will undoubtedly slow down training speed.
 
+---
+
+Here is the detailed upper bound on the peak memory for several characteristic modules in Transformer. Since this is an upper bound estimation, we simply sum up all the data that needs to be retained during training (in actual execution, dynamic memory deallocation occurs, making the actual footprint smaller than the upper bound) and ignore optimizations that use recomputation to reduce memory (during gradient calculation, some intermediate variables are recomputed because the recomputation overhead is smaller).
+
+Overall, peak memory can be divided into four parts: trainable parameters (weights), optimizer states (depending on the type of optimizer; AdamW is used by default below), gradients, and activations. The first three are easy to understand: trainable parameters are explicitly defined in the code; for the AdamW optimizer, each parameter requires first and second moments, which is twice the number of trainable parameters; and for gradients, every trainable parameter has a corresponding gradient. But what exactly are activations? Activations are the intermediate variables (such as input tensors) required during gradient calculation. They are tightly coupled with the gradient computation process, and dynamic recomputation mechanisms can be used to save memory; therefore, the output of each elementary operation is generally accounted for as an activation.
+
+**RMSNorm**: Contains a trainable scaling parameter of size \(d_{\text{model}}\), the optimizer occupies \(2 \times d_{\text{model}}\) parameters, gradients require \(d_{\text{model}}\) parameters, and the activation only needs the input tensor, which is \(\text{batch\_size}\times \text{context\_length}\times d_{\text{model}}\).
+
+**Multi-Head Self-Attention**: Assuming \(d_{k}=\frac{d_{\text{model}}}{\text{num\_heads}}\) by default, the trainable parameters are the three matrices \(W_{Q}\), \(W_{K}\), and \(W_{V}\), each having a shape of \(d_{\text{model}}\times d_{\text{model}}\); the optimizer states take twice the number of trainable parameters, i.e., \(6\times d_{\text{model}}\times d_{\text{model}}\) parameters; gradients match the trainable parameters with \(3\times d_{\text{model}}\times d_{\text{model}}\) parameters; activations include the input tensor \(\text{batch\_size}\times \text{context\_length}\times d_{\text{model}}\), the three projection tensors \(Q\), \(K\), and \(V\) (each being \(\text{batch\_size}\times\text{context\_length}\times d_{\text{model}}\)), the attention scores and softmax (both producing tensors of shape \(\text{batch\_size}\times \text{num\_heads} \times \text{context\_length}\times \text{context\_length}\), the quadratic term), the weighted linear sum \(\text{batch\_size}\times \text{context\_length}\times d_{\text{model}}\), and the output linear projection which is also \(\text{batch\_size}\times \text{context\_length}\times d_{\text{model}}\).
+
+**FFN**: Generally \(d_{ff} = \frac{8}{3}\times d_{\text{model}}\), so the number of trainable parameters is \(3 \times (\text{d\_model} \times d_{ff}) = 8 \times \text{d\_model}^2\); gradients and optimizer states are \(8 \times \text{d\_model}^2\) and \(16 \times \text{d\_model}^2\), respectively; activations include the input tensor \(\text{batch\_size}\times \text{context\_length}\times d_{\text{model}}\) and the computed outputs of the three projection matrices \(3 \times (\text{batch\_size} \times \text{context\_length} \times \frac{8}{3} \text{d\_model}) = 8 \times \text{batch\_size} \times \text{context\_length} \times \text{d\_model}\).
+
 #### Tensor Computation
 
 Let's look at the computational cost of tensor multiplication, using the following diagram as an example.
@@ -129,6 +141,8 @@ As a model introduced back in 2017, the standard Transformer is, in a sense, sho
 ![transformer_original](img/transformer_original.png "Standard Transformer Architecture" )
 
 ![transformer_modern](img/transformer_modern.png "Modernized Transformer Architecture" )
+
+A noteworthy point in the final output stage is the shape of the output tensor. Empirically, one might expect the final result to be a probability distribution over the entire vocabulary, i.e., a tensor of shape \(\text{batch\_size}\times \text{vocab\_size}\). In reality, however, the output shape is \(\text{batch\_size} \times \text{seq\_len} \times \text{vocab\_size}\), which means that the distribution of the next token is predicted for every token position (this is precisely where the highly parallel training capability of the Transformer originates). You might wonder: wouldn't this be very wasteful during inference? In fact, inference only requires the probability distribution at the very last token position. Indeed, directly copying the training logic would be quite wasteful; however, inference utilizes KV Cache technology, so this waste only occurs when generating the **first** token. During subsequent token-by-token generation, the sequence length is directly kept fixed at 1, as there is simply no need to repeatedly feed the preceding sequence into the model.
 
 #### Normalization
 
@@ -221,9 +235,37 @@ Although the GPT-J paper states that this parallel approach yields a \(15\%\) sp
 
 Currently, the most mainstream positional encoding technique is **Rotary Position Embedding** (RoPE), which is a relative positional encoding scheme independent of absolute token positions. Why do we need relative positional encoding? Because the attention mechanism in Transformers logically ought to depend only on the relative positions between tokens, rather than capturing absolute position information for logical inference.
 
-Thus, the motivation behind RoPE is simple: since we want an embedding representation independent of absolute positions, and the inner product is invariant under rotation, we can use rotation angles to represent relative positions, as illustrated below:
+Before RoPE, there were several relative position encoding schemes, but most of them suffered from drawbacks such as high computational overhead or being unfriendly to KV Cache implementations. The ideal relative position encoding: it can be applied to each token in an absolute position manner, and when calculating attention (inner product), it naturally becomes a function of relative position. What mathematical operation can satisfy both of these conditions? The answer is the rotation of 2D planar vectors, as shown in the figure below:
 
 ![img/RoPE.png](img/RoPE.png)
+
+You might wonder: a 2D vector can obviously be rotated this way, but how do we rotate a high-dimensional vector? It is hard to imagine how a 4D vector should be rotated to satisfy the conditions above. In reality, however, we do not need to actually rotate a high-dimensional vector directly. Because the ultimate goal is to compute the inner product, we can simply group the components of the high-dimensional vector in pairs of two and treat each pair as a 2D planar vector. The specific mathematical formulation is as follows, introducing two index parameters: \(i\in\{0, 1, \dots ,\text{max\_seq\_len}-1\}\) denotes the absolute position index of the token (handling up to \(\text{max\_seq\_len}\) tokens), and \(k \in \{0,1, \dots ,\frac{d}{2}-1\}\) denotes the group index after partitioning the \(d\)-dimensional token embedding vector in pairs of two.
+
+
+$$
+\theta_{i,k} = \frac{i}{\Theta^{\frac{2k}{d}}}
+$$
+
+
+$$
+R_k^i = \begin{pmatrix} \cos(\theta_{i,k}) & -\sin(\theta_{i,k}) \\ \sin(\theta_{i,k}) & \cos(\theta_{i,k}) \end{pmatrix}
+$$
+
+
+$$
+R^i = \begin{pmatrix} R_1^i & 0 & 0 & \dots & 0 \\ 0 & R_2^i & 0 & \dots & 0 \\ 0 & 0 & R_3^i & \dots & 0 \\ \vdots & \vdots & \vdots & \ddots & \vdots \\ 0 & 0 & 0 & \dots & R_{d/2}^i \end{pmatrix}
+$$
+
+In practical code implementations, we generally do not directly store \(\text{max\_seq\_len}\) distinct \(R^i\) matrices. A better approach is to store the sine and cosine matrices separately; both are 2D dense matrices and can be reused globally. During computation, we transform the input and then directly apply element-wise multiplication. An intuitive example is rotating a 2D vector \([x_0, x_1]^\top\) by an angle \(\theta\):
+
+
+$$
+\begin{pmatrix} \cos\theta & -\sin\theta \\ \sin\theta & \cos\theta \end{pmatrix} \begin{pmatrix} x_0 \\ x_1 \end{pmatrix} = \begin{pmatrix} x_0 \cos\theta - x_1 \sin\theta \\ x_1 \cos\theta + x_0 \sin\theta \end{pmatrix}
+$$
+
+We can rewrite this in the form of element-wise multiplication: $\(x \odot \cos(\theta) + \tilde{x} \odot \sin(\theta)\)$
+
+where \(\tilde{x} = [-x_1, x_0, -x_3, x_2, \dots]\), which swaps adjacent elements in pairs and applies a negative sign; this result can be obtained using batched matrix/tensor operations.
 
 #### Hyperparameter Selection
 
@@ -238,6 +280,9 @@ Hyperparameter selection generally revolves around these core questions:
 First, the relationship \(d_{\text{ff}} = 4d_{\text{model}}\) holds true for the vast majority of current models, with very few exceptions. For example, in GLU-variant FF layers, due to the third projection matrix introduced, \(d_{\text{ff}}\) is set to \(\frac{2}{3}\) of the standard size, giving \(d_{\text{ff}} = \frac{8}{3}d_{\text{model}}\) in this family—which in a sense isn't even a true exception. The real outlier is Google's T 5 model, which uses an exaggerated \(d_{\text{ff}} = 64d_{\text{model}}\), though the paper explains this choice was driven by TPU utilization considerations.
 
 As for the number of attention heads, \(d_{\text{model}} = d_{\text{head\_num}} \cdot d_{\text{head}}\) holds true almost all the time, with the main exceptions again being certain Google models.
+
+> [!NOTE] Detailed Explanation
+> You might wonder: if \(d_{\text{model}} \neq d_{\text{head\_num}} \cdot d_{\text{head}}\), wouldn't the token embedding dimension change? How could it then be fed into the next Transformer Block? To resolve this issue, we simply wrap the final output with an additional linear layer \(W_{O}\) to project the output dimension back to \(d_{\text{model}}\). Furthermore, another purpose of \(W_{O}\) is to mix the representations produced across different attention heads; therefore, a \(W_{O}\) layer is applied even when \(d_{\text{model}} = d_{\text{head\_num}} \cdot d_{\text{head}}\).
 
 Regarding the aspect ratio (width vs. depth), extensive empirical data indicates that \(d_{\text{model}}/n_{\text{layer}} \approx 128\) is a sweet spot. Models are not strictly better the deeper they get; extremely deep models are notoriously hard to parallelize and suffer from high latency.
 
@@ -433,3 +478,5 @@ The later DeepSeekMoE-v 2 built upon this by introducing a Top-M device routing 
 Of course, training stability and fine-tuning in MoE differ markedly from standard dense FF modules—and frankly, are much trickier. Training instability largely stems from the softmax function in routing (nine out of ten instability issues trace back to softmax 🤣), which can be mitigated using the Z-loss method covered in the [Training Stability]({{< relref "#training-stability" >}}) section. On the fine-tuning front, MoE models are far more prone to overfitting on small datasets than dense counterparts. DeepSeek's remedy? Fine-tune with massive datasets.
 
 Overall, MoE carries a heavy systems engineering flavor—which brings us back to my point at the start: MoE's true impact shines brightest in systems engineering. At its core, MoE uses pragmatic engineering tricks to push the boundaries of scaling laws, giving us a straightforward path to continue squeezing performance out of sheer model scale.
+
+## Systems engineering

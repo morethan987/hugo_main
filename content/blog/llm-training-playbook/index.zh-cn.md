@@ -13,7 +13,7 @@ series:
   - AI工程
 series_order: 1
 date: 2025-05-28
-lastmod: 2026-08-09
+lastmod: 2026-08-31
 authors:
   - Morethan
 ---
@@ -29,8 +29,8 @@ authors:
 
 所有的内容整体上可以分为五个部分：
 
-1. 基础部分：分词器、可用资源盘点、模型架构、训练思路
-2. 系统工程：内核、并行、推理
+1. [基础部分]({{< relref "#基础部分" >}})：分词器、可用资源盘点、模型架构、训练思路
+2. [系统工程]({{< relref "#系统工程" >}})：内核、并行、推理
 3. 规模定律(很多翻译为"缩放定律"，但语义上来说规模定律更确切)
 4. 数据工程：预训练数据工程，脏但非常关键
 5. 模型对齐：RL 后训练微调
@@ -107,6 +107,18 @@ b'hello, \xe4\xb8\x96\xe7\x95\x8c\xef\xbc\x81'
 
 一些削减内存占用的方法，比如梯度积累，使用一个 micro_batch_size 参数去计算梯度并在 \(\frac{\text{batch\_size}}{\text{micro\_batch\_size}}\) 这么多步内逐步积累梯度，然后再进行参数更新；选择性存储激活值，比如激活前的参数和激活后的参数可以只存储其中的激活前数据，需要后激活数据可以临时计算，更激进的做法甚至会跨越矩阵乘法进行省略，但速度肯定会慢许多就是了。
 
+---
+
+这里详细给出 Transformer 中一些特色模块的峰值内存上界，因为是求上界所以这里就简单地将训练过程中需要保存的数据全部加起来(实际运行时会有动态的内存释放，会比上界更小)，并忽略一些使用临时计算来降低内存的优化操作(在计算梯度时有些中间变量就会重算，因为重算的开销更小)
+
+从整体上来说，峰值内存可以划分为四个部分：可训练参数(权重)、优化器状态(取决于优化器种类，下文默认使用 AdamW 优化器)、梯度值、激活值。前三个都很好理解：可训练参数本身就写在代码里面的，AdamW 优化器每个参数都有第一和第二动量也就是可训练参数量的两倍，梯度值每一个可训练参数都有一个梯度。但是激活值具体是什么？激活值是求梯度值的过程中需要使用的中间变量(比如输入张量)，与梯度的计算过程强耦合，并且还有动态重算机制来节约内存，因此一般认为每一步基本操作的产出都会计入激活值。
+
+**RMSNorm**：含有一个 \(d_{\text{model}}\) 的可训练缩放参数，优化器占用 \(2 \times d_{\text{model}}\) 的参数量，梯度需要 \(d_{\text{model}}\) 参数，激活值只需要输入张量一个即可，也就是 \(\text{batch\_size}\times \text{context\_length}\times d_{\text{model}}\)
+
+**多头自注意力**：默认 \(d_{k}=\frac{d_{\text{model}}}{\text{num\_heads}}\)，可训练参数也就是 \(W_{Q}\)  \(W_{K}\)  \(W_{V}\) 三个矩阵，每个矩阵都是 \(d_{\text{model}}\times d_{\text{model}}\) 的形状；优化器是两倍可训练参数量即 \(6\times d_{\text{model}}\times d_{\text{model}}\) 的参数量；梯度与可训练参数一致有 \(3\times d_{\text{model}}\times d_{\text{model}}\) 的参数量；激活值包括输入张量 \(\text{batch\_size}\times \text{context\_length}\times d_{\text{model}}\)， \(Q\) \(K\) \(V\) 三个投影张量，每一个投影张量都是 \(\text{batch\_size}\times\text{contex\_length}\times d_{\text{model}}\)，注意力打分和 softmax 都产出 \(\text{batch\_size}\times \text{num\_heads} \times \text{contex\_length}\times \text{contex\_length}\) 形状的张量(二次项)，加权线性求和 \(\text{batch\_size}\times \text{context\_length}\times d_{\text{model}}\)，输出层线性投影同样为 \(\text{batch\_size}\times \text{context\_length}\times d_{\text{model}}\)
+
+**FFN**：一般来说 \(d_{ff} = \frac{8}{3}\times d_{\text{model}}\) 因此可训练参数量为 \(3 \times (\text{d\_model} \times d_{ff}) = 8 \times \text{d\_model}^2\)；梯度和优化器状态则分别为 \(8 \times \text{d\_model}^2\) 和 \(16 \times \text{d\_model}^2\)；激活值包括输入张量 \(\text{batch\_size}\times \text{context\_length}\times d_{\text{model}}\) 和三个投影矩阵的计算结果 \(3 \times (\text{batch\_size} \times \text{context\_length} \times \frac{8}{3} \text{d\_model}) = 8 \times \text{batch\_size} \times \text{context\_length} \times \text{d\_model}\)
+
 #### 张量计算
 
 张量乘法的计算量，以下面这张图的计算为例
@@ -129,6 +141,8 @@ b'hello, \xe4\xb8\x96\xe7\x95\x8c\xef\xbc\x81'
 ![transformer_original](img/transformer_original.png "标准 Transformer 架构" )
 
 ![transformer_modern](img/transformer_modern.png "改良版 Transformer 架构" )
+
+在最终输出部分有一个值得注意的点，那就是最后输出张量的形状，根据经验最终得到的应该是对整个词表的词汇的概率分布也就是 \(\text{batch\_size}\times \text{vocab\_size}\) 的一个张量，但实际上输出的应该是 \(\text{batch\_size} \times \text{seq\_len} \times \text{vocab\_size}\) 也就是对每一个位置的 token 都预测下一个词的分布(这正是 Transformer 高度并行化训练的由来)。猜你想问，那么推理的时候不会很浪费吗？实际上推理的时候只需要最后一个 token 上的概率分布。是的，如果直接照搬训练的逻辑确实很浪费，但推理的时候有 KV Cache 技术，所以只有在生成**首个** token 的时候会产生浪费，后续逐 token 生成的时候会直接令序列长度为固定的 1 不变，因为本身也没必要再重复传入先前的序列。
 
 #### 归一化
 
@@ -221,9 +235,37 @@ $$
 
 目前最为主流的位置编码方式就是**旋转位置编码**了，Rotary Position Embeddings(RoPE)，其也是一种相对位置编码，与 token 的绝对位置无关。为什么需要相对位置编码呢？因为 Transformer 中的注意力机制逻辑上应该只依赖 token 之间的相对位置，而绝对位置信息不应该被注意力机制捕获并用于逻辑推断。
 
-所以旋转位置编码的动机就是：既然需要找到一种对绝对位置无关的嵌入表示方法，而内积是旋转 无关的，那么我们就可以使用旋转角度来表示相对位置，如图所示
+在 RoPE 之前也有一些相对位置编码的方案，但是大都面临计算成本高昂或者将不利于 KV Cache 实现等等缺点。理想中的相对位置编码：我可以按照绝对位置的方式应用到每一个 token 上，当计算注意力(内积)的时候就自动变为相对位置的函数。那么什么数学操作能够满足这两个条件呢？答案就是平面矢量的旋转，如下图所示
 
 ![img/RoPE.png](img/RoPE.png)
+
+猜你想问：一个二维的向量当然可以这么旋转了，那么高维的向量怎么旋转呢？很难想象一个四维的矢量应该怎么旋转才能够满足上面的条件。但实际上我们没必要真的去旋转一个高维向量，因为最终还是要进行内积，所以大可以将高维矢量的分量两个一组当成平面矢量来处理。具体数学公式如下，引入两个索引参数 \(i\in\{0, 1, \dots ,\text{max\_seq\_len}-1\}\) 表示 token 的绝对位置索引(最多处理 \(\text{max\_seq\_len}\) 个 token)，\(k \in \{0,1, \dots ,\frac{d}{2}-1\}\) 表示 \(d\) 维的 token 嵌入向量按照两个一组划分后的组编号。
+
+
+$$
+\theta_{i,k} = \frac{i}{\Theta^{\frac{2k}{d}}}
+$$
+
+
+$$
+R_k^i = \begin{pmatrix} \cos(\theta_{i,k}) & -\sin(\theta_{i,k}) \\ \sin(\theta_{i,k}) & \cos(\theta_{i,k}) \end{pmatrix}
+$$
+
+
+$$
+R^i = \begin{pmatrix} R_1^i & 0 & 0 & \dots & 0 \\ 0 & R_2^i & 0 & \dots & 0 \\ 0 & 0 & R_3^i & \dots & 0 \\ \vdots & \vdots & \vdots & \ddots & \vdots \\ 0 & 0 & 0 & \dots & R_{d/2}^i \end{pmatrix}
+$$
+
+具体代码实现的时候则一般不会直接存储 \(\text{max\_seq\_len}\) 个 \(R^i\) 矩阵，一个更好的方法是单独存储正弦值和余弦值矩阵，两个都是二维的稠密矩阵并且可以全局复用，计算的时候将输入进行变换然后直接应用逐元素乘法即可。一个简单的理解性的例子就是，对二维向量 \([x_0, x_1]^\top\) 旋转 \(\theta\) 角：
+
+
+$$
+\begin{pmatrix} \cos\theta & -\sin\theta \\ \sin\theta & \cos\theta \end{pmatrix} \begin{pmatrix} x_0 \\ x_1 \end{pmatrix} = \begin{pmatrix} x_0 \cos\theta - x_1 \sin\theta \\ x_1 \cos\theta + x_0 \sin\theta \end{pmatrix}
+$$
+
+我们可以把它改写成逐元素相乘的形式： $\(x \odot \cos(\theta) + \tilde{x} \odot \sin(\theta)\)$
+
+其中 \(\tilde{x} = [-x_1, x_0, -x_3, x_2, \dots]\)，把相邻元素两两交换位置并加个负号，这个结果可以使用批量化的矩阵操作得到。
 
 #### 超参数选择
 
@@ -238,6 +280,9 @@ $$
 首先，\(d_{\text{ff}} = 4d_{\text{model}}\) 这个关系在目前绝大部分模型上都是真实存在的，只有极少数的例外，比如 GLU 变体的 FF 层，由于其引入的第三个投影矩阵，其 \(d_{\text{ff}}\) 是标准的 \(\frac{2}{3}\) 所以在这个变体系列中 \(d_{\text{ff}} = \frac{8}{3}d_{\text{model}}\) ，从某种意义上来讲甚至不算是一个特例。真正的特例其实是 Google 的 T5 模型，其 \(d_{\text{ff}} = 64d_{\text{model}}\) 非常夸张，但论文中对此的描述则是出于对 TPU 利用率的考虑才这么设置的。
 
 然后是注意力头的数量选择，绝大部分时候都有 \(d_{\text{model}} = d_{\text{head\_num}} \cdot d_{\text{head}}\) 成立，最大的意外还是某些 Google 的模型。
+
+> [!NOTE] 细节说明
+> 你可能会疑惑，如果 \(d_{\text{model}} \neq d_{\text{head\_num}} \cdot d_{\text{head}}\) 那么 token 嵌入的维度不就变化了吗？怎么还能够输入到下一个 Transformer Block 里面呢？这个问题只需要再在最终输出外面套一层线性层 \(W_{O}\) 将输出维度重新调整为 \(d_{\text{model}}\) 就行了，当然这个 \(W_{O}\) 还有一个作用就是混合不同注意力头产出的结果的作用，因此即便 \(d_{\text{model}} = d_{\text{head\_num}} \cdot d_{\text{head}}\) 的时候也会套一层 \(W_{O}\)
 
 模型的宽深比，同样也是大量的统计数据标明，\(d_{\text{model}}/n_{\text{layer}} = 128\) 左右是一个比较好的权衡，因为模型并不是越深越好，极度深的模型难以并行化具有非常高的延时。
 
@@ -433,3 +478,5 @@ $$
 当然 MoE 的训练稳定和微调都与标准的密集 FF 模块有所区别，具体来说就是更差了。训练不稳定是由于路由函数中引入的 softmax 函数(十处训练不稳定九处都是 softmax🤣)，这个问题可以使用[训练稳定性]({{< relref "#训练稳定性" >}})小节提到的 Z-loss 方法进行缓解。而微调部分的问题则是 MoE 模型在小规模的数据上进行微调相比于标准方案更容易过拟合。DeepSeek 对此的解决方案是：用大规模的数据进行微调。
 
 整体上来说 MoE 相关的部分都有很浓烈的工程色彩，这也是为什么我在本节开头就说明了：MoE 在系统工程上的意义似乎更大一些。本质上来说 MoE 是用极具工程色彩的方案拉高了规模定律的适用范围，使得我们能够继续简单地从模型的规模中榨取性能。
+
+## 系统工程
