@@ -1,6 +1,6 @@
 disabled = false
-languageCode = "zh-cn"
-languageName = "中文"
+locale = "zh-cn"
+label = "中文"
 weight = 4
 title = "Morethan 小站"
 

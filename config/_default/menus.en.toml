@@ -1,7 +1,7 @@
 # -- Main Menu --
 # The main menu is displayed in the header at the top of the page.
 # Acceptable parameters are name, pageRef, page, url, title, weight.
-# 
+#
 # The simplest menu configuration is to provide:
 #   name = The name to be displayed for this menu link
 #   pageRef = The identifier of the page or section to link to
@@ -12,34 +12,23 @@
 
 [[main]]
   name = "Blog"
-  title = "Blog"
   pageRef = "blog"
   weight = 10
 
 [[main]]
   name = "Tags"
-  title = "Tags"
   pageRef = "tags"
   weight = 15
 
 [[main]]
   name = "Series"
-  title = "Series"
   pageRef = "series"
   weight = 20
 
 [[main]]
   name = "Authors"
-  title = "Authors"
   pageRef = "authors"
   weight = 25
-
-#次级菜单
-#[[main]]
-#  name = "Samples"
-#  parent = "Examples"
-#  pageRef = "samples"
-#  weight = 16
 
 [[main]]
   identifier = "github"
@@ -54,12 +43,10 @@
 
  [[footer]]
    name = "Tags"
-   title = "Tags"
    pageRef = "tags"
    weight = 10
 
  [[footer]]
    name = "Authors"
-   title = "Authors"
    pageRef = "authors"
    weight = 20
