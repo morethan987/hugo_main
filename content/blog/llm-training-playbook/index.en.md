@@ -13,7 +13,7 @@ series:
   - AI Engineering
 series_order: 0
 date: 2025-05-28
-lastmod: 2026-08-31
+lastmod: 2026-09-04
 authors:
   - Morethan
 ---
@@ -178,7 +178,9 @@ $$
 \text{FNN}(x) = \sigma(xW_{1})W_{2}
 $$
 
-The main reason for this change is to save memory and improve training stability. See the [Training Stability]({{< relref "#training-stability" >}}) section for details regarding training stability. #### Activation Functions
+The main reason for this change is to save memory and improve training stability. See the [Training Stability]({{< relref "#training-stability" >}}) section for details regarding training stability.
+
+#### Activation Functions
 
 A wide variety of activation functions have emerged, but selecting the right one still requires careful consideration. Modern LLM models generally choose activation functions with gating mechanisms. The so-called gating mechanism is essentially an element-wise multiplication (Hadamard product, \(\otimes\)). Below is a concrete comparative example. The classic FF layer expression is as follows:
 
@@ -480,3 +482,107 @@ Of course, training stability and fine-tuning in MoE differ markedly from standa
 Overall, MoE carries a heavy systems engineering flavor—which brings us back to my point at the start: MoE's true impact shines brightest in systems engineering. At its core, MoE uses pragmatic engineering tricks to push the boundaries of scaling laws, giving us a straightforward path to continue squeezing performance out of sheer model scale.
 
 ## Systems engineering
+
+The core of this section is grasping the fundamental mechanics of modern GPUs and leveraging these insights to guide model architecture choices and algorithmic breakthroughs. On the architecture front, a prime example is the NanoGPT Speedrun project, where the single most dramatic speedup came from simply padding the model's vocabulary size up to the nearest multiple of 64.
+
+![img/nanogpt-speedrun.png](img/nanogpt-speedrun.png)
+
+On the algorithmic side, FlashAttention is the undisputed poster child—its performance gains are measured in integer multiples rather than mere percentages.
+
+### GPU Architecture
+
+A GPU’s internal architecture and scheduling mechanics can be neatly unpacked through two orthogonal lenses: the "Programming & Memory Perspective" and the "Hardware & Scheduling Perspective." The programming and memory view breaks down as follows:
+
+![img/gpu_memory_model.png](img/gpu_memory_model.png)
+
+1. Thread: The fundamental unit of parallel execution; all threads run identical instructions across different slices of input data.
+2. Block: A cluster of threads designed to collaborate and communicate through fast shared memory.
+3. Grid: A collection of blocks coordinated via shared global memory and static memory.
+4. Host: The CPU host and its system memory. Data moves between host memory and GPU VRAM across PCIe; because of bandwidth and latency penalties, cross-host communication and data transfers are notoriously expensive.
+
+From the hardware and scheduling perspective, the following concepts take center stage:
+
+1. SM (Streaming Multiprocessor): The GPU's primary physical compute engine, equipped with its own warp schedulers, register files, shared memory, and execution pipelines to host and execute thread blocks.
+2. Warp: The lowest-level physical execution unit on hardware, strictly fixed at 32 threads. The distinction from a block is crucial: blocks are logical abstractions defined by developers with flexible sizes, but the hardware slices them into warps where all 32 threads execute scheduler instructions in lockstep; the primary purpose of warps is latency hiding via zero-overhead context switching (e.g., when Warp 0 stalls on memory reads, the scheduler immediately fires compute instructions from Warp 1).
+3. Wave: The macro-level scheduling batch across the entire device, representing the maximum number of blocks that all SMs on the chip can concurrently execute; the GPU dispatches and completes work strictly in complete wave increments.
+
+Intuitively, GPU architecture mirrors classic CPU paradigms, so anyone with computer architecture foundations will feel right at home with the multi-tier cache hierarchy. Similarly, TPU and GPU designs share substantial DNA, with direct conceptual equivalents across both camps. The real divergence lies in TPUs featuring leaner control units, massive matrix multiplication units (MXUs), and ultra-fast L 1 scratchpads (Shared Memory in GPUs vs. Vector Memory in TPUs).
+
+![img/tpu-gpu.png](img/tpu-gpu.png)
+
+Across GPU generations, different subsystems evolve at vastly disparate rates: arithmetic compute capability has scaled exponentially faster than cache and memory bandwidth, as charted below. This is precisely why modern systems engineering obsesses over memory hierarchy optimizations—compute is so far ahead of memory loading that eliminating a single memory round-trip can unlock a 10,000 x (or even higher) boost in operational throughput.
+
+![img/gpu_component_develop_speed.png](img/gpu_component_develop_speed.png)
+
+### Optimization Techniques
+
+#### Branch Control
+
+In short: replace branching (if-else) instructions with masks. This necessity stems from the core SIMT constraint: every thread within a warp must follow identical instructions. When conditional paths diverge on different data, conflicting execution requirements emerge. The hardware’s brute-force resolution is straightforward: both branches get executed sequentially, and unselected results are masked and thrown away.
+
+![img/gpu_diverge_excute.png](img/gpu_diverge_excute.png)
+
+#### Low-Precision Computing
+
+The premise is straightforward: trade numeric precision for massive data throughput. Pushing training to sub-byte levels, however, requires clever tricks. The prevailing industry standard groups low-precision values under a shared scaling factor, best exemplified by the MXFP 8 format. Yet this introduces a notorious headache: how do you handle transpositions? Because values are blocked and scaled row-wise, transposing swaps rows to columns, shattering the original scale-factor layout. There is no truly elegant in-place workaround, so training pipelines typically just duplicate and maintain a dedicated transposed copy of the tensor in memory.
+
+![img/MXFP8.png](img/MXFP8.png)
+
+Another promising angle omitted in Stanford's CS 336—likely due to its complexity and lack of battle-testing in production-grade frontier models—is detailed in this [paper](https://arxiv.org/abs/2509.00404), which achieved end-to-end FP 4 training on an 8 B LLM. Prior to this, NVIDIA possessed internal FP 4 training recipes but kept the blueprints proprietary. The authors reverse-engineered NVIDIA’s technical blog posts by simulating FP 4 training mechanics via BF 16, meticulously matching target precision, training loss curves, and convergence dynamics in an impressively rigorous baseline study.
+
+At its core, this research tackles a fundamental dilemma: neural network weights exhibit wide dynamic ranges, meaning naive scaling-factor quantization squashes subtle values under large outliers (classic quantization error), as an inflated dynamic range widens the quantization grid steps and collapses tiny near-zero values straight to zero. Intuitively, dominant outliers and subtle residuals demand decoupled representations. The authors achieve this by decomposing weight matrices via SVD, where \(\sigma_{i}\) denotes descending singular values:
+
+
+$$
+M = \sum_{i=1}^{r} \sigma_i \cdot (u_i v_i^T)
+$$
+
+Experimental results reveal that roughly the top 3% of singular values dominate the upper bound of the magnitude distribution (spanning one to two orders of magnitude). Stripping away these few dominant singular values leaves a residual matrix with an exceptionally flat, uniform distribution ready for tight quantization grids, while the isolated dominant components naturally compress into a shared scale factor coupled with well-behaved singular vectors—making it uniquely tailor-made for FP 4 quantization.
+
+![img/Pasted image 20260903012451.png](img/Pasted image 20260903012451.png)
+
+It’s worth highlighting that SVD-driven quantization wasn't invented in a vacuum; an earlier precursor was [SVDQuant](https://arxiv.org/abs/2411.05007). While both leverage SVD, SVDQuant feels somewhat unpolished in practice, shuttling high-precision matrices back and forth and wrestling with sparse matrix multiplication overheads, whereas the newer paper cleanly absorbs the heavy lifting directly into scaling factors and singular vectors.
+
+#### Operator Fusion
+
+Fusing multiple kernel operations into a unified pass avoids repeatedly ping-ponging intermediate tensors to and from HBM, slashing memory access overhead—this serves as the absolute cornerstone of FlashAttention. The diagram below captures the rationale intuitively: load data once, churn through as many arithmetic operations as possible locally, and avoid premature write-backs.
+
+![img/operator_fusion.png](img/operator_fusion.png)
+
+#### Recomputation
+
+Literally what it says on the tin: discard intermediate activations instead of parking them in cache, and recompute them on the fly from primary inputs during the backward pass. In the toy workflow illustrated below, this clever trade-off slashes 8 memory accesses down to just 5.
+
+![img/recomputation.png](img/recomputation.png)
+
+#### Memory Coalescing
+
+This optimization taps into raw silicon mechanics: global memory (DRAM) accesses are wide and concurrent, meaning memory controllers must activate and pull an entire DRAM row buffer into staging before selecting target bytes. In other words, you pay the full latency and power cost of fetching a wide memory segment regardless; your only leverage is coalescing concurrent thread requests to consume as much of that pre-fetched segment as humanly possible.
+
+![img/memory_coalescing.png](img/memory_coalescing.png)
+
+For instance, accessing a row-major matrix with threads distributed across different row indices produces fragmented, strided fetches; aligning threads across contiguous column elements along the same row index allows a single coalesced DRAM transaction to satisfy all threads simultaneously.
+
+#### Tiling
+
+Sharing the identical philosophy behind operator fusion, tiling aims to minimize redundant memory round-trips by maximizing arithmetic work per byte loaded into high-speed memory.
+
+![img/tiling.png](img/tiling.png)
+
+As depicted above, without tiling, every input element must be fetched from slow global memory \(N\) times; under a tiled scheme, global reads drop to \(N/T\) per element, supplemented by \(T\) subsequent reads from ultra-fast on-chip Shared Memory. Since shared memory operates at near-register speeds, this effectively reduces DRAM pressure by roughly \(\frac{1}{T}\) —an immense architectural win.
+
+Crucially, the efficacy of tiling hinges dramatically on matrix geometries—poorly conditioned shapes incur catastrophic efficiency penalties. The first pitfall is bad tiling: edge tiles containing barely any real data end up spinning SM execution pipelines entirely in idle waste, as illustrated below.
+
+![bad_tiling](bad_tiling.png ""Cite from [NVIDIA Blog](https://docs.nvidia.com/deeplearning/performance/dl-performance-matrix-multiplication/index.html#tile-quant))
+
+The second pitfall is memory alignment: well-aligned dimensions allow tiled fetches to fully exploit DRAM concurrent burst transfers, whereas mismatched alignments trigger memory fragmentation that wrecks theoretical throughput.
+
+![layout_align](img/layout_align.png "Cite from the [blog](https://www.thonking.ai/p/what-shapes-do-matrix-multiplications)" )
+
+#### Performance Benchmark Teardown
+
+![flops_for_square_matmul](img/flops_for_square_matmul.webp "Cite from the [blog](https://www.thonking.ai/p/what-shapes-do-matrix-multiplications)" )
+
+Armed with these principles, the bizarre cliffs and jagged steps in this benchmark plot suddenly make crystal-clear sense: the macro trend reflects arithmetic intensity scaling with matrix dimension; the abrupt performance cliffs highlight pathological shape misalignment (as broken down in the [Tiling]({{< relref "#tiling" >}}) section), where clean alignment alone can yield a nearly 2 x throughput boost; and finally, the mysterious periodic sawtooth dips stem from GPU wave quantization—when matrix dimensions cross specific boundaries, an extra wave is spawned with barely enough thread blocks to fill it, forcing SMs to run a nearly empty tail wave at full cost.
+
+![img/wave_quantization_example.png](img/wave_quantization_example.png)
