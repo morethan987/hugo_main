@@ -13,7 +13,7 @@ series:
   - AI Engineering
 series_order: 0
 date: 2025-05-28
-lastmod: 2026-09-04
+lastmod: 2026-09-12
 authors:
   - Morethan
 ---
@@ -539,7 +539,7 @@ $$
 
 Experimental results reveal that roughly the top 3% of singular values dominate the upper bound of the magnitude distribution (spanning one to two orders of magnitude). Stripping away these few dominant singular values leaves a residual matrix with an exceptionally flat, uniform distribution ready for tight quantization grids, while the isolated dominant components naturally compress into a shared scale factor coupled with well-behaved singular vectors—making it uniquely tailor-made for FP 4 quantization.
 
-![img/Pasted image 20260903012451.png](img/Pasted image 20260903012451.png)
+![img/metis_illustration.png](img/metis_illustration.png)
 
 It’s worth highlighting that SVD-driven quantization wasn't invented in a vacuum; an earlier precursor was [SVDQuant](https://arxiv.org/abs/2411.05007). While both leverage SVD, SVDQuant feels somewhat unpolished in practice, shuttling high-precision matrices back and forth and wrestling with sparse matrix multiplication overheads, whereas the newer paper cleanly absorbs the heavy lifting directly into scaling factors and singular vectors.
 
@@ -586,3 +586,45 @@ The second pitfall is memory alignment: well-aligned dimensions allow tiled fetc
 Armed with these principles, the bizarre cliffs and jagged steps in this benchmark plot suddenly make crystal-clear sense: the macro trend reflects arithmetic intensity scaling with matrix dimension; the abrupt performance cliffs highlight pathological shape misalignment (as broken down in the [Tiling]({{< relref "#tiling" >}}) section), where clean alignment alone can yield a nearly 2 x throughput boost; and finally, the mysterious periodic sawtooth dips stem from GPU wave quantization—when matrix dimensions cross specific boundaries, an extra wave is spawned with barely enough thread blocks to fill it, forcing SMs to run a nearly empty tail wave at full cost.
 
 ![img/wave_quantization_example.png](img/wave_quantization_example.png)
+
+### Engineering Details
+
+After soaking in the previous section, you might think systems engineering is just like architectural design—merely swapping in a different domain of knowledge. In practice, however, what we deal with here is far more granular and chaotic than you would expect. Consider this section an honest engineering rant 😅
+
+#### Benchmarking
+
+Before attempting any optimization, your very first prerequisite is building a benchmarking framework to quantify the system. In this context, a benchmarking framework essentially boils down to one goal: accurately measuring the wall-clock time of different compute phases.
+
+Specifically, back in [Foundations]({{< relref "#foundations" >}}), we ended up with a neat Transformer model. As a first step, we can start with coarse-grained profiling: forward pass, backward pass, and parameter updates. These three major phases are straightforward to measure—just duplicate your training script, strip away extraneous logic, and place timestamps around each phase. You only need to watch out for two critical caveats:
+
+1. Use `timeit.default_timer()` instead of `time.time()`, as the former hooks into the operating system's highest-resolution clock for tighter accuracy (modern deep learning hardware runs blazing fast, making sub-millisecond precision essential).
+2. Call `torch.cuda.synchronize()` to flush any pending GPU execution. Kernel launches from the CPU are asynchronous; once a task is dispatched, the CPU moves on immediately, so you must explicitly block until the GPU finishes before taking the time delta.
+
+Of course, such coarse timing is insufficient for low-level systems work. To pinpoint the exact execution time of specific kernels within a phase, you need NVIDIA's official profiling suite, [Nsight Systems](https://docs.nvidia.com/nsight-systems/index.html). PyTorch integrates with it natively via the `torch.cuda.nvtx` module. Using the API isn't hard, but the real engineering headache lies in instrumentation: injecting profiling markers cleanly. Ideally, profiling instrumentation should satisfy three requirements:
+
+1. Simple, intuitive, and readable.
+2. Ergonomic, with trivial toggles to enable or disable profiling at specific call sites.
+3. Non-invasive, introducing zero pollution to the original training code.
+
+In CS 336, the default approach is monkey patching. Specifically, you manipulate Python's module import system and intercept functions called by other modules, replacing them with annotated wrappers. It sounds reasonable enough, but in truth, it requires subtle handling—import ordering, how the target module initially imported the symbol, and so forth; one misstep and the patch fails silently. Moreover, monkey patching cannot profile the backward pass because PyTorch's autograd engine is encapsulated deep inside C++ internals where Python-level patches cannot reach.
+
+```python
+import cs336_basics.layers.multihead_self_attention as _mha # this should be a module type!
+
+from cs336_systems.utils import annotated_scaled_dot_product_attention
+
+# monkey patch
+_mha.scaled_dot_product_attention = annotated_scaled_dot_product_attention  # type: ignore
+```
+
+This is where the gritty frustration of engineering truly shines. If you find monkey patching too hacky and set out to find a "more elegant" design pattern, congratulations: you will be hit with an Unlimited Void of esoteric abstractions. After weighing the options, you'll crawl back realizing that monkey patching is surprisingly the most pragmatic, straightforward, and "just right" tool for the job 😅
+
+All in all, feeling lost when first dealing with these tools is completely normal. The best remedy for the chaos is continuous trial and error: run a command, inspect the profiler output (ask an AI when stuck), and recalibrate your mental model. You might ask: in this AI-driven era, do we still need to care about these low-level details? My take is: just remember the core intuition that leaves the deepest impression. For example, `nsys` maintains a chronological GPU event stream; NVTX markers merely project your CPU-defined time intervals onto that GPU timeline, showing you which kernels actually ran behind that block of code.
+
+---
+
+Here are some profiling results to look at. The table below lists the most time-consuming kernels when running various sequence lengths across different model sizes, with kernel names cleaned up to highlight their core semantics.
+
+![img/nsys_kernel_results.png](img/nsys_kernel_results.png)
+
+In the forward pass, the dominant time sink in most cases is the `gemm` kernel, i.e., general matrix multiplication (\(D = \alpha AB + \beta C\)). However, a noticeable inflection occurs once the context length reaches 2048: the top kernel flips to `masked_fill` (the attention masking step), illustrating that long-context regimes are bound by memory bandwidth rather than compute. During the backward pass, most time shifts to `vectorized_mul` (element-wise multiplication). This showcases a key characteristic of backpropagation: it involves a massive amount of element-wise operations (additions, element-wise exp, etc., all take notable shares) that carry significant memory overhead. Another detail worth noting is the tile shape of the `gemm` kernels—they do not match the exact shapes of our input tensors, which is simply GPU thread block tiling in action.
