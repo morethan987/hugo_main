@@ -265,7 +265,12 @@ $$
 \begin{pmatrix} \cos\theta & -\sin\theta \\ \sin\theta & \cos\theta \end{pmatrix} \begin{pmatrix} x_0 \\ x_1 \end{pmatrix} = \begin{pmatrix} x_0 \cos\theta - x_1 \sin\theta \\ x_1 \cos\theta + x_0 \sin\theta \end{pmatrix}
 $$
 
-我们可以把它改写成逐元素相乘的形式： $\(x \odot \cos(\theta) + \tilde{x} \odot \sin(\theta)\)$
+我们可以把它改写成逐元素相乘的形式：
+
+
+$$
+x \odot \cos(\theta) + \tilde{x} \odot \sin(\theta)
+$$
 
 其中 \(\tilde{x} = [-x_1, x_0, -x_3, x_2, \dots]\)，把相邻元素两两交换位置并加个负号，这个结果可以使用批量化的矩阵操作得到。
 

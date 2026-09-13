@@ -265,7 +265,12 @@ $$
 \begin{pmatrix} \cos\theta & -\sin\theta \\ \sin\theta & \cos\theta \end{pmatrix} \begin{pmatrix} x_0 \\ x_1 \end{pmatrix} = \begin{pmatrix} x_0 \cos\theta - x_1 \sin\theta \\ x_1 \cos\theta + x_0 \sin\theta \end{pmatrix}
 $$
 
-We can rewrite this in the form of element-wise multiplication: $\(x \odot \cos(\theta) + \tilde{x} \odot \sin(\theta)\)$
+We can rewrite this in the form of element-wise multiplication:
+
+
+$$
+x \odot \cos(\theta) + \tilde{x} \odot \sin(\theta)
+$$
 
 where \(\tilde{x} = [-x_1, x_0, -x_3, x_2, \dots]\), which swaps adjacent elements in pairs and applies a negative sign; this result can be obtained using batched matrix/tensor operations.
 
