@@ -13,7 +13,7 @@ series:
   - AI工程
 series_order: 1
 date: 2025-05-28
-lastmod: 2026-09-12
+lastmod: 2026-09-14
 authors:
   - Morethan
 ---
@@ -309,11 +309,11 @@ $$
 
 ![train_stability](img/train_stability.png "训练稳定性示意图" )
 
-这种训练不稳定稳定从何而来？首先是模型输出处的 softmax 函数，其计算中的除法部分比较危险：
+这种训练不稳定从何而来？首先是模型输出处的 softmax 函数，由于 softmax 函数具有平移不变性，因此优化器没有任何动力去降低打分函数的绝对数值，很容易造成数值溢出。下面是一个标准的交叉熵损失：
 
 
 $$
-\log(P(x)) = \log\left(\frac{e^{U_r(x)}}{Z(x)}\right) = U_r(x) - \log(Z(x))
+\begin{aligned} \text{Loss} &=-\sum_{i}^{L} \left[ \log(P(x_i)) \right] \\ &=-\sum_{i}^{L} \left[ \log\left(\frac{e^{U_r(x_{i})}}{Z(x_{i})}\right) \right] \\ &=-\sum_{i}^{L} \left[ U_r(x_{i}) - \log(Z(x_{i})) \right] \end{aligned}
 $$
 
 
@@ -321,11 +321,18 @@ $$
 Z(x)=\sum_{r'=1}^{|V|} e^{U_{r'}(x)}
 $$
 
-其中的 \(U_{r}\) 函数表示打分函数，\(|V|\) 表示词表大小。为了稳定这一项，可以将 \(\log(Z(x))\) 部分变为下面的形式，也就是平方之后在使用 \(\alpha\) 进行调节，让除法项能够趋近于 0 最好。这种方法一般被称为 Z-loss 方法。
+其中的 \(U_{r}\) 函数表示打分函数，\(|V|\) 表示词表大小，\(L\) 表示序列长度。交叉熵损失公式看着很复杂，其实抛开前面的符号，剩余部分其实就是对数似然。为了显式地告诉优化器去约束所有指数的数值大小，一个直白的正则项就是去约束所有指数项的和，也就是 \(Z(x)\) 函数。于是我们可以在损失值中增加一个 Z-loss 正则项：
 
 
 $$
-\begin{aligned} L &=\sum_i \left[ \log(P(x_i)) -\alpha(\log(Z(x_i))-0)^2 \right] \\ &=\sum_i \left[ \log(P(x_i)) -\alpha\log^2(Z(x_i)) \right] \end{aligned}
+\begin{aligned} \text{Loss} &=-\sum_{i}^{L} \left[ \log(P(x_i)) -\alpha(\log(Z(x_i))-0)^2 \right] \\ &=-\sum_{i}^{L} \left[ U_r(x_{i}) - \log(Z(x_{i})) -\alpha\log^2(Z(x_i)) \right] \\ &=\sum_{i=1}^{L} \Big[ \underbrace{\log(Z(x_i)) - U_r(x_i)}_{\text{Cross-Entropy}} + \underbrace{\alpha \log^2(Z(x_i))}_{\text{Z-loss}} \Big] \end{aligned}
+$$
+
+猜你想问，正则项为什么是对数的平方，而不是 \((Z-1)^2\)？这里有一个非常容易混淆的地方，此处的 \(Z\) 函数必须是绝对数值，不能使用扣除最大值技巧(用了最后也需要补回去)，这是引入这个正则项的必然要求。换言之，如果需要处理绝对数值的话，就必须要使用 \(\log\) 去将指数变为加法，直接使用 \((Z-1)^2\) 会数值溢出：
+
+
+$$
+\log(Z) = m + \log\left( \sum e^{U_{r} - m} \right),\ m=\text{max}(U_{r})
 $$
 
 其次是注意力模块中的的 softmax 不稳定，但是这里的解决方法并不是直接在 softmax 上动刀，而是在 QK 输入时进行 Norm 操作，也就是一般而言的 "QK Norm" 方法：标准的 Transformer 注意力模块 QK 在得到之后会直接进行内积，而 "QK Norm" 方法会将 QK 进行归一化后再内积，这样送入到 softmax 部分的数据在数量级上会更加一致。

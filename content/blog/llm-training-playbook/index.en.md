@@ -13,7 +13,7 @@ series:
   - AI Engineering
 series_order: 0
 date: 2025-05-28
-lastmod: 2026-09-12
+lastmod: 2026-09-14
 authors:
   - Morethan
 ---
@@ -309,11 +309,11 @@ What is training stability? It might sound a bit abstract, but the figure below 
 
 ![train_stability](img/train_stability.png "Training Stability Diagram" )
 
-Where does this instability stem from? First is the Softmax function at the output layer, where the division operation can be dangerous:
+Where does this training instability come from? A prime suspect is the softmax layer at the model's output. Because softmax is shift-invariant, the optimizer has zero incentive to keep the absolute magnitude of the scoring function (logits) in check, paving the way for numerical overflow. Here is what standard cross-entropy loss looks like:
 
 
 $$
-\log(P(x)) = \log\left(\frac{e^{U_r(x)}}{Z(x)}\right) = U_r(x) - \log(Z(x))
+\begin{aligned} \text{Loss} &=-\sum_{i}^{L} \left[ \log(P(x_i)) \right] \\ &=-\sum_{i}^{L} \left[ \log\left(\frac{e^{U_r(x_{i})}}{Z(x_{i})}\right) \right] \\ &=-\sum_{i}^{L} \left[ U_r(x_{i}) - \log(Z(x_{i})) \right] \end{aligned}
 $$
 
 
@@ -321,11 +321,18 @@ $$
 Z(x)=\sum_{r'=1}^{|V|} e^{U_{r'}(x)}
 $$
 
-where \(U_{r}\) represents the scoring function and \(|V|\) denotes the vocabulary size. To stabilize this term, \(\log(Z(x))\) can be transformed into the following form—squaring it and tuning it with \(\alpha\) so that the division term approaches 0 as closely as possible. This method is called Z-loss stability.
+Here, \(U_{r}\) represents the scoring function (logits), \(|V|\) denotes the vocabulary size, and \(L\) is the sequence length. While the cross-entropy formulation might look a bit intimidating, stripping away the negative sign reveals that it is simply the log-likelihood. To explicitly force the optimizer to rein in the exponential terms, an intuitive fix is to penalize their sum—the partition function \(Z(x)\). This motivates adding a regularization term known as Z-loss into our objective:
 
 
 $$
-\begin{aligned} L &=\sum_i \left[ \log(P(x_i)) -\alpha(\log(Z(x_i))-0)^2 \right] \\ &=\sum_i \left[ \log(P(x_i)) -\alpha\log^2(Z(x_i)) \right] \end{aligned}
+\begin{aligned} \text{Loss} &=-\sum_{i}^{L} \left[ \log(P(x_i)) -\alpha(\log(Z(x_i))-0)^2 \right] \\ &=-\sum_{i}^{L} \left[ U_r(x_{i}) - \log(Z(x_{i})) -\alpha\log^2(Z(x_i)) \right] \\ &=\sum_{i=1}^{L} \Big[ \underbrace{\log(Z(x_i)) - U_r(x_i)}_{\text{Cross-Entropy}} + \underbrace{\alpha \log^2(Z(x_i))}_{\text{Z-loss}} \Big] \end{aligned}
+$$
+
+You might wonder: why penalize the squared logarithm rather than a straightforward \((Z-1)^2\)? There is a subtle and easily overlooked detail here: \(Z\) must reflect its true absolute value, meaning we cannot bypass it with the standard max-subtraction trick (any subtracted constant must eventually be restored), as this is inherently required by the regularizer itself. In other words, when handling absolute magnitudes, working in the log domain is essential to convert exponential blowups into manageable additions—evaluating \((Z-1)^2\) directly would trigger numerical overflow in an instant:
+
+
+$$
+\log(Z) = m + \log\left( \sum e^{U_{r} - m} \right),\ m=\text{max}(U_{r})
 $$
 
 Second is the instability within the attention module's Softmax. However, the solution here isn't to modify Softmax directly, but to apply Normalization to the QK inputs—the widely known "QK Norm" method. In standard Transformer attention, Q and K undergo an inner product immediately after computation; "QK Norm", on the other hand, normalizes Q and K before computing their inner product, ensuring the values fed into Softmax remain on a far more consistent scale.
