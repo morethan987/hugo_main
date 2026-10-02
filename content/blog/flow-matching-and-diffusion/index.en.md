@@ -75,7 +75,18 @@ Mathematically, a trajectory \(X: [0, 1] \to \mathbb{R}^d, \, t \mapsto X_t\) is
 
 
 $$
-The solution to this equation across time is characterized by the flow $\psi_t: \mathbb{R}^d \to \mathbb{R}^d$, which tracks the position $\psi_t(x_0) = X_t$ satisfying $\frac{d}{dt}\psi_t(x_0) = u_t(\psi_t(x_0))$ with $\psi_0(x_0) = x_0$. The clever part of building a generative flow model is that the neural network is never asked to predict the entire trajectory or the flow $\psi_t$ directly. Instead, we only parameterize the local vector field $u_t^\theta(x) \approx u_t(x)$ using a network with weights $\theta$. We inject randomness purely by sampling an initial condition $X_0$ from a simple base distribution $p_{\text{init}}$, such as a standard Gaussian $\mathcal{N}(0, I_d)$. Our end goal is simply to have the terminal state $X_1 = \psi_1^\theta(X_0)$ follow the true data distribution $p_{\text{data}}$. At inference time, because the neural vector field cannot be integrated analytically, generation is carried out by simulating the ODE numerically. Starting from $X_0 \sim \mathcal{N}(0, I_d)$, we discretize time with a small step size $h = 1/n$ and march forward along the vector field using the standard Euler method:
+\frac{d}{dt} X_t = u_t(X_t), \quad X_0 = x_0
+$$
+
+The solution to this equation across time is characterized by the flow \(\psi_t: \mathbb{R}^d \to \mathbb{R}^d\), which tracks the position \(\psi_t(x_0) = X_t\) satisfying \(\frac{d}{dt}\psi_t(x_0) = u_t(\psi_t(x_0))\) with \(\psi_0(x_0) = x_0\). 
+
+The clever part of building a generative flow model is that the neural network is never asked to predict the entire trajectory or the flow \(\psi_t\) directly. Instead, we only parameterize the local vector field \(u_t^\theta(x) \approx u_t(x)\) using a network with weights \(\theta\). We inject randomness purely by sampling an initial condition \(X_0\) from a simple base distribution \(p_{\text{init}}\), such as a standard Gaussian \(\mathcal{N}(0, I_d)\). Our end goal is simply to have the terminal state \(X_1 = \psi_1^\theta(X_0)\) follow the true data distribution \(p_{\text{data}}\).
+
+At inference time, because the neural vector field cannot be integrated analytically, generation is carried out by simulating the ODE numerically. Starting from \(X_0 \sim \mathcal{N}(0, I_d)\), we discretize time with a small step size \(h = 1/n\) and march forward along the vector field using the standard Euler method:
+
+
+$$
+X_{t+h} = X_t + h \cdot u_t^\theta(X_t)
 $$
 
 Iterating this from \(t = 0\) to \(1\) pushes the initial Gaussian noise along the learned velocity lines, delivering the final sample \(X_1 \approx z \sim p_{\text{data}}\).
@@ -88,7 +99,16 @@ To make the deterministic trajectory random, we incorporate a continuous random 
 
 
 $$
-Here, $u_t(x)$ acts as the deterministic drift vector field, while $\sigma_t \ge 0$ is a scalar diffusion coefficient modulating the magnitude of injected noise over time. Just like in flow models, the neural network only needs to learn the drift field $u_t^\theta(x)$, leaving $\sigma_t$ as a pre-designed, fixed schedule. Sampling from a diffusion model then mirrors the flow setting, but replaces the Euler integrator with its stochastic counterpart, the Euler-Maruyama method:
+dX_t = u_t(X_t)dt + \sigma_t dW_t, \quad X_0 \sim p_{\text{init}}
+$$
+
+Here, \(u_t(x)\) acts as the deterministic drift vector field, while \(\sigma_t \ge 0\) is a scalar diffusion coefficient modulating the magnitude of injected noise over time. 
+
+Just like in flow models, the neural network only needs to learn the drift field \(u_t^\theta(x)\), leaving \(\sigma_t\) as a pre-designed, fixed schedule. Sampling from a diffusion model then mirrors the flow setting, but replaces the Euler integrator with its stochastic counterpart, the Euler-Maruyama method:
+
+
+$$
+X_{t+h} = X_t + h \cdot u_t^\theta(X_t) + \sigma_t \sqrt{h} \cdot \epsilon_t, \quad \epsilon_t \sim \mathcal{N}(0, I_d)
 $$
 
 At each interval, the state takes a small step in the direction of the vector field and simultaneously receives a random Gaussian nudge scaled by \(\sigma_t \sqrt{h}\). If we turn off this noise injection entirely by setting \(\sigma_t = 0\), the stochastic term vanishes and we immediately recover the deterministic flow model, revealing that flow models are simply zero-diffusion special cases of the broader SDE family.
