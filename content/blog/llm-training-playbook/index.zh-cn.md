@@ -13,7 +13,7 @@ series:
   - AI工程
 series_order: 1
 date: 2025-05-28
-lastmod: 2026-09-14
+lastmod: 2026-10-05
 authors:
   - Morethan
 ---
@@ -640,3 +640,106 @@ _mha.scaled_dot_product_attention = annotated_scaled_dot_product_attention  # ty
 ![img/nsys_kernel_results.png](img/nsys_kernel_results.png)
 
 前向传播大部分情况下最耗时的 kernel 是 `gemm` 也就是广义矩阵乘法内核(\(D = \alpha AB + \beta C\))；在上下文长度达到 2048 的时候出现了一个特例，最耗时的 kernel 变为了 `masked_fill` 也就是掩码覆盖步骤，这个转变说明了长上下文的瓶颈是内存而非计算；后向传播过程中大部分耗时集中在 `vectorized_mul` 也就是逐元素乘法内核上，这也是反向传播过程中的一个特点，那就是存在大量的逐元素操作(逐元素加，逐元素取指数等等都占据了不小的比例)并且这种逐元素计算开销很大；另一个值得一提的那就是 `gemm` 内核的形状，其并非是我们送入的张量的形状，这里其实就是 GPU 自动分块的具体表现。
+
+---
+
+关于冷启动问题，在测时间的时候一般需要充分的冷启动以及多次测量取平均值，在测量内存的时候则不需要那么多的冷启动和测量，一般来说只需要一次冷启动和一次测量即可
+
+> [!warning] 踩坑
+> 猜你想问：既然是测量内存，不要冷启动不行吗？反正在第一次反向传播的时候会到达峰值。实际上这个说法非常微妙，实际上可以但要明确这么做会发生什么。因为 PyTorch 的特性，优化器的参数会在第一次 `optimizer.step()` 的时候才分配，如果你的**测量步只有一步**，那么在优化器内存加载之前激活的峰值就会过去，导致你测量得到的并不是常态的内存峰值，而是激活峰值和优化器峰值两者之间的更大值。那如果你的测量步有两步及以上呢？那本质上就是将冷启动搬运到了测量步，因此**内存测量时冷启动是必要的！**
+
+#### Triton Kernel
+
+在学习之前，Triton kernel 是一个非常神秘的东西，用魔法般的力量让你的模型跑的飞快。但实际上，在接触了一些编程训练之后你就会意识到，真正的魔法在于算法设计而不是 Triton kernel，也就是下一节 [FlashAttention]({{< relref "#flashattention" >}}) 部分会记录的内容。并且这里主要记录的是一种被称为 Block pointer 的编程思路，是一种较新并且更容易理解的方案。
+
+在正式理解 Block pointer 之前，有一个非常重要的心智模型需要理解。在一个 kernel 内部我们处理的总是一个二维的运算，并且总是分块进行的，因为 GPU 的 SRAM 并没有那么大，只能够算一块再加载下一块数据。猜你想问，那高维的张量计算怎么办？有两种思路，一种就是对维度进行展平操作，计算完成后再重新拼接回去；另一种是在启动内核的时候使用 Triton 的网格语法，但 Triton 的网格最多只支持三维，也就是说更多的维度只能够使用展平操作消化后再送进内核。
+
+这里的网格可以理解为 GPU 的并行处理维度，每一个网格之中都会有一个线程来处理你的任务并且线程之间应当是**解耦**的，每一个线程内部会去 for 循环加载最后这个维度的不同分块然后进行计算。就这个简单的二维场景而言，网格就可以是行方向或者是列方向，选定网格方向之后，你就想象有一批割草机按照这个方向填充，然后沿着另一个方向一块一块地收割 (是的没错，就是植物大战僵尸里的小推车😄)
+
+![img/triton_tiles.png](img/triton_tiles.png)
+
+上面就是 Triton 内核编程的核心计算部分了，非常清晰明了，和普通的 PyTorch 编程没有太大的区别，只是加了一些分块的技巧。所以真正比较耗费心神的其实是数据加载：
+
+1. 数据的逻辑存储和物理存储是解耦的，你需要十分小心地去挪动指针
+2. 为了计算效率，你需要根据物理存储方式的不同去调整计算顺序从而利用[批量访存]({{< relref "#批量访存" >}})技巧来加速
+3. 当实际矩阵的大小不能够被分块大小整除的时候，我们一般会向上取整保证所有数据都被处理，但这就会带来越界访问的问题，我们需要在这时候对数据进行填充
+4. 数据写回的时候同样需要检查越界访问的问题
+
+这些问题在没有 Block pointer 抽象的时候是非常繁琐并且极其容易出错的，并且你的代码中会充斥着各种边界情况，你的主体计算逻辑会支离破碎，可读性极差。有了 Block pointer 之后，这些复杂的逻辑就能够封装到 block 内部了，下面就是几个 Block pointer：
+
+```python
+x_block_ptr = tl.make_block_ptr(
+    x_ptr,
+    shape=(NUM_ROWS, D),
+    strides=(x_stride_row, x_stride_dim),
+    offsets=(row_tile_idx * ROWS_TILE_SIZE, 0),  # parallel on rows, so only the affected set offsets
+    block_shape=(ROWS_TILE_SIZE, D_TILE_SIZE),
+    order=(1, 0),
+)
+
+weight_block_ptr = tl.make_block_ptr(
+    weight_ptr,
+    shape=(D,),
+    strides=(weight_stride_dim,),
+    offsets=(0,),
+    block_shape=(D_TILE_SIZE,),
+    order=(0,),
+)
+
+output_block_ptr = tl.make_block_ptr(
+    output_ptr,
+    shape=(NUM_ROWS,),
+    strides=(output_stride_row,),
+    offsets=(row_tile_idx * ROWS_TILE_SIZE,),  # row affected
+    block_shape=(ROWS_TILE_SIZE,),
+    order=(0,),
+)
+```
+
+第一个 block 就是典型的并行处理维度的 block，需要在构造的时候就指定 `offsets` 参数，第二个 block 则不需要，因为所有并行的线程都需要从同一个开始位置读取数据，第三个 block 就是计算结果需要写回的地方，不同的线程需要写到不同的位置，因此也需要设置偏移量。
+
+然后其他参数需要关注的就是 `strides` 和 `order` 这两个，前者表示不同维度逻辑上相邻的数据在物理存储上相距多少字节(也就是步长)；后者其实就是按照步长排序后的维度索引，PyTorch 是行优先排布的，所以步长最小的维度在更靠后的索引。
+
+好的，所有复杂的情况声明都已经填充好了，我们在核心的计算循环中就可以极大地简化逻辑了：
+
+```python
+output = tl.zeros((ROWS_TILE_SIZE,), dtype=tl.float32)  # row allocator
+for _ in range(tl.cdiv(D, D_TILE_SIZE)):
+    row = tl.load(x_block_ptr, boundary_check=(0, 1), padding_option="zero")  # (ROW_TILE_SIZE, D_TILE_SIZE)
+    weight = tl.load(weight_block_ptr, boundary_check=(0,), padding_option="zero")  # (D_TILE_SIZE)
+    output += tl.sum(row * weight[None, :], axis=1)
+
+    x_block_ptr = x_block_ptr.advance((0, D_TILE_SIZE))
+    weight_block_ptr = weight_block_ptr.advance((D_TILE_SIZE,))
+
+tl.store(output_block_ptr, output, boundary_check=(0,))
+```
+
+说人话就是：先将分块数据加载到 SRAM 上，加载的时候去检查是否越界，如果越界就自动进行零填充，然后执行计算并将计算结果累加到 SRAM 上的另一个临时变量上，这个分块计算完成后就前进到下一个分块上。所有线程计算完成后一次性将临时变量收集好的计算结果写回 HBM 里面。
+
+> [!NOTE]+ 说明
+> 第一次上手肯定是没那么清晰的，但理解之后就稍微好一些。虽然但是，内核编程确实是非常繁琐的😵即便是有 Block pointer 抽象简化。并且在学完这个章节之后你会意识到，内核编程不是目的而是手段，真正有意思的在于你如何解耦数据之间的依赖从而让并行处理成为可能
+
+#### FlashAttention
+
+> 天才般的算法让数据解耦，同时也让我的大脑旋转😵‍💫😵
+
+
+在编写算法之前我们需要分析目前的算法有什么问题，而分析算法需要的前置知识就是矩阵求导。强烈推荐去看看这两篇知乎文章：[矩阵求导术（上）](https://zhuanlan.zhihu.com/p/24709748) 和[矩阵求导术（下）](https://zhuanlan.zhihu.com/p/24863977)；非常清爽的文章，补足了高数中几乎没有涉及的部分，并且避免了去啃大部头的矩阵分析书籍。
+
+然后这里就不去讨论具体细节了，就放两张算法伪代码图片。
+
+![img/flash_attention2_forward.png](img/flash_attention2_forward.png)
+
+![img/flash_attention2_backward.png](img/flash_attention2_backward.png)
+
+Flash Attention 的功绩自不必多说，实现了 \(O(N)\) 访存的注意力算法，极大地降低了整体计算耗时。但最值得关注的其实是前向传播过程中的"在线 softmax"算法，如何从直观上理解这个算法的可行性？
+
+![img/running_softmax.png](img/running_softmax.png)
+
+在线 softmax 的核心就是使用当前收集到的最新数据去修正先前的结果，一个比较困惑的点在于：我当前这个分块已经计算完毕了，怎么还能够去修正之前的结果呢？
+
+事实上 score 的确是没法修正了，但最后我们要的也不是 score 而是最终的输出 \(O\) 矩阵。如图所示，可以发现，score 和 \(V\) 的矩阵乘法在这里起到了一个收集器的作用，让不同 \(K\) 分块的计算能够作用到同一个 \(O\) 分块上面去。我认为这才是在线计算能够进行的前提。
+
+> [!NOTE] 说明
+> 正因如此，我感觉这种操作被称为"在线 softmax"不太准确，感觉应该叫作"在线分块注意力"更准确。因为单纯的 softmax 就不能被在线计算，或者说在单纯的 softmax 计算中，后面的分块没法去修正前一个分块的计算结果🤔

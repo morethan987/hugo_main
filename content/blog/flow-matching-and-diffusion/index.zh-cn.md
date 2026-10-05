@@ -13,7 +13,7 @@ series:
   - AI工程
 series_order: 2
 date: 2026-10-02
-lastmod: 2026-10-02
+lastmod: 2026-10-05
 authors:
   - Morethan
 ---
@@ -41,7 +41,7 @@ authors:
 
 *因此，最终形式化的目标，就是从条件分布 \(p_{\text{data}}(\cdot|y)\) 中采样一个向量 \(z\)，其中 \(y\) 是描述我们需求的提示词（prompt）。*
 
-## 流模型与扩散模型
+## 思路
 
 如果我们仅仅想生成小狗的图片，该如何表示这个分布呢？这是最终目标的一个简化版本。最朴素的想法是用一个神经网络来充当这个分布：它就像一台吃进随机种子（random seeds）就能吐出小狗图片的老虎机。
 
@@ -65,53 +65,135 @@ authors:
 
 从更宏观的视角来看，这种方法可以被视作是在**时间维度**上拓展“深度”，而非单纯在模型架构的层数维度上堆叠深度。
 
+## 算法原理
+
 ### 流模型
 
-总结一下，我们目前的任务就是去描述噪声分布如何一步步平滑演化为目标数据分布的过程。
+概括来说，我们当下的任务是去描述一个简单的噪声分布是如何逐步演化成目标数据分布的。
 
-幸运的是（不得不说 🐸），常微分方程（ODE）恰好是描述这一演化过程的绝佳数学工具。为了保持本博客的完整性，在此我直接引用[课程讲义（lecture notes）](https://diffusion.csail.mit.edu/2026/docs/lecture_notes.pdf) 中的核心表述。
+幸运的是 🐸，常微分方程（ODE）为这种变换过程提供了一个极其优雅的数学框架。具体而言，如果我们能找到一个与时间相关的向量场 \(u_t(x)\)，使其能够在 \(t = 0\) 到 \(t = 1\) 的时间跨度内驱动生成我们期望的概率密度路径 \(p_t(x)\)，那么我们就可以训练一个参数为 \(\theta\) 的神经网络 \(u_t^\theta(x)\) 来对其进行逼近拟合。
 
-在数学上，轨迹 \(X: [0, 1] \to \mathbb{R}^d, \, t \mapsto X_t\) 是由一个与时间相关的向量场 \(u_t: \mathbb{R}^d \to \mathbb{R}^d\) 驱动的，该向量场指定了在每个时间点和空间位置上的速度：
+顺理成章地，该回归训练目标，即 **流匹配损失（Flow Matching loss）**，可以形式化为：
+
+
+$$
+\mathcal{L}_{\text{FM}}(\theta) = \mathbb{E}_{t \sim \text{Unif}[0, 1], \, x \sim p_t} \left[ \| u_t^\theta(x) - u_t(x) \|^2 \right]
+$$
+
+然而，一个根本性的困境随即浮现：在实际应用中，\(u_t(x)\) 是完全不可解的。我们能拿到的仅仅是来自真实数据分布 \(p_{\text{data}}\) 的经验样本，又该如何确定推动这整个分布演化的边缘向量场 \(u_t(x)\) 呢？
+
+为了厘清 \(u_t(x)\) 的数学定义以及计算方式，我们不妨将视角从单个粒子的动力学行为推广到宏观的概率分布上。
+
+单个粒子的运动轨迹 \(X: [0, 1] \to \mathbb{R}^d, \, t \mapsto X_t\) 由一个时变向量场 \(u_t: \mathbb{R}^d \to \mathbb{R}^d\) 决定，该向量场指明了空间中任意位置与时间点的瞬时速度：
 
 
 $$
 \frac{d}{dt} X_t = u_t(X_t), \quad X_0 = x_0
 $$
 
-该方程随时间演化的解由流（flow）\(\psi_t: \mathbb{R}^d \to \mathbb{R}^d\) 来刻画，它追踪了满足 \(\frac{d}{dt}\psi_t(x_0) = u_t(\psi_t(x_0))\) 且 \(\psi_0(x_0) = x_0\) 的位置 \(\psi_t(x_0) = X_t\)。
-
-构建生成式流模型的精妙之处在于：我们永远不需要神经网络去直接预测整条轨迹或流变换 \(\psi_t\) 本身。相反，我们只需要使用带权重 \(\theta\) 的网络去参数化局部的速度向量场 \(u_t^\theta(x) \approx u_t(x)\)。随机性的来源非常纯粹——完全来自于从简单的基准分布 \(p_{\text{init}}\)（例如标准高斯分布 \(\mathcal{N}(0, I_d)\)）中采样的初始状态 \(X_0\)。我们最终的目标，仅仅是让终端状态 \(X_1 = \psi_1^\theta(X_0)\) 符合真实的数据分布 \(p_{\text{data}}\)。
-
-在推理（采样）阶段，由于神经网络表示的向量场无法求得解析积分，生成过程是通过对 ODE 进行数值仿真来完成的。从 \(X_0 \sim \mathcal{N}(0, I_d)\) 开始，我们使用微小步长 \(h = 1/n\) 对时间进行离散化，并借助标准的欧拉法（Euler method）沿着向量场向前推进一步：
+在整个时间跨度上的连续解由流映射（flow map）\(\psi_t: \mathbb{R}^d \to \mathbb{R}^d\) 刻画，它追踪粒子的位置 \(\psi_t(x_0) = X_t\)，并满足：
 
 
 $$
-X_{t+h} = X_t + h \cdot u_t^\theta(X_t)
+\frac{d}{dt}\psi_t(x_0) = u_t(\psi_t(x_0)), \quad \text{with } \psi_0(x_0) = x_0
 $$
 
-从 \(t = 0\) 到 \(1\) 循环迭代这一过程，就能沿着学习到的速度流线，将初始高斯噪声逐步推演为最终的生成样本 \(X_1 \approx z \sim p_{\text{data}}\)。
+从物理直觉来看，\(u_t\) 无非是一个输入时刻 \(t\) 与坐标 \(x\)，并输出粒子在该处瞬时速度向量的函数。
+
+而当我们把视野放大到由无数粒子汇聚而成的整体、并在时间维度上形成一个连续的**概率分布** \(p_t(x)\)（即**概率密度路径**）时，事情就变得非常有意思了。
+
+由于概率质量守恒（粒子既不会凭空产生，也不会凭空消失），由向量场 \(u_t(x)\) 推动的空间密度 \(p_t(x)\) 必然满足**连续性方程**：
+
+
+$$
+\frac{\partial p_t(x)}{\partial t} = - \nabla \cdot \big( p_t(x) u_t(x) \big)
+$$
+
+既然从全局视角直接处理边缘分布 \(p_t(x)\) 和向量场 \(u_t(x)\) 异常棘手，我们不妨引入一个条件变量 \(z\)（例如目标数据点 \(x_1 \sim p_{\text{data}}\)，或者初末状态对 \((x_0, x_1)\)）：
+
+
+$$
+p_t(x) = \int p_t(x \mid z) p(z) \, dz
+$$
+
+此时，每一条条件路径 \(p_t(x \mid z)\) 都有其形式简单、定义清晰的条件向量场 \(u_t(x \mid z)\)，并满足属于它自己的连续性方程：
+
+
+$$
+\frac{\partial p_t(x \mid z)}{\partial t} = - \nabla \cdot \big( p_t(x \mid z) u_t(x \mid z) \big)
+$$
+
+对边缘分布 \(p_t(x)\) 求关于时间的偏导数：
+
+
+$$
+\begin{aligned} \frac{\partial p_t(x)}{\partial t} &= \int \frac{\partial p_t(x \mid z)}{\partial t} p(z) \, dz \\ &= - \nabla \cdot \int p_t(x \mid z) u_t(x \mid z) p(z) \, dz \\ &= - \nabla \cdot \left( p_t(x) \int u_t(x \mid z) \frac{p_t(x \mid z) p(z)}{p_t(x)} \, dz \right) \\ &= - \nabla \cdot \left( p_t(x) \int u_t(x \mid z) p_t(z \mid x) \, dz \right) \end{aligned}
+$$
+
+将此推导与最初的边缘连续性方程 \(\frac{\partial p_t(x)}{\partial t} = - \nabla \cdot \big( p_t(x) u_t(x) \big)\) 进行对比，我们便能极其自然地将边缘向量场定义为：
+
+
+$$
+u_t(x) = \int u_t(x \mid z) p_t(z \mid x) \, dz = \mathbb{E}_{z \sim p_t(z \mid x)} \left[ u_t(x \mid z) \right]
+$$
+
+这一至关重要的结论表明：看似复杂莫测的全局向量场 \(u_t(x)\)，本质上不过是那些容易求解的条件向量场 \(u_t(x \mid z)\) 的后验期望整合。
+
+重温我们最初的流匹配优化目标：
+
+
+$$
+\mathcal{L}_{\text{FM}}(\theta) = \mathbb{E}_{t \sim \text{Unif}[0, 1], \, x \sim p_t} \left[ \| u_t^\theta(x) - u_t(x) \|^2 \right]
+$$
+
+把边缘向量场 \(u_t(x) = \mathbb{E}_{z \sim p_t(z \mid x)} [u_t(x \mid z)]\) 直接代入该损失函数并展开平方项，便能揭示出一个神奇的事实：\(\mathcal{L}_{\text{FM}}(\theta)\) 与条件流匹配（Conditional Flow Matching）目标仅相差一个与 \(\theta\) 无关的常数项：
+
+
+$$
+\mathcal{L}_{\text{CFM}}(\theta) = \mathbb{E}_{t \sim \text{Unif}[0, 1], \, z \sim p(z), \, x \sim p_t(x \mid z)} \left[ \| u_t^\theta(x) - u_t(x \mid z) \|^2 \right]
+$$
+
+具体来说，可以严格证明：
+
+
+$$
+\mathcal{L}_{\text{CFM}}(\theta) = \mathcal{L}_{\text{FM}}(\theta) + C \quad \implies \quad \nabla_\theta \mathcal{L}_{\text{FM}}(\theta) = \nabla_\theta \mathcal{L}_{\text{CFM}}(\theta)
+$$
+
+具体证明过程可参见[课程讲义](https://diffusion.csail.mit.edu/2026/docs/lecture_notes.pdf)，其核心前提正是我们在前面已经证毕的结论：\(u_t(x)\) 可以表示为条件向量场的后验期望。
+
+既然两者对 \(\theta\) 的梯度完全相同，那么去最小化易于求解的条件目标 \(\mathcal{L}_{\text{CFM}}(\theta)\)，在数学上就完全等价于最小化无法直接求解的边缘目标 \(\mathcal{L}_{\text{FM}}(\theta)\)。在实际工程落地时，我们只需采样条件 \(z\)、按照可自由定义的简单演化形式采样 \(x \sim p_t(x \mid z)\)、计算出解析形式的条件速度 \(u_t(x \mid z)\)，便可以通过最平凡的均方误差（MSE）回归来训练网络了。
 
 ### 扩散模型
 
-大体上，扩散模型与流模型非常相似，只不过它的演化规则是**随机的**。
-
-为了给确定性的轨迹注入随机性，我们引入了由标准布朗运动（或维纳过程）\(W_t\) 驱动的连续随机游走，它具有连续的轨迹和独立的高斯增量 \(W_{t+h} - W_t \sim \mathcal{N}(0, h I_d)\)。在 ODE 的无限小微元步长中加入这些随机的“微扰”，便得到了标准的随机微分方程（SDE）：
+Score Matching的数学体系从一开始其实就是完全自洽独立的。我们将边缘得分定义为对数密度的梯度 \(\nabla \log p_t(x)\)。尽管真实的边缘概率密度 \(p_t(x)\) 难以捉摸，但我们拥有一条优美的边缘化恒等式：
 
 
 $$
-dX_t = u_t(X_t)dt + \sigma_t dW_t, \quad X_0 \sim p_{\text{init}}
+\nabla \log p_t(x) = \int \nabla \log p_t(x|z) \frac{p_t(x|z)p_{\text{data}}(z)}{p_t(x)} \mathrm{d}z
 $$
 
-在此，\(u_t(x)\) 充当确定性的漂移向量场，而 \(\sigma_t \ge 0\) 是一个标量扩散系数，负责随时间调节注入噪声的强度。
+通过将针对该边缘得分的均方误差展开，无法直接计算的边缘目标便能直接化简为条件去噪得分匹配损失：\(\mathbb{E}[\|s_t^\theta(x) - \nabla \log p_t(x|z)\|^2]\)。在理论上，仅凭这一个恒等式就足够了：得分匹配即便完全脱离向量场或流模型的概念，也能够独立构建公式、完成训练并闭环。
 
-与流模型如出一辙，神经网络仅需学习漂移场 \(u_t^\theta(x)\)，而 \(\sigma_t\) 通常作为预先设定好的固定调度策略。从扩散模型中采样的逻辑也与流模型高度镜像，只是将欧拉积分器替换为其随机版本——欧拉-丸山法：
+然而，训练出一个得分模型仅仅只走完了一半路程，因为单凭得分函数本身并不足以生成新样本。得分函数指明的仅仅是概率密度局部递增的方向，它本身并不会主动将概率质量从初始噪声 \(p_{\text{init}}\) 运送到数据分布 \(p_{\text{data}}\)。如果我们想要通过模拟随机微分方程（SDE）来生成样本，同时保证 \(X_t\) 的边缘分布能够严格沿着我们期望的概率路径 \(p_t\) 演化，福克-普朗克方程（Fokker-Planck equation）要求该轨迹必须满足如下形式：
 
 
 $$
-X_{t+h} = X_t + h \cdot u_t^\theta(X_t) + \sigma_t \sqrt{h} \cdot \epsilon_t, \quad \epsilon_t \sim \mathcal{N}(0, I_d)
+\begin{aligned} \mathrm{d}X_t &= u_t(X_t) \mathrm{d}t + \frac{\sigma_t^2}{2} \nabla \log p_t(X_t) \mathrm{d}t + \sigma_t \mathrm{d}W_t \\ &= \left[ u_t(X_t) + \frac{\sigma_t^2}{2} \nabla \log p_t(X_t) \right] \mathrm{d}t + \sigma_t \mathrm{d}W_t \end{aligned}
 $$
 
-在每个微小区间内，状态既沿着向量场方向迈出一步，同时还会受到一个由 \(\sigma_t \sqrt{h}\) 缩放的高斯随机扰动。如果我们通过令 \(\sigma_t = 0\) 完全关闭这种噪声注入，随机项便瞬间消失，我们立刻就能退化还原到确定性的流模型。这也揭示了一个重要事实：**流模型本质上只是更广义 SDE 家族中扩散系数为零的一个特例。**
+在此，布朗运动项 \(\sigma_t \mathrm{d}W_t\) 注入了随机扰动，而 \(\frac{\sigma_t^2}{2} \nabla \log p_t(X_t)\) 项则起到向内修正的作用，用于抵消噪声所带来的扩散与发散。但仔细观察漂移项（drift）就会发现：它明确地**同时**需要确定性速度场 \(u_t(X_t)\) 与得分函数 \(\nabla \log p_t(X_t)\)。仅有得分只能提供拉回的修正力，却无法提供基准的前进轨迹。
+
+这就引出了一个尴尬的现实：对于一条任意设计的概率路径而言，速度场 \(u_t\) 和得分场 \(\nabla \log p_t\) 是两个截然不同的数学对象，二者之间并没有简单的对应关系。倘若我们随意选取分布路径，就会陷入工程层面的噩梦——仅为了运行一次 SDE 采样循环，我们必须**训练两个独立的神经网络**，一个用流匹配去学 \(u_t\)，另一个用得分匹配去学 \(\nabla \log p_t\)。
+
+这一尴尬的困境，恰恰解释了为什么实际落地中的扩散模型几乎普遍约定俗成地采用高斯概率路径 \(p_t(x|z) = \mathcal{N}(x; \alpha_t z, \beta_t^2 I_d)\)。在高斯路径下，条件速度场 \(u_t(x|z)\) 和条件得分 \(\nabla \log p_t(x|z)\) 恰好全都是关于 \(x\) 和 \(z\) 的仿射函数。与后验积分之后，二者都会塌缩为对同一个后验均值 \(\mathbb{E}[z \mid x]\)（即去噪器）的线性重参数化。由此，架起了一座解析形式的桥梁：
+
+
+$$
+u_t(x) = a_t \nabla \log p_t(x) + b_t x
+$$
+
+正得益于这种完全等价的关系，训练单个网络就能让我们免费白嫖到另一个物理量。
 
 > [!NOTE] 思考
-> 为什么我们要引入随机因素？目前一个较为公认的解释是为了**多样性**。流模型简单优雅，但往往过于僵硬且具有强确定性。不过，我对这种观点持有一点保留意见，这值得更深入地探讨。🤔
+> 为什么我们要引入随机因素？一个普遍公认的解释在于**多样性**。流模型虽然简洁优雅，但未免过于死板且具备确定性。此外，流模型在训练中不可避免地会产生一些在理论上难以完全消除的逼近误差。通过引入随机因素，我们能够借助调节 SDE 中的 \(\sigma\) 参数，期望在生成质量与多样性上取得更佳的表现。

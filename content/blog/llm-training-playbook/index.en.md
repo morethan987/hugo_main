@@ -13,7 +13,7 @@ series:
   - AI Engineering
 series_order: 0
 date: 2025-05-28
-lastmod: 2026-09-14
+lastmod: 2026-10-05
 authors:
   - Morethan
 ---
@@ -640,3 +640,106 @@ Here are some profiling results to look at. The table below lists the most time-
 ![img/nsys_kernel_results.png](img/nsys_kernel_results.png)
 
 In the forward pass, the dominant time sink in most cases is the `gemm` kernel, i.e., general matrix multiplication (\(D = \alpha AB + \beta C\)). However, a noticeable inflection occurs once the context length reaches 2048: the top kernel flips to `masked_fill` (the attention masking step), illustrating that long-context regimes are bound by memory bandwidth rather than compute. During the backward pass, most time shifts to `vectorized_mul` (element-wise multiplication). This showcases a key characteristic of backpropagation: it involves a massive amount of element-wise operations (additions, element-wise exp, etc., all take notable shares) that carry significant memory overhead. Another detail worth noting is the tile shape of the `gemm` kernels—they do not match the exact shapes of our input tensors, which is simply GPU thread block tiling in action.
+
+---
+
+Regarding the warmup (cold start) issue: when benchmarking execution time, you generally need sufficient warmup runs and multiple measurements to take an average. When profiling memory, however, you don't need nearly as many runs—typically, a single warmup step and one measurement step are sufficient.
+
+> [!warning] Pitfall
+> You might wonder: *Since we're profiling memory, can't we just skip the warmup altogether? After all, memory reaches its peak during the very first backward pass anyway.* This assumption is actually quite subtle. In practice, you *could*, but you must understand what really happens under the hood. Due to how PyTorch operates, optimizer state memory is only allocated on the very first call to `optimizer.step()`. If your **profiling run consists of only one step**, the peak activation memory will have already passed and been freed *before* the optimizer state memory is allocated. As a result, what you measure isn't the steady-state peak memory, but merely \(\max(\text{activation peak}, \text{optimizer peak})\). What if your profiling run has two or more steps? Then you are essentially just shifting the warmup into your benchmark steps anyway. Therefore, **a warmup run is essential even when profiling memory!**
+
+#### Triton Kernels
+
+Before diving into it, Triton kernels might seem mysterious—like some dark magic that suddenly makes your models run blazingly fast. But in reality, once you gain some hands-on programming experience, you realize that the true magic lies in algorithm design rather than Triton kernels themselves, which is what we will cover in the next section on [FlashAttention]({{< relref "#flashattention" >}}). Here, I mainly want to document a programming paradigm known as **Block Pointers**, which is a newer and much more intuitive approach.
+
+Before grasping Block Pointers, there is a crucial mental model to understand. Inside a kernel, we are almost always dealing with a 2D computation, and it is always executed in tiles/blocks. This is because GPU SRAM (shared memory) is limited in size; you can only compute one tile, load the next, and repeat. You might ask: *what about higher-dimensional tensor computations?* There are generally two approaches: one is to flatten the dimensions and reshape/reconstruct them after computation; the other is to leverage Triton's grid syntax when launching the kernel. However, Triton grids only support up to 3 dimensions, meaning any extra dimensions must still be flattened before being passed into the kernel.
+
+Here, the "grid" can be viewed as the parallel execution dimensions of the GPU. Each grid point (program instance / thread block) handles a designated portion of the work, and these instances should be **decoupled** from one another. Inside each instance, a loop sequentially loads and computes different tiles along the remaining dimension. For a simple 2D scenario, the grid could be aligned along either rows or columns. Once you pick a grid direction, imagine a row of lawnmowers lined up along that dimension, mowing block-by-block across the orthogonal dimension (yes, exactly like the lawnmowers in *Plants vs. Zombies* 😄).
+
+![img/triton_tiles.png](img/triton_tiles.png)
+
+That sums up the core computational pattern of Triton kernel programming: it's actually quite clean and not drastically different from standard PyTorch, just with explicit tiling tricks added. What really drains your mental energy, however, is the data loading:
+
+1. Logical tensor layouts and physical memory storage are decoupled; you have to advance and manipulate pointers with extreme care.
+2. For computational efficiency, you must adjust the access pattern based on physical layout to exploit [Memory Coalescing]({{< relref "#memory-coalescing" >}}) for acceleration.
+3. When the actual matrix dimensions cannot be evenly divided by the tile size, we typically round up (ceiling division) the grid to ensure all elements are covered. However, this introduces out-of-bounds memory accesses, requiring boundary padding.
+4. When storing data back, out-of-bounds boundary checks are equally necessary.
+
+Without the Block Pointer abstraction, handling these issues is tedious and error-prone. Code gets cluttered with edge cases, and the main computational logic ends up fragmented and unreadable. With Block Pointers, this complexity is neatly encapsulated inside the block declaration. Here are a few examples of Block Pointers:
+
+```python
+x_block_ptr = tl.make_block_ptr(
+    x_ptr,
+    shape=(NUM_ROWS, D),
+    strides=(x_stride_row, x_stride_dim),
+    offsets=(row_tile_idx * ROWS_TILE_SIZE, 0),  # parallel on rows, so only the affected set offsets
+    block_shape=(ROWS_TILE_SIZE, D_TILE_SIZE),
+    order=(1, 0),
+)
+
+weight_block_ptr = tl.make_block_ptr(
+    weight_ptr,
+    shape=(D,),
+    strides=(weight_stride_dim,),
+    offsets=(0,),
+    block_shape=(D_TILE_SIZE,),
+    order=(0,),
+)
+
+output_block_ptr = tl.make_block_ptr(
+    output_ptr,
+    shape=(NUM_ROWS,),
+    strides=(output_stride_row,),
+    offsets=(row_tile_idx * ROWS_TILE_SIZE,),  # row affected
+    block_shape=(ROWS_TILE_SIZE,),
+    order=(0,),
+)
+```
+
+The first block pointer represents the parallelized dimension, requiring an explicit `offsets` parameter at initialization. The second block doesn't need an offset because all parallel threads start reading from the same base position. The third block is where the output is written back; since different threads write to distinct locations, it also requires an offset.  
+
+The other two critical parameters to watch are `strides` and `order`: `strides` specifies the memory displacement (stride in elements/bytes) between logically adjacent elements along each dimension; `order` represents the dimension indices sorted by stride. Since PyTorch uses row-major ordering by default, the dimension with the smallest stride sits at the trailing index.  
+
+Once all these configurations are declared, the core compute loop becomes remarkably concise:
+
+```python
+output = tl.zeros((ROWS_TILE_SIZE,), dtype=tl.float32)  # row allocator
+for _ in range(tl.cdiv(D, D_TILE_SIZE)):
+    row = tl.load(x_block_ptr, boundary_check=(0, 1), padding_option="zero")  # (ROW_TILE_SIZE, D_TILE_SIZE)
+    weight = tl.load(weight_block_ptr, boundary_check=(0,), padding_option="zero")  # (D_TILE_SIZE)
+    output += tl.sum(row * weight[None, :], axis=1)
+
+    x_block_ptr = x_block_ptr.advance((0, D_TILE_SIZE))
+    weight_block_ptr = weight_block_ptr.advance((D_TILE_SIZE,))
+
+tl.store(output_block_ptr, output, boundary_check=(0,))
+```
+
+In plain English: load the tile data into SRAM while checking boundaries (padding with zeros if out of bounds), execute the compute, and accumulate the result into a local SRAM accumulator. Once the tile is processed, advance the pointer to the next tile. After all tiles are finished, flush the accumulated result from the local accumulator back into HBM (High Bandwidth Memory) all at once.
+
+> [!NOTE]+ Note
+> It might feel a bit disorienting the first time you try it, but it clicks once you get the intuition. That said, kernel programming remains undeniably tedious 😵, even with abstractions like Block Pointers. Moreover, once you complete this section, you will realize that writing kernels is not the end goal, but merely a tool; the real intellectual fun lies in figuring out how to decouple data dependencies so massive parallelism becomes possible.
+
+#### FlashAttention
+
+> A stroke of genius in algorithm design that decoupled data dependencies—and sent my brain spinning 😵‍💫😵.
+
+
+Before writing the algorithm, we need to understand what's wrong with the current implementation, and doing so requires a prerequisite: matrix calculus. I highly recommend checking out these two Zhihu articles: *Matrix Calculus Techniques (Part 1)* and *Matrix Calculus Techniques (Part 2)*. They are wonderfully lucid reads that fill the gaps left by standard college calculus without requiring you to slog through massive matrix analysis textbooks.
+
+I won't dive into the full mathematical derivation here, so I'll just include two algorithm pseudocode screenshots:
+
+![img/flash_attention2_forward.png](img/flash_attention2_forward.png)
+
+![img/flash_attention2_backward.png](img/flash_attention2_backward.png)
+
+The impact of FlashAttention goes without saying: it achieves an attention algorithm with \(O(N)\) memory access, drastically slashing total execution latency. However, what deserves the most attention is the "online softmax" algorithm in the forward pass. How should we intuitively understand why this works?
+
+![img/running_softmax.png](img/running_softmax.png)
+
+The core idea of online softmax is to update/rescale prior partial results using newly observed incoming data. A common point of confusion is: *once I have already finished computing a tile, how can I retroactively update previous outputs?*  
+
+In fact, the intermediate attention scores themselves cannot be modified once discarded. But remember: we don't actually need to store the attention scores—what we ultimately care about is the output matrix \(O\). As shown in the figure, the matrix multiplication between the attention scores and \(V\) acts as an accumulator, allowing computations across different \(K\) (and \(V\)) tiles to contribute incrementally to the same output tile \(O\). In my view, this is the very prerequisite that makes online computation feasible in the first place.
+
+> [!NOTE] Remark
+> Because of this, I feel that calling this mechanism "online softmax" isn't entirely accurate; it might be better termed "online tiled attention." Pure softmax on its own cannot be computed in a streaming online fashion like this—or rather, in standalone softmax, later tiles have no way to retroactively correct the outputs of preceding tiles without keeping everything around. 🤔
