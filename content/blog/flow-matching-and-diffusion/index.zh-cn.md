@@ -1,7 +1,7 @@
 ---
 title: 流匹配与扩散模型
 weight: -130
-draft: true
+draft: false
 description: 流匹配与扩散模型相关笔记
 slug: flow-matching-and-diffusion
 language: zh-cn
@@ -13,7 +13,7 @@ series:
   - AI工程
 series_order: 2
 date: 2026-10-02
-lastmod: 2026-10-05
+lastmod: 2026-10-07
 authors:
   - Morethan
 ---
@@ -274,3 +274,149 @@ $$
 最后还需要强调一点：强化后的结果 \(\tilde{X}_1\) 不一定完全符合原始的条件分布 \(p_{\mathrm{data}}(\cdot|y)\)。实际上，模型学到的是一个被**锐化**了的分布，它的多样性更低，但精准度更高。下面是课程讲义中的一段评论：
 
 ![img/lecture_note_comment_on_classifier_free.png](img/lecture_note_comment_on_classifier_free.png)
+
+## 自编码器
+
+在前面的章节中，我们已经了解了如何训练模型来拟合速度场 \(u_t(x)\)。在推理阶段，我们可以通过数值模拟 ODE/SDE 得到最终的目标分布。然而在实际模拟 ODE/SDE 时会遇到一个现实挑战：如果我们希望生成高分辨率的高清图像，\(u_t(x)\) 就必须在一个极高维的空间中运行，这不仅计算代价极其昂贵，而且模型也极难训练。
+
+> [!NOTE]+ 补充说明
+> 在图像生成的语境下，\(u_t(x)\) 本质上是在指导我们如何修改图像所有通道上的**每一个像素**。
+
+此外，在真实的图像生成任务中，其实存在大量的空间与语义冗余。例如在下图中，黑色的背景部分无论如何都应该保持全黑。这启发我们可以将原始图像压缩到更紧凑的形式，让生成模型在更低维的表示上进行建模。
+
+![img/redundancy_example.png](img/redundancy_example.png)
+
+这便引出了**自编码器**：它包含一个将图像映射到低维空间（**潜空间 / latent space**）的编码器，以及一个将潜空间中的点重构回原始图像的解码器。
+
+![img/autoencoder.png](img/autoencoder.png)
+
+### 标准自编码器
+
+形式化地，我们记编码器为 \(\mu_{\phi}: \mathbb{R}^d \to \mathbb{R}^k\)，解码器为 \(\mu_{\theta}: \mathbb{R}^k \to \mathbb{R}^d\)。标准自编码器直接采用朴素的重构损失进行训练：
+
+
+$$
+\mathcal{L}_{\mathrm{Recon}}(\phi, \theta) = \mathbb{E}_{x \sim p_{\mathrm{data}}} \left[ \| \mu_\theta(\mu_\phi(x)) - x \|^2 \right]
+$$
+
+这个损失函数很直观。但我们的核心目标并不只是得到一个单纯的自编码器，而是要为生成模型构建一个规整的潜空间。这就意味着我们需要对潜空间的分布形态拥有更多的控制权。
+
+### 变分编码器
+
+相比标准自编码器，变分自编码器（VAE）最大的转变在于：它将编码和解码映射视为了在潜在概率分布上的**采样**操作。因此，编码器和解码器分别被定义为条件概率分布：
+
+
+$$
+q_\phi(z|x) = \mathcal{N}(z; \mu_\phi(x), \operatorname{diag}(\sigma_\phi^2(x))), \quad p_\theta(x|z) = \mathcal{N}(x; \mu_\theta(z), \sigma_\theta^2(z)I_d)
+$$
+
+其中 \(\mu_\phi(x) \in \mathbb{R}^k\)、\(\sigma_\phi^2(x) \in \mathbb{R}_{\ge 0}^k\)、\(\mu_\theta(z) \in \mathbb{R}^d\) 以及 \(\sigma_\theta^2(z) \in \mathbb{R}_{\ge 0}\) 均由神经网络参数化实现，\(\operatorname{diag}\) 表示对角矩阵。变量的编码与解码则通过采样来完成：
+
+
+$$
+z \sim q_\phi(\cdot|x), \ x \sim p_\theta(\cdot|z)
+$$
+
+在此视角下，重构损失被定义为负对数似然：
+
+
+$$
+\mathcal{L}_{\text{VAE-Recon}}(\phi, \theta) = -\mathbb{E}_{x \sim p_{\text{data}}(x), z \sim q_\phi(\cdot|x)} \left[ \log p_\theta(x|z) \right]
+$$
+
+它的直观含义是：对于从条件分布 \(q_\phi(\cdot|x)\) 中采样出的 \(z\)，模型在解码出原始数据 \(x\) 时的对数概率应该尽可能大。代入高斯分布后，该损失展开为：
+
+
+$$
+\mathcal{L}_{\text{VAE-Recon}}(\phi, \theta) = \mathbb{E}_{x \sim p_{\text{data}}(x), z \sim q_\phi(z|x)} \left[ \frac{1}{2\sigma_\theta^2(z)} \|x - \mu_\theta(z)\|^2 + \frac{d}{2} \log \sigma_\theta^2(z) \right] + \mathrm{const}
+$$
+
+在工程实践中，为了避免病态行为并获得更好的数值稳定性，通常会将解码方差固定为常数。此时损失函数简化为：
+
+
+$$
+\mathcal{L}_{\text{VAE-Recon}}(\phi, \theta) = \mathbb{E}_{x \sim p_{\text{data}}(x), z \sim q_\phi(z|x)} \left[ \frac{1}{2\sigma_\theta^2} \|x - \mu_\theta(z)\|^2 \right] + \mathrm{const}
+$$
+
+可以看出，此时的重构损失在数学形式上已等价于标准的均方误差重构损失。而为了得到性质更优良的潜空间分布，我们首先需要明确何为“优良”。高斯分布凭借其极佳的数学性质在各类工作中被广泛验证，因此我们直接将标准高斯分布定义为理想的目标分布。接着，我们在总损失中引入正则化项，促使潜空间分布尽可能逼近标准高斯分布：
+
+
+$$
+\begin{align*} \mathcal{L}_{\text{VAE}}(\phi, \theta) &= \mathcal{L}_{\text{VAE-Recon}}(\phi, \theta) + \beta \mathcal{L}_{\text{VAE-Prior}}(\phi) \\ &= -\mathbb{E}_{x \sim p_{\text{data}}(x), z \sim q_\phi(z \mid x)} \left[ \log p_\theta(x \mid z) \right] + \beta \mathbb{E}_{x \sim p_{\text{data}}(x)} \left[ D_{KL}(q_\phi(\cdot \mid x) \parallel p_{\text{prior}}) \right] \\ &= \mathbb{E}_{x \sim p_{\text{data}}(x), z \sim q_\phi(z \mid x)} \left[ \underbrace{\frac{1}{2\sigma_\theta^2(z)} \|x - \mu_\theta(z)\|^2}_{\text{重构误差}} + \underbrace{\frac{d}{2} \log \sigma_\theta^2(z)}_{\text{解码置信度}} + \underbrace{\frac{\beta}{2}\mathcal{K}(\sigma_\phi^2(x))}_{\text{促使潜变量方差趋近 1}} + \underbrace{\frac{\beta}{2} \|\mu_\phi(x)\|^2}_{\text{促使潜变量均值趋近 0}} \right] \end{align*}
+$$
+
+其中，\(\beta\) 调节正则项的权重占比，\(D_{KL}\) 为衡量两个分布差异的 KL 散度。
+
+值得注意的是，采样得到的 \(z\) 本身依赖于待训练的参数，直接采样操作无法进行反向传播求导。不过得益于高斯分布良好的数学特性，我们可以借助**重参数化技巧**将网络参数提取出来，使得梯度可以直接回传：
+
+
+$$
+\mathcal{L}_{\text{VAE}}(\phi, \theta) = \mathbb{E}_{x \sim p_{\text{data}}(x), \epsilon \sim \mathcal{N}(0, I_k)} \left[ \frac{1}{2\sigma_\theta^2(z)} \|x - \mu_\theta(\mu_\phi(x) + \sigma_\phi(x)\epsilon)\|^2 + \frac{d}{2} \log \sigma_\theta^2(z) + \frac{\beta}{2} \mathcal{K}(\sigma_\phi^2(x)) + \frac{\beta}{2} \|\mu_\phi(x)\|^2 \right]
+$$
+
+## 离散扩散模型
+
+我们为什么需要离散扩散模型？因为并非所有现实数据都天然适合被建模为欧氏空间 \(\mathbb{R}^d\) 中的连续向量。诸如文本或 DNA 序列这类离散数据，更自然的做法是将其视作离散状态空间 \(S\) 中的元素。
+
+回顾前面的内容，ODE 和 SDE 描述的是连续变量的演化过程；而此时的核心任务是构建一套对应的“离散版本 ODE/SDE”，这在概率论中被称为**连续时间马尔可夫链（Continuous-Time Markov Chain, CTMC）**：
+
+
+$$
+\frac{\mathrm{d}}{\mathrm{d}h} p_{t+h|t}(X_{t+h} = y \mid X_t = x) \Big|_{h=0} = Q_t(y \mid x) \quad \text{for all } x, y \in S, 0 \le t
+$$
+
+其中 \(Q_t(y \mid x)\) 定义了状态转移的**速率矩阵（rate matrix）**，刻画了从状态 \(x\) 跳变到状态 \(y\) 的瞬时速率；而 \(p_{t+h|t}(X_{t+h} = y \mid X_t = x)\) 则给出了在微小时间步长 \(h\) 内从状态 \(x\) 转移到 \(y\) 的转移概率。
+
+对转移方程进行泰勒展开，我们便能够对其离散步长进行模拟：
+
+
+$$
+p_{t+h|t}(X_{t+h} = y \mid X_t = x) = p_{t|t}(X_t = y \mid X_t = x) + h Q_t(y \mid x) + R_t(h) = 1_{y=x} + h Q_t(y \mid x) + R_t(h)
+$$
+
+类似于 Flow 模型，通过在前向时间上模拟该 CTMC 过程，我们便能如愿将初始的噪声分布 \(p_{\text{init}}\) 逐步演化至真实数据分布 \(p_{\text{data}}\)。
+
+然而，\(Q_t(y \mid x)\) 所处的全状态空间极其庞大。具体来说，当词表大小为 \(V\)、序列长度为 \(d\) 时，状态空间的大小为 \(|S| = V^d\)。为了让计算在工程上可行，我们必须对模型施加结构约束，最常用的策略就是**因子分解（factorization）**。下图展示了这一直观思路：
+
+![img/factorized_ctmc_model.png](img/factorized_ctmc_model.png)
+
+经过因子分解后，速率矩阵的计算开销大幅降低至可承受范围：
+
+
+$$
+x \mapsto \{Q_t^\theta(y \mid x)\}_{y \in N(x)} = \begin{pmatrix} Q_t^\theta(v_1, 1 \mid x) & \dots & Q_t^\theta(v_V, 1 \mid x) \\ \vdots & \ddots & \vdots \\ Q_t^\theta(v_1, d \mid x) & \dots & Q_t^\theta(v_V, d \mid x) \end{pmatrix}
+$$
+
+矩阵中的每个元素表示：在给定当前被掩码/带噪序列 \(x\) 的条件下，位置 \(i\) 转变（跳转）为词元 \(v_j\) 的瞬时速率。以上便是推理采样阶段的全部核心机制。
+
+至于训练阶段，其整体逻辑与 Flow Matching 几乎完全一致。首先，我们求解条件概率下的转移速率：
+
+
+$$
+\begin{align*} Q_t^z(y \mid x) &= \left(Q_t^z(v_i, j \mid x_j)\right)_{v_i, j} \\ Q_t^z(v_i, j \mid x_j) &= \frac{\dot{\kappa}_t}{1 - \kappa_t} \left(\delta_{z_j}(v_i) - \delta_{x_j}(v_i)\right) \\ &= \frac{\dot{\kappa}_t}{1 - \kappa_t} \begin{cases} 0 & \text{if } x_j = z_j \\ 1 & \text{if } v_i = z_j, \, x_j \neq z_j \\ 0 & \text{if } v_i \neq z_j, \, x_j \neq z_j \\ -1 & \text{if } v_i = x_j, \, x_j \neq z_j \end{cases} \end{align*}
+$$
+
+对展开项的直观物理理解如下：
+
+1. 若当前位置 \(x_j\) 已经是目标 token \(z_j\)，则转移速率为 \(0\)，概率保持不变；
+2. 若候选词 \(v_i\) 是真实目标 \(z_j\)，但当前 \(x_j \neq z_j\)，则转移速率为正（\(=1\)），概率质量向其流入；
+3. 若 \(v_i\) 与 \(x_j\) 均不是目标 \(z_j\)，则保持不动；
+4. 若当前位置 \(x_j\) 为 \(v_i\)，但该值并非目标 \(z_j\)，则转移速率为负（\(=-1\)），概率质量向外流出。
+
+随后，我们对所有已知样本取加权平均，即可得到边缘转移速率矩阵：
+
+
+$$
+Q_t(y \mid x) = \sum_{z \in S} Q_t^z(y \mid x) p_{1|t}(z \mid x)
+$$
+
+这里唯一未知的量是后验概率项 \(p_{1|t}(z \mid x)\)，它需要通过神经网络来进行参数化估计。它的物理含义是：在给定中间带噪状态 \(x\) 的情况下，预测其还原到最终真实样本 \(z\) 的概率。这与 BERT 模型所做的事情如出一辙——即给定被掩码的文本序列去预测被遮盖的真实词。因此，其训练目标也可以直接采用经典的交叉熵损失：
+
+
+$$
+\mathcal{L}_{\mathrm{DFM}}(\theta) = \mathbb{E}_{z \sim p_{\mathrm{data}}, \, t \sim \mathrm{Unif}_{[0, 1]}, \, x \sim p_t(\cdot \mid z)} \left[ \sum_{j=1}^d -\log p_{1|t}^\theta (z_j \mid x) \right]
+$$
+
+这个推导过程并不难理解，但或许会让人产生一丝疑问：文本生成真的有必要采用这种范式吗？它的优势与劣势究竟何在？
+
+这在当前仍是一个开放性课题（Open Problem）：一部分人认为，基于扩散的文本生成采样更快，并且天然赋予了模型编辑已生成文本的能力；但另一部分人则指出，离散扩散模型难以适配诸如 KV Cache 等主流的高效推理加速机制，且相比于经典的自回归生成范式，目前尚未展现出显著的性能优势。🤔

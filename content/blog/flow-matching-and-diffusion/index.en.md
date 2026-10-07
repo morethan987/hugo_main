@@ -1,7 +1,7 @@
 ---
 title: Flow matching and diffusion model
 weight: -130
-draft: true
+draft: false
 description: Some notes for flow matching and diffusion model
 slug: flow-matching-and-diffusion
 language: en
@@ -13,7 +13,7 @@ series:
   - AI Engineering
 series_order: 2
 date: 2026-10-02
-lastmod: 2026-10-05
+lastmod: 2026-10-07
 authors:
   - Morethan
 ---
@@ -196,7 +196,7 @@ Because of this exact equivalence, training a single network gives us the other 
 > [!NOTE] Thought
 > Why we introduce some stochastic factor? A converged explaination is about **diversity**. Flow model is simple and graceful but too rigrid and determinated. Moreover, there are some errors for flow model training which cannot be tackled theoritically. By introducing the stochastic factor, we hope to achieve a better performance by adjusting the \(\sigma\) of SDE.
 
-## Guidance Generation
+## Guided Generation
 
 The algorithms above does not take the user's prompt into considertation. Usually, we want to push the result to the direction that follows our prompt or other possible extra information.
 
@@ -284,3 +284,149 @@ You may consider: can we get apply different weight to \(u_t^\theta(x|\emptyset)
 One more thing that should emphasize: reinforced \(\tilde{X_{1}}\) is not necessarily aligned with \(X_{1} \sim p_{\text{data}}(\cdot|y)\). Actually, what the model learnt is a **sharped** distribution with lower diversity but higher precision. Here is what the lecture note says:
 
 ![img/lecture_note_comment_on_classifier_free.png](img/lecture_note_comment_on_classifier_free.png)
+
+## Autoencoder
+
+In the previous sections, we know how to train a model to matching velosity filed \(u_t(x)\). And in inference time, we simulate the ODE/SDE to get final distribution. But there is a problem when we simulating the ODE/SDE in practice: if we want to generate a high-quality image, the \(u_t(x)\) should be working in a extremely high dimensional space which is costly and hard to train.
+
+> [!NOTE]+ Note
+> In the context of image generation, \(u_t(x)\) actually tells us how to modify **every** pixel across the channels.
+
+And more over, there should be a lot of redundancy in the real image generation. For example, the dark part of the picture below should always be dark. This revels that we can represent the original image with a more compressed form that is easier to tackel by our generative models.
+
+![img/redundancy_example.png](img/redundancy_example.png)
+
+And that is the **autoencoder** which means an encoder to convert the image into a low dimensional space (**latent space**) and a decoder to convert data point in latent space back to an image.
+
+![img/autoencoder.png](img/autoencoder.png)
+
+### Standard Autoencoders
+
+Formally, we denote \(u_{\phi}: \mathbb{R}^d \to \mathbb{R}^k\) as encoder and \(u_{\theta}: \mathbb{R}^k \to \mathbb{R}^d\) as decoder. A standard autoencoder is trained with the naive reconstruction loss:
+
+
+$$
+\mathcal{L}_{\mathrm{Recon}}(\phi, \theta) = \mathbb{E}_{x \sim p_{\mathrm{data}}} \left[ \| \mu_\theta(\mu_\phi(x)) - x \|^2 \right]
+$$
+
+The loss function is easy to understand. However, our goal is not simply getting an autoencoder but getting an latent space for generative model. That means we need more control on the latent space should be.
+
+### Variational Autoencoders
+
+The first difference of variational autoencoders comparing to standard autoencoder is viewing the conversion operation as a sampling operation on a latent distribution. So the encoder and decoder is defined as:
+
+
+$$
+q_\phi(z|x) = \mathcal{N}(z; \mu_\phi(x), \operatorname{diag}(\sigma_\phi^2(x))), \quad p_\theta(x|z) = \mathcal{N}(x; \mu_\theta(z), \sigma_\theta^2(z)I_d)
+$$
+
+where \(\mu_\phi(x) \in \mathbb{R}^k\), \(\sigma_\phi^2(x) \in \mathbb{R}_{\ge 0}^k\), \(\mu_\theta(z) \in \mathbb{R}^d\), and \(\sigma_\theta^2(z) \in \mathbb{R}_{\ge 0}\) are parameterized as neural networks and \(\operatorname{diag}\) denotes the diagonal matrix. To encode or decode a variable, we sample
+
+
+$$
+z \sim q_\phi(\cdot|x), \ x \sim p_\theta(\cdot|z)
+$$
+
+Under this view, the reconstruction loss is:
+
+
+$$
+\mathcal{L}_{\text{VAE-Recon}}(\phi, \theta) = -\mathbb{E}_{x \sim p_{\text{data}}(x), z \sim q_\phi(\cdot|x)} \left[ \log p_\theta(x|z) \right]
+$$
+
+This means given a sampled \(z\) from a conditional distribution \(q_\phi(\cdot|x)\), we should get the largest log probability at \(x\). For the Gaussian case, the loss becomes:
+
+
+$$
+\mathcal{L}_{\text{VAE-Recon}}(\phi, \theta) = \mathbb{E}_{x \sim p_{\text{data}}(x), z \sim q_\phi(z|x)} \left[ \frac{1}{2\sigma_\theta^2(z)} \|x - \mu_\theta(z)\|^2 + \frac{d}{2} \log \sigma_\theta^2(z) \right] + \mathrm{const}
+$$
+
+Practically, to avoid pathological behavior and get better numerical stability, the \(\sigma_{\phi}(x)\) and \(\sigma_{\theta}(z)\) are usually fixed. The loss now is:
+
+
+$$
+\mathcal{L}_{\text{VAE-Recon}}(\phi, \theta) = \mathbb{E}_{x \sim p_{\text{data}}(x), z \sim q_\phi(z|x)} \left[ \frac{1}{2\sigma_\theta^2} \|x - \mu_\theta(z)\|^2 \right] + \mathrm{const}
+$$
+
+Now the loss is mathematically equals the standard reconstruction loss. To get a "nicer" latent distribution, we should claim what is a nicer distribution. The Gaussian is so special and widely valided that here we define that Gaussian is a nice distribution. So we introduce some regularization term into the loss to make sure the latent distribution to be somewhat similar with Gaussian.
+
+
+$$
+\begin{align*} \mathcal{L}_{\text{VAE}}(\phi, \theta) &= \mathcal{L}_{\text{VAE-Recon}}(\phi, \theta) + \beta \mathcal{L}_{\text{VAE-Prior}}(\phi) \\ &= -\mathbb{E}_{x \sim p_{\text{data}}(x), z \sim q_\phi(z \mid x)} \left[ \log p_\theta(x \mid z) \right] + \beta \mathbb{E}_{x \sim p_{\text{data}}(x)} \left[ D_{KL}(q_\phi(\cdot \mid x) \parallel p_{\text{prior}}) \right] \\ &= \mathbb{E}_{x \sim p_{\text{data}}(x), z \sim q_\phi(z \mid x)} \left[ \underbrace{\frac{1}{2\sigma_\theta^2(z)} \|x - \mu_\theta(z)\|^2}_{\text{recon. error}} + \underbrace{\frac{d}{2} \log \sigma_\theta^2(z)}_{\text{decoder confidence}} + \underbrace{\frac{\beta}{2}\mathcal{K}(\sigma_\phi^2(x))}_{\text{make latent variance=1}} + \underbrace{\frac{\beta}{2} \|\mu_\phi(x)\|^2}_{\text{make latent mean=0}} \right] \end{align*}
+$$
+
+where \(\beta\) means how important the similarity term should be, the \(D_{KL}\) is the KL divergence which represents the distance between two distribution.
+
+Notablly, \(z\) now relies on trainable parameters which is mathematically invalid to do backpropagation. Due to the fine property of Gaussian, we can move the parameter into the loss expression:
+
+
+$$
+\mathcal{L}_{\text{VAE}}(\phi, \theta) = \mathbb{E}_{x \sim p_{\text{data}}(x), \epsilon \sim \mathcal{N}(0, I_k)} \left[ \frac{1}{2\sigma_\theta^2(z)} \|x - \mu_\theta(\mu_\phi(x) + \sigma_\phi(x)\epsilon)\|^2 + \frac{d}{2} \log \sigma_\theta^2(z) + \frac{\beta}{2} \mathcal{K}(\sigma_\phi^2(x)) + \frac{\beta}{2} \|\mu_\phi(x)\|^2 \right]
+$$
+
+## Discrete Diffusion Models
+
+Why we want a discrete diffusion model? Because not all data is naturally modeled as a point in Euclidean space \(\mathbb{R}^d\), such as text or DNA which is more naturally viewed as elements of a discrete state space \(S\).
+
+Remember the ODE/SDE defines a continuous evolution, the core task now is to propose the "discrete ODE/SDE", which is actually called Continuous-Time Markov chain (CTMC).
+
+
+$$
+\frac{\mathrm{d}}{\mathrm{d}h} p_{t+h|t}(X_{t+h} = y \mid X_t = x) \Big|_{h=0} = Q_t(y \mid x) \quad \text{for all } x, y \in S, 0 \le t
+$$
+
+\(Q_{t}(y|x)\) defines a **rate matrix** that summarizes the rate of switching from state \(x\) to \(y\). \(p_{t+h|t}(X_{t+h} = y \mid X_t = x)\) tells us the probability of switching from \(x\) to \(y\) during a time step \(h\).
+
+By applying Tailor expansion on the transition equation, we can simulate the CTMC.
+
+
+$$
+p_{t+h|t}(X_{t+h} = y \mid X_t = x) = p_{t|t}(X_t = y \mid X_t = x) + h Q_t(y \mid x) + R_t(h) = 1_{y=x} + h Q_t(y \mid x) + R_t(h)
+$$
+
+Just like flow model, by simulating the CTMC, the distribution \(p_{\text{init}}\) becomes \(p_{\text{data}}\) which is what we expected.
+
+However, the state space of \(Q_{t}(y|x)\) can be very large. In paticular, \(|S|=V^d\) where \(V\) is our vocabulary size and \(d\) is sequence length. To make it practical, we need to constrain the model and the most widely-used method is **factorization**. Here is a picture to get some intuition.
+
+![img/factorized_ctmc_model.png](img/factorized_ctmc_model.png)
+
+And now the rate matrix is much affordable:
+
+
+$$
+x \mapsto \{Q_t^\theta(y \mid x)\}_{y \in N(x)} = \begin{pmatrix} Q_t^\theta(v_1, 1 \mid x) & \dots Q_t^\theta(v_V, 1 \mid x) \\ \dots & \\ Q_t^\theta(v_1, d \mid x) & \dots Q_t^\theta(v_V, d \mid x) \end{pmatrix}
+$$
+
+The element of the matrix means given the masked sequence of \(x\) the rate of position \(i\) turns into \(v_{j}\). That's all for the inference time.
+
+And for the training time, it's almost the same with flow model. First, we solve the conditional problem:
+
+
+$$
+\begin{align*} Q_t^z(y \mid x) &= \left(Q_t^z(v_i, j \mid x_j)\right)_{v_i, j} \\ Q_t^z(v_i, j \mid x_j) &= \frac{\dot{\kappa}_t}{1 - \kappa_t} \left(\delta_{z_j}(v_i) - \delta_{x_j}(v_i)\right) \\ &= \frac{\dot{\kappa}_t}{1 - \kappa_t} \begin{cases} 0 & \text{if } x_j = z_j \\ 1 & \text{if } v_i = z_j, \, x_j \neq z_j \\ 0 & \text{if } v_i \neq z_j, \, x_j \neq z_j \\ -1 & \text{if } v_i = x_j, \, x_j \neq z_j \end{cases} \end{align*}
+$$
+
+Some illustration for expanded items: 
+
+1. if \(x_{j}\) is the tag \(z_{j}\) then the rate is \(0\) means the probability should keep the same;
+2. if \(v_{i}\) is tag \(z_{j}\) but \(x_{j}\) now is not \(z_{j}\) then the rate is \(1\) means the probability should flow into it;
+3. if both \(v_{i}\) and \(x_{j}\) is not \(z_{j}\) then do nothing;
+4. if \(x_{j}\) now is \(v_{i}\) but \(v_{i}\) is not the tag \(z_{j}\) then the probability should flow out.
+
+Then we take a weighted average for all known samples to get the marginal rate matrix:
+
+
+$$
+Q_t(y \mid x) = \sum_{z \in S} Q_t^z(y \mid x) p_{1|t}(z \mid x)
+$$
+
+The only term we do not know is \(Q_t^z(y \mid x)\) and that should be replaced by our neural network. The meaning of the term is that given a internal "dirty" \(x\) how the rate should be for the specific sample \(z\). This is exactly the BERT model do: give the masked sentence to predict the masked word. So the loss function should also be the classic cross entropy loss:
+
+
+$$
+\mathcal{L}_{\mathrm{DFM}}(\theta) = \mathbb{E}_{z \sim p_{\mathrm{data}}, \, t \sim \mathrm{Unif}_{[0, 1]}, \, x \sim p_t(\cdot \mid z)} \left[ \sum_{j=1}^d -\log p_{1|t}^\theta (z_j \mid x) \right]
+$$
+
+It's not hard to comprehend but kind of strange: is this necessary for text generation? or what's the advantage and disadvantage?
+
+Now it's an opening problem, someone hold that the diffusion text generation is faster and enables the model to edit the generated text (stronger performance), but others hold that these models are hard to implement KV cache and maybe no notable performance improvement over tytpical autoregressive generation. 🤔
