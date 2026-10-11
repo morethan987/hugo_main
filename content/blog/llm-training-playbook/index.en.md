@@ -13,7 +13,7 @@ series:
   - AI Engineering
 series_order: 0
 date: 2025-05-28
-lastmod: 2026-10-05
+lastmod: 2026-10-08
 authors:
   - Morethan
 ---
@@ -743,3 +743,120 @@ In fact, the intermediate attention scores themselves cannot be modified once di
 
 > [!NOTE] Remark
 > Because of this, I feel that calling this mechanism "online softmax" isn't entirely accurate; it might be better termed "online tiled attention." Pure softmax on its own cannot be computed in a streaming online fashion like this—or rather, in standalone softmax, later tiles have no way to retroactively correct the outputs of preceding tiles without keeping everything around. 🤔
+
+### Distributed Training
+
+Why do we need distributed training in the first place? There are two primary scenarios: First, suppose you have an entire compute cluster—you need to squeeze every drop of performance out of these accelerators to avoid wasting compute. Second, you have a massive model that cannot fit on a single GPU, a single rack, or even a modest cluster. At that point, distributed training is no longer optional—it is a necessity.
+
+![gpu_connections](img/gpu_connections.png "Common GPU Interconnection Topologies" )
+
+As shown in the figure, this is a common interconnection topology for GPU clusters. While TPU clusters often adopt different network designs (typically toroidal mesh topologies), tree-like hierarchical network topologies have become increasingly dominant as MoE (Mixture of Experts) has become the de facto standard.
+
+> [!NOTE]- Note
+> Why not connect every GPU point-to-point (all-to-all)? While that minimizes communication latency and maximizes bandwidth, the cost is prohibitive: the required cabling scales quadratically (\(O(N^2)\)) with the number of GPUs. Furthermore, it is extremely inflexible, as adding a single new GPU would require rewiring connections to every existing device.
+
+#### Collective Operations
+
+Before exploring complex parallelization strategies, let's first establish the foundational collective communication primitives shown below:
+
+![img/usual_collective_operations.png](img/usual_collective_operations.png)
+
+Among these, `All-Reduce` deserves special attention. Implemented naively, its communication overhead is enormous. For example, if every rank simply broadcasts all its data to every other rank and computes the reduction locally, the total transfer volume scales as \(3 \times 4 = 12\). A vastly more efficient approach decomposes `All-Reduce` into a `Reduce-Scatter` followed by an `All-Gather`, slashing the total communication volume down to \(4 \times \left(\frac{3}{4} + \frac{3}{4}\right) = 6\).
+
+> [!NOTE]+ Sidenote
+> Splitting a large collective operation into smaller stages offers another key advantage: it allows communication to overlap with computation, further reducing the effective communication bottleneck.
+
+#### Data Parallelism (DP)
+
+Vanilla Data Parallelism is straightforward: you slice the batch across the batch dimension and assign a sub-batch to each GPU. The forward pass proceeds identically on each device, and during the backward pass, an `All-Reduce` synchronizes the gradients across all GPUs. The glaring drawback, however, is that every single GPU must maintain an entire replica of the model weights, gradients, and optimizer states.
+
+ZeRO (Zero Redundancy Optimizer) introduced an exceptionally elegant solution that breaks this down into three progressive stages, as illustrated below. ZeRO is widely celebrated as "elegant" because it eliminates memory redundancy almost for free, adding negligible communication overhead compared to standard DP.
+
+![img/ZeRO_illustration.png](img/ZeRO_illustration.png)
+
+**Stage 1: Optimizer State Partitioning.** Different GPUs store and update optimizer states for different parameter slices. This is implemented via `Reduce-Scatter` + `All-Gather`: each GPU computes full gradients on its local batch, scatters them to the corresponding owning GPU to perform the optimizer step, and then gathers the updated parameters back. This introduces virtually zero extra communication cost over standard `All-Reduce`, yet eliminates the vast majority of redundant optimizer memory.
+
+![img/ZeRO_stage_1.png](img/ZeRO_stage_1.png)
+
+**Stage 2: Gradient Partitioning.** Unlike Stage 1—which traverses the entire backward graph before synchronizing all gradients at once—Stage 2 exchanges gradients layer-by-layer during the backward pass itself, immediately freeing any gradients that the local device does not own. This is conceptually straightforward, costs no extra communication, and partitions the gradient memory footprint evenly across devices.
+
+**Stage 3: Parameter (Weight) Partitioning.** Here, even the model weights are sharded across GPUs. Each GPU holds only a fraction of the parameters. Whenever a forward or backward computation requires weights stored on another device, they are fetched on the fly via collective communication and immediately discarded after use. Remarkably, this can still be achieved with minimal communication penalty by overlapping parameter fetching with the preceding layer's computation. For compute-heavy workloads (such as large matrix multiplications) running over high-bandwidth interconnects, this pipelining effectively hides the communication overhead.
+
+![img/communication_computation_overlaping.png](img/communication_computation_overlaping.png)
+
+However, ZeRO is not a silver bullet. It has an implicit constraint: the number of GPUs cannot exceed the batch size. You might think, "No problem, just crank up the batch size." But while GPU counts can scale, effective batch size cannot grow indefinitely. Beyond a certain threshold (critical batch size), training efficiency saturates; scaling the batch size further causes GPUs to idle on sub-optimal optimization dynamics, resulting in wasted compute.
+
+![img/traning_speed_saturation.png](img/traning_speed_saturation.png)
+
+Another limitation of ZeRO is that it does not partition activation memory. Consequently, while Stage 3 makes it look effortless to scale model size on paper, activations quickly become the true memory bottleneck. To rein in activation memory, one must turn to model parallelization during the forward pass.
+
+#### Pipeline Parallelism (PP)
+
+Pipeline parallelism is both intuitive and somewhat counter-intuitive—it is arguably the least "parallel-feeling" of all parallel paradigms. Conceptually, different layers of a model are assigned to different GPUs sequentially; once GPU \(N\) finishes computing its stage, it passes the intermediate activations downstream to GPU \(N+1\). You can immediately spot the problem: catastrophic pipeline stalls ("bubbles"). A common fix is to break each batch into multiple micro-batches, as illustrated below.
+
+![img/batch_pipeline_parallel.png](img/batch_pipeline_parallel.png)
+
+Naturally, keeping a pipeline fully utilized requires a sufficiently large batch size, and throughput is notoriously sensitive to this value. To mitigate this idle time, complex pipeline scheduling schemes have been developed to squeeze out as many bubbles as possible. This begs the question: can we eliminate the pipeline bubble entirely? The answer is yes.
+
+![img/zero_bubble_pipline_parallel.png](img/zero_bubble_pipline_parallel.png)
+
+A closer look at backpropagation reveals that it consists of two decoupled computations: computing the gradient with respect to the input activation (\(x\)) and computing the gradient with respect to the weights (\(W\)). The input gradient \(\nabla_x\) is time-critical because it must be passed backward to earlier pipeline stages immediately. In contrast, the weight gradient \(\nabla_W\) only needs to be finished before the optimizer step; its execution can be rescheduled arbitrarily to fill the idle pipeline bubbles. With a properly designed schedule, bubbles can be almost completely eliminated!
+
+#### Tensor Parallelism (TP)
+
+Tensor Parallelism operates at a finer granularity, as illustrated below. For an MLP block, we can slice matrix \(A\) along columns and matrix \(B\) along rows. This minimizes intermediate synchronization, because the inner dimension matches the matrix multiplication requirements naturally. One subtle detail: during backpropagation, the communication functions \(f\) and \(g\) must swap roles to preserve computational graph consistency.
+
+![img/tensor_parallel_for_GeLU.png](img/tensor_parallel_for_GeLU.png)
+
+What is the catch with Tensor Parallelism? Because it operates at the sub-layer/operator level, communication collectives are invoked hundreds of times per training step. These operations are strictly synchronous, leaving virtually no room to hide communication behind computation. Moreover, TP exhibits a poor compute-to-communication ratio that cannot be amortized by scaling batch size. Here, \(tp\) represents the tensor parallel degree:
+
+
+$$
+\text{Ratio} = \frac{\frac{16 \cdot b \cdot s \cdot h^2}{tp}}{4 \cdot b \cdot s \cdot h} = \frac{4h}{tp}
+$$
+
+In short, Tensor Parallelism is intensely communication-bandwidth hungry. In practice, it is almost exclusively confined within high-speed local interconnect domains, such as NVLink/NVSwitch within a single physical node.
+
+#### Sequence Parallelism and Context Parallelism
+
+![img/sequence_parallel.png](img/sequence_parallel.png)
+
+Sequence Parallelism (SP) is typically applied to residual connections and LayerNorm/RMSNorm modules. In naive Tensor Parallelism, every GPU keeps a fully replicated copy of the activations in these non-TP regions. SP addresses this by splitting activations along the sequence length dimension, directly curbing activation memory.
+
+Context Parallelism (CP) pushes this idea further into the attention mechanism itself by partitioning the Key-Value (KV) cache across devices. Techniques like RingAttention operate similarly to `All-Reduce` at the communication layer, passing token chunks in a ring topology to compute attention progressively.
+
+![img/ring_attention.png](img/ring_attention.png)
+
+By layering these model-level parallel strategies on top of one another—complemented by selective activation checkpointing—virtually every component of activation memory can be sharded evenly across GPUs.
+
+![img/Pasted image 20261008153913.png](img/Pasted image 20261008153913.png)
+
+> [!NOTE]- 😂
+> What an absolute masterclass in squeezing hardware dry! 🤣
+
+#### Expert Parallelism (EP)
+
+The term "Expert Parallelism" can sound slightly redundant at first glance, since Mixture-of-Experts (MoE) is inherently parallel: different experts reside on different GPUs, and intermediate tokens are dynamically routed to their target expert devices. That is indeed how it works in practice.
+
+![img/expert_parallel.png](img/expert_parallel.png)
+
+The real engineering complexity of Expert Parallelism arises when composing it with other parallelism paradigms. Notably, Data Parallelism and Expert Parallelism can share parameter sharding under the hood, meaning the degree of Expert Parallelism generally should not exceed the degree of Data Parallelism.
+
+![img/expert_parallel_conbination.png](img/expert_parallel_conbination.png)
+
+> [!warning]+ Warning
+> You cannot blindly scale Data Parallelism and Tensor Parallelism to arbitrary extremes in an MoE setup. GPUs are fundamentally designed for large matrix multiplications; keeping arithmetic workloads sufficiently dense is essential to reaching theoretical peak compute throughput.
+
+#### Hybrid Parallelism
+
+With so many specialized parallelization dimensions available, how do we stitch them together in real-world systems to achieve peak performance?
+
+![img/mixed_parallel.png](img/mixed_parallel.png)
+
+In modern large-scale training, the standard recipe is 3D (or 4D) Parallelism:
+
+1. **Intra-node:** Each yellow box represents an NVLink domain, within which we execute model-level intra-layer parallelisms (Tensor Parallelism, Sequence Parallelism, Context Parallelism, and Expert Parallelism).
+2. **Inter-stage:** Different yellow boxes represent distinct model layers, chained together via Pipeline Parallelism.
+3. **Cluster-wide:** Finally, the 2D/3D units formed above are replicated across the remaining nodes using Data Parallelism (ZeRO).
+
+As a rule of thumb, you first use Model Parallelism and Pipeline Parallelism to fit the model within hardware memory limits (tuning tensor shapes so they are just large enough to maximize GPU matrix computation efficiency). Once memory constraints are cleared, you scale Data Parallelism across the cluster to saturate the remaining compute capacity.
