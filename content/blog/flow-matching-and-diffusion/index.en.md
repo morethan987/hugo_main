@@ -430,3 +430,17 @@ $$
 It's not hard to comprehend but kind of strange: is this necessary for text generation? or what's the advantage and disadvantage?
 
 Now it's an opening problem, someone hold that the diffusion text generation is faster and enables the model to edit the generated text (stronger performance), but others hold that these models are hard to implement KV cache and maybe no notable performance improvement over tytpical autoregressive generation. 🤔
+
+## Summary and thoughts
+
+What's the most important things for me from the course? The top three is:
+
+1. Using ODE/SDE to describe a dynamic probability distribution
+2. Generating is sampling from data distribution
+3. Mathematical training to build a machine learning model
+
+I am currently interested in continual learning and its typical setting is a dynamic distribution of time. ODE/SDE is a useful tool to modeling that.
+
+Generating is sampling from data distribution. This calim is profound and inspiring especially when you see how VAE puts the claim into practice: VAE treats encoding and decoding process as sampling.
+
+Bridging the gap between pure mathematics and machine learning takes practice. Pure theory doesn't always translate directly into practice, it takes experience to truly harness its power. This course served as a great hands-on exercise, giving me an intuitive feel for how to turn mathematical formulations into functional machine learning models.
