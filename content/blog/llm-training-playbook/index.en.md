@@ -13,7 +13,7 @@ series:
   - AI Engineering
 series_order: 0
 date: 2025-05-28
-lastmod: 2026-10-08
+lastmod: 2026-10-17
 authors:
   - Morethan
 ---
@@ -31,7 +31,7 @@ The content can be broadly divided into five parts:
 
 1. [Fundamentals]({{< relref "#fundamentals" >}}): tokenizers, resource inventory, model architectures, training strategies
 2. [Systems engineering]({{< relref "#systems-engineering" >}}): kernels, parallelism, inference
-3. Scaling laws
+3. [Scaling laws]({{< relref "#scaling-laws" >}})
 4. Data engineering: pretraining data engineering—messy, but absolutely critical
 5. Model alignment: RL post-training fine-tuning
 
@@ -175,7 +175,7 @@ However, modern implementations generally use:
 
 
 $$
-\text{FNN}(x) = \sigma(xW_{1})W_{2}
+\text{FFN}(x) = \sigma(xW_{1})W_{2}
 $$
 
 The main reason for this change is to save memory and improve training stability. See the [Training Stability]({{< relref "#training-stability" >}}) section for details regarding training stability.
@@ -860,3 +860,278 @@ In modern large-scale training, the standard recipe is 3D (or 4D) Parallelism:
 3. **Cluster-wide:** Finally, the 2D/3D units formed above are replicated across the remaining nodes using Data Parallelism (ZeRO).
 
 As a rule of thumb, you first use Model Parallelism and Pipeline Parallelism to fit the model within hardware memory limits (tuning tensor shapes so they are just large enough to maximize GPU matrix computation efficiency). Once memory constraints are cleared, you scale Data Parallelism across the cluster to saturate the remaining compute capacity.
+
+### Inference
+
+It is well known that training LLMs consumes massive amounts of compute. However, across the entire lifecycle of a model, inference often accounts for an even larger share of total compute. Moreover, inference performance is directly tied to user experience, making systematic engineering optimizations absolutely crucial. Because GPU workloads during inference differ fundamentally from those during training, they require dedicated analysis.
+
+Naturally, we want our inference system to be as fast as possible, but "fast" can mean several different things:
+
+1. **Time-to-First-Token (TTFT)**: Measures the blank waiting time experienced by the user, typically in milliseconds (ms).
+2. **Token Latency / Inter-Token Latency (ITL)**: The time cost required to produce each subsequent token for a user request, typically measured in seconds per token (s/token) or milliseconds.
+3. **Throughput**: Measures the overall capacity of the system, defined as the total number of tokens generated per second across all users, in tokens/s (or \(\text{s}^{-1}\)).
+
+> [!NOTE] Note
+> While "token rate" is sometimes used colloquially, the standard English technical term is per-token *latency* (or Inter-Token Latency). Because using "latency" for both TTFT and individual token generation can be slightly ambiguous in Chinese, we often refer to it as "token rate" or "per-token generation time."
+
+#### Inference Workflow
+
+Below is the standard Transformer architecture flowchart along with the tensor shapes involved in the computation (see [Model Architecture]({{< relref "#model-architecture" >}}) for full details). To keep subsequent calculations clean, we assume the canonical parameter relations: \(F = 4D\), \(D = NH\), and \(N = KG\). We also default to `bfloat16` precision throughout.
+
+![transformer_detailed_operations](img/transformer_detailed_operations.png "Cite from [Scaling book](https://jax-ml.github.io/scaling-book/transformers/#:~:text=Figure%3A%20this,the%20weight%20shape.)" )
+
+> [!NOTE] Note
+> Seeing both \(S\) and \(T\) at first glance might be confusing—why are there two sequence lengths? Think of \(S\) as the length of the prior context tokens (hence labeled alongside KV in the diagram), while \(T\) represents the sequence length generated in a single forward pass. Naively, \(T=1\); however, techniques like speculative decoding (discussed in [Lossless Speedup]({{< relref "#lossless-speedup" >}})) can produce multiple tokens in a single step (\(T > 1\)). Additionally, this diagram adopts Grouped-Query Attention (GQA), discussed in [Lossy Speedup]({{< relref "#lossy-speedup" >}}).
+
+The most naive inference implementation looks like the figure below, where every step mirrors standard training: we compute the next-token prediction distributions across all sequence positions, extract the prediction distribution of the very last token, sample a new token using some decoding strategy (temperature scaling, top-\(p\) truncation, etc.), concatenate it back to the input sequence, and repeat. As you can imagine, this approach incurs an \(O(n^2)\) computational complexity in feed-forward layers and \(O(n^3)\) in attention layers, introducing staggering amounts of redundant computation.
+
+![transformer_naive_sampling](img/transformer_naive_sampling.png "Cite from [Scaling book](https://jax-ml.github.io/scaling-book/inference/#:~:text=Figure%3A%20naive%20sampling%20from%20a%20Transformer.)" )
+
+The de facto industry standard to eliminate this redundancy is **KV Caching**. With a KV cache in place, inference splits into two distinct phases:
+
+1. **Prefill Phase**: Similar to training, the model processes an extended prompt of known tokens in parallel to produce the initial logits, while simultaneously caching the computed \(K\) and \(V\) tensors across layers for subsequent attention calculations.
+2. **Decode Phase**: Generates one token at a time sequentially, computing and appending only the newly generated token's \(K\) and \(V\) tensors to the cache.
+
+![transformer_kvcache_sampling](img/transformer_kvcache_sampling.png "Cite from [Scaling book](https://jax-ml.github.io/scaling-book/inference/#:~:text=Figure%3A%20diagram%20of%20efficient%20Transformer%20sampling%20with%20a%20KV%20cache.)" )
+
+#### Arithmetic Intensity Analysis
+
+Let us look at the data flow of a standard SwiGLU-style Feed-Forward Network (FFN): Load the attention output \(X \in \mathbb{R}^{B \times T \times D}\), the up-projection weights \(W_u \in \mathbb{R}^{D \times F}\), the gate weights \(W_g \in \mathbb{R}^{D \times F}\), and the down-projection weights \(W_d \in \mathbb{R}^{F \times D}\). Compute \(X W_u\) to get \(U\) and write it to HBM; compute \(X W_g\) to get \(G\) and write it to HBM; read back both results, apply element-wise GeLU/SiLU activation to \(G\), compute the element-wise product \(U \odot \text{act}(G)\), multiply by \(W_d\), and write the final output back to HBM.
+
+Accounting for total data movement (\(20BTD + 24D^2\ \text{Bytes}\)) and floating-point operations (\(24BTD^2\ \text{FLOPs}\)), the arithmetic intensity of the FFN layer evaluates to:
+
+
+$$
+I = \frac{24BTD^2}{20BTD + 24D^2} = \frac{6BTD}{5BT + 6D}\quad \text{FLOPs/Byte}
+$$
+
+During the **prefill phase**, both the batch size \(B\) and sequence length \(T\) are relatively large. Here, arithmetic intensity approaches \(1.2D\), almost effortlessly saturating the theoretical compute capacity of the GPU. Even under moderate batch sizes and sequence lengths, hitting the compute-bound regime remains easily achievable with minimal mathematical margin.
+
+> [!NOTE]+ H 100 Reference Specifications
+> An NVIDIA H 100 SXM boasts roughly \(9.89 \times 10^{14}\) FLOPs/s of peak dense FP 16/BF 16 compute and \(3.35 \times 10^{12}\) Bytes/s of HBM 3 memory bandwidth, yielding a hardware ridge point (roofline turning point) of approximately 295 FLOPs/Byte. To fully utilize the compute cores, our arithmetic intensity needs to exceed this threshold.
+
+During the **decode phase**, assuming we generate a single token per step (\(T = 1\)), the FFN faces a noticeable bottleneck: \(B\) depends on concurrent user requests, which is an external operational variable rather than something fixed by model engineering. When concurrency is low, arithmetic intensity drops drastically. However, for mainstream production workloads serving high concurrency, we can batch requests together to achieve a sufficiently high \(B\), effectively driving the GPU back toward compute saturation (see [Dynamic Workloads]({{< relref "#dynamic-workloads" >}})).
+
+---
+
+Next, let us analyze the Attention layer (assuming FlashAttention without GQA for now). The flow is as follows: Read input \(X \in \mathbb{R}^{B \times T \times D}\) and projection matrices \(W_Q, W_K, W_V \in \mathbb{R}^{D \times D}\). Perform matrix multiplications to obtain \(Q, K, V \in \mathbb{R}^{B \times T \times N \times H}\). The newly computed \(K\) and \(V\) are written to the KV cache in HBM, while \(Q\) stays in on-chip SRAM. \(Q\) is multiplied by the cached keys \(K_{\text{all}}^T \in \mathbb{R}^{B \times S \times N \times H}\), scaled, masked, softmaxed, and multiplied by \(V_{\text{all}}\). Thanks to FlashAttention, these intermediate attention matrices are fused in SRAM without intermediate roundtrips to HBM. Finally, the attention output \(O \in \mathbb{R}^{B \times T \times N \times H}\) is written back.
+
+Summing all data movement (\(8BTD + 6D^2 + 4BSD\ \text{Bytes}\)) and compute (\(6BTD^2 + 4BTSD\ \text{FLOPs}\)), the arithmetic intensity for the Attention layer is:
+
+
+$$
+I = \frac{3 \frac{D}{S} + 2}{\frac{4}{S} + 3 \frac{D}{BTS} + \frac{2}{T}}
+$$
+
+In the **prefill phase**, where \(T = S\) and \(B\) are substantial (often matching or exceeding \(D\)), achieving the target arithmetic intensity is straightforward, even under dynamic batch variations.
+
+In the **decode phase**, however, \(T = 1\). Even if the context length \(S\) grows very large, the asymptotic arithmetic intensity tops out around \(1\ \text{FLOP/Byte}\). This is disastrously low compared to hardware capabilities.
+
+This theoretical analysis brings us to a stark conclusion: **the Attention layer during decode is severely memory-bandwidth bound. Simply tweaking hyperparameters will not fix this; it demands architectural and algorithmic innovations.**
+
+#### Performance Metric Analysis
+
+Having established that decoding is predominantly memory-bound, we can reasonably ignore raw computation when estimating token latency and throughput to obtain clean, insightful closed-form estimates. Furthermore, production inference engines employ aggressive operator fusion to eliminate unnecessary data roundtrips, meaning minor memory accesses can be ignored (accounting for only fractions of a percent). Our analysis boils down to two dominant memory transfers: **model weights** and **KV Cache**.
+
+The total model parameter count (without GQA, where \(K = N\)) is approximated by:
+
+
+$$
+\text{Param} = \underbrace{2VD}_{\text{Embedding \& LM Head}} + \underbrace{3DFL}_{\text{MLP}} + \underbrace{\Big( \underbrace{DNH}_{W_Q} + \underbrace{2DKH}_{W_{K,V}} + \underbrace{DNH}_{W_O} \Big) L}_{\text{Attention}}
+$$
+
+The memory footprint of the KV Cache is given by:
+
+
+$$
+\text{Memory}_{\text{KV}} = \underbrace{2}_{\text{Key \& Value}} \cdot \underbrace{P}_{\text{Bytes/Elem}} \cdot \underbrace{BS}_{\text{Tokens}} \cdot \underbrace{L}_{\text{Layers}} \cdot \underbrace{KH}_{\text{KV Dim}}
+$$
+
+In the memory-bound regime, theoretical per-token generation latency is simply the time required to stream all weights and cache entries through memory:
+
+
+$$
+\text{Latency} = \frac{\text{Param} + \text{Memory}_{\text{KV}}}{\text{Mem\_bandwidth}}
+$$
+
+From a system batching perspective, the aggregate throughput is:
+
+
+$$
+\text{Throughput} = \frac{B}{\text{Latency}} = \frac{B \cdot \text{Mem\_bandwidth}}{\text{Param} + \text{Memory}_{\text{KV}}}
+$$
+
+Plugging in concrete parameters for **Llama-2-13 B** yields the following estimates:
+
+Batch Size | `num_params` | `memory` (Bytes) | `latency` (s) | `throughput` (tokens/s)
+:----- | :----- | :----- | :----- | :-----
+**b 1** (\(B=1\)) | 13,015,449,600 | 26,869,760,000 | 0.0080 | 124.68
+**b 64** (\(B=64\)) | 13,015,449,600 | 79,717,990,400 | 0.0238 | 2689.48
+**b 256** (\(B=256\)) | 13,015,449,600 | 240,779,264,000 | 0.0719 | 3561.77
+
+Notice the fundamental trade-off: **per-token latency and aggregate throughput are inherently at odds**. Scaling \(B\) improves GPU utilization and boosts overall system throughput, but each individual user experiences higher latency per token. System engineering is fundamentally about striking the right balance between the two.
+
+We have not modeled TTFT in detail here, but conceptually it is the sum of the prefill processing time and the first decode step. Because both scale with \(B\) and prompt length, increasing \(B\) will likewise increase TTFT.
+
+#### Lossy Speedup
+
+To accelerate inference, optimization strategies target the two largest memory contributors: the **KV Cache** and the **model weights**.
+
+To compress the KV Cache, a direct approach is to decouple the number of KV heads from query heads (**Grouped-Query Attention, GQA**). For example, while standard multi-head attention might use 8 query heads of dimension 128 and 8 matching KV heads, GQA uses only 4 KV heads (each shared across 2 query heads), instantly halving the KV cache footprint. Empirical findings demonstrate that as long as the architecture does not collapse all the way to a single KV head (Multi-Query Attention), performance degradation is negligible.
+
+![grouped_query_attention](img/grouped_query_attention.png "Cite from [Ainslie+ 2023](https://arxiv.org/pdf/2305.13245.pdf)" )
+
+DeepSeek demonstrated exceptional system-level engineering with **Multi-Head Latent Attention (MLA)**. Instead of caching full per-head KV tensors, MLA projects the KV representations into a low-dimensional latent space before caching. At decode time, queries absorb the decompression matrices directly via linear re-association before interacting with the cached latent vectors. This grants fine-grained control over the compression ratio far beyond standard GQA. Remarkably, the added representational flexibility actually *boosted* downstream benchmark performance—a true architectural win-win.
+
+![multi_head_latent_attention](img/multi_head_latent_attention.png "Cite from [DeepSeek-AI+ 2024](https://arxiv.org/abs/2405.04434)" )
+
+Other KV compression paradigms include cross-layer attention sharing, sliding window attention, and various linear attention mechanisms, which we omit here for brevity.
+
+---
+
+On the model weight side, two primary techniques dominate: **Quantization** and **Pruning / Distillation**.
+
+Quantization represents high-precision numerical values using lower-precision formats. Intuitively, imagine a sparse grid in continuous space; quantization snaps scattered high-precision values onto these discrete grid points. It is typically categorized into:
+
+1. **Quantization-Aware Training (QAT)**: Simulates quantization rounding errors during training. The downside is steep training overhead, slower convergence, and degraded stability, demanding significantly more data and compute hours.
+2. **Post-Training Quantization (PTQ)**: Calibrates quantization scales on a small validation set after full training is complete. It is computationally cheap and preserves most of the original model performance ([Frantar et al., 2022](https://arxiv.org/abs/2210.17323)).
+3. **Activation/Attention Quantization**: Dynamically retains higher precision for high-magnitude outlier values while quantizing the rest, as activation outliers interact multiplicatively with subsequent weights ([Lin et al., 2023](https://arxiv.org/abs/2306.00978)).
+
+In model pruning and distillation, representative works include NVIDIA's Nemotron-4-15 B and Minitron-8 B ([Muralidharan et al., 2024](https://arxiv.org/abs/2407.14679)).
+
+![img/nemontron_model_pruning.png](img/nemontron_model_pruning.png)
+
+The results are striking: the pruned and distilled Minitron-8 B achieved superior benchmark performance at a fraction of the training cost compared to Nemotron-3-8 B trained from scratch.
+
+![img/nemontron_model_pruning_result.png](img/nemontron_model_pruning_result.png)
+
+#### Lossless Speedup
+
+The methods above modify or compress either the KV cache or the model parameters. While modern methods minimize quality loss (or even improve it, as with MLA), is it possible to achieve true **lossless** acceleration? Currently, the primary answer is **Speculative Decoding**.
+
+Speculative decoding leverages the observation that running a forward verification pass over multiple candidate tokens in parallel (prefill-like compute) is far cheaper than generating those tokens sequentially one by one. Verifying tokens is compute-bound and fast; generating them sequentially is memory-bound and slow. It operates on a low-penalty, high-reward principle reminiscent of branch prediction in modern CPU pipelines.
+
+Specifically, a small, fast draft model rapidly proposes a sequence of \(K\) candidate tokens. The target base model then evaluates these candidates in a single parallel forward pass. In practice, a prefix of the candidates is accepted (e.g., verifying 4 speculative tokens might confirm 2). The target model then samples a corrected token right at the first rejected position using its own output distribution, and the draft model continues speculating from there. A clear [visual demo](https://storage.googleapis.com/gweb-research2023-media/media/SpeculativeDecoding-1-Illustration.mp4) illustrates this cycle nicely.
+
+> [!NOTE] Note
+> The algorithm uses modified rejection sampling guarantees: the accepted tokens mathematically follow the exact output distribution of the target model, making the acceleration provably lossless.
+
+An interesting question arises: how closely must the draft model's probability distribution align with the target model to yield a net speedup? A loose mathematical bound reveals that the distribution overlap \(\alpha\) between the two models must exceed the execution speed ratio \(c\) of the draft model relative to the target model:
+
+
+$$
+\alpha = \mathbb{E}_{x \sim Q} \left[ \min\left(1, \frac{P(x)}{Q(x)}\right) \right] = \sum_{x \in \mathcal{V}} Q(x) \min\left(1, \frac{P(x)}{Q(x)}\right) = \sum_{x \in \mathcal{V}} \min(P(x), Q(x))
+$$
+
+where \(P(x)\) is the target model's distribution, \(Q(x)\) is the draft model's distribution, and \(\mathcal{V}\) is the vocabulary. In practice, this theoretical bound is fairly optimistic: when \(c \approx 0.1\), the draft model generally needs a top-1 token agreement rate exceeding \(65\%\) against the target model on standard benchmarks to deliver roughly a \(2\times\) wall-clock speedup.
+
+#### Dynamic Workloads
+
+From a systems perspective, our primary lever for maximizing throughput is scaling the batch size \(B\). However, real-world inference workloads are inherently dynamic: user requests arrive asynchronously with wildly varying prompt and generation lengths. Orca introduced an elegant solution: **iteration-level scheduling** (continuous batching). Instead of scheduling at the granularity of entire requests, scheduling happens at the granularity of individual forward passes. The moment a request outputs an end-of-sequence token, it exits the batch, and a pending request immediately steps in to take its slot.
+
+![dynamic_workload](img/dynamic_workload.png "Cite from [Orca](https://www.usenix.org/system/files/osdi22-yu.pdf)" )
+
+A practical challenge is that standard dense tensor operations expect uniform rectangular tensors. How do we handle batches composed of jagged, non-uniform sequences? Orca observed that outside the Attention layers, Transformer operations (FFNs, norms, embeddings) treat tokens independently; tokens across different requests can simply be flattened into a single contiguous token dimension. Attention operations, which depend on sequence boundaries, are handled via ragged attention kernels.
+
+---
+
+Taking memory management a step further, the vLLM paper addressed memory fragmentation within and across requests, unlocking substantially larger batch sizes on the same hardware. As illustrated below, memory waste comes in two flavors: *internal fragmentation*, caused by over-allocating fixed memory buffers for maximum possible sequence lengths that users rarely exhaust; and *external fragmentation*, arising from dynamic memory allocation and deallocation across asynchronous requests of varying lengths.
+
+![paged_attention_problem_defination](img/paged_attention_problem_defination.png "Cite from [Kwon+](https://arxiv.org/pdf/2309.06180.pdf)" )
+
+Borrowing directly from classical OS virtual memory concepts, **PagedAttention** partitions each sequence's KV cache into fixed-size blocks allocated across non-contiguous physical GPU memory. This raises effective memory utilization from around \(40\%\) to over \(96\%\). A major side benefit is zero-copy memory sharing: requests sharing common prefixes (such as shared system prompts or tree branches in parallel sampling) can share physical KV blocks, cutting memory consumption even further and driving up overall system throughput.
+
+![paged_attention_share_blocks](img/paged_attention_share_blocks.png "Cite from [Kwon+](https://arxiv.org/pdf/2309.06180.pdf)" )
+
+## Scaling Laws
+
+In popular discourse, "scaling law" is often treated as a blunt assertion: scale up the model, feed it more data, and performance will keep climbing. In reality, that is merely a description of the *scaling effect*. A genuine *scaling law* provides actionable, quantitative foresight: it allows us to extrapolate the outcomes of massive, expensive training runs directly from controlled, small-scale experiments.
+
+Imagine you are the chief infrastructure engineer at a company with a 10,000-GPU cluster. Management asks you to deliver a state-of-the-art foundation model within a month. How do you design the model architecture? How do you partition GPU hours across pretraining stages? Most critically: how do you justify your technical roadmap with quantitative guarantees? You cannot simply tell leadership, "We made the run bigger, so trust me, the model will be better." Large-scale runs cost millions of dollars; quantitative predictability is precisely what scaling laws provide.
+
+### Data Scaling Laws
+
+Empirical observation across thousands of runs shows that test loss exhibits a consistent power-law relationship with dataset size: \(\text{loss} = c n^{-\alpha}\). Why power laws? A simple, intuitive (though non-rigorous) mental model is estimating the mean of a 1D Gaussian distribution from \(n\) samples, \(x_1, x_2, \dots, x_n \sim \mathcal{N}(\mu, \sigma^2)\). The optimal estimator is the sample average:
+
+
+$$
+\hat{\mu} = \frac{\sum_{i=1}^{n} x_i}{n}
+$$
+
+The expected estimation error is:
+
+
+$$
+\mathbb{E}[(\hat{\mu} - \mu)^2] = \frac{\sigma^2}{n}
+$$
+
+Taking the logarithm on both sides:
+
+
+$$
+\log(\mathbb{E}[(\hat{\mu} - \mu)^2]) = -\log n + 2 \log \sigma
+$$
+
+This produces a clean linear relationship on a log-log plot. If we view complex learning tasks as superpositions of many such sub-tasks, the overall error trajectory naturally tracks a straight line in log-log space.
+
+![img/power_law_widely_observed.png](img/power_law_widely_observed.png)
+
+While the power-law form is clear, what determines its slope? In our simple Gaussian example, the scaling exponent is \(-1\). Do real-world learning tasks scale with an exponent of \(-1\)? Empirically, exponents vary dramatically across different data modalities and tasks, and observed slopes are consistently shallower than simple theory predicts.
+
+![img/various_exponent.png](img/various_exponent.png)
+
+A widely accepted explanation links the scaling exponent to the **intrinsic dimensionality** of the data distribution. Under the manifold hypothesis, high-dimensional real-world data points lie on a lower-dimensional sub-manifold embedded within ambient space; the intrinsic dimension is the dimension of this underlying manifold. That said, reliably measuring intrinsic dimensionality in practice remains challenging, so this theory serves more as an intuitive framework than an absolute law.
+
+![img/intrinsic_dimension.png](img/intrinsic_dimension.png)
+
+Another critical engineering question is data curation: does the **data mixture ratio** change the scaling behavior? Extensive empirical studies point to a clear rule of thumb: **varying the data mixture changes the intercept, not the slope**. Can we derive an analytical scaling law for arbitrary data mixtures? In practice, this is notoriously difficult: complex positive and negative transfer dynamics exist between domains, making cross-domain mixture extrapolation unreliable.
+
+While modeling arbitrary mixtures is challenging, what about **data repetition**? Here, predictable scaling holds much better: experiments show that repeating high-quality tokens up to roughly 4 epochs yields performance indistinguishable from training on entirely unique tokens.
+
+![img/data_repeatation.png](img/data_repeatation.png)
+
+Pulling this together into actionable guidance for data curation: ***Under a constrained compute budget, train exclusively on ultra-filtered, high-purity tokens; under massive compute budgets, relax the filtering threshold to incorporate larger volumes of medium-quality tokens.***
+
+![img/data_quality_selection.png](img/data_quality_selection.png)
+
+### Model Scaling Laws
+
+At the architecture level, scaling laws help resolve critical engineering questions: Should we choose an LSTM-like recurrence or a Transformer? Which optimizer scales best? Under fixed parameter budgets, is a deeper model better than a wider one? Should we collect more data or scale GPU cluster capacity?
+
+On **architecture selection**, no single formula reliably predicts cross-family performance; standard practice is to benchmark candidate architectures across smaller parameter scales and extrapolate their Pareto curves.
+
+![img/various_arch_performance.png](img/various_arch_performance.png)
+
+On **optimizer selection**, different optimizers yield virtually identical scaling slopes; differences show up purely as constant intercept offsets. Because early scaling law studies established that Adam and AdamW dominate across scales, AdamW remains the unchallenged default across industry.
+
+![img/various_optimizer_performance.png](img/various_optimizer_performance.png)
+
+For **model depth**, the trend is consistent: provided the model is not pathologically shallow, deeper models consistently outperform shallower ones at equal parameter counts, albeit with diminishing returns as depth continues to scale.
+
+![img/model_depth_reward.png](img/model_depth_reward.png)
+
+The **aspect ratio (width-to-depth ratio)** shifts slightly toward deeper architectures as models grow, but an aspect ratio around \(d_{\text{model}} / n_{\text{layer}} \approx 100\) serves as a remarkably robust default across a wide range of model sizes.
+
+![img/aspect_ratio_reward.png](img/aspect_ratio_reward.png)
+
+With Mixture-of-Experts (MoE) now standard in leading frontier models, MoE-specific scaling laws are essential. The high-level takeaway is straightforward: conditional computation reliably shifts the compute-performance frontier downward—larger sparse models consistently beat dense equivalents at matched training FLOPs.
+
+![img/Pasted image 20261012102529.png](img/Pasted image 20261012102529.png)
+
+The **batch size** used in pretraining is another vital lever. Beyond a certain threshold—the **critical batch size**—further expanding the batch size fails to yield meaningful gradient noise reduction or sample efficiency gains. You can calibrate this critical batch size experimentally by picking a target validation loss, measuring the required gradient steps and total sample consumption across various batch sizes, and computing the ratio of their minima, \(\frac{E_{\text{min}}}{S_{\text{min}}}\).
+
+![img/critical_batch_size.png](img/critical_batch_size.png)
+
+Finally, **learning rates** must adapt systematically as model dimensions scale. An effective framework is the Maximal Update Parametrization (\(\mu P\)), which coordinates learning rates and weight initialization across layers to ensure stable feature representations and smooth loss-frontier scaling across orders of magnitude.
+
+![img/Pasted image 20261012104528.png](img/Pasted image 20261012104528.png)
+
+### Disaggregating Parameters
+
+An easy pitfall in scaling analysis is treating all model parameters uniformly. In reality, different parameter groups scale differently. In particular, **embedding parameters** follow distinctly different scaling dynamics compared to transformer block parameters: embedding capacity depends primarily on vocabulary size and context token diversity rather than non-linear model depth.
+
+![img/Pasted image 20261012104859.png](img/Pasted image 20261012104859.png)
+
+### Summary
+
+The literature on scaling laws is vast, dense, and occasionally conflicting. Yet the core operating principle remains exactly what we emphasized at the outset: **use disciplined, small-scale experiments to extrapolate large-scale outcomes**. While published scaling curves offer indispensable baseline priors, landing a multi-million-dollar training run in production still requires running your own targeted small-scale sweeps to calibrate exact scaling exponents for your specific data mixture, architecture, and training stack.
