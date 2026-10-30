@@ -13,7 +13,7 @@ series:
   - AI Engineering
 series_order: 0
 date: 2025-05-28
-lastmod: 2026-10-17
+lastmod: 2026-10-24
 authors:
   - Morethan
 ---
@@ -32,7 +32,7 @@ The content can be broadly divided into five parts:
 1. [Fundamentals]({{< relref "#fundamentals" >}}): tokenizers, resource inventory, model architectures, training strategies
 2. [Systems engineering]({{< relref "#systems-engineering" >}}): kernels, parallelism, inference
 3. [Scaling laws]({{< relref "#scaling-laws" >}})
-4. Data engineering: pretraining data engineering—messy, but absolutely critical
+4. [Data engineering]({{< relref "#data-engineering" >}}): benchmarking and pretraining data engineering. Messy, but absolutely critical
 5. Model alignment: RL post-training fine-tuning
 
 ## Fundamentals
@@ -400,7 +400,7 @@ $$
 \begin{matrix} S_{t} = \gamma_{t} (I-\beta_{t}k_{t}k_{t}^T) S_{t-1} + \beta_{t}k_{t}v_{t}^T \\ y_{t} = q_{t}^TS_{t} \end{matrix}
 $$
 
-Here, \((I-\beta_{t}k_{t}k_{t}^T)\) erases parts of the state related to the current \(k_{t}\), making room for the new memory item \(\beta_{t}k_{t}v_{t}^T\). The largest-scale application of this approach to date is the Qwen-3.5 model—though again, it uses a 3:1 hybrid format rather than pure linear attention to get the best of both worlds. A clear trend emerges: linear attention mechanisms are gradually converging toward LSTM-like architectures.
+Here, \((I-\beta_{t}k_{t}k_{t}^T)\) erases parts of the state related to the current \(k_{t}\), making room for the new memory item \(\beta_{t}k_{t}v_{t}^T\). The largest-scale application of this approach is the Qwen-3.5 model—though again, it uses a 3:1 hybrid format rather than pure linear attention to get the best of both worlds. A clear trend emerges: linear attention mechanisms are gradually converging toward LSTM-like architectures.
 
 Besides hidden-state approaches, another route is sparse activation, best exemplified by DSA (DeepSeek Attention). DSA uses a lightweight index to compute and retrieve the Top-k most relevant tokens, keeping the costs of \(O(n^2)\) attention manageable. This mechanism is adopted in both DeepSeek-v 3.2 and GLM-5, yielding impressive real-world results.
 
@@ -829,7 +829,7 @@ Context Parallelism (CP) pushes this idea further into the attention mechanism i
 
 By layering these model-level parallel strategies on top of one another—complemented by selective activation checkpointing—virtually every component of activation memory can be sharded evenly across GPUs.
 
-![img/Pasted image 20261008153913.png](img/Pasted image 20261008153913.png)
+![img/cut_down_memory_peak.png](img/cut_down_memory_peak.png)
 
 > [!NOTE]- 😂
 > What an absolute masterclass in squeezing hardware dry! 🤣
@@ -1037,7 +1037,7 @@ A practical challenge is that standard dense tensor operations expect uniform re
 
 Taking memory management a step further, the vLLM paper addressed memory fragmentation within and across requests, unlocking substantially larger batch sizes on the same hardware. As illustrated below, memory waste comes in two flavors: *internal fragmentation*, caused by over-allocating fixed memory buffers for maximum possible sequence lengths that users rarely exhaust; and *external fragmentation*, arising from dynamic memory allocation and deallocation across asynchronous requests of varying lengths.
 
-![paged_attention_problem_defination](img/paged_attention_problem_defination.png "Cite from [Kwon+](https://arxiv.org/pdf/2309.06180.pdf)" )
+![paged_attention_problem_definition](img/paged_attention_problem_definition.png "Cite from [Kwon+](https://arxiv.org/pdf/2309.06180.pdf)" )
 
 Borrowing directly from classical OS virtual memory concepts, **PagedAttention** partitions each sequence's KV cache into fixed-size blocks allocated across non-contiguous physical GPU memory. This raises effective memory utilization from around \(40\%\) to over \(96\%\). A major side benefit is zero-copy memory sharing: requests sharing common prefixes (such as shared system prompts or tree branches in parallel sampling) can share physical KV blocks, cutting memory consumption even further and driving up overall system throughput.
 
@@ -1116,7 +1116,7 @@ The **aspect ratio (width-to-depth ratio)** shifts slightly toward deeper archit
 
 With Mixture-of-Experts (MoE) now standard in leading frontier models, MoE-specific scaling laws are essential. The high-level takeaway is straightforward: conditional computation reliably shifts the compute-performance frontier downward—larger sparse models consistently beat dense equivalents at matched training FLOPs.
 
-![img/Pasted image 20261012102529.png](img/Pasted image 20261012102529.png)
+![img/MoE_scaling_law.png](img/MoE_scaling_law.png)
 
 The **batch size** used in pretraining is another vital lever. Beyond a certain threshold—the **critical batch size**—further expanding the batch size fails to yield meaningful gradient noise reduction or sample efficiency gains. You can calibrate this critical batch size experimentally by picking a target validation loss, measuring the required gradient steps and total sample consumption across various batch sizes, and computing the ratio of their minima, \(\frac{E_{\text{min}}}{S_{\text{min}}}\).
 
@@ -1124,14 +1124,118 @@ The **batch size** used in pretraining is another vital lever. Beyond a certain 
 
 Finally, **learning rates** must adapt systematically as model dimensions scale. An effective framework is the Maximal Update Parametrization (\(\mu P\)), which coordinates learning rates and weight initialization across layers to ensure stable feature representations and smooth loss-frontier scaling across orders of magnitude.
 
-![img/Pasted image 20261012104528.png](img/Pasted image 20261012104528.png)
+![img/mup_results.png](img/mup_results.png)
 
 ### Disaggregating Parameters
 
 An easy pitfall in scaling analysis is treating all model parameters uniformly. In reality, different parameter groups scale differently. In particular, **embedding parameters** follow distinctly different scaling dynamics compared to transformer block parameters: embedding capacity depends primarily on vocabulary size and context token diversity rather than non-linear model depth.
 
-![img/Pasted image 20261012104859.png](img/Pasted image 20261012104859.png)
+![img/response_of_different_params_to_scaling.png](img/response_of_different_params_to_scaling.png)
 
 ### Summary
 
 The literature on scaling laws is vast, dense, and occasionally conflicting. Yet the core operating principle remains exactly what we emphasized at the outset: **use disciplined, small-scale experiments to extrapolate large-scale outcomes**. While published scaling curves offer indispensable baseline priors, landing a multi-million-dollar training run in production still requires running your own targeted small-scale sweeps to calibrate exact scaling exponents for your specific data mixture, architecture, and training stack.
+
+## Data engineering
+
+### Benchmarks
+
+A core purpose of benchmarking is answering a simple question: just how "good" is a model? Of course, "good" is a vague notion. Translating intuitive expectations into concrete, quantifiable metrics is one of the hardest parts of designing benchmarks.
+
+#### Perplexity
+
+Perplexity is the most straightforward metric for measuring model performance. Because language models are trained directly to minimize training set perplexity, using perplexity on a held-out test set feels like the most natural way to gauge raw linguistic competence.
+
+Today, perspectives on perplexity generally fall into two camps:
+
+1. **Perplexity is everything**: If our training dataset truly mirrors real-world data distributions, relentlessly minimizing perplexity will eventually lead us to AGI.
+2. **Perplexity isn't everything**: Perplexity assumes all tokens carry identical information value (or importance), which clearly isn't the case in reality.
+
+> [!NOTE]- Take
+> I currently lean toward the second camp because the first premise feels logically flawed: while a dataset can capture the distribution of natural language quite well, I don't believe language alone is an expressive enough representation to fully capture the true state of the physical world. In other words, here's a working hypothesis: if we rely purely on language to approximate the ground truth of the world, the required data volume might need to scale faster than exponentially.
+
+#### Standardized Exams
+
+Much like human exams, building this kind of benchmark allows us to tightly control subjects and difficulty levels. To keep grading objective and reproducible, questions are typically designed with a single, unambiguous correct answer. Here are a few notable examples:
+
+Massive Multitask Language Understanding ([MMLU](https://arxiv.org/pdf/2009.03300.pdf)) spans 57 subjects where models must pick the right answer from multiple choices, as illustrated below. Despite its name, what this test actually measures has very little to do with core language understanding. 🐸
+
+![MMLU_example](img/MMLU_example.png "Cite from [Hendrycks+ 2020](https://arxiv.org/pdf/2009.03300.pdf)" )
+
+Unsurprisingly, this benchmark has been virtually saturated. Here are the numbers as of October 24, 2026:
+
+![MMLU_result_261024](img/MMLU_result_261024.png "Cite from [llm-stats](https://llm-stats.com/benchmarks/mmlu)" )
+
+Once the original MMLU was maxed out, [MMLU-Pro](https://arxiv.org/abs/2406.01574) was introduced—expanding the options from 4 to 10 and filtering out overly trivial questions. Predictably, this benchmark has also reached near-saturation by now. See the [data here](https://llm-stats.com/benchmarks/mmlu-pro).
+
+---
+
+As frontier models grew more capable, 2025 saw the release of Humanity's Last Exam ([HLE](https://arxiv.org/abs/2501.14249)). Widely discussed across the AI community, its difficulty truly lives up to its dramatic name.
+
+![HLE_example](img/HLE_example.png "Cite from [Phan+ 2025](https://arxiv.org/abs/2501.14249)" )
+
+Even today, this benchmark is far from being genuinely saturated. Here are the figures from October 24, 2026:
+
+![HLE_results_261024](img/HLE_results_261024.png "Cite from [llm-stats](https://llm-stats.com/benchmarks/hle)" )
+
+---
+
+To sum up: exam-style benchmarks have become brutally difficult to keep pace with advancing models. However, exams are inherently detached from actual user workflows: real-world questions rarely have a single, rigid "correct" answer. When that gap widens, high exam scores don't necessarily translate into a good user experience.
+
+#### Chat Evaluation
+
+Chatting with a model in a browser is one of the most prominent real-world use cases. But this setting is dominated by open-ended prompts, and reliably grading answers to open-ended questions is notoriously tricky.
+
+**Chatbot Arena** proposed a neat solution: bypass fixed human rubrics and judge models altogether. Real web users bring their own prompts, receive blind side-by-side responses from two random models, and vote on which answer is better. Using this crowdsourced win/loss data, we can apply an Elo-style rating system—just like in competitive chess—to rank the models' overall capabilities.
+
+A key advantage of Arena is that no single biased judge dictates the scores for subjective prompts. That said, it isn't without flaws: crowd voters are fairly random, meaning they don't necessarily represent the model's target enterprise or expert user base; different voters apply conflicting personal standards; and accumulating enough head-to-head matches takes time, making Arena much slower to deliver feedback compared to instantaneous exam benchmarks.
+
+---
+
+Another mainstream route for handling open-ended queries is **LLM-as-a-Judge**: utilizing a capable, relatively impartial model to evaluate outputs against standardized guidelines. Examples include [AlpacaEval](https://tatsu-lab.github.io/alpaca_eval/) (2023) and [WildBench](https://arxiv.org/pdf/2406.04770) (2024), both of which employ GPT-4 or comparable frontier models as judges.
+
+> [!NOTE] Note
+> Many benchmarks of this style explicitly report their correlation with Chatbot Arena rankings. On one hand, this validates the benchmark's own methodology; on the other, it provides a fast proxy that circumvents Arena's scoring latency.
+
+#### Agents
+
+What makes agent benchmarks distinctive is that they test not just the foundation model, but the quality of the surrounding agent framework as well. Results consistently show that the framework's design often impacts final performance just as much as the base model itself! Furthermore, because agent frameworks vastly expand what models can do beyond simple text input and output, agent benchmarks tend to be remarkably rich. The task expectations are essentially on par with human job requirements—to the extent that a well-crafted LLM-agent pipeline can practically be scheduled and deployed like an autonomous human contributor.
+
+#### Pure Reasoning
+
+The motivation behind pure reasoning benchmarks is simple: what if we want to measure a model's raw problem-solving intellect rather than its breadth of memorized knowledge (even though knowledge remains undeniably critical)? By designing specialized puzzles, we can strip away domain background knowledge and isolate reasoning capacity.
+
+A standout pioneer here is [ARC-AGI-1](https://arcprize.org/arc-agi) (2019), which presents tasks as multimodal, few-shot visual reasoning puzzles:
+
+![ARC_AGI_1_example](img/ARC_AGI_1_example.png "Cite from [ARC-AGI-1](https://arcprize.org/arc-agi)" )
+
+In 2025, [ARC-AGI-2](https://arcprize.org/arc-agi) launched with a substantial jump in difficulty:
+
+![img/ARC_AGI_2_example.png](img/ARC_AGI_2_example.png)
+
+However, both iterations have now largely been saturated ([see Figure 1 in the technical report for a results summary](https://arcprize.org/media/ARC_AGI_3_Technical_Report.pdf)). In response, [ARC-AGI-3](https://arcprize.org/media/ARC_AGI_3_Technical_Report.pdf) was introduced this year (2026). Its signature feature is an interactive evaluation environment, reminiscent of retro handheld game consoles:
+
+![ARC_AGI_3_example.png](img/ARC_AGI_3_example.png "Cite from [paper](https://arcprize.org/media/ARC_AGI_3_Technical_Report.pdf)" )
+
+> [!Warning] Food for Thought
+> Can we ever truly separate intelligence from knowledge? Doesn't an interactive, handheld-game-style testing environment come baked with strong inductive biases and priors of its own? 🤔
+
+#### Safety
+
+"Safety" is another loosely defined term. A broad working consensus is: models should not produce outputs that violate laws, breach fundamental ethics, or pose catastrophic risks to humanity, and they should reliably refuse prompts that elicit harm.
+
+Safety benchmarks are relatively fewer in number compared to the [Agents]({{< relref "#agents" >}}) category, but classic examples include **HarmBench** ([Mazeika+ 2024](https://arxiv.org/abs/2402.04249)) and **AIR-Bench** ([Zeng+ 2024](https://arxiv.org/abs/2407.17436)).
+
+#### Train-Test Contamination
+
+One of the golden rules in introductory machine learning is: *never train on your test data*. In the pre-LLM era, this was trivial to follow. Today, it has become an excruciating challenge: training corpora are so monstrously large that keeping them 100% clean is virtually impossible.
+
+A few strategies have surfaced to address this:
+
+1. **Algorithmic contamination detection**: Leverage properties like test question order exchangeability. If a model exhibits significantly lower perplexity under a specific canonical ordering of questions, it strongly signals data leakage ([Oren+ 2023](https://arxiv.org/pdf/2310.17623)).
+2. **Transparent reporting**: Model creators should publish formal contamination analysis audits ([Zhang+ 2024](https://arxiv.org/abs/2410.08385)).
+3. **Evaluating on private datasets**: This is considerably more expensive. Worse, running the evaluation still requires transmitting the data over an API, leaving you with little choice but to hope the provider doesn't quietly stash a copy. 🐸
+
+#### Takeaways
+
+The value proposition of benchmarks is clear: they give us a signal of how capable a model is. But applying them effectively is tricky. Any individual dataset is inevitably biased and rarely matches our exact use cases. A reasonable rule of thumb: if a model excels on one specific dataset, take it with a grain of salt; if a model performs consistently well across a wide and diverse spectrum of benchmarks, chances are it's genuinely a great model.
