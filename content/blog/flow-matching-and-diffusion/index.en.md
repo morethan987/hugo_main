@@ -292,7 +292,7 @@ In the previous sections, we know how to train a model to matching velosity file
 > [!NOTE]+ Note
 > In the context of image generation, \(u_t(x)\) actually tells us how to modify **every** pixel across the channels.
 
-And more over, there should be a lot of redundancy in the real image generation. For example, the dark part of the picture below should always be dark. This revels that we can represent the original image with a more compressed form that is easier to tackel by our generative models.
+And more over, there should be a lot of redundancy in the real image generation. For example, the dark part of the picture below should always be dark. This revels that we can represent the original image with a more compressed form that is easier to tackle by our generative models.
 
 ![img/redundancy_example.png](img/redundancy_example.png)
 

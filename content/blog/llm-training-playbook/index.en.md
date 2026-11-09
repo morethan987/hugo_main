@@ -13,7 +13,7 @@ series:
   - AI Engineering
 series_order: 0
 date: 2025-05-28
-lastmod: 2026-10-24
+lastmod: 2026-11-09
 authors:
   - Morethan
 ---
@@ -33,7 +33,7 @@ The content can be broadly divided into five parts:
 2. [Systems engineering]({{< relref "#systems-engineering" >}}): kernels, parallelism, inference
 3. [Scaling laws]({{< relref "#scaling-laws" >}})
 4. [Data engineering]({{< relref "#data-engineering" >}}): benchmarking and pretraining data engineering. Messy, but absolutely critical
-5. Model alignment: RL post-training fine-tuning
+5. [Model alignment]({{< relref "#model-alignment" >}}): RL post-training fine-tuning
 
 ## Fundamentals
 
@@ -1239,3 +1239,106 @@ A few strategies have surfaced to address this:
 #### Takeaways
 
 The value proposition of benchmarks is clear: they give us a signal of how capable a model is. But applying them effectively is tricky. Any individual dataset is inevitably biased and rarely matches our exact use cases. A reasonable rule of thumb: if a model excels on one specific dataset, take it with a grain of salt; if a model performs consistently well across a wide and diverse spectrum of benchmarks, chances are it's genuinely a great model.
+
+### Data Pipeline
+
+This section mainly covers the engineering techniques behind data cleaning. As the name suggests, think of the data pipeline as an assembly line that raw text must pass through before it is clean enough to feed into a model.
+
+#### Conversion
+
+Language models typically train on plain text, but raw internet data is rarely that tidy—think academic PDFs, messy code repositories, or HTML pages crammed with formatting tags. When building foundational model capabilities, stripping out this markup and noise is the very first order of business.
+
+There isn't much deep academic novelty here, so here is a quick lineup of popular, battle-tested extraction tools: [Trafilatura](https://github.com/adbar/trafilatura), [Resiliparse](https://github.com/chatnoir-eu/chatnoir-resiliparse#1-resiliparse), and [jusText](https://github.com/miso-belica/jusText).
+
+#### Filtering
+
+Let’s formalize the goal here, as illustrated below. Filtering boils down to one fundamental question: what data do we actually want—and what should we toss? You could write natural language prompts for an LLM to generate criteria, curate a small batch manually, or simply grab a reputable existing dataset. Whatever the method, you need a target dataset \(T\). From there, the task is to sift through the raw dump \(R\) to extract candidate data \(T'\) that closely resembles your target.
+
+![img/algorithmic_filtering.png](img/algorithmic_filtering.png)
+
+How do you actually filter \(T'\) out of \(R\)? You could train a generative model (like a Transformer) to score quality, or keep it lightweight with a simple classifier. As usual in engineering, there is a clear trade-off: higher precision typically comes with slower throughput.
+
+One easily overlooked nuance is data diversity. Plenty of empirical results show that under large compute budgets, keeping a healthy dose of medium-to-lower quality data actually yields lower evaluation loss, effectively preventing the model from overfitting to an overly narrow slice of pristine text.
+
+![img/different_quality_data_results.png](img/different_quality_data_results.png)
+
+#### Deduplication
+
+First off, why deduplicate? Research like [Lee+ 2021](https://arxiv.org/pdf/2107.06499) shows that deduplication boosts model performance, saves precious training FLOPs, and prevents verbatim memorization. Doing this at scale requires some finesse: pairwise comparison across the entire corpus scales with \(O(n^2)\) complexity, which is an absolute non-starter. On top of that, you need a principled threshold—you can't just discard an entire document because a few words overlap; you only want to purge texts once similarity crosses a certain line.
+
+To dodge the \(O(n^2)\) bottleneck, hashing is the weapon of choice. With a single pass, we can map every document into a compact set of signatures—where a hash collision flags potential duplication. While conventional hashing tries hard to prevent collisions, here we want the exact opposite: a hash function tailored to produce collisions when two texts share high *similarity*, and rarely collide when they don't.
+
+We also need a clear definition of similarity. The standard choice is *Jaccard similarity*: for any two sets \(A\) and \(B\), it is defined as:
+
+
+$$
+J=\frac{\left | A \cap B \right | }{\left | A \cup B \right | }
+$$
+
+Now we need an algorithm where the collision probability directly mirrors this similarity. That brings us to MinHash:
+
+```python
+def minhash(S: set[str], seed: int):
+    return min(mmh3.hash(x, seed) for x in S)
+```
+
+Conceptually, MinHash doesn't care which specific hash function you pick; it simply hashes all tokens in a document and grabs the minimum value. Assuming a uniform hash distribution, this is mathematically equivalent to taking a random permutation of the vocabulary set and picking the very first element. If two sets yield the exact same minimum, that counts as a collision. Run this across 100 different hash seeds, and the empirical collision rate cleanly approximates the true Jaccard similarity. Just like that, we get a solid similarity estimate in linear time.
+
+MinHash has an elegant property: collision probability scales linearly with similarity, i.e., \(P = s\) (where \(s\) is document similarity). Normally, you would estimate \(s\) first and compare it against a cutoff. But can we bake the threshold directly into the hashing mechanism itself? Doing so eliminates extra comparison steps and drastically cuts false positives. Ideally, we want the collision probability to drop to near 0 below the threshold and jump to near 1 above it—effectively morphing that gentle \(45^\circ\) line into a sharp step function.
+
+The standard trick is AND-OR probability amplification (LSH banding). Divide your \(N\) MinHash values into \(b\) bands of \(r\) rows each (\(N = b \times r\)). We define a band match only when *all* \(r\) hashes within that band match (AND logic), and flag two documents as duplicates if *at least one* band matches (OR logic). After this tuning, the collision probability becomes:
+
+
+$$
+P=1-(1-s^r)^b
+$$
+
+The resulting curve (shown below) gives us a classic S-shaped step function. Finding the inflection point (where the first derivative peaks and the second derivative hits zero) yields the effective threshold: \(s^* = \left( \frac{1}{b} \right)^{\frac{1}{r}}\).
+
+![img/local_sensitive_hash.png](img/local_sensitive_hash.png)
+
+> [!NOTE] Takeaway
+> This AND-OR amplification trick pops up everywhere in probabilistic algorithms when you need to sharpen decision boundaries.
+
+#### Data Mixing
+
+Real-world datasets vary wildly in size. Suppose Dataset A is lower quality but packs 10 T tokens, while Dataset B is pristine but only has 10 B tokens. If your compute budget allows training on 1 T tokens in total, how should you split the budget between them?
+
+A naive 50/50 split (0.5 T from A and 0.5 T from B) is clearly a bad idea: Dataset B would be looped through 50 times, while Dataset A would barely be 5% explored. Overfitting on B and underfitting on A is a recipe for disaster.
+
+A straightforward heuristic is to sample uniformly across sources while capping repetition: keep track of the token count consumed from each source, and shut off sampling from any dataset once it hits an epoch cap of \(C\) repeats (as proposed in UniMax by [Chung+ 2023](https://arxiv.org/abs/2304.09151)).
+
+Another popular method leans on scaling laws: search for the optimal data mixture on smaller proxy models first, then extrapolate the mixture recipe to your production runs ([Liu+ 2024](https://arxiv.org/abs/2407.01492), [Chen+ 2026](https://arxiv.org/pdf/2602.12237)). Just keep in mind that during proxy training, you need to subsample the dataset proportionally to simulate the target scale ([Held+ 2025](https://arxiv.org/pdf/2501.11747)) —e.g., if the final run trains on 1 T tokens and the small proxy only does 10 B tokens, you should downsample the pool to 1% to match the data novelty regime.
+
+### Pre-training Data
+
+It is common knowledge that pre-training sets the ceiling for model capabilities, and pre-training data is what sets the ceiling for pre-training itself. Data is often far more critical than architecture. Companies rarely spill their secret sauce—Meta only disclosed high-level recipe info for LLaMA 2, and DeepSeek keeps its full pre-training recipes under tight wraps. These meticulously curated corpora are arguably an AI lab's most guarded moat.
+
+Furthermore, copyright is an omnipresent landmine. Several published datasets have been taken down over licensing infractions, and major AI labs routinely face lawsuits—The New York Times suing OpenAI in 2023, or authors taking Anthropic to court over copyrighted books. The rule of thumb in data engineering: when in doubt about legality, leave it out.
+
+So what does a modern pre-training data recipe actually look like? Looking at partially open initiatives gives us a pretty clear picture:
+
+1. **Web crawls**: Much like search engines, spiders start from seed URLs and crawl the web at massive scale.
+2. **Public repository dumps**: Wikipedia, GitHub, arXiv, and similar platforms offer bulk dumps or APIs directly, sparing you the hassle of scraping.
+3. **Shadow libraries**: Questionable sources like Sci-Hub or Z-Library, which often carry unlicensed material.
+
+After aggressive filtering—heuristics, rule-based filters, and LLM-based scoring or rewriting—this raw firehose is distilled into training-ready tokens. To put the rejection rate into perspective, look at [DataComp-LM](https://arxiv.org/abs/2406.11794): out of a massive 240 T raw token pool, only a tiny 1.4% survived the cut to make it into the final high-quality dataset.
+
+![DataComp_LM_data_composition](img/DataComp_LM_data_composition.png "Cite from [DataComp-LM](https://arxiv.org/abs/2406.11794)" )
+
+### Post-training Data
+
+In today's landscape, post-training has become almost synonymous with reasoning and code training. As a result, the recipe for gathering post-training data is fairly straightforward:
+
+1. Build a sandbox environment.
+2. Formulate a set of benchmark tasks.
+3. Distill reasoning traces and rollouts from stronger teacher models as guidance.
+
+A few prominent post-training datasets in the wild:
+
+1. **OpenThoughts** [Guha+ 2025](https://arxiv.org/abs/2506.04178): 1.2 M reasoning traces from QwQ-32 B.
+2. **SWE-smith** [Yang+ 2025](https://arxiv.org/abs/2504.21798): 500 k tasks across 128 curated GitHub repositories.
+3. **SWE-Zero** [Ludwig+ 2026](https://arxiv.org/abs/2604.01496): Software engineering environments with intricate dependencies.
+4. **SWE-rebench** [Badertdinov+ 2025](https://arxiv.org/pdf/2505.20411): 21 k interactive Python coding tasks alongside 450 k real-world GitHub PRs.
+
+## Model alignment
