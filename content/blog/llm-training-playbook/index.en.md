@@ -1,7 +1,7 @@
 ---
 title: Practical LLM Training
 weight: -105
-draft: true
+draft: false
 description: Documents various engineering aspects related to LLM training.
 slug: llm-training-playbook
 language: en
@@ -13,7 +13,7 @@ series:
   - AI Engineering
 series_order: 0
 date: 2025-05-28
-lastmod: 2026-11-09
+lastmod: 2026-11-17
 authors:
   - Morethan
 ---
@@ -1342,3 +1342,208 @@ A few prominent post-training datasets in the wild:
 4. **SWE-rebench** [Badertdinov+ 2025](https://arxiv.org/pdf/2505.20411): 21 k interactive Python coding tasks alongside 450 k real-world GitHub PRs.
 
 ## Model alignment
+
+After pre-training, we end up with a base language model, yet much of its behavior falls short of what we actually want: it struggles to follow user instructions reliably, lacks strong coding skills, and still answers harmful prompts (where we would expect a refusal). *Model alignment* addresses precisely these issues, giving us much finer-grained control over the model's outputs. 🤌
+
+### Imitation Learning
+
+In this context, imitation learning simply refers to Supervised Fine-Tuning (SFT), and the mechanics are almost identical to pre-training. You gather a collection of desired target data and run gradient descent—it really is that straightforward. 🐸 Because the training loop itself is so simple, the real focus here is the SFT data: what does it look like, and how do we curate high-quality datasets?
+
+![img/opensource_sft_data.png](img/opensource_sft_data.png)
+
+Several common open-source SFT datasets are listed above. Without diving into specific samples, these datasets share a few distinct traits compared to pre-training corpora:
+
+1. **A human touch**: In a conversation, we don't want to talk to a stiff, robotic bookworm; we want responses that feel warm and natural.
+2. **Rich, comprehensive detail**: When asking for travel advice, we don't want a bare list of landmarks—we expect thorough recommendations that factor in geography, logistics, and context.
+3. **Tool calling**: Arguably the most critical end-user capability today, requiring LLMs to handle complex tool-use interactions seamlessly.
+
+By rule of thumb, there is no single "silver bullet" SFT dataset—and practice bears this out, as different datasets excel in different areas, as shown below.
+
+![img/sft_datasets_benchmark.png](img/sft_datasets_benchmark.png)
+
+To build intuition for what actually happens during SFT, let's look at a concrete example from OpenAssistant.
+
+![img/Pasted image 20261109221123.png](img/Pasted image 20261109221123.png)
+
+When the model trains autoregressively on this example, we can intuitively see two distinct types of information flowing into the model via gradients:
+
+1. **Factual information**: The link between the citation and the preceding claims forms a factual association.
+2. **Formatting information**: The model learns that "including citations in a proper format" is a desirable habit.
+
+Studies have shown that fine-tuning a model on knowledge it does not already possess significantly increases hallucinations. Intuitively, because the model cannot grasp the underlying facts, it latches onto the much more obvious formatting patterns instead—producing answers that look authoritative on the surface but are completely fabricated.
+
+![img/sft_hallucination.png](img/sft_hallucination.png)
+
+In short, SFT works remarkably well—even with relatively small amounts of data—when we want to sharpen or elicit capabilities the model already has. However, trying to inject brand-new knowledge through SFT tends to backfire. 🤔
+
+---
+
+### Reinforcement Learning from Human Feedback
+
+In English, this is universally known as RLHF (Reinforcement Learning from Human Feedback). A helpful way to understand RL is to contrast it with SFT: in theory, RL doesn't require explicit "expert demonstrations"—we only need to reward good trajectories, and we can assign different reward magnitudes to different trajectories (whereas SFT effectively assigns a constant reward). This makes it "data-aware."
+
+In practice, however, we still have to collect substantial expert preference data to train a reward model before running RLHF. Common collection methods include pairwise comparisons (like Chatbot Arena) or rubric-based grading. For frontier models, top-tier domain experts are hired to do this annotation, often commanding hefty hourly rates (hundreds of dollars per hour).
+
+Early RLHF pipelines relied primarily on the PPO family of algorithms, whose evolution looks roughly as follows:
+
+![img/ppo_progress.png](img/ppo_progress.png)
+
+Vanilla policy gradient is straightforward: given a full trajectory \(z\), we push the model parameters toward higher reward \(R\) by sampling multiple trajectories and weighting their log-likelihoods by their rewards. Of course, this simple approach suffers from massive variance and cannot reuse past data. TRPO addressed this by introducing an importance sampling ratio (\(\frac{\pi_\theta(a_t \mid s_t)}{\pi_{\theta_{\text{old}}}(a_t \mid s_t)}\)) to weight the advantage function—allowing old samples to update the new policy—while using a KL divergence trust region to constrain parameter updates. TRPO is theoretically elegant, but computing the KL constraint requires second-order derivatives, so PPO replaces it with a simple clipped objective.
+
+As noted above, PPO-style methods still depend on a massive reward/value model and online sampling (requiring fresh rollouts every \(K\) steps), which means training giant auxiliary models and dealing with lower data efficiency.
+
+Direct Preference Optimization (DPO), by contrast, is purely offline and can be derived directly from the standard RLHF objective:
+
+
+$$
+\max_{\pi_\theta} \mathbb{E}_{x \sim \mathcal{D}, y \sim \pi_\theta(y|x)} [r_\phi(x,y)] - \beta \mathbb{D}_{KL}[\pi_\theta(y|x) || \pi_{ref}(y|x)]
+$$
+
+Assuming infinite model capacity (a non-parametric policy), this optimization problem has a closed-form solution:
+
+
+$$
+\pi_r(y|x) = \frac{1}{Z(x)} \pi_{ref}(y|x) \exp\left(\frac{1}{\beta} r(x,y)\right)
+$$
+
+Rearranging gives us an expression for the reward in terms of the policy:
+
+
+$$
+r(x,y) = \beta \log \frac{\pi_r(y|x)}{\pi_{ref}(y|x)} + \beta \log Z(x)
+$$
+
+This shows that the policy model itself acts as an implicit reward model, though the log-partition term \(\log Z(x)\) remains intractable. Fortunately, RLHF preference data tells us that one response is better than another, allowing us to formulate an objective where the better response gets a higher reward while the intractable partition term cancels out:
+
+
+$$
+\text{loss}(r_\theta) = - \mathbb{E} [\log \sigma(r_\theta(x, y_w) - r_\theta(x, y_l))]
+$$
+
+Substituting the implicit reward expression yields the DPO loss:
+
+
+$$
+\mathcal{L}_{DPO}(\pi_\theta; \pi_{ref}) = - \mathbb{E}_{(x, y_w, y_l)} \left[ \log \sigma \left( \beta \log \frac{\pi_\theta(y_w|x)}{\pi_{ref}(y_w|x)} - \beta \log \frac{\pi_\theta(y_l|x)}{\pi_{ref}(y_l|x)} \right) \right]
+$$
+
+With this, we can optimize directly on pre-collected human preference datasets, eliminating online sampling altogether.
+
+> [!NOTE] Food for Thought
+> You might wonder: is the non-parametric assumption a free lunch? Of course not. In reality, our models always have finite parameters. This approximation can lead to overfitting and over-rewarding overly long responses, which is precisely why newer algorithms keep emerging. In practice, models like GPT 5.6 often go on massive overthinking sprees (thinking for half an hour just to do one minute of work)—one can't help but wonder if this kind of dynamic plays a role. 🤔
+
+### Verifiable Rewards
+
+Because human feedback is inherently noisy, expensive, and scarce, standard RLHF suffers from severe overfitting. Simply throwing more compute at it won't reliably yield better models.
+
+![img/overfit_RLHF.png](img/overfit_RLHF.png)
+
+A natural direction, then, is to find feedback signals that are far more stable and informative. That sounds easy in theory, though open-ended tasks pose an obvious challenge—you simply can't design deterministic feedback for every kind of question. However, if a class of problems is both broadly applicable and admits objective, verifiable feedback, RL can reliably convert raw compute into genuine model capability. This is the core idea behind Reinforcement Learning with Verifiable Rewards (RLVR).
+
+RLVR currently relies primarily on GRPO. Theoretically, like PPO, GRPO is a policy gradient algorithm that uses a baseline. Here, a "baseline" means the model shouldn't learn from raw absolute scores alone, but rather from how much better a response is compared to its current average performance. Imagine scoring 50 on a brutal math exam: it looks low in isolation, but if the class average is 20, a 50 is actually an impressive result.
+
+In practice, the key question is how to estimate that baseline. PPO trains a massive separate value model for this, whereas GRPO simply estimates the baseline from a group of \(G\) sampled rollouts, leading to the loss function shown below.
+
+![docter_GRPO](img/docter_GRPO.png "Cite from [Liu et al.](https://arxiv.org/abs/2503.20783)" )
+
+Looking closely, GRPO's loss formulation actually has a couple of questionable design choices. First, the advantage shouldn't be normalized by its standard deviation, as doing so disproportionately amplifies cases with tiny variance—typically questions that are either way too hard or way too easy (where the model gets them right or wrong almost every time). Second, normalizing by output length (\(\frac{1}{|o_i|}\)) implicitly incentivizes verbose responses, since longer outputs dilute the loss. Put differently, from a reward-hacking perspective, that \(\frac{1}{|o_i|}\) term hands the model a cheap shortcut to lower its loss simply by rambling—hardly what we want.
+
+Once the algorithm is set, the overall post-training pipeline looks something like the Qwen 3 workflow below; details vary across labs, but the general recipe is largely the same.
+
+![img/Qwen3_post_training_pipeline.png](img/Qwen3_post_training_pipeline.png)
+
+---
+
+This also raises a couple of fascinating questions about reinforcement learning.
+
+First, can we distill reasoning abilities into non-thinking models? Yes—and it works remarkably well.
+
+![img/qwen_2.5_distill.png](img/qwen_2.5_distill.png)
+
+Second, can we achieve the same gains without using RL at all? The jury is still out. Many approaches try to match RL's gains using non-RL methods, yet nothing has truly replaced RL so far. Kimi k 1.5 ran thorough ablations on this: the yellow RL curve consistently outperforms Expert Iteration. If RL works by boosting the probability of positive samples while suppressing negatives, Expert Iteration simply performs SFT on positive samples alone to bootstrap a stronger model in a virtuous cycle.
+
+![img/kimi_k1.5_ablation.png](img/kimi_k1.5_ablation.png)
+
+### Multimodal Alignment
+
+Everything we've discussed so far deals strictly with text-in, text-out models. Yet our world is inherently multimodal, and pure text is often a clumsy medium for expressing what we want. For instance, when building a frontend UI without visual capabilities, we have to describe layouts in abstract prose—which yields terrible results and can become indecipherable even to ourselves a few days later. 😅
+
+Because Transformers are so dominant, we naturally stick with the Transformer architecture. Since Transformers only understand tokens, we need ways to convert other modalities into tokens—just as text requires a dedicated tokenizer. Here we'll focus on images and video, though the general principles extend readily to other modalities.
+
+#### CLIP
+
+CLIP remains one of the most influential image embedding models, and its performance is remarkably strong—especially considering how messy its training data was (even after heavy filtering) compared to curated datasets like ImageNet. On web blogs, captions rarely spell out every detail in an image. Take the diagram below: I would summarize its purpose in a sentence or two—contrastive training that treats matched image-text pairs as positives and all other pairs as negatives. Notice I wouldn't bother specifying how many boxes are drawn or how they're arranged, even though those visual details make up the image itself.
+
+![clip_arch](img/clip_arch.png "Cite from [Radford+ 2021](https://arxiv.org/abs/2103.00020)" )
+
+That's why CLIP's success felt so eye-opening: it mirrored the exact playbook that made LLMs work—scrape massive amounts of noisy public internet data, pair it with huge models and massive compute, and let scale work its magic.
+
+For the image encoder, CLIP uses [ViT](https://arxiv.org/pdf/2010.11929). OpenAI also tested ResNet-50, and Transformer-based architectures clearly came out ahead. Notably, ViT was originally designed for image classification and lacked flexible positional encoding for image patches suited to fine-grained spatial layouts—an issue that later commercial-grade multimodal LLMs had to tackle head-on.
+
+#### SigLIP
+
+SigLIP builds directly on CLIP while fixing a key flaw. CLIP treats every unpaired example in a batch as a negative. At massive scale, however, two distinct images in the same batch can easily be near-identical—similar enough to count as a valid positive pair—making softmax's forced single-choice selection unreasonable. SigLIP replaces softmax with sigmoid, reformulating multi-class classification into an \(N \times N\) pairwise binary classification problem. Beyond being more logical, this decoupling removes softmax's global normalization denominator, paving the way for much more hardware-efficient distributed training.
+
+![siglip_system_algorithm](img/siglip_system_algorithm.png "Cite from [Zhai+ 2023](https://arxiv.org/abs/2303.15343)" )
+
+#### Model Fusion
+
+Once you have a strong vision encoder (like SigLIP) and a capable LLM, the obvious move is to connect them into a powerful "multimodal model." Granted, this is a somewhat "stitched-together" approach compared to natively trained end-to-end multimodal models, and it may lag slightly in theoretical ceiling, but it works surprisingly well in practice at a fraction of the training cost.
+
+These stitched models generally follow a standard two-stage recipe: first, freeze both the LLM and the vision encoder, and train a lightweight adapter to project visual tokens into the LLM's text embedding space; second, keep only the vision encoder frozen while fine-tuning both the adapter and the LLM. [LLaVA](https://arxiv.org/abs/2304.08485) is the classic example—take a look below to get a feel for how well this works in practice.
+
+![llava_result](img/llava_result.png "Cite from [LLaVA](https://arxiv.org/abs/2304.08485)" )
+
+Compared to earlier baselines, LLaVA delivers strikingly detailed descriptions, proving that even bolted-on architectures can achieve impressive visual understanding.
+
+Follow-up work has pushed this paradigm further, culminating in models like [LLaVA-OneVision](https://arxiv.org/pdf/2408.03326), which handles complex multimodal inputs across single images, multi-image sequences, video, and text. For detail-dense single images like PDF pages (e.g., research papers), it adopts a dual-pathway design (reminiscent of residual connections): a small set of tokens comes from embedding a downsampled full-page overview, while a larger set of tokens comes from slicing the image into high-res patches and embedding them individually (using bilinear interpolation to keep token counts manageable).
+
+![llava_onevision_pdf](img/llava_onevision_pdf.png "Cite from [LLaVA OneVision](https://arxiv.org/pdf/2408.03326)" )
+
+Another crucial factor is data balancing. If video data vastly outnumbers single-image data, gradients during training will be dominated by video signals. We therefore need to balance token budgets across modalities: allocating higher resolution to single images, base resolution to multi-image inputs, and extracting keyframes for video.
+
+![llava_oneversion_data_balance](img/llava_oneversion_data_balance.png "Cite from [LLaVA OneVision](https://arxiv.org/pdf/2408.03326)" )
+
+> [!NOTE] Note
+> Another huge contribution of the LLaVA family is open-sourcing its training datasets. Data engineering is a subtle, tedious, yet make-or-break part of training; having high-quality open datasets saves enormous effort. 👍
+
+#### Multimodal Positional Encoding
+
+In LLaVA, handling PDF pages mainly relied on global thumbnail tokens alongside patches without explicitly preserving spatial coordinates—yet positional encoding offers a clean way to retain that structure. Qwen 2-VL introduced an elegant video/multimodal positional encoding scheme to solve this.
+
+![img/Pasted image 20261115120019.png](img/Pasted image 20261115120019.png)
+
+Standard [Positional Encoding]({{< relref "#positional-encoding" >}}) splits an attention head's dimensions into pairs of 2D planar vectors—for instance, a 128-dim head yields 64 2D vectors—each rotated according to the same token position (e.g., text token at position 512). Qwen 2-VL's M-RoPE instead partitions these 64 vectors into three groups: the first 16 encode temporal rotation, the middle 24 encode height, and the last 24 encode width. This fine-grained spatial-temporal encoding gives Qwen 2-VL far sharper perception of visual details.
+
+That said, M-RoPE has two notable flaws. First, RoPE relies on trigonometric functions spanning different frequencies; splitting dimensions into contiguous blocks starves the temporal dimension of low-frequency components, while height and width lose high-frequency components. Second, pure relative positional encoding erases absolute timestamps—the model knows which frame index it's looking at, but not which second of the video it corresponds to. Qwen 3-VL fixes both issues: it switches from contiguous blocks to interleaved slicing (`ttt|hhh|www` -> `thw|thw|thw`) so every axis enjoys the full spectrum from high to low frequencies, and it injects absolute timestamps directly into the input sequence as text tokens.
+
+> [!NOTE] Note
+> Wondering why there's no figure illustrating Qwen 3-VL's improvement? The paper itself is almost pure text with barely any diagrams 😅—and honestly, text conveys the idea clearly enough.
+
+#### Image Generation
+
+All the models discussed above only generate text outputs, even when fed multimodal inputs. A fascinating alternative is to define discrete visual token primitives: encode input images into these tokens, let the model predict visual tokens alongside text, and pass them through a decoder to synthesize images. [Chameleon](https://arxiv.org/pdf/2405.09818) follows this exact paradigm.
+
+![chameleon_arch](img/chameleon_arch.png "Cite from [Chameleon](https://arxiv.org/pdf/2405.09818)" )
+
+The clever part is designing visual tokens that both capture rich visual semantics and let the model "draw" the same way it writes text. Chameleon maintains a codebook of 8,192 visual tokens: its encoder extracts features via multi-layer convolutions and quantizes them to the nearest codebook entries, while its neural decoder smooths and sharpens the reconstructed tokens to produce realistic images. This trade-off isn't free, of course—rendered text inside generated images tends to look blurry—but for general imagery that doesn't require pixel-perfect precision, the results are quite solid.
+
+![chameleon_result_example.png](img/chameleon_result_example.png "Cite from [Chameleon](https://arxiv.org/pdf/2405.09818)" )
+
+## Final Thoughts
+
+Stanford's CS 336 is an extraordinarily high-quality course—and, predictably, a brutally challenging one. I've logged 113 hours so far, and considering roughly half of my study time went untracked, I'm probably closer to 200 hours in. With a few lab assignments still on my plate, the final tally will likely approach 240 hours—a hefty investment of time by any measure. Along the way, you get an unfiltered look at every facet of frontier LLM engineering, experiencing firsthand the elegance, the pragmatism, and the sheer messiness of the field. For me, the course's greatest impact was taking cutting-edge AI off its pedestal—demystifying it, clearing away the fog, and helping me build a coherent mental model in my own head.
+
+I really love how Larry Guth puts it in [this essay](https://arxiv.org/abs/2609.32028):
+
+> When I talk with non-mathematicians, they almost always describe math as two sharply divided phases: one that's completely clear, and another that's utterly baffling. In their memory, this shift feels remarkably abrupt—as if math had suddenly become incomprehensible overnight. In reality, it's not that basics like "counting" are inherently simple; we've just forgotten how hard they were when we were first learning them.
+
+
+This course does a wonderful job of recreating that exact arc—from initial bewilderment to eventual clarity. Throughout the journey, there's always a faint undercurrent of excitement, much like stepping alone into uncharted wilderness or projecting yourself into the shoes of a character in a novel. It's a subtle yet deeply gratifying feeling. Perhaps that is where the real joy of exploration and learning lies.
+
+Nowadays, AI can hand us almost anything we ask for in moments. Even when the output leaves much to be desired, we subconsciously begin to treat creation as a kind of wish-granting ritual rather than an arduous labor of time and effort. Yet in reality, the experience feels strangely hollow. Deep down, you know perfectly well you haven't learned a thing, yet you still find yourself hooked on speed and efficiency—one-click generation, instant implementation, auto-accepting everything—swept up in an astonishing kind of restlessness. Perhaps we've simply mistaken the AI's capabilities for our own. The fundamental laws of human learning haven't changed: we can only truly manipulate what we genuinely understand. As a YouTube comment aptly put it:
+
+> You can't outsource your brain if you don't actually have one.
+
+
+I honestly don't know if slowing down to truly understand things is the "right" choice in such a restless era. But on a visceral level, it leaves me feeling firmly grounded.
